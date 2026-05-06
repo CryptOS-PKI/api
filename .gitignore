@@ -1,0 +1,17 @@
+# IDE
+.idea/
+.vscode/
+
+# Go
+*.exe
+*.test
+*.out
+vendor/
+bin/
+
+# protoc local install
+.bin/
+tools/
+
+# OS
+.DS_Store

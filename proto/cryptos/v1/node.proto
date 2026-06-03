@@ -1,0 +1,105 @@
+syntax = "proto3";
+/*
+   Apache License 2.0
+
+   Copyright 2026 Shane
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+
+package cryptos.v1;
+
+import "cryptos/v1/ceremony.proto";
+import "cryptos/v1/config.proto";
+import "cryptos/v1/identity.proto";
+import "cryptos/v1/status.proto";
+
+option go_package = "github.com/CryptOS-PKI/api/go/cryptos/v1;cryptosv1";
+
+// NodeService is the Phase 1 management surface for a single CryptOS node.
+// All RPCs are served over mTLS gRPC on port 443 of the management
+// interface, plus a local UNIX socket for on-box cryptosctl access.
+//
+// Phase 1 ships exactly these RPCs. Phase 2 splits SignCSR into
+// role-restricted RPCs and adds protocol-adapter management.
+service NodeService {
+  // ApplyConfig sets the node's declarative machine configuration.
+  // Returns requires_reboot=true when the change cannot take effect at runtime.
+  rpc ApplyConfig(ApplyConfigRequest) returns (ApplyConfigResponse);
+
+  // GetStatus returns node role, identity state, and subsystem health.
+  rpc GetStatus(GetStatusRequest) returns (GetStatusResponse);
+
+  // GetIdentity returns the node's CA certificate chain in DER and PEM.
+  rpc GetIdentity(GetIdentityRequest) returns (GetIdentityResponse);
+
+  // StartCeremony drives the first-boot ceremony. Operator-initiated;
+  // streams progress events until completion. Only valid when the node
+  // is in the no-identity state.
+  rpc StartCeremony(StartCeremonyRequest) returns (stream StartCeremonyResponse);
+
+  // SignCSR signs a Certificate Signing Request with the Root CA key.
+  // Phase 1 debug-only: included only in builds compiled with
+  // -tags=debug_signcsr. Phase 2 replaces this with role-restricted
+  // RPCs (Root.SignSubordinateCSR and an internal Issuing.IssueLeaf).
+  rpc SignCSR(SignCSRRequest) returns (SignCSRResponse);
+}
+
+message ApplyConfigRequest {
+  MachineConfig config = 1;
+}
+
+message ApplyConfigResponse {
+  // Monotonically increasing generation; bumped on every successful apply.
+  uint64 generation = 1;
+  // True when the apply changed a field that takes effect only on reboot.
+  bool requires_reboot = 2;
+  // SHA-256 digest of the canonical-encoded applied configuration.
+  bytes config_digest = 3;
+}
+
+message GetStatusRequest {}
+
+message GetStatusResponse {
+  NodeStatus status = 1;
+}
+
+message GetIdentityRequest {}
+
+message GetIdentityResponse {
+  Identity identity = 1;
+}
+
+message StartCeremonyRequest {
+  CeremonyKind kind = 1;
+  // Operator's machine config to apply as part of the ceremony.
+  // Carried as YAML bytes; server parses and validates.
+  bytes machine_config_yaml = 2;
+}
+
+// StartCeremonyResponse is the unit streamed back during a ceremony.
+// Exactly one detail field on the embedded event is set per message.
+message StartCeremonyResponse {
+  CeremonyEvent event = 1;
+}
+
+// SignCSRRequest carries a DER-encoded PKCS#10 CSR and the profile to apply.
+// Phase 1 debug build only.
+message SignCSRRequest {
+  bytes csr_der = 1;
+  string profile = 2;
+}
+
+message SignCSRResponse {
+  bytes cert_der = 1;
+}

@@ -1,0 +1,74 @@
+syntax = "proto3";
+/*
+   Apache License 2.0
+
+   Copyright 2026 Shane
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+
+package cryptos.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/CryptOS-PKI/api/go/cryptos/v1;cryptosv1";
+
+// CeremonyKind identifies which ceremony is being run. Phase 1 ships
+// FIRST_BOOT_ROOT only; later phases add re-key and recovery flows.
+enum CeremonyKind {
+  CEREMONY_KIND_UNSPECIFIED = 0;
+  CEREMONY_KIND_FIRST_BOOT_ROOT = 1;
+}
+
+// CeremonyEvent is emitted on the StartCeremony stream. Exactly one
+// detail field is set per event, matching the kind.
+message CeremonyEvent {
+  CeremonyEventKind kind = 1;
+  google.protobuf.Timestamp ts = 2;
+
+  oneof detail {
+    KeyCreated key_created = 10;
+    CertSigned cert_signed = 11;
+    ManifestWritten manifest_written = 12;
+    AdminRotated admin_rotated = 13;
+    Complete complete = 14;
+  }
+}
+
+enum CeremonyEventKind {
+  CEREMONY_EVENT_KIND_UNSPECIFIED = 0;
+  CEREMONY_EVENT_KIND_KEY_CREATED = 1;
+  CEREMONY_EVENT_KIND_CERT_SIGNED = 2;
+  CEREMONY_EVENT_KIND_MANIFEST_WRITTEN = 3;
+  CEREMONY_EVENT_KIND_ADMIN_ROTATED = 4;
+  CEREMONY_EVENT_KIND_COMPLETE = 5;
+}
+
+message KeyCreated {
+  bytes tpm_public = 1;
+  bytes creation_data = 2;
+}
+
+message CertSigned {
+  bytes cert_sha256 = 1;
+}
+
+message ManifestWritten {
+  string manifest_id = 1;
+}
+
+message AdminRotated {
+  bytes admin_cert_sha256 = 1;
+}
+
+message Complete {}

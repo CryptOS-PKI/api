@@ -1,0 +1,50 @@
+syntax = "proto3";
+/*
+   Apache License 2.0
+
+   Copyright 2026 Shane
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+
+package cryptos.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/CryptOS-PKI/api/go/cryptos/v1;cryptosv1";
+
+// AuditEvent is one entry in the hash-chained audit log. Stored as
+// newline-delimited protobuf on the encrypted state partition; replicated
+// to the Fleet Manager (Phase 3) and shipped to SIEM (Phase 3).
+message AuditEvent {
+  // Monotonically increasing sequence number; gaps indicate tampering.
+  uint64 seq = 1;
+  google.protobuf.Timestamp ts = 2;
+  // Subject DN of the caller's mTLS client certificate.
+  string actor_subject = 3;
+  // Fully-qualified gRPC method name, e.g. "cryptos.v1.NodeAPI/SignCSR".
+  string rpc_method = 4;
+  // SHA-256 of the canonical-encoded request message.
+  bytes request_digest_sha256 = 5;
+  Outcome outcome = 6;
+  // SHA-256 of the previous entry's canonical encoding; nil for the first
+  // entry. Verifiers re-chain this on read.
+  bytes prev_entry_sha256 = 7;
+}
+
+enum Outcome {
+  OUTCOME_UNSPECIFIED = 0;
+  OUTCOME_OK = 1;
+  OUTCOME_DENIED = 2;
+  OUTCOME_ERROR = 3;
+}

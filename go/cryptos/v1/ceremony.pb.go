@@ -503,9 +503,9 @@ func (*Complete) Descriptor() ([]byte, []int) {
 }
 
 // CeremonyManifest is the durable, signed record of a completed ceremony,
-// persisted at /cryptos/ceremony/manifests/<ceremony_id>. The schema
-// carries the locked decision #10 fields and is shaped for M-of-N quorum;
-// Phase 1 records a single 1-of-1 operator signature.
+// persisted at /cryptos/ceremony/manifests/<ceremony_id>. The schema is
+// shaped for M-of-N quorum; Phase 1 records a single 1-of-1 operator
+// signature.
 //
 // The signed payload is the deterministic-marshaled CeremonyManifest with
 // operator_signatures cleared; signatures are computed over that payload

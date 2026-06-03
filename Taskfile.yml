@@ -52,7 +52,7 @@ tasks:
       - go mod tidy
 
   ci:
-    desc: Full local validation chain (matches feedback-local-validation-before-push)
+    desc: Full local validation chain (fmt + lint + generate-and-verify + test)
     cmds:
       - task: fmt
       - task: lint

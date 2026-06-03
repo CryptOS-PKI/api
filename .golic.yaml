@@ -1,0 +1,7 @@
+golic:
+  rules:
+    .proto:
+      prefix: "/*"
+      suffix: "*/"
+      under:
+        - "syntax = *"

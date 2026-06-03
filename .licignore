@@ -1,0 +1,12 @@
+# Deny everything by default, then allow specific source files.
+*
+
+# Allow our hand-written source files.
+!*.proto
+!*.go
+
+# Allow directory traversal.
+!*/
+
+# Re-deny generated stubs (regenerated from .proto on every build).
+go/**/*.pb.go

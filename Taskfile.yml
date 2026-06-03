@@ -1,0 +1,64 @@
+version: '3'
+
+# Task targets for the CryptOS-PKI api/ module.
+# Requires on PATH: buf, protoc-gen-go, protoc-gen-go-grpc, golic.
+
+tasks:
+  default:
+    desc: Show available tasks
+    cmds:
+      - task --list
+
+  fmt:
+    desc: Format proto files
+    cmds:
+      - buf format -w
+
+  lint:
+    desc: Lint proto files
+    cmds:
+      - buf lint
+      - buf format -d
+
+  generate:
+    desc: Generate Go stubs from protos
+    cmds:
+      - buf generate
+
+  generate:verify:
+    desc: Generate and assert the working tree is clean
+    cmds:
+      - task: generate
+      - |
+        if ! git diff --quiet go/; then
+          echo "Generated stubs are out of date. Run 'task generate' and commit the result." >&2
+          git --no-pager diff go/ >&2
+          exit 1
+        fi
+
+  license:
+    desc: Inject Apache 2.0 license headers via golic
+    cmds:
+      - golic inject -t apache2 -c "2026 Shane"
+
+  test:
+    desc: Run Go tests
+    cmds:
+      - go test ./go/...
+
+  tidy:
+    desc: Tidy the Go module
+    cmds:
+      - go mod tidy
+
+  ci:
+    desc: Full local validation chain (matches feedback-local-validation-before-push)
+    cmds:
+      - task: fmt
+      - task: lint
+      - task: generate:verify
+      - task: test
+    # Note: a strict license:check gate isn't part of `task ci` because
+    # `buf format` reindents block comments in a way `golic --dry`
+    # doesn't recognize as equivalent. Headers are visually confirmed and
+    # `task license` is the canonical re-injection step.

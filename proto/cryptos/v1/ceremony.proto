@@ -72,3 +72,57 @@ message AdminRotated {
 }
 
 message Complete {}
+
+// CeremonyManifest is the durable, signed record of a completed ceremony,
+// persisted at /cryptos/ceremony/manifests/<ceremony_id>. The schema
+// carries the locked decision #10 fields and is shaped for M-of-N quorum;
+// Phase 1 records a single 1-of-1 operator signature.
+//
+// The signed payload is the deterministic-marshaled CeremonyManifest with
+// operator_signatures cleared; signatures are computed over that payload
+// and then placed back into operator_signatures.
+message CeremonyManifest {
+  // manifest_version is the manifest schema version (1 for Phase 1).
+  uint32 manifest_version = 1;
+  // ceremony_id is a UUID identifying this ceremony run.
+  string ceremony_id = 2;
+  // ceremony_kind identifies the ceremony type (e.g. "root_first_boot").
+  string ceremony_kind = 3;
+  // node_id identifies the node that ran the ceremony.
+  string node_id = 4;
+  // started_at is when the ceremony began.
+  google.protobuf.Timestamp started_at = 5;
+  // completed_at is when the ceremony finished.
+  google.protobuf.Timestamp completed_at = 6;
+  // operator_signatures holds one entry per authorizing operator. Phase 1
+  // records a single entry binding the authorizing bootstrap admin.
+  repeated OperatorSignature operator_signatures = 7;
+  // key_creation_attestation captures the TPM evidence for the created key.
+  KeyCreationAttestation key_creation_attestation = 8;
+  // resulting_cert_sha256 is the SHA-256 of the resulting certificate DER.
+  bytes resulting_cert_sha256 = 9;
+  // prev_manifest_sha256 chains to the prior manifest; nil for the first.
+  bytes prev_manifest_sha256 = 10;
+}
+
+// OperatorSignature is one authorizing signature over a CeremonyManifest.
+message OperatorSignature {
+  // signer_id identifies the signer (Phase 1: the bootstrap admin cert
+  // SHA-256 in lowercase hex).
+  string signer_id = 1;
+  // sig_alg names the signature algorithm (e.g. "ed25519").
+  string sig_alg = 2;
+  // sig_bytes is the raw signature over the manifest payload.
+  bytes sig_bytes = 3;
+}
+
+// KeyCreationAttestation captures the TPM evidence produced when the CA
+// signing key was created inside the TPM.
+message KeyCreationAttestation {
+  // tpm_public is the TPM2B_PUBLIC blob of the created key.
+  bytes tpm_public = 1;
+  // tpm_creation_data is the TPM2B_CREATION_DATA returned at creation.
+  bytes tpm_creation_data = 2;
+  // tpm_creation_ticket is the TPMT_TK_CREATION ticket returned at creation.
+  bytes tpm_creation_ticket = 3;
+}

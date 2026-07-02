@@ -10,3 +10,7 @@
 
 # Re-deny generated stubs (regenerated from .proto on every build).
 go/**/*.pb.go
+
+# Proto headers are hand-maintained in the .proto sources (golic v0.2.0 does not
+# round-trip the post-syntax block comment); exclude them from the golic check.
+*.proto

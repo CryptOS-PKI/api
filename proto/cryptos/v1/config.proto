@@ -35,6 +35,9 @@ message MachineConfig {
   Storage storage = 6;
   Bootstrap bootstrap = 7;
   Pki pki = 8;
+  // install carries the target-disk declaration for the maintenance-mode
+  // install flow. Ignored by an already-installed node.
+  Install install = 9;
 }
 
 message Metadata {
@@ -71,6 +74,14 @@ message Pki {
   Subject root_subject = 2;
   uint32 root_validity_years = 3;
   uint32 path_len_constraint = 4;
+}
+
+// Install declares how the node provisions itself to persistent storage during
+// the maintenance-mode install (apply-config in maintenance). Ignored by an
+// already-installed node.
+message Install {
+  // disk is the target block device to install to and WIPE, e.g. "/dev/nvme0n1".
+  string disk = 1;
 }
 
 message Subject {

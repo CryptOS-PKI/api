@@ -29,6 +29,7 @@ message NodeStatus {
   EtcdState etcd_state = 4;
   uint64 boot_count = 5;
   string software_version = 6;
+  FleetManagerState fleet_manager = 7;
 }
 
 // NodeRole is the role this node booted into, from machine config.
@@ -60,4 +61,14 @@ enum EtcdState {
   ETCD_STATE_UNSPECIFIED = 0;
   ETCD_STATE_OK = 1;
   ETCD_STATE_DEGRADED = 2;
+}
+
+// FleetManagerState reports whether the node is connected to a Fleet Manager.
+// A node with no Fleet Manager endpoint configured is NOT_ENROLLED. Fleet
+// Manager connectivity is non-critical: it never affects the node's serving.
+enum FleetManagerState {
+  FLEET_MANAGER_STATE_UNSPECIFIED = 0;
+  FLEET_MANAGER_STATE_NOT_ENROLLED = 1;
+  FLEET_MANAGER_STATE_CONNECTED = 2;
+  FLEET_MANAGER_STATE_DISCONNECTED = 3;
 }

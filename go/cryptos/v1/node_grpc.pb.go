@@ -19,12 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	NodeService_ApplyConfig_FullMethodName   = "/cryptos.v1.NodeService/ApplyConfig"
-	NodeService_GetStatus_FullMethodName     = "/cryptos.v1.NodeService/GetStatus"
-	NodeService_GetIdentity_FullMethodName   = "/cryptos.v1.NodeService/GetIdentity"
-	NodeService_StartCeremony_FullMethodName = "/cryptos.v1.NodeService/StartCeremony"
-	NodeService_SignCSR_FullMethodName       = "/cryptos.v1.NodeService/SignCSR"
-	NodeService_Reset_FullMethodName         = "/cryptos.v1.NodeService/Reset"
+	NodeService_ApplyConfig_FullMethodName        = "/cryptos.v1.NodeService/ApplyConfig"
+	NodeService_GetStatus_FullMethodName          = "/cryptos.v1.NodeService/GetStatus"
+	NodeService_GetIdentity_FullMethodName        = "/cryptos.v1.NodeService/GetIdentity"
+	NodeService_StartCeremony_FullMethodName      = "/cryptos.v1.NodeService/StartCeremony"
+	NodeService_SignCSR_FullMethodName            = "/cryptos.v1.NodeService/SignCSR"
+	NodeService_SignSubordinateCSR_FullMethodName = "/cryptos.v1.NodeService/SignSubordinateCSR"
+	NodeService_IssueLeaf_FullMethodName          = "/cryptos.v1.NodeService/IssueLeaf"
+	NodeService_Reset_FullMethodName              = "/cryptos.v1.NodeService/Reset"
 )
 
 // NodeServiceClient is the client API for NodeService service.
@@ -54,6 +56,17 @@ type NodeServiceClient interface {
 	// -tags=debug_signcsr. Phase 2 replaces this with role-restricted
 	// RPCs (Root.SignSubordinateCSR and an internal Issuing.IssueLeaf).
 	SignCSR(ctx context.Context, in *SignCSRRequest, opts ...grpc.CallOption) (*SignCSRResponse, error)
+	// SignSubordinateCSR signs a child CA's CSR into a CA certificate per a
+	// named profile (BasicConstraints CA:TRUE, pathLen clamped to the parent's
+	// budget) and returns the new cert plus the parent's chain. Role-restricted
+	// (a CA that may sign sub-CAs) and authorized by the bootstrap admin;
+	// reachable online (parent mTLS) or offline (operator ferry via the local
+	// socket). Supersedes the debug-only SignCSR for the CA path.
+	SignSubordinateCSR(ctx context.Context, in *SignSubordinateCSRRequest, opts ...grpc.CallOption) (*SignSubordinateCSRResponse, error)
+	// IssueLeaf signs an end-entity (CA:FALSE) certificate per a named profile.
+	// Role-restricted (intermediate/issuing; a root only with the irreversible
+	// ack). The internal path the Phase-2 protocol adapters will call.
+	IssueLeaf(ctx context.Context, in *IssueLeafRequest, opts ...grpc.CallOption) (*IssueLeafResponse, error)
 	// Reset destroys the node's identity: it erases the state-partition key
 	// material (rendering all encrypted data unrecoverable), clears any staged
 	// config, and reboots into maintenance. Served ONLY on the local UNIX
@@ -130,6 +143,26 @@ func (c *nodeServiceClient) SignCSR(ctx context.Context, in *SignCSRRequest, opt
 	return out, nil
 }
 
+func (c *nodeServiceClient) SignSubordinateCSR(ctx context.Context, in *SignSubordinateCSRRequest, opts ...grpc.CallOption) (*SignSubordinateCSRResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SignSubordinateCSRResponse)
+	err := c.cc.Invoke(ctx, NodeService_SignSubordinateCSR_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nodeServiceClient) IssueLeaf(ctx context.Context, in *IssueLeafRequest, opts ...grpc.CallOption) (*IssueLeafResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(IssueLeafResponse)
+	err := c.cc.Invoke(ctx, NodeService_IssueLeaf_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *nodeServiceClient) Reset(ctx context.Context, in *ResetRequest, opts ...grpc.CallOption) (*ResetResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ResetResponse)
@@ -167,6 +200,17 @@ type NodeServiceServer interface {
 	// -tags=debug_signcsr. Phase 2 replaces this with role-restricted
 	// RPCs (Root.SignSubordinateCSR and an internal Issuing.IssueLeaf).
 	SignCSR(context.Context, *SignCSRRequest) (*SignCSRResponse, error)
+	// SignSubordinateCSR signs a child CA's CSR into a CA certificate per a
+	// named profile (BasicConstraints CA:TRUE, pathLen clamped to the parent's
+	// budget) and returns the new cert plus the parent's chain. Role-restricted
+	// (a CA that may sign sub-CAs) and authorized by the bootstrap admin;
+	// reachable online (parent mTLS) or offline (operator ferry via the local
+	// socket). Supersedes the debug-only SignCSR for the CA path.
+	SignSubordinateCSR(context.Context, *SignSubordinateCSRRequest) (*SignSubordinateCSRResponse, error)
+	// IssueLeaf signs an end-entity (CA:FALSE) certificate per a named profile.
+	// Role-restricted (intermediate/issuing; a root only with the irreversible
+	// ack). The internal path the Phase-2 protocol adapters will call.
+	IssueLeaf(context.Context, *IssueLeafRequest) (*IssueLeafResponse, error)
 	// Reset destroys the node's identity: it erases the state-partition key
 	// material (rendering all encrypted data unrecoverable), clears any staged
 	// config, and reboots into maintenance. Served ONLY on the local UNIX
@@ -197,6 +241,12 @@ func (UnimplementedNodeServiceServer) StartCeremony(*StartCeremonyRequest, grpc.
 }
 func (UnimplementedNodeServiceServer) SignCSR(context.Context, *SignCSRRequest) (*SignCSRResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SignCSR not implemented")
+}
+func (UnimplementedNodeServiceServer) SignSubordinateCSR(context.Context, *SignSubordinateCSRRequest) (*SignSubordinateCSRResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SignSubordinateCSR not implemented")
+}
+func (UnimplementedNodeServiceServer) IssueLeaf(context.Context, *IssueLeafRequest) (*IssueLeafResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IssueLeaf not implemented")
 }
 func (UnimplementedNodeServiceServer) Reset(context.Context, *ResetRequest) (*ResetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Reset not implemented")
@@ -304,6 +354,42 @@ func _NodeService_SignCSR_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NodeService_SignSubordinateCSR_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SignSubordinateCSRRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).SignSubordinateCSR(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_SignSubordinateCSR_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).SignSubordinateCSR(ctx, req.(*SignSubordinateCSRRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NodeService_IssueLeaf_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IssueLeafRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).IssueLeaf(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_IssueLeaf_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).IssueLeaf(ctx, req.(*IssueLeafRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _NodeService_Reset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ResetRequest)
 	if err := dec(in); err != nil {
@@ -344,6 +430,14 @@ var NodeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SignCSR",
 			Handler:    _NodeService_SignCSR_Handler,
+		},
+		{
+			MethodName: "SignSubordinateCSR",
+			Handler:    _NodeService_SignSubordinateCSR_Handler,
+		},
+		{
+			MethodName: "IssueLeaf",
+			Handler:    _NodeService_IssueLeaf_Handler,
 		},
 		{
 			MethodName: "Reset",

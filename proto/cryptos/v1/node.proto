@@ -53,6 +53,14 @@ service NodeService {
   // -tags=debug_signcsr. Phase 2 replaces this with role-restricted
   // RPCs (Root.SignSubordinateCSR and an internal Issuing.IssueLeaf).
   rpc SignCSR(SignCSRRequest) returns (SignCSRResponse);
+
+  // Reset destroys the node's identity: it erases the state-partition key
+  // material (rendering all encrypted data unrecoverable), clears any staged
+  // config, and reboots into maintenance. Served ONLY on the local UNIX
+  // socket (physical-console trust); the node refuses it over mTLS and in
+  // maintenance mode. The caller must echo the current Root CA CN as
+  // confirmation.
+  rpc Reset(ResetRequest) returns (ResetResponse);
 }
 
 message ApplyConfigRequest {
@@ -103,3 +111,11 @@ message SignCSRRequest {
 message SignCSRResponse {
   bytes cert_der = 1;
 }
+
+// ResetRequest confirms a destructive node reset. confirm_common_name must
+// exactly equal the node's current Root CA CN, or the node refuses the reset.
+message ResetRequest {
+  string confirm_common_name = 1;
+}
+
+message ResetResponse {}

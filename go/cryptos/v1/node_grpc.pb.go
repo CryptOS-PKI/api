@@ -24,6 +24,7 @@ const (
 	NodeService_GetIdentity_FullMethodName   = "/cryptos.v1.NodeService/GetIdentity"
 	NodeService_StartCeremony_FullMethodName = "/cryptos.v1.NodeService/StartCeremony"
 	NodeService_SignCSR_FullMethodName       = "/cryptos.v1.NodeService/SignCSR"
+	NodeService_Reset_FullMethodName         = "/cryptos.v1.NodeService/Reset"
 )
 
 // NodeServiceClient is the client API for NodeService service.
@@ -53,6 +54,13 @@ type NodeServiceClient interface {
 	// -tags=debug_signcsr. Phase 2 replaces this with role-restricted
 	// RPCs (Root.SignSubordinateCSR and an internal Issuing.IssueLeaf).
 	SignCSR(ctx context.Context, in *SignCSRRequest, opts ...grpc.CallOption) (*SignCSRResponse, error)
+	// Reset destroys the node's identity: it erases the state-partition key
+	// material (rendering all encrypted data unrecoverable), clears any staged
+	// config, and reboots into maintenance. Served ONLY on the local UNIX
+	// socket (physical-console trust); the node refuses it over mTLS and in
+	// maintenance mode. The caller must echo the current Root CA CN as
+	// confirmation.
+	Reset(ctx context.Context, in *ResetRequest, opts ...grpc.CallOption) (*ResetResponse, error)
 }
 
 type nodeServiceClient struct {
@@ -122,6 +130,16 @@ func (c *nodeServiceClient) SignCSR(ctx context.Context, in *SignCSRRequest, opt
 	return out, nil
 }
 
+func (c *nodeServiceClient) Reset(ctx context.Context, in *ResetRequest, opts ...grpc.CallOption) (*ResetResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ResetResponse)
+	err := c.cc.Invoke(ctx, NodeService_Reset_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NodeServiceServer is the server API for NodeService service.
 // All implementations should embed UnimplementedNodeServiceServer
 // for forward compatibility.
@@ -149,6 +167,13 @@ type NodeServiceServer interface {
 	// -tags=debug_signcsr. Phase 2 replaces this with role-restricted
 	// RPCs (Root.SignSubordinateCSR and an internal Issuing.IssueLeaf).
 	SignCSR(context.Context, *SignCSRRequest) (*SignCSRResponse, error)
+	// Reset destroys the node's identity: it erases the state-partition key
+	// material (rendering all encrypted data unrecoverable), clears any staged
+	// config, and reboots into maintenance. Served ONLY on the local UNIX
+	// socket (physical-console trust); the node refuses it over mTLS and in
+	// maintenance mode. The caller must echo the current Root CA CN as
+	// confirmation.
+	Reset(context.Context, *ResetRequest) (*ResetResponse, error)
 }
 
 // UnimplementedNodeServiceServer should be embedded to have
@@ -172,6 +197,9 @@ func (UnimplementedNodeServiceServer) StartCeremony(*StartCeremonyRequest, grpc.
 }
 func (UnimplementedNodeServiceServer) SignCSR(context.Context, *SignCSRRequest) (*SignCSRResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SignCSR not implemented")
+}
+func (UnimplementedNodeServiceServer) Reset(context.Context, *ResetRequest) (*ResetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Reset not implemented")
 }
 func (UnimplementedNodeServiceServer) testEmbeddedByValue() {}
 
@@ -276,6 +304,24 @@ func _NodeService_SignCSR_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NodeService_Reset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).Reset(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_Reset_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).Reset(ctx, req.(*ResetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NodeService_ServiceDesc is the grpc.ServiceDesc for NodeService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -298,6 +344,10 @@ var NodeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SignCSR",
 			Handler:    _NodeService_SignCSR_Handler,
+		},
+		{
+			MethodName: "Reset",
+			Handler:    _NodeService_Reset_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

@@ -419,6 +419,9 @@ type Pki struct {
 	RootSubject       *Subject `protobuf:"bytes,2,opt,name=root_subject,json=rootSubject,proto3" json:"root_subject,omitempty"`
 	RootValidityYears uint32   `protobuf:"varint,3,opt,name=root_validity_years,json=rootValidityYears,proto3" json:"root_validity_years,omitempty"`
 	PathLenConstraint uint32   `protobuf:"varint,4,opt,name=path_len_constraint,json=pathLenConstraint,proto3" json:"path_len_constraint,omitempty"`
+	// Named certificate profiles this node may generate a CSR from or stamp when
+	// signing (Phase 2). Referenced by name from the role/issuance flows.
+	Profiles []*CertificateProfile `protobuf:"bytes,5,rep,name=profiles,proto3" json:"profiles,omitempty"`
 }
 
 func (x *Pki) Reset() {
@@ -481,6 +484,325 @@ func (x *Pki) GetPathLenConstraint() uint32 {
 	return 0
 }
 
+func (x *Pki) GetProfiles() []*CertificateProfile {
+	if x != nil {
+		return x.Profiles
+	}
+	return nil
+}
+
+// CertificateProfile drives CSR generation and certificate signing: key
+// parameters, subject, validity, and X.509 extensions. Phase 2 defines a
+// covering subset of typed extensions plus a raw-extension escape hatch; the
+// set grows additively toward the full X.509 catalog.
+type CertificateProfile struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// e.g. "ECDSA-P384". Covering subset; RSA sizes and other curves are additive.
+	KeyAlg           string            `protobuf:"bytes,2,opt,name=key_alg,json=keyAlg,proto3" json:"key_alg,omitempty"`
+	Subject          *Subject          `protobuf:"bytes,3,opt,name=subject,proto3" json:"subject,omitempty"`
+	ValidityDays     uint32            `protobuf:"varint,4,opt,name=validity_days,json=validityDays,proto3" json:"validity_days,omitempty"`
+	BasicConstraints *BasicConstraints `protobuf:"bytes,5,opt,name=basic_constraints,json=basicConstraints,proto3" json:"basic_constraints,omitempty"`
+	// e.g. "cert_sign", "crl_sign", "digital_signature", "key_encipherment".
+	KeyUsage []string `protobuf:"bytes,6,rep,name=key_usage,json=keyUsage,proto3" json:"key_usage,omitempty"`
+	// e.g. "server_auth", "client_auth".
+	ExtKeyUsage []string         `protobuf:"bytes,7,rep,name=ext_key_usage,json=extKeyUsage,proto3" json:"ext_key_usage,omitempty"`
+	Sans        *SubjectAltNames `protobuf:"bytes,8,opt,name=sans,proto3" json:"sans,omitempty"`
+	// Raw-OID escape hatch for extensions not yet modeled as typed fields.
+	ExtraExtensions []*X509Extension `protobuf:"bytes,9,rep,name=extra_extensions,json=extraExtensions,proto3" json:"extra_extensions,omitempty"`
+}
+
+func (x *CertificateProfile) Reset() {
+	*x = CertificateProfile{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_v1_config_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CertificateProfile) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CertificateProfile) ProtoMessage() {}
+
+func (x *CertificateProfile) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_v1_config_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CertificateProfile.ProtoReflect.Descriptor instead.
+func (*CertificateProfile) Descriptor() ([]byte, []int) {
+	return file_cryptos_v1_config_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *CertificateProfile) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *CertificateProfile) GetKeyAlg() string {
+	if x != nil {
+		return x.KeyAlg
+	}
+	return ""
+}
+
+func (x *CertificateProfile) GetSubject() *Subject {
+	if x != nil {
+		return x.Subject
+	}
+	return nil
+}
+
+func (x *CertificateProfile) GetValidityDays() uint32 {
+	if x != nil {
+		return x.ValidityDays
+	}
+	return 0
+}
+
+func (x *CertificateProfile) GetBasicConstraints() *BasicConstraints {
+	if x != nil {
+		return x.BasicConstraints
+	}
+	return nil
+}
+
+func (x *CertificateProfile) GetKeyUsage() []string {
+	if x != nil {
+		return x.KeyUsage
+	}
+	return nil
+}
+
+func (x *CertificateProfile) GetExtKeyUsage() []string {
+	if x != nil {
+		return x.ExtKeyUsage
+	}
+	return nil
+}
+
+func (x *CertificateProfile) GetSans() *SubjectAltNames {
+	if x != nil {
+		return x.Sans
+	}
+	return nil
+}
+
+func (x *CertificateProfile) GetExtraExtensions() []*X509Extension {
+	if x != nil {
+		return x.ExtraExtensions
+	}
+	return nil
+}
+
+type BasicConstraints struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	IsCa bool `protobuf:"varint,1,opt,name=is_ca,json=isCa,proto3" json:"is_ca,omitempty"`
+	// path_len applies when is_ca. 0 = no CAs may be issued below this one
+	// (a leaf-only issuing CA). Absent = unconstrained depth.
+	PathLen *uint32 `protobuf:"varint,2,opt,name=path_len,json=pathLen,proto3,oneof" json:"path_len,omitempty"`
+}
+
+func (x *BasicConstraints) Reset() {
+	*x = BasicConstraints{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_v1_config_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BasicConstraints) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BasicConstraints) ProtoMessage() {}
+
+func (x *BasicConstraints) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_v1_config_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BasicConstraints.ProtoReflect.Descriptor instead.
+func (*BasicConstraints) Descriptor() ([]byte, []int) {
+	return file_cryptos_v1_config_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *BasicConstraints) GetIsCa() bool {
+	if x != nil {
+		return x.IsCa
+	}
+	return false
+}
+
+func (x *BasicConstraints) GetPathLen() uint32 {
+	if x != nil && x.PathLen != nil {
+		return *x.PathLen
+	}
+	return 0
+}
+
+type SubjectAltNames struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Dns   []string `protobuf:"bytes,1,rep,name=dns,proto3" json:"dns,omitempty"`
+	Ip    []string `protobuf:"bytes,2,rep,name=ip,proto3" json:"ip,omitempty"`
+	Email []string `protobuf:"bytes,3,rep,name=email,proto3" json:"email,omitempty"`
+	Uri   []string `protobuf:"bytes,4,rep,name=uri,proto3" json:"uri,omitempty"`
+}
+
+func (x *SubjectAltNames) Reset() {
+	*x = SubjectAltNames{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_v1_config_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SubjectAltNames) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubjectAltNames) ProtoMessage() {}
+
+func (x *SubjectAltNames) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_v1_config_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubjectAltNames.ProtoReflect.Descriptor instead.
+func (*SubjectAltNames) Descriptor() ([]byte, []int) {
+	return file_cryptos_v1_config_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *SubjectAltNames) GetDns() []string {
+	if x != nil {
+		return x.Dns
+	}
+	return nil
+}
+
+func (x *SubjectAltNames) GetIp() []string {
+	if x != nil {
+		return x.Ip
+	}
+	return nil
+}
+
+func (x *SubjectAltNames) GetEmail() []string {
+	if x != nil {
+		return x.Email
+	}
+	return nil
+}
+
+func (x *SubjectAltNames) GetUri() []string {
+	if x != nil {
+		return x.Uri
+	}
+	return nil
+}
+
+// X509Extension is the raw escape hatch: a dotted OID, criticality flag, and the
+// DER-encoded extension value, for extensions not yet modeled as typed fields.
+type X509Extension struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Oid      string `protobuf:"bytes,1,opt,name=oid,proto3" json:"oid,omitempty"`
+	Critical bool   `protobuf:"varint,2,opt,name=critical,proto3" json:"critical,omitempty"`
+	Value    []byte `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
+}
+
+func (x *X509Extension) Reset() {
+	*x = X509Extension{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_v1_config_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *X509Extension) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*X509Extension) ProtoMessage() {}
+
+func (x *X509Extension) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_v1_config_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use X509Extension.ProtoReflect.Descriptor instead.
+func (*X509Extension) Descriptor() ([]byte, []int) {
+	return file_cryptos_v1_config_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *X509Extension) GetOid() string {
+	if x != nil {
+		return x.Oid
+	}
+	return ""
+}
+
+func (x *X509Extension) GetCritical() bool {
+	if x != nil {
+		return x.Critical
+	}
+	return false
+}
+
+func (x *X509Extension) GetValue() []byte {
+	if x != nil {
+		return x.Value
+	}
+	return nil
+}
+
 // Install declares how the node provisions itself to persistent storage during
 // the maintenance-mode install (apply-config in maintenance). Ignored by an
 // already-installed node.
@@ -496,7 +818,7 @@ type Install struct {
 func (x *Install) Reset() {
 	*x = Install{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_cryptos_v1_config_proto_msgTypes[7]
+		mi := &file_cryptos_v1_config_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -509,7 +831,7 @@ func (x *Install) String() string {
 func (*Install) ProtoMessage() {}
 
 func (x *Install) ProtoReflect() protoreflect.Message {
-	mi := &file_cryptos_v1_config_proto_msgTypes[7]
+	mi := &file_cryptos_v1_config_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -522,7 +844,7 @@ func (x *Install) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Install.ProtoReflect.Descriptor instead.
 func (*Install) Descriptor() ([]byte, []int) {
-	return file_cryptos_v1_config_proto_rawDescGZIP(), []int{7}
+	return file_cryptos_v1_config_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *Install) GetDisk() string {
@@ -545,7 +867,7 @@ type Subject struct {
 func (x *Subject) Reset() {
 	*x = Subject{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_cryptos_v1_config_proto_msgTypes[8]
+		mi := &file_cryptos_v1_config_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -558,7 +880,7 @@ func (x *Subject) String() string {
 func (*Subject) ProtoMessage() {}
 
 func (x *Subject) ProtoReflect() protoreflect.Message {
-	mi := &file_cryptos_v1_config_proto_msgTypes[8]
+	mi := &file_cryptos_v1_config_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -571,7 +893,7 @@ func (x *Subject) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Subject.ProtoReflect.Descriptor instead.
 func (*Subject) Descriptor() ([]byte, []int) {
-	return file_cryptos_v1_config_proto_rawDescGZIP(), []int{8}
+	return file_cryptos_v1_config_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *Subject) GetCommonName() string {
@@ -646,7 +968,7 @@ var file_cryptos_v1_config_proto_rawDesc = []byte{
 	0x50, 0x65, 0x6d, 0x12, 0x2a, 0x0a, 0x11, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x63, 0x65, 0x72,
 	0x74, 0x5f, 0x73, 0x68, 0x61, 0x32, 0x35, 0x36, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0f,
 	0x61, 0x64, 0x6d, 0x69, 0x6e, 0x43, 0x65, 0x72, 0x74, 0x53, 0x68, 0x61, 0x32, 0x35, 0x36, 0x22,
-	0xbf, 0x01, 0x0a, 0x03, 0x50, 0x6b, 0x69, 0x12, 0x20, 0x0a, 0x0c, 0x72, 0x6f, 0x6f, 0x74, 0x5f,
+	0xfb, 0x01, 0x0a, 0x03, 0x50, 0x6b, 0x69, 0x12, 0x20, 0x0a, 0x0c, 0x72, 0x6f, 0x6f, 0x74, 0x5f,
 	0x6b, 0x65, 0x79, 0x5f, 0x61, 0x6c, 0x67, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x72,
 	0x6f, 0x6f, 0x74, 0x4b, 0x65, 0x79, 0x41, 0x6c, 0x67, 0x12, 0x36, 0x0a, 0x0c, 0x72, 0x6f, 0x6f,
 	0x74, 0x5f, 0x73, 0x75, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32,
@@ -658,19 +980,65 @@ var file_cryptos_v1_config_proto_rawDesc = []byte{
 	0x73, 0x12, 0x2e, 0x0a, 0x13, 0x70, 0x61, 0x74, 0x68, 0x5f, 0x6c, 0x65, 0x6e, 0x5f, 0x63, 0x6f,
 	0x6e, 0x73, 0x74, 0x72, 0x61, 0x69, 0x6e, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x11,
 	0x70, 0x61, 0x74, 0x68, 0x4c, 0x65, 0x6e, 0x43, 0x6f, 0x6e, 0x73, 0x74, 0x72, 0x61, 0x69, 0x6e,
-	0x74, 0x22, 0x1d, 0x0a, 0x07, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6c, 0x6c, 0x12, 0x12, 0x0a, 0x04,
-	0x64, 0x69, 0x73, 0x6b, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x64, 0x69, 0x73, 0x6b,
-	0x22, 0x68, 0x0a, 0x07, 0x53, 0x75, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x12, 0x1f, 0x0a, 0x0b, 0x63,
-	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x0a, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x22, 0x0a, 0x0c,
-	0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x0c, 0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x07, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79, 0x42, 0x34, 0x5a, 0x32, 0x67, 0x69,
-	0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x43, 0x72, 0x79, 0x70, 0x74, 0x4f, 0x53,
-	0x2d, 0x50, 0x4b, 0x49, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x2f, 0x63, 0x72, 0x79, 0x70,
-	0x74, 0x6f, 0x73, 0x2f, 0x76, 0x31, 0x3b, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x76, 0x31,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x74, 0x12, 0x3a, 0x0a, 0x08, 0x70, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x18, 0x05, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x76, 0x31,
+	0x2e, 0x43, 0x65, 0x72, 0x74, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x66,
+	0x69, 0x6c, 0x65, 0x52, 0x08, 0x70, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x73, 0x22, 0x98, 0x03,
+	0x0a, 0x12, 0x43, 0x65, 0x72, 0x74, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f,
+	0x66, 0x69, 0x6c, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x17, 0x0a, 0x07, 0x6b, 0x65, 0x79, 0x5f,
+	0x61, 0x6c, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6b, 0x65, 0x79, 0x41, 0x6c,
+	0x67, 0x12, 0x2d, 0x0a, 0x07, 0x73, 0x75, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x13, 0x2e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x76, 0x31, 0x2e,
+	0x53, 0x75, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x52, 0x07, 0x73, 0x75, 0x62, 0x6a, 0x65, 0x63, 0x74,
+	0x12, 0x23, 0x0a, 0x0d, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x69, 0x74, 0x79, 0x5f, 0x64, 0x61, 0x79,
+	0x73, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0c, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x69, 0x74,
+	0x79, 0x44, 0x61, 0x79, 0x73, 0x12, 0x49, 0x0a, 0x11, 0x62, 0x61, 0x73, 0x69, 0x63, 0x5f, 0x63,
+	0x6f, 0x6e, 0x73, 0x74, 0x72, 0x61, 0x69, 0x6e, 0x74, 0x73, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x1c, 0x2e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x42, 0x61,
+	0x73, 0x69, 0x63, 0x43, 0x6f, 0x6e, 0x73, 0x74, 0x72, 0x61, 0x69, 0x6e, 0x74, 0x73, 0x52, 0x10,
+	0x62, 0x61, 0x73, 0x69, 0x63, 0x43, 0x6f, 0x6e, 0x73, 0x74, 0x72, 0x61, 0x69, 0x6e, 0x74, 0x73,
+	0x12, 0x1b, 0x0a, 0x09, 0x6b, 0x65, 0x79, 0x5f, 0x75, 0x73, 0x61, 0x67, 0x65, 0x18, 0x06, 0x20,
+	0x03, 0x28, 0x09, 0x52, 0x08, 0x6b, 0x65, 0x79, 0x55, 0x73, 0x61, 0x67, 0x65, 0x12, 0x22, 0x0a,
+	0x0d, 0x65, 0x78, 0x74, 0x5f, 0x6b, 0x65, 0x79, 0x5f, 0x75, 0x73, 0x61, 0x67, 0x65, 0x18, 0x07,
+	0x20, 0x03, 0x28, 0x09, 0x52, 0x0b, 0x65, 0x78, 0x74, 0x4b, 0x65, 0x79, 0x55, 0x73, 0x61, 0x67,
+	0x65, 0x12, 0x2f, 0x0a, 0x04, 0x73, 0x61, 0x6e, 0x73, 0x18, 0x08, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x1b, 0x2e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x75, 0x62,
+	0x6a, 0x65, 0x63, 0x74, 0x41, 0x6c, 0x74, 0x4e, 0x61, 0x6d, 0x65, 0x73, 0x52, 0x04, 0x73, 0x61,
+	0x6e, 0x73, 0x12, 0x44, 0x0a, 0x10, 0x65, 0x78, 0x74, 0x72, 0x61, 0x5f, 0x65, 0x78, 0x74, 0x65,
+	0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x09, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63,
+	0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x58, 0x35, 0x30, 0x39, 0x45, 0x78,
+	0x74, 0x65, 0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x0f, 0x65, 0x78, 0x74, 0x72, 0x61, 0x45, 0x78,
+	0x74, 0x65, 0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x22, 0x54, 0x0a, 0x10, 0x42, 0x61, 0x73, 0x69,
+	0x63, 0x43, 0x6f, 0x6e, 0x73, 0x74, 0x72, 0x61, 0x69, 0x6e, 0x74, 0x73, 0x12, 0x13, 0x0a, 0x05,
+	0x69, 0x73, 0x5f, 0x63, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x04, 0x69, 0x73, 0x43,
+	0x61, 0x12, 0x1e, 0x0a, 0x08, 0x70, 0x61, 0x74, 0x68, 0x5f, 0x6c, 0x65, 0x6e, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x0d, 0x48, 0x00, 0x52, 0x07, 0x70, 0x61, 0x74, 0x68, 0x4c, 0x65, 0x6e, 0x88, 0x01,
+	0x01, 0x42, 0x0b, 0x0a, 0x09, 0x5f, 0x70, 0x61, 0x74, 0x68, 0x5f, 0x6c, 0x65, 0x6e, 0x22, 0x5b,
+	0x0a, 0x0f, 0x53, 0x75, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x41, 0x6c, 0x74, 0x4e, 0x61, 0x6d, 0x65,
+	0x73, 0x12, 0x10, 0x0a, 0x03, 0x64, 0x6e, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52, 0x03,
+	0x64, 0x6e, 0x73, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x70, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52,
+	0x02, 0x69, 0x70, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18, 0x03, 0x20, 0x03,
+	0x28, 0x09, 0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x12, 0x10, 0x0a, 0x03, 0x75, 0x72, 0x69,
+	0x18, 0x04, 0x20, 0x03, 0x28, 0x09, 0x52, 0x03, 0x75, 0x72, 0x69, 0x22, 0x53, 0x0a, 0x0d, 0x58,
+	0x35, 0x30, 0x39, 0x45, 0x78, 0x74, 0x65, 0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x10, 0x0a, 0x03,
+	0x6f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6f, 0x69, 0x64, 0x12, 0x1a,
+	0x0a, 0x08, 0x63, 0x72, 0x69, 0x74, 0x69, 0x63, 0x61, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08,
+	0x52, 0x08, 0x63, 0x72, 0x69, 0x74, 0x69, 0x63, 0x61, 0x6c, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61,
+	0x6c, 0x75, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65,
+	0x22, 0x1d, 0x0a, 0x07, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6c, 0x6c, 0x12, 0x12, 0x0a, 0x04, 0x64,
+	0x69, 0x73, 0x6b, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x64, 0x69, 0x73, 0x6b, 0x22,
+	0x68, 0x0a, 0x07, 0x53, 0x75, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x12, 0x1f, 0x0a, 0x0b, 0x63, 0x6f,
+	0x6d, 0x6d, 0x6f, 0x6e, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x0a, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x22, 0x0a, 0x0c, 0x6f,
+	0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x0c, 0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12,
+	0x18, 0x0a, 0x07, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x07, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x72, 0x79, 0x42, 0x34, 0x5a, 0x32, 0x67, 0x69, 0x74,
+	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x43, 0x72, 0x79, 0x70, 0x74, 0x4f, 0x53, 0x2d,
+	0x50, 0x4b, 0x49, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x2f, 0x63, 0x72, 0x79, 0x70, 0x74,
+	0x6f, 0x73, 0x2f, 0x76, 0x31, 0x3b, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x76, 0x31, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -685,32 +1053,41 @@ func file_cryptos_v1_config_proto_rawDescGZIP() []byte {
 	return file_cryptos_v1_config_proto_rawDescData
 }
 
-var file_cryptos_v1_config_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_cryptos_v1_config_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_cryptos_v1_config_proto_goTypes = []any{
-	(*MachineConfig)(nil), // 0: cryptos.v1.MachineConfig
-	(*Metadata)(nil),      // 1: cryptos.v1.Metadata
-	(*Role)(nil),          // 2: cryptos.v1.Role
-	(*Network)(nil),       // 3: cryptos.v1.Network
-	(*Storage)(nil),       // 4: cryptos.v1.Storage
-	(*Bootstrap)(nil),     // 5: cryptos.v1.Bootstrap
-	(*Pki)(nil),           // 6: cryptos.v1.Pki
-	(*Install)(nil),       // 7: cryptos.v1.Install
-	(*Subject)(nil),       // 8: cryptos.v1.Subject
+	(*MachineConfig)(nil),      // 0: cryptos.v1.MachineConfig
+	(*Metadata)(nil),           // 1: cryptos.v1.Metadata
+	(*Role)(nil),               // 2: cryptos.v1.Role
+	(*Network)(nil),            // 3: cryptos.v1.Network
+	(*Storage)(nil),            // 4: cryptos.v1.Storage
+	(*Bootstrap)(nil),          // 5: cryptos.v1.Bootstrap
+	(*Pki)(nil),                // 6: cryptos.v1.Pki
+	(*CertificateProfile)(nil), // 7: cryptos.v1.CertificateProfile
+	(*BasicConstraints)(nil),   // 8: cryptos.v1.BasicConstraints
+	(*SubjectAltNames)(nil),    // 9: cryptos.v1.SubjectAltNames
+	(*X509Extension)(nil),      // 10: cryptos.v1.X509Extension
+	(*Install)(nil),            // 11: cryptos.v1.Install
+	(*Subject)(nil),            // 12: cryptos.v1.Subject
 }
 var file_cryptos_v1_config_proto_depIdxs = []int32{
-	1, // 0: cryptos.v1.MachineConfig.metadata:type_name -> cryptos.v1.Metadata
-	2, // 1: cryptos.v1.MachineConfig.role:type_name -> cryptos.v1.Role
-	3, // 2: cryptos.v1.MachineConfig.network:type_name -> cryptos.v1.Network
-	4, // 3: cryptos.v1.MachineConfig.storage:type_name -> cryptos.v1.Storage
-	5, // 4: cryptos.v1.MachineConfig.bootstrap:type_name -> cryptos.v1.Bootstrap
-	6, // 5: cryptos.v1.MachineConfig.pki:type_name -> cryptos.v1.Pki
-	7, // 6: cryptos.v1.MachineConfig.install:type_name -> cryptos.v1.Install
-	8, // 7: cryptos.v1.Pki.root_subject:type_name -> cryptos.v1.Subject
-	8, // [8:8] is the sub-list for method output_type
-	8, // [8:8] is the sub-list for method input_type
-	8, // [8:8] is the sub-list for extension type_name
-	8, // [8:8] is the sub-list for extension extendee
-	0, // [0:8] is the sub-list for field type_name
+	1,  // 0: cryptos.v1.MachineConfig.metadata:type_name -> cryptos.v1.Metadata
+	2,  // 1: cryptos.v1.MachineConfig.role:type_name -> cryptos.v1.Role
+	3,  // 2: cryptos.v1.MachineConfig.network:type_name -> cryptos.v1.Network
+	4,  // 3: cryptos.v1.MachineConfig.storage:type_name -> cryptos.v1.Storage
+	5,  // 4: cryptos.v1.MachineConfig.bootstrap:type_name -> cryptos.v1.Bootstrap
+	6,  // 5: cryptos.v1.MachineConfig.pki:type_name -> cryptos.v1.Pki
+	11, // 6: cryptos.v1.MachineConfig.install:type_name -> cryptos.v1.Install
+	12, // 7: cryptos.v1.Pki.root_subject:type_name -> cryptos.v1.Subject
+	7,  // 8: cryptos.v1.Pki.profiles:type_name -> cryptos.v1.CertificateProfile
+	12, // 9: cryptos.v1.CertificateProfile.subject:type_name -> cryptos.v1.Subject
+	8,  // 10: cryptos.v1.CertificateProfile.basic_constraints:type_name -> cryptos.v1.BasicConstraints
+	9,  // 11: cryptos.v1.CertificateProfile.sans:type_name -> cryptos.v1.SubjectAltNames
+	10, // 12: cryptos.v1.CertificateProfile.extra_extensions:type_name -> cryptos.v1.X509Extension
+	13, // [13:13] is the sub-list for method output_type
+	13, // [13:13] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_cryptos_v1_config_proto_init() }
@@ -804,7 +1181,7 @@ func file_cryptos_v1_config_proto_init() {
 			}
 		}
 		file_cryptos_v1_config_proto_msgTypes[7].Exporter = func(v any, i int) any {
-			switch v := v.(*Install); i {
+			switch v := v.(*CertificateProfile); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -816,6 +1193,54 @@ func file_cryptos_v1_config_proto_init() {
 			}
 		}
 		file_cryptos_v1_config_proto_msgTypes[8].Exporter = func(v any, i int) any {
+			switch v := v.(*BasicConstraints); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_v1_config_proto_msgTypes[9].Exporter = func(v any, i int) any {
+			switch v := v.(*SubjectAltNames); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_v1_config_proto_msgTypes[10].Exporter = func(v any, i int) any {
+			switch v := v.(*X509Extension); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_v1_config_proto_msgTypes[11].Exporter = func(v any, i int) any {
+			switch v := v.(*Install); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_v1_config_proto_msgTypes[12].Exporter = func(v any, i int) any {
 			switch v := v.(*Subject); i {
 			case 0:
 				return &v.state
@@ -828,13 +1253,14 @@ func file_cryptos_v1_config_proto_init() {
 			}
 		}
 	}
+	file_cryptos_v1_config_proto_msgTypes[8].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_cryptos_v1_config_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

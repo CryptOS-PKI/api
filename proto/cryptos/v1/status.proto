@@ -46,6 +46,9 @@ enum IdentityState {
   IDENTITY_STATE_NONE = 1;
   IDENTITY_STATE_CEREMONY_IN_PROGRESS = 2;
   IDENTITY_STATE_ESTABLISHED = 3;
+  // A subordinate CA that has generated its key + CSR and is waiting for its
+  // parent to sign it (Phase 2).
+  IDENTITY_STATE_AWAITING_CERT = 4;
 }
 
 // TpmState reports TPM availability and capabilities.

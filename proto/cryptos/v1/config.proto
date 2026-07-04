@@ -74,6 +74,51 @@ message Pki {
   Subject root_subject = 2;
   uint32 root_validity_years = 3;
   uint32 path_len_constraint = 4;
+  // Named certificate profiles this node may generate a CSR from or stamp when
+  // signing (Phase 2). Referenced by name from the role/issuance flows.
+  repeated CertificateProfile profiles = 5;
+}
+
+// CertificateProfile drives CSR generation and certificate signing: key
+// parameters, subject, validity, and X.509 extensions. Phase 2 defines a
+// covering subset of typed extensions plus a raw-extension escape hatch; the
+// set grows additively toward the full X.509 catalog.
+message CertificateProfile {
+  string name = 1;
+  // e.g. "ECDSA-P384". Covering subset; RSA sizes and other curves are additive.
+  string key_alg = 2;
+  Subject subject = 3;
+  uint32 validity_days = 4;
+  BasicConstraints basic_constraints = 5;
+  // e.g. "cert_sign", "crl_sign", "digital_signature", "key_encipherment".
+  repeated string key_usage = 6;
+  // e.g. "server_auth", "client_auth".
+  repeated string ext_key_usage = 7;
+  SubjectAltNames sans = 8;
+  // Raw-OID escape hatch for extensions not yet modeled as typed fields.
+  repeated X509Extension extra_extensions = 9;
+}
+
+message BasicConstraints {
+  bool is_ca = 1;
+  // path_len applies when is_ca. 0 = no CAs may be issued below this one
+  // (a leaf-only issuing CA). Absent = unconstrained depth.
+  optional uint32 path_len = 2;
+}
+
+message SubjectAltNames {
+  repeated string dns = 1;
+  repeated string ip = 2;
+  repeated string email = 3;
+  repeated string uri = 4;
+}
+
+// X509Extension is the raw escape hatch: a dotted OID, criticality flag, and the
+// DER-encoded extension value, for extensions not yet modeled as typed fields.
+message X509Extension {
+  string oid = 1;
+  bool critical = 2;
+  bytes value = 3;
 }
 
 // Install declares how the node provisions itself to persistent storage during

@@ -19,14 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	NodeService_ApplyConfig_FullMethodName        = "/cryptos.v1.NodeService/ApplyConfig"
-	NodeService_GetStatus_FullMethodName          = "/cryptos.v1.NodeService/GetStatus"
-	NodeService_GetIdentity_FullMethodName        = "/cryptos.v1.NodeService/GetIdentity"
-	NodeService_StartCeremony_FullMethodName      = "/cryptos.v1.NodeService/StartCeremony"
-	NodeService_SignCSR_FullMethodName            = "/cryptos.v1.NodeService/SignCSR"
-	NodeService_SignSubordinateCSR_FullMethodName = "/cryptos.v1.NodeService/SignSubordinateCSR"
-	NodeService_IssueLeaf_FullMethodName          = "/cryptos.v1.NodeService/IssueLeaf"
-	NodeService_Reset_FullMethodName              = "/cryptos.v1.NodeService/Reset"
+	NodeService_ApplyConfig_FullMethodName                  = "/cryptos.v1.NodeService/ApplyConfig"
+	NodeService_GetStatus_FullMethodName                    = "/cryptos.v1.NodeService/GetStatus"
+	NodeService_GetIdentity_FullMethodName                  = "/cryptos.v1.NodeService/GetIdentity"
+	NodeService_StartCeremony_FullMethodName                = "/cryptos.v1.NodeService/StartCeremony"
+	NodeService_SignCSR_FullMethodName                      = "/cryptos.v1.NodeService/SignCSR"
+	NodeService_SignSubordinateCSR_FullMethodName           = "/cryptos.v1.NodeService/SignSubordinateCSR"
+	NodeService_IssueLeaf_FullMethodName                    = "/cryptos.v1.NodeService/IssueLeaf"
+	NodeService_GetSubordinateCSR_FullMethodName            = "/cryptos.v1.NodeService/GetSubordinateCSR"
+	NodeService_SubmitSubordinateCertificate_FullMethodName = "/cryptos.v1.NodeService/SubmitSubordinateCertificate"
+	NodeService_Reset_FullMethodName                        = "/cryptos.v1.NodeService/Reset"
 )
 
 // NodeServiceClient is the client API for NodeService service.
@@ -67,6 +69,15 @@ type NodeServiceClient interface {
 	// Role-restricted (intermediate/issuing; a root only with the irreversible
 	// ack). The internal path the Phase-2 protocol adapters will call.
 	IssueLeaf(ctx context.Context, in *IssueLeafRequest, opts ...grpc.CallOption) (*IssueLeafResponse, error)
+	// GetSubordinateCSR returns the CSR a subordinate node generated on first
+	// boot, while it is in IDENTITY_STATE_AWAITING_CERT. The operator carries it
+	// to the parent's SignSubordinateCSR (Refused unless awaiting a cert).
+	GetSubordinateCSR(ctx context.Context, in *GetSubordinateCSRRequest, opts ...grpc.CallOption) (*GetSubordinateCSRResponse, error)
+	// SubmitSubordinateCertificate hands a subordinate node the parent-signed
+	// certificate + chain. The node verifies the chain roots to its configured
+	// parent trust anchor (pki.parent) and that the leaf matches its own key,
+	// then commits and becomes ESTABLISHED. Returns the committed identity.
+	SubmitSubordinateCertificate(ctx context.Context, in *SubmitSubordinateCertificateRequest, opts ...grpc.CallOption) (*SubmitSubordinateCertificateResponse, error)
 	// Reset destroys the node's identity: it erases the state-partition key
 	// material (rendering all encrypted data unrecoverable), clears any staged
 	// config, and reboots into maintenance. Served ONLY on the local UNIX
@@ -163,6 +174,26 @@ func (c *nodeServiceClient) IssueLeaf(ctx context.Context, in *IssueLeafRequest,
 	return out, nil
 }
 
+func (c *nodeServiceClient) GetSubordinateCSR(ctx context.Context, in *GetSubordinateCSRRequest, opts ...grpc.CallOption) (*GetSubordinateCSRResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetSubordinateCSRResponse)
+	err := c.cc.Invoke(ctx, NodeService_GetSubordinateCSR_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nodeServiceClient) SubmitSubordinateCertificate(ctx context.Context, in *SubmitSubordinateCertificateRequest, opts ...grpc.CallOption) (*SubmitSubordinateCertificateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SubmitSubordinateCertificateResponse)
+	err := c.cc.Invoke(ctx, NodeService_SubmitSubordinateCertificate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *nodeServiceClient) Reset(ctx context.Context, in *ResetRequest, opts ...grpc.CallOption) (*ResetResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ResetResponse)
@@ -211,6 +242,15 @@ type NodeServiceServer interface {
 	// Role-restricted (intermediate/issuing; a root only with the irreversible
 	// ack). The internal path the Phase-2 protocol adapters will call.
 	IssueLeaf(context.Context, *IssueLeafRequest) (*IssueLeafResponse, error)
+	// GetSubordinateCSR returns the CSR a subordinate node generated on first
+	// boot, while it is in IDENTITY_STATE_AWAITING_CERT. The operator carries it
+	// to the parent's SignSubordinateCSR (Refused unless awaiting a cert).
+	GetSubordinateCSR(context.Context, *GetSubordinateCSRRequest) (*GetSubordinateCSRResponse, error)
+	// SubmitSubordinateCertificate hands a subordinate node the parent-signed
+	// certificate + chain. The node verifies the chain roots to its configured
+	// parent trust anchor (pki.parent) and that the leaf matches its own key,
+	// then commits and becomes ESTABLISHED. Returns the committed identity.
+	SubmitSubordinateCertificate(context.Context, *SubmitSubordinateCertificateRequest) (*SubmitSubordinateCertificateResponse, error)
 	// Reset destroys the node's identity: it erases the state-partition key
 	// material (rendering all encrypted data unrecoverable), clears any staged
 	// config, and reboots into maintenance. Served ONLY on the local UNIX
@@ -247,6 +287,12 @@ func (UnimplementedNodeServiceServer) SignSubordinateCSR(context.Context, *SignS
 }
 func (UnimplementedNodeServiceServer) IssueLeaf(context.Context, *IssueLeafRequest) (*IssueLeafResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IssueLeaf not implemented")
+}
+func (UnimplementedNodeServiceServer) GetSubordinateCSR(context.Context, *GetSubordinateCSRRequest) (*GetSubordinateCSRResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSubordinateCSR not implemented")
+}
+func (UnimplementedNodeServiceServer) SubmitSubordinateCertificate(context.Context, *SubmitSubordinateCertificateRequest) (*SubmitSubordinateCertificateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitSubordinateCertificate not implemented")
 }
 func (UnimplementedNodeServiceServer) Reset(context.Context, *ResetRequest) (*ResetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Reset not implemented")
@@ -390,6 +436,42 @@ func _NodeService_IssueLeaf_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NodeService_GetSubordinateCSR_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSubordinateCSRRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).GetSubordinateCSR(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_GetSubordinateCSR_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).GetSubordinateCSR(ctx, req.(*GetSubordinateCSRRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NodeService_SubmitSubordinateCertificate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SubmitSubordinateCertificateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).SubmitSubordinateCertificate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_SubmitSubordinateCertificate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).SubmitSubordinateCertificate(ctx, req.(*SubmitSubordinateCertificateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _NodeService_Reset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ResetRequest)
 	if err := dec(in); err != nil {
@@ -438,6 +520,14 @@ var NodeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "IssueLeaf",
 			Handler:    _NodeService_IssueLeaf_Handler,
+		},
+		{
+			MethodName: "GetSubordinateCSR",
+			Handler:    _NodeService_GetSubordinateCSR_Handler,
+		},
+		{
+			MethodName: "SubmitSubordinateCertificate",
+			Handler:    _NodeService_SubmitSubordinateCertificate_Handler,
 		},
 		{
 			MethodName: "Reset",

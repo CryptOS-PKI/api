@@ -67,6 +67,17 @@ service NodeService {
   // ack). The internal path the Phase-2 protocol adapters will call.
   rpc IssueLeaf(IssueLeafRequest) returns (IssueLeafResponse);
 
+  // GetSubordinateCSR returns the CSR a subordinate node generated on first
+  // boot, while it is in IDENTITY_STATE_AWAITING_CERT. The operator carries it
+  // to the parent's SignSubordinateCSR (Refused unless awaiting a cert).
+  rpc GetSubordinateCSR(GetSubordinateCSRRequest) returns (GetSubordinateCSRResponse);
+
+  // SubmitSubordinateCertificate hands a subordinate node the parent-signed
+  // certificate + chain. The node verifies the chain roots to its configured
+  // parent trust anchor (pki.parent) and that the leaf matches its own key,
+  // then commits and becomes ESTABLISHED. Returns the committed identity.
+  rpc SubmitSubordinateCertificate(SubmitSubordinateCertificateRequest) returns (SubmitSubordinateCertificateResponse);
+
   // Reset destroys the node's identity: it erases the state-partition key
   // material (rendering all encrypted data unrecoverable), clears any staged
   // config, and reboots into maintenance. Served ONLY on the local UNIX
@@ -155,4 +166,21 @@ message IssueLeafRequest {
 
 message IssueLeafResponse {
   bytes cert_der = 1;
+}
+
+message GetSubordinateCSRRequest {}
+
+message GetSubordinateCSRResponse {
+  bytes csr_der = 1;
+}
+
+// SubmitSubordinateCertificateRequest carries the parent-signed chain,
+// leaf-first (this node's cert, parent, ..., root).
+message SubmitSubordinateCertificateRequest {
+  repeated bytes chain_der = 1;
+  string chain_pem = 2;
+}
+
+message SubmitSubordinateCertificateResponse {
+  Identity identity = 1;
 }

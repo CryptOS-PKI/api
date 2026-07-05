@@ -77,6 +77,17 @@ message Pki {
   // Named certificate profiles this node may generate a CSR from or stamp when
   // signing (Phase 2). Referenced by name from the role/issuance flows.
   repeated CertificateProfile profiles = 5;
+  // parent pins the CA that signs this subordinate node's certificate, so it
+  // can verify the chain it is handed (Phase 2; unset on a Root).
+  Parent parent = 6;
+}
+
+// Parent is the trust anchor a subordinate CA pins for its issuer: the parent
+// (or root) CA certificate, by full PEM or by SHA-256 fingerprint. Exactly one
+// is set. Unused by a Root.
+message Parent {
+  string ca_cert_pem = 1;
+  string ca_cert_sha256 = 2;
 }
 
 // CertificateProfile drives CSR generation and certificate signing: key

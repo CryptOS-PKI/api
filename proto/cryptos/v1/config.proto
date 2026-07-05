@@ -80,6 +80,20 @@ message Pki {
   // parent pins the CA that signs this subordinate node's certificate, so it
   // can verify the chain it is handed (Phase 2; unset on a Root).
   Parent parent = 6;
+  // revocation_base_url is the base URL under which this node serves its CRL
+  // and OCSP responder. When set, issued certs carry CDP/AIA pointers and the
+  // node serves /crl and /ocsp over HTTP (Phase 2 revocation).
+  string revocation_base_url = 7;
+  // allow_unverified_revocation_url overrides the fail-closed revocation
+  // preflight so an isolated/air-gapped node issues even when the revocation
+  // URL does not resolve.
+  bool allow_unverified_revocation_url = 8;
+  // crl_next_update_hours is the CRL validity window: nextUpdate is thisUpdate
+  // plus this many hours. Zero means the node default.
+  uint32 crl_next_update_hours = 9;
+  // revocation_http_port is the TCP port for the anonymous CRL/OCSP HTTP
+  // listener. Zero means the node default.
+  uint32 revocation_http_port = 10;
 }
 
 // Parent is the trust anchor a subordinate CA pins for its issuer: the parent

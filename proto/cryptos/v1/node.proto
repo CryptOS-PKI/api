@@ -23,6 +23,7 @@ import "cryptos/v1/ceremony.proto";
 import "cryptos/v1/config.proto";
 import "cryptos/v1/identity.proto";
 import "cryptos/v1/status.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/CryptOS-PKI/api/go/cryptos/v1;cryptosv1";
 
@@ -77,6 +78,19 @@ service NodeService {
   // parent trust anchor (pki.parent) and that the leaf matches its own key,
   // then commits and becomes ESTABLISHED. Returns the committed identity.
   rpc SubmitSubordinateCertificate(SubmitSubordinateCertificateRequest) returns (SubmitSubordinateCertificateResponse);
+
+  // RevokeCertificate marks a certificate this node issued (identified by its
+  // hex serial) as revoked with an RFC 5280 reason, records it, and refreshes
+  // the CRL. Admin-authorized. NotFound if the serial is not in this node's
+  // issued set. Idempotent: re-revoking returns the existing revocation.
+  rpc RevokeCertificate(RevokeCertificateRequest) returns (RevokeCertificateResponse);
+
+  // ListIssued returns the certificates this node has issued, for inventory
+  // and for the Fleet Manager to drive revocation.
+  rpc ListIssued(ListIssuedRequest) returns (ListIssuedResponse);
+
+  // ListRevocations returns this node's revoked certificates.
+  rpc ListRevocations(ListRevocationsRequest) returns (ListRevocationsResponse);
 
   // Reset destroys the node's identity: it erases the state-partition key
   // material (rendering all encrypted data unrecoverable), clears any staged
@@ -183,4 +197,48 @@ message SubmitSubordinateCertificateRequest {
 
 message SubmitSubordinateCertificateResponse {
   Identity identity = 1;
+}
+
+// IssuedCert is one entry in a node's issued-certificate inventory.
+message IssuedCert {
+  // Hex-encoded certificate serial number (the join key for revocation).
+  string serial_hex = 1;
+  string subject_dn = 2;
+  google.protobuf.Timestamp not_before = 3;
+  google.protobuf.Timestamp not_after = 4;
+  // Hex-encoded subject key identifier.
+  string ski_hex = 5;
+  string profile_name = 6;
+  google.protobuf.Timestamp issued_at = 7;
+}
+
+// Revocation records a revoked certificate.
+message Revocation {
+  string serial_hex = 1;
+  google.protobuf.Timestamp revoked_at = 2;
+  // RFC 5280 CRLReason code.
+  int32 reason_code = 3;
+}
+
+// RevokeCertificateRequest identifies the certificate to revoke by hex serial
+// and carries the RFC 5280 reason code.
+message RevokeCertificateRequest {
+  string serial_hex = 1;
+  int32 reason_code = 2;
+}
+
+message RevokeCertificateResponse {
+  Revocation revocation = 1;
+}
+
+message ListIssuedRequest {}
+
+message ListIssuedResponse {
+  repeated IssuedCert issued = 1;
+}
+
+message ListRevocationsRequest {}
+
+message ListRevocationsResponse {
+  repeated Revocation revocations = 1;
 }

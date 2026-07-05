@@ -28,6 +28,9 @@ const (
 	NodeService_IssueLeaf_FullMethodName                    = "/cryptos.v1.NodeService/IssueLeaf"
 	NodeService_GetSubordinateCSR_FullMethodName            = "/cryptos.v1.NodeService/GetSubordinateCSR"
 	NodeService_SubmitSubordinateCertificate_FullMethodName = "/cryptos.v1.NodeService/SubmitSubordinateCertificate"
+	NodeService_RevokeCertificate_FullMethodName            = "/cryptos.v1.NodeService/RevokeCertificate"
+	NodeService_ListIssued_FullMethodName                   = "/cryptos.v1.NodeService/ListIssued"
+	NodeService_ListRevocations_FullMethodName              = "/cryptos.v1.NodeService/ListRevocations"
 	NodeService_Reset_FullMethodName                        = "/cryptos.v1.NodeService/Reset"
 )
 
@@ -78,6 +81,16 @@ type NodeServiceClient interface {
 	// parent trust anchor (pki.parent) and that the leaf matches its own key,
 	// then commits and becomes ESTABLISHED. Returns the committed identity.
 	SubmitSubordinateCertificate(ctx context.Context, in *SubmitSubordinateCertificateRequest, opts ...grpc.CallOption) (*SubmitSubordinateCertificateResponse, error)
+	// RevokeCertificate marks a certificate this node issued (identified by its
+	// hex serial) as revoked with an RFC 5280 reason, records it, and refreshes
+	// the CRL. Admin-authorized. NotFound if the serial is not in this node's
+	// issued set. Idempotent: re-revoking returns the existing revocation.
+	RevokeCertificate(ctx context.Context, in *RevokeCertificateRequest, opts ...grpc.CallOption) (*RevokeCertificateResponse, error)
+	// ListIssued returns the certificates this node has issued, for inventory
+	// and for the Fleet Manager to drive revocation.
+	ListIssued(ctx context.Context, in *ListIssuedRequest, opts ...grpc.CallOption) (*ListIssuedResponse, error)
+	// ListRevocations returns this node's revoked certificates.
+	ListRevocations(ctx context.Context, in *ListRevocationsRequest, opts ...grpc.CallOption) (*ListRevocationsResponse, error)
 	// Reset destroys the node's identity: it erases the state-partition key
 	// material (rendering all encrypted data unrecoverable), clears any staged
 	// config, and reboots into maintenance. Served ONLY on the local UNIX
@@ -194,6 +207,36 @@ func (c *nodeServiceClient) SubmitSubordinateCertificate(ctx context.Context, in
 	return out, nil
 }
 
+func (c *nodeServiceClient) RevokeCertificate(ctx context.Context, in *RevokeCertificateRequest, opts ...grpc.CallOption) (*RevokeCertificateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RevokeCertificateResponse)
+	err := c.cc.Invoke(ctx, NodeService_RevokeCertificate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nodeServiceClient) ListIssued(ctx context.Context, in *ListIssuedRequest, opts ...grpc.CallOption) (*ListIssuedResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListIssuedResponse)
+	err := c.cc.Invoke(ctx, NodeService_ListIssued_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nodeServiceClient) ListRevocations(ctx context.Context, in *ListRevocationsRequest, opts ...grpc.CallOption) (*ListRevocationsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListRevocationsResponse)
+	err := c.cc.Invoke(ctx, NodeService_ListRevocations_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *nodeServiceClient) Reset(ctx context.Context, in *ResetRequest, opts ...grpc.CallOption) (*ResetResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ResetResponse)
@@ -251,6 +294,16 @@ type NodeServiceServer interface {
 	// parent trust anchor (pki.parent) and that the leaf matches its own key,
 	// then commits and becomes ESTABLISHED. Returns the committed identity.
 	SubmitSubordinateCertificate(context.Context, *SubmitSubordinateCertificateRequest) (*SubmitSubordinateCertificateResponse, error)
+	// RevokeCertificate marks a certificate this node issued (identified by its
+	// hex serial) as revoked with an RFC 5280 reason, records it, and refreshes
+	// the CRL. Admin-authorized. NotFound if the serial is not in this node's
+	// issued set. Idempotent: re-revoking returns the existing revocation.
+	RevokeCertificate(context.Context, *RevokeCertificateRequest) (*RevokeCertificateResponse, error)
+	// ListIssued returns the certificates this node has issued, for inventory
+	// and for the Fleet Manager to drive revocation.
+	ListIssued(context.Context, *ListIssuedRequest) (*ListIssuedResponse, error)
+	// ListRevocations returns this node's revoked certificates.
+	ListRevocations(context.Context, *ListRevocationsRequest) (*ListRevocationsResponse, error)
 	// Reset destroys the node's identity: it erases the state-partition key
 	// material (rendering all encrypted data unrecoverable), clears any staged
 	// config, and reboots into maintenance. Served ONLY on the local UNIX
@@ -293,6 +346,15 @@ func (UnimplementedNodeServiceServer) GetSubordinateCSR(context.Context, *GetSub
 }
 func (UnimplementedNodeServiceServer) SubmitSubordinateCertificate(context.Context, *SubmitSubordinateCertificateRequest) (*SubmitSubordinateCertificateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitSubordinateCertificate not implemented")
+}
+func (UnimplementedNodeServiceServer) RevokeCertificate(context.Context, *RevokeCertificateRequest) (*RevokeCertificateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RevokeCertificate not implemented")
+}
+func (UnimplementedNodeServiceServer) ListIssued(context.Context, *ListIssuedRequest) (*ListIssuedResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListIssued not implemented")
+}
+func (UnimplementedNodeServiceServer) ListRevocations(context.Context, *ListRevocationsRequest) (*ListRevocationsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListRevocations not implemented")
 }
 func (UnimplementedNodeServiceServer) Reset(context.Context, *ResetRequest) (*ResetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Reset not implemented")
@@ -472,6 +534,60 @@ func _NodeService_SubmitSubordinateCertificate_Handler(srv interface{}, ctx cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NodeService_RevokeCertificate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevokeCertificateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).RevokeCertificate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_RevokeCertificate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).RevokeCertificate(ctx, req.(*RevokeCertificateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NodeService_ListIssued_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListIssuedRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).ListIssued(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_ListIssued_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).ListIssued(ctx, req.(*ListIssuedRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NodeService_ListRevocations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListRevocationsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).ListRevocations(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_ListRevocations_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).ListRevocations(ctx, req.(*ListRevocationsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _NodeService_Reset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ResetRequest)
 	if err := dec(in); err != nil {
@@ -528,6 +644,18 @@ var NodeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SubmitSubordinateCertificate",
 			Handler:    _NodeService_SubmitSubordinateCertificate_Handler,
+		},
+		{
+			MethodName: "RevokeCertificate",
+			Handler:    _NodeService_RevokeCertificate_Handler,
+		},
+		{
+			MethodName: "ListIssued",
+			Handler:    _NodeService_ListIssued_Handler,
+		},
+		{
+			MethodName: "ListRevocations",
+			Handler:    _NodeService_ListRevocations_Handler,
 		},
 		{
 			MethodName: "Reset",

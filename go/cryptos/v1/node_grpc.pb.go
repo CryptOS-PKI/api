@@ -33,6 +33,8 @@ const (
 	NodeService_ListRevocations_FullMethodName              = "/cryptos.v1.NodeService/ListRevocations"
 	NodeService_ExportCAKey_FullMethodName                  = "/cryptos.v1.NodeService/ExportCAKey"
 	NodeService_ImportCAKey_FullMethodName                  = "/cryptos.v1.NodeService/ImportCAKey"
+	NodeService_BeginKeyRotation_FullMethodName             = "/cryptos.v1.NodeService/BeginKeyRotation"
+	NodeService_CompleteKeyRotation_FullMethodName          = "/cryptos.v1.NodeService/CompleteKeyRotation"
 	NodeService_Reset_FullMethodName                        = "/cryptos.v1.NodeService/Reset"
 )
 
@@ -103,6 +105,16 @@ type NodeServiceClient interface {
 	// which has no identity yet. It decrypts the envelope with the passphrase and
 	// commits the restored key + chain, becoming ESTABLISHED as the same CA.
 	ImportCAKey(ctx context.Context, in *ImportCAKeyRequest, opts ...grpc.CallOption) (*ImportCAKeyResponse, error)
+	// BeginKeyRotation starts a subordinate CA key rotation: the established
+	// intermediate/issuing node generates a new key and returns a CSR to ferry to
+	// the parent, while continuing to sign with its current key. Admin-authorized;
+	// refused on a root or a node with no identity.
+	BeginKeyRotation(ctx context.Context, in *BeginKeyRotationRequest, opts ...grpc.CallOption) (*BeginKeyRotationResponse, error)
+	// CompleteKeyRotation submits the parent-signed chain for the new key. The
+	// node verifies it roots to the pinned parent and matches the staged new key,
+	// then atomically swaps to the new key + cert. Certificates the old key signed
+	// remain valid until they expire.
+	CompleteKeyRotation(ctx context.Context, in *CompleteKeyRotationRequest, opts ...grpc.CallOption) (*CompleteKeyRotationResponse, error)
 	// Reset destroys the node's identity: it erases the state-partition key
 	// material (rendering all encrypted data unrecoverable), clears any staged
 	// config, and reboots into maintenance. Served ONLY on the local UNIX
@@ -269,6 +281,26 @@ func (c *nodeServiceClient) ImportCAKey(ctx context.Context, in *ImportCAKeyRequ
 	return out, nil
 }
 
+func (c *nodeServiceClient) BeginKeyRotation(ctx context.Context, in *BeginKeyRotationRequest, opts ...grpc.CallOption) (*BeginKeyRotationResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BeginKeyRotationResponse)
+	err := c.cc.Invoke(ctx, NodeService_BeginKeyRotation_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nodeServiceClient) CompleteKeyRotation(ctx context.Context, in *CompleteKeyRotationRequest, opts ...grpc.CallOption) (*CompleteKeyRotationResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CompleteKeyRotationResponse)
+	err := c.cc.Invoke(ctx, NodeService_CompleteKeyRotation_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *nodeServiceClient) Reset(ctx context.Context, in *ResetRequest, opts ...grpc.CallOption) (*ResetResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ResetResponse)
@@ -346,6 +378,16 @@ type NodeServiceServer interface {
 	// which has no identity yet. It decrypts the envelope with the passphrase and
 	// commits the restored key + chain, becoming ESTABLISHED as the same CA.
 	ImportCAKey(context.Context, *ImportCAKeyRequest) (*ImportCAKeyResponse, error)
+	// BeginKeyRotation starts a subordinate CA key rotation: the established
+	// intermediate/issuing node generates a new key and returns a CSR to ferry to
+	// the parent, while continuing to sign with its current key. Admin-authorized;
+	// refused on a root or a node with no identity.
+	BeginKeyRotation(context.Context, *BeginKeyRotationRequest) (*BeginKeyRotationResponse, error)
+	// CompleteKeyRotation submits the parent-signed chain for the new key. The
+	// node verifies it roots to the pinned parent and matches the staged new key,
+	// then atomically swaps to the new key + cert. Certificates the old key signed
+	// remain valid until they expire.
+	CompleteKeyRotation(context.Context, *CompleteKeyRotationRequest) (*CompleteKeyRotationResponse, error)
 	// Reset destroys the node's identity: it erases the state-partition key
 	// material (rendering all encrypted data unrecoverable), clears any staged
 	// config, and reboots into maintenance. Served ONLY on the local UNIX
@@ -403,6 +445,12 @@ func (UnimplementedNodeServiceServer) ExportCAKey(context.Context, *ExportCAKeyR
 }
 func (UnimplementedNodeServiceServer) ImportCAKey(context.Context, *ImportCAKeyRequest) (*ImportCAKeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ImportCAKey not implemented")
+}
+func (UnimplementedNodeServiceServer) BeginKeyRotation(context.Context, *BeginKeyRotationRequest) (*BeginKeyRotationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BeginKeyRotation not implemented")
+}
+func (UnimplementedNodeServiceServer) CompleteKeyRotation(context.Context, *CompleteKeyRotationRequest) (*CompleteKeyRotationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CompleteKeyRotation not implemented")
 }
 func (UnimplementedNodeServiceServer) Reset(context.Context, *ResetRequest) (*ResetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Reset not implemented")
@@ -672,6 +720,42 @@ func _NodeService_ImportCAKey_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NodeService_BeginKeyRotation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BeginKeyRotationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).BeginKeyRotation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_BeginKeyRotation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).BeginKeyRotation(ctx, req.(*BeginKeyRotationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NodeService_CompleteKeyRotation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompleteKeyRotationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).CompleteKeyRotation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_CompleteKeyRotation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).CompleteKeyRotation(ctx, req.(*CompleteKeyRotationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _NodeService_Reset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ResetRequest)
 	if err := dec(in); err != nil {
@@ -748,6 +832,14 @@ var NodeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ImportCAKey",
 			Handler:    _NodeService_ImportCAKey_Handler,
+		},
+		{
+			MethodName: "BeginKeyRotation",
+			Handler:    _NodeService_BeginKeyRotation_Handler,
+		},
+		{
+			MethodName: "CompleteKeyRotation",
+			Handler:    _NodeService_CompleteKeyRotation_Handler,
 		},
 		{
 			MethodName: "Reset",

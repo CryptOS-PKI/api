@@ -104,6 +104,18 @@ service NodeService {
   // commits the restored key + chain, becoming ESTABLISHED as the same CA.
   rpc ImportCAKey(ImportCAKeyRequest) returns (ImportCAKeyResponse);
 
+  // BeginKeyRotation starts a subordinate CA key rotation: the established
+  // intermediate/issuing node generates a new key and returns a CSR to ferry to
+  // the parent, while continuing to sign with its current key. Admin-authorized;
+  // refused on a root or a node with no identity.
+  rpc BeginKeyRotation(BeginKeyRotationRequest) returns (BeginKeyRotationResponse);
+
+  // CompleteKeyRotation submits the parent-signed chain for the new key. The
+  // node verifies it roots to the pinned parent and matches the staged new key,
+  // then atomically swaps to the new key + cert. Certificates the old key signed
+  // remain valid until they expire.
+  rpc CompleteKeyRotation(CompleteKeyRotationRequest) returns (CompleteKeyRotationResponse);
+
   // Reset destroys the node's identity: it erases the state-partition key
   // material (rendering all encrypted data unrecoverable), clears any staged
   // config, and reboots into maintenance. Served ONLY on the local UNIX
@@ -231,6 +243,25 @@ message ImportCAKeyRequest {
 }
 
 message ImportCAKeyResponse {
+  Identity identity = 1;
+}
+
+message BeginKeyRotationRequest {}
+
+// BeginKeyRotationResponse returns the DER CSR for the newly generated key, to
+// be ferried to the parent's SignSubordinateCSR.
+message BeginKeyRotationResponse {
+  bytes csr_der = 1;
+}
+
+// CompleteKeyRotationRequest carries the parent-signed chain for the new key,
+// leaf-first (this node's new cert, parent, ..., root).
+message CompleteKeyRotationRequest {
+  repeated bytes chain_der = 1;
+  string chain_pem = 2;
+}
+
+message CompleteKeyRotationResponse {
   Identity identity = 1;
 }
 

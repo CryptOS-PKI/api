@@ -92,6 +92,18 @@ service NodeService {
   // ListRevocations returns this node's revoked certificates.
   rpc ListRevocations(ListRevocationsRequest) returns (ListRevocationsResponse);
 
+  // ExportCAKey returns an encrypted backup of this node's software CA key and
+  // certificate chain, sealed under the operator passphrase. The plaintext key
+  // never leaves the node. Admin-authorized; refused on a TPM node (TPM keys
+  // are non-exportable by design).
+  rpc ExportCAKey(ExportCAKeyRequest) returns (ExportCAKeyResponse);
+
+  // ImportCAKey restores a CA from an encrypted backup: it is the recovery
+  // counterpart of StartCeremony, valid only on a node whose storage is up but
+  // which has no identity yet. It decrypts the envelope with the passphrase and
+  // commits the restored key + chain, becoming ESTABLISHED as the same CA.
+  rpc ImportCAKey(ImportCAKeyRequest) returns (ImportCAKeyResponse);
+
   // Reset destroys the node's identity: it erases the state-partition key
   // material (rendering all encrypted data unrecoverable), clears any staged
   // config, and reboots into maintenance. Served ONLY on the local UNIX
@@ -196,6 +208,29 @@ message SubmitSubordinateCertificateRequest {
 }
 
 message SubmitSubordinateCertificateResponse {
+  Identity identity = 1;
+}
+
+// ExportCAKeyRequest carries the operator passphrase the node seals the backup
+// under. It travels over the admin mTLS channel; the plaintext CA key does not.
+message ExportCAKeyRequest {
+  bytes passphrase = 1;
+}
+
+// ExportCAKeyResponse returns the encrypted backup envelope (KDF + AEAD over the
+// CA key and chain).
+message ExportCAKeyResponse {
+  bytes envelope = 1;
+}
+
+// ImportCAKeyRequest carries an encrypted backup envelope and the passphrase to
+// open it, for restoring a CA onto a fresh no-identity node.
+message ImportCAKeyRequest {
+  bytes envelope = 1;
+  bytes passphrase = 2;
+}
+
+message ImportCAKeyResponse {
   Identity identity = 1;
 }
 

@@ -38,6 +38,27 @@ message MachineConfig {
   // install carries the target-disk declaration for the maintenance-mode
   // install flow. Ignored by an already-installed node.
   Install install = 9;
+  // state_key selects how the LUKS state-partition key is protected. Empty
+  // uses the node's build-time default (nodeid or tpm).
+  StateKey state_key = 10;
+}
+
+// StateKey selects the protector for the encrypted state-partition key.
+message StateKey {
+  // mode is "nodeid" | "tpm" | "kms"; empty means the build-time default.
+  string mode = 1;
+  // kms carries the KMS settings when mode is "kms".
+  KmsStateKey kms = 2;
+}
+
+// KmsStateKey configures the envelope-encryption KMS that seals/unseals the
+// state key. The sealed blob and endpoint are stored in the LUKS2 header token,
+// so only first-boot provisioning reads this from the machine config.
+message KmsStateKey {
+  // endpoint is the base URL of the seal/unseal KMS.
+  string endpoint = 1;
+  // trust_pem optionally pins the PEM CA bundle verifying the KMS TLS server.
+  string trust_pem = 2;
 }
 
 message Metadata {

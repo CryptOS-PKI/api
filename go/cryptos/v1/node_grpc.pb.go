@@ -31,6 +31,8 @@ const (
 	NodeService_RevokeCertificate_FullMethodName            = "/cryptos.v1.NodeService/RevokeCertificate"
 	NodeService_ListIssued_FullMethodName                   = "/cryptos.v1.NodeService/ListIssued"
 	NodeService_ListRevocations_FullMethodName              = "/cryptos.v1.NodeService/ListRevocations"
+	NodeService_ExportCAKey_FullMethodName                  = "/cryptos.v1.NodeService/ExportCAKey"
+	NodeService_ImportCAKey_FullMethodName                  = "/cryptos.v1.NodeService/ImportCAKey"
 	NodeService_Reset_FullMethodName                        = "/cryptos.v1.NodeService/Reset"
 )
 
@@ -91,6 +93,16 @@ type NodeServiceClient interface {
 	ListIssued(ctx context.Context, in *ListIssuedRequest, opts ...grpc.CallOption) (*ListIssuedResponse, error)
 	// ListRevocations returns this node's revoked certificates.
 	ListRevocations(ctx context.Context, in *ListRevocationsRequest, opts ...grpc.CallOption) (*ListRevocationsResponse, error)
+	// ExportCAKey returns an encrypted backup of this node's software CA key and
+	// certificate chain, sealed under the operator passphrase. The plaintext key
+	// never leaves the node. Admin-authorized; refused on a TPM node (TPM keys
+	// are non-exportable by design).
+	ExportCAKey(ctx context.Context, in *ExportCAKeyRequest, opts ...grpc.CallOption) (*ExportCAKeyResponse, error)
+	// ImportCAKey restores a CA from an encrypted backup: it is the recovery
+	// counterpart of StartCeremony, valid only on a node whose storage is up but
+	// which has no identity yet. It decrypts the envelope with the passphrase and
+	// commits the restored key + chain, becoming ESTABLISHED as the same CA.
+	ImportCAKey(ctx context.Context, in *ImportCAKeyRequest, opts ...grpc.CallOption) (*ImportCAKeyResponse, error)
 	// Reset destroys the node's identity: it erases the state-partition key
 	// material (rendering all encrypted data unrecoverable), clears any staged
 	// config, and reboots into maintenance. Served ONLY on the local UNIX
@@ -237,6 +249,26 @@ func (c *nodeServiceClient) ListRevocations(ctx context.Context, in *ListRevocat
 	return out, nil
 }
 
+func (c *nodeServiceClient) ExportCAKey(ctx context.Context, in *ExportCAKeyRequest, opts ...grpc.CallOption) (*ExportCAKeyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ExportCAKeyResponse)
+	err := c.cc.Invoke(ctx, NodeService_ExportCAKey_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nodeServiceClient) ImportCAKey(ctx context.Context, in *ImportCAKeyRequest, opts ...grpc.CallOption) (*ImportCAKeyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ImportCAKeyResponse)
+	err := c.cc.Invoke(ctx, NodeService_ImportCAKey_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *nodeServiceClient) Reset(ctx context.Context, in *ResetRequest, opts ...grpc.CallOption) (*ResetResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ResetResponse)
@@ -304,6 +336,16 @@ type NodeServiceServer interface {
 	ListIssued(context.Context, *ListIssuedRequest) (*ListIssuedResponse, error)
 	// ListRevocations returns this node's revoked certificates.
 	ListRevocations(context.Context, *ListRevocationsRequest) (*ListRevocationsResponse, error)
+	// ExportCAKey returns an encrypted backup of this node's software CA key and
+	// certificate chain, sealed under the operator passphrase. The plaintext key
+	// never leaves the node. Admin-authorized; refused on a TPM node (TPM keys
+	// are non-exportable by design).
+	ExportCAKey(context.Context, *ExportCAKeyRequest) (*ExportCAKeyResponse, error)
+	// ImportCAKey restores a CA from an encrypted backup: it is the recovery
+	// counterpart of StartCeremony, valid only on a node whose storage is up but
+	// which has no identity yet. It decrypts the envelope with the passphrase and
+	// commits the restored key + chain, becoming ESTABLISHED as the same CA.
+	ImportCAKey(context.Context, *ImportCAKeyRequest) (*ImportCAKeyResponse, error)
 	// Reset destroys the node's identity: it erases the state-partition key
 	// material (rendering all encrypted data unrecoverable), clears any staged
 	// config, and reboots into maintenance. Served ONLY on the local UNIX
@@ -355,6 +397,12 @@ func (UnimplementedNodeServiceServer) ListIssued(context.Context, *ListIssuedReq
 }
 func (UnimplementedNodeServiceServer) ListRevocations(context.Context, *ListRevocationsRequest) (*ListRevocationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListRevocations not implemented")
+}
+func (UnimplementedNodeServiceServer) ExportCAKey(context.Context, *ExportCAKeyRequest) (*ExportCAKeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ExportCAKey not implemented")
+}
+func (UnimplementedNodeServiceServer) ImportCAKey(context.Context, *ImportCAKeyRequest) (*ImportCAKeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ImportCAKey not implemented")
 }
 func (UnimplementedNodeServiceServer) Reset(context.Context, *ResetRequest) (*ResetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Reset not implemented")
@@ -588,6 +636,42 @@ func _NodeService_ListRevocations_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NodeService_ExportCAKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExportCAKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).ExportCAKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_ExportCAKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).ExportCAKey(ctx, req.(*ExportCAKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NodeService_ImportCAKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ImportCAKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).ImportCAKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_ImportCAKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).ImportCAKey(ctx, req.(*ImportCAKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _NodeService_Reset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ResetRequest)
 	if err := dec(in); err != nil {
@@ -656,6 +740,14 @@ var NodeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListRevocations",
 			Handler:    _NodeService_ListRevocations_Handler,
+		},
+		{
+			MethodName: "ExportCAKey",
+			Handler:    _NodeService_ExportCAKey_Handler,
+		},
+		{
+			MethodName: "ImportCAKey",
+			Handler:    _NodeService_ImportCAKey_Handler,
 		},
 		{
 			MethodName: "Reset",

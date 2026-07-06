@@ -94,6 +94,11 @@ message Pki {
   // revocation_http_port is the TCP port for the anonymous CRL/OCSP HTTP
   // listener. Zero means the node default.
   uint32 revocation_http_port = 10;
+  // root_leaf_issuance is the explicit, irreversible operator acknowledgement
+  // that unlocks direct end-entity (leaf) issuance from a ROOT-role node. Empty
+  // (the default) leaves a Root refusing to issue leaves. Carried in the proto
+  // so the acknowledgement survives ApplyConfig and reaches an installed node.
+  string root_leaf_issuance = 11;
 }
 
 // Parent is the trust anchor a subordinate CA pins for its issuer: the parent

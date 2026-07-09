@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file cryptos/fleet/v1/fleet.proto.
  */
 export const file_cryptos_fleet_v1_fleet: GenFile = /*@__PURE__*/
-  fileDesc("ChxjcnlwdG9zL2ZsZWV0L3YxL2ZsZWV0LnByb3RvEhBjcnlwdG9zLmZsZWV0LnYxIhIKEExpc3ROb2Rlc1JlcXVlc3QiQQoRTGlzdE5vZGVzUmVzcG9uc2USLAoFbm9kZXMYASADKAsyHS5jcnlwdG9zLmZsZWV0LnYxLk5vZGVTdW1tYXJ5Ih4KDkdldE5vZGVSZXF1ZXN0EgwKBG5hbWUYASABKAkiPQoPR2V0Tm9kZVJlc3BvbnNlEioKBG5vZGUYASABKAsyHC5jcnlwdG9zLmZsZWV0LnYxLk5vZGVEZXRhaWwiJwoXTGlzdENlcnRpZmljYXRlc1JlcXVlc3QSDAoEbm9kZRgBIAEoCSJPChhMaXN0Q2VydGlmaWNhdGVzUmVzcG9uc2USMwoMY2VydGlmaWNhdGVzGAEgAygLMh0uY3J5cHRvcy5mbGVldC52MS5DZXJ0aWZpY2F0ZSKvAQoLTm9kZVN1bW1hcnkSDAoEbmFtZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJEgwKBHJvbGUYAyABKAkSFgoOaWRlbnRpdHlfc3RhdGUYBCABKAkSCgoCY24YBSABKAkSDgoGaXNzdWVyGAYgASgJEigKBmhlYWx0aBgHIAEoDjIYLmNyeXB0b3MuZmxlZXQudjEuSGVhbHRoEhUKDWhlYWx0aF9kZXRhaWwYCCABKAkiSQoMTm9kZUlkZW50aXR5EhEKCWNoYWluX3BlbRgBIAEoCRIRCgljaGFpbl9kZXIYAiADKAwSEwoLbGVhZl9zaGEyNTYYAyABKAkiqQEKCk5vZGVEZXRhaWwSLgoHc3VtbWFyeRgBIAEoCzIdLmNyeXB0b3MuZmxlZXQudjEuTm9kZVN1bW1hcnkSMAoIaWRlbnRpdHkYAiABKAsyHi5jcnlwdG9zLmZsZWV0LnYxLk5vZGVJZGVudGl0eRIVCg10cG1fYXZhaWxhYmxlGAMgASgIEhIKCmJvb3RfY291bnQYBCABKAQSDgoGdXB0aW1lGAUgASgJIsABCgtDZXJ0aWZpY2F0ZRIOCgZzZXJpYWwYASABKAkSEgoKc3ViamVjdF9jbhgCIAEoCRITCgtpc3N1ZXJfbm9kZRgDIAEoCRIMCgRraW5kGAQgASgJEg4KBnN0YXR1cxgFIAEoCRISCgpub3RfYmVmb3JlGAYgASgJEhEKCW5vdF9hZnRlchgHIAEoCRIPCgdwcm9maWxlGAggASgJEhIKCnJldm9rZWRfYXQYCSABKAkSDgoGcmVhc29uGAogASgJKlIKBkhlYWx0aBIWChJIRUFMVEhfVU5TUEVDSUZJRUQQABINCglIRUFMVEhfVVAQARIPCgtIRUFMVEhfRE9XThACEhAKDEhFQUxUSF9FUlJPUhADMp8CCgxGbGVldFNlcnZpY2USVAoJTGlzdE5vZGVzEiIuY3J5cHRvcy5mbGVldC52MS5MaXN0Tm9kZXNSZXF1ZXN0GiMuY3J5cHRvcy5mbGVldC52MS5MaXN0Tm9kZXNSZXNwb25zZRJOCgdHZXROb2RlEiAuY3J5cHRvcy5mbGVldC52MS5HZXROb2RlUmVxdWVzdBohLmNyeXB0b3MuZmxlZXQudjEuR2V0Tm9kZVJlc3BvbnNlEmkKEExpc3RDZXJ0aWZpY2F0ZXMSKS5jcnlwdG9zLmZsZWV0LnYxLkxpc3RDZXJ0aWZpY2F0ZXNSZXF1ZXN0GiouY3J5cHRvcy5mbGVldC52MS5MaXN0Q2VydGlmaWNhdGVzUmVzcG9uc2VCOFo2Z2l0aHViLmNvbS9DcnlwdE9TLVBLSS9hcGkvZ28vY3J5cHRvcy9mbGVldC92MTtmbGVldHYxYgZwcm90bzM");
+  fileDesc("ChxjcnlwdG9zL2ZsZWV0L3YxL2ZsZWV0LnByb3RvEhBjcnlwdG9zLmZsZWV0LnYxIhIKEExpc3ROb2Rlc1JlcXVlc3QiQQoRTGlzdE5vZGVzUmVzcG9uc2USLAoFbm9kZXMYASADKAsyHS5jcnlwdG9zLmZsZWV0LnYxLk5vZGVTdW1tYXJ5Ih4KDkdldE5vZGVSZXF1ZXN0EgwKBG5hbWUYASABKAkiPQoPR2V0Tm9kZVJlc3BvbnNlEioKBG5vZGUYASABKAsyHC5jcnlwdG9zLmZsZWV0LnYxLk5vZGVEZXRhaWwiJwoXTGlzdENlcnRpZmljYXRlc1JlcXVlc3QSDAoEbm9kZRgBIAEoCSJPChhMaXN0Q2VydGlmaWNhdGVzUmVzcG9uc2USMwoMY2VydGlmaWNhdGVzGAEgAygLMh0uY3J5cHRvcy5mbGVldC52MS5DZXJ0aWZpY2F0ZSIVChNMaXN0UHJvZmlsZXNSZXF1ZXN0IkQKFExpc3RQcm9maWxlc1Jlc3BvbnNlEiwKBWl0ZW1zGAEgAygLMh0uY3J5cHRvcy5mbGVldC52MS5DZXJ0UHJvZmlsZSIVChNMaXN0QWRhcHRlcnNSZXF1ZXN0IkoKFExpc3RBZGFwdGVyc1Jlc3BvbnNlEjIKBWl0ZW1zGAEgAygLMiMuY3J5cHRvcy5mbGVldC52MS5FbnJvbGxtZW50QWRhcHRlciISChBMaXN0QXVkaXRSZXF1ZXN0IkAKEUxpc3RBdWRpdFJlc3BvbnNlEisKBWl0ZW1zGAEgAygLMhwuY3J5cHRvcy5mbGVldC52MS5BdWRpdEV2ZW50IhgKFkxpc3RFbnJvbGxtZW50c1JlcXVlc3QiTQoXTGlzdEVucm9sbG1lbnRzUmVzcG9uc2USMgoFaXRlbXMYASADKAsyIy5jcnlwdG9zLmZsZWV0LnYxLkVucm9sbG1lbnRSZXF1ZXN0Iq8BCgtOb2RlU3VtbWFyeRIMCgRuYW1lGAEgASgJEg8KB2FkZHJlc3MYAiABKAkSDAoEcm9sZRgDIAEoCRIWCg5pZGVudGl0eV9zdGF0ZRgEIAEoCRIKCgJjbhgFIAEoCRIOCgZpc3N1ZXIYBiABKAkSKAoGaGVhbHRoGAcgASgOMhguY3J5cHRvcy5mbGVldC52MS5IZWFsdGgSFQoNaGVhbHRoX2RldGFpbBgIIAEoCSJJCgxOb2RlSWRlbnRpdHkSEQoJY2hhaW5fcGVtGAEgASgJEhEKCWNoYWluX2RlchgCIAMoDBITCgtsZWFmX3NoYTI1NhgDIAEoCSKpAQoKTm9kZURldGFpbBIuCgdzdW1tYXJ5GAEgASgLMh0uY3J5cHRvcy5mbGVldC52MS5Ob2RlU3VtbWFyeRIwCghpZGVudGl0eRgCIAEoCzIeLmNyeXB0b3MuZmxlZXQudjEuTm9kZUlkZW50aXR5EhUKDXRwbV9hdmFpbGFibGUYAyABKAgSEgoKYm9vdF9jb3VudBgEIAEoBBIOCgZ1cHRpbWUYBSABKAkiwAEKC0NlcnRpZmljYXRlEg4KBnNlcmlhbBgBIAEoCRISCgpzdWJqZWN0X2NuGAIgASgJEhMKC2lzc3Vlcl9ub2RlGAMgASgJEgwKBGtpbmQYBCABKAkSDgoGc3RhdHVzGAUgASgJEhIKCm5vdF9iZWZvcmUYBiABKAkSEQoJbm90X2FmdGVyGAcgASgJEg8KB3Byb2ZpbGUYCCABKAkSEgoKcmV2b2tlZF9hdBgJIAEoCRIOCgZyZWFzb24YCiABKAkinAEKC0NlcnRQcm9maWxlEgwKBG5hbWUYASABKAkSDwoHa2V5X2FsZxgCIAEoCRIRCglrZXlfdXNhZ2UYAyADKAkSFQoNZXh0X2tleV91c2FnZRgEIAMoCRINCgVpc19jYRgFIAEoCBIQCghwYXRoX2xlbhgGIAEoBRIMCgRzYW5zGAcgAygJEhUKDXZhbGlkaXR5X2RheXMYCCABKAUijQEKEUVucm9sbG1lbnRBZGFwdGVyEgwKBGtpbmQYASABKAkSDAoEbmFtZRgCIAEoCRIQCghlbmRwb2ludBgDIAEoCRIPCgdwcm9maWxlGAQgASgJEg8KB2VuYWJsZWQYBSABKAgSEgoKY2hhbGxlbmdlcxgGIAMoCRIUCgxncG9fdGVtcGxhdGUYByABKAkibQoKQXVkaXRFdmVudBIKCgJpZBgBIAEoCRIKCgJhdBgCIAEoCRIMCgRraW5kGAMgASgJEg8KB3N1bW1hcnkYBCABKAkSEwoLdGFyZ2V0X2tpbmQYBSABKAkSEwoLdGFyZ2V0X3BhdGgYBiABKAkirAIKEUVucm9sbG1lbnRSZXF1ZXN0EgoKAmlkGAEgASgJEhUKDXByb3Bvc2VkX25hbWUYAiABKAkSDAoEcm9sZRgDIAEoCRIRCglwYXJlbnRfY24YBCABKAkSDwoHYWRkcmVzcxgFIAEoCRIOCgZzdGF0dXMYBiABKAkSGwoTYXR0ZXN0YXRpb25fc3VtbWFyeRgHIAEoCRIbChNhdHRlc3RhdGlvbl9ub2RlX2lkGAggASgJEhQKDGNzcl9rZXlfdHlwZRgJIAEoCRIWCg5jc3Jfc3ViamVjdF9jbhgKIAEoCRIUCgxyZXF1ZXN0ZWRfYXQYCyABKAkSGAoQcmVqZWN0aW9uX3JlYXNvbhgMIAEoCRIaChJhZG1pdHRlZF9ub2RlX25hbWUYDSABKAkqUgoGSGVhbHRoEhYKEkhFQUxUSF9VTlNQRUNJRklFRBAAEg0KCUhFQUxUSF9VUBABEg8KC0hFQUxUSF9ET1dOEAISEAoMSEVBTFRIX0VSUk9SEAMymwUKDEZsZWV0U2VydmljZRJUCglMaXN0Tm9kZXMSIi5jcnlwdG9zLmZsZWV0LnYxLkxpc3ROb2Rlc1JlcXVlc3QaIy5jcnlwdG9zLmZsZWV0LnYxLkxpc3ROb2Rlc1Jlc3BvbnNlEk4KB0dldE5vZGUSIC5jcnlwdG9zLmZsZWV0LnYxLkdldE5vZGVSZXF1ZXN0GiEuY3J5cHRvcy5mbGVldC52MS5HZXROb2RlUmVzcG9uc2USaQoQTGlzdENlcnRpZmljYXRlcxIpLmNyeXB0b3MuZmxlZXQudjEuTGlzdENlcnRpZmljYXRlc1JlcXVlc3QaKi5jcnlwdG9zLmZsZWV0LnYxLkxpc3RDZXJ0aWZpY2F0ZXNSZXNwb25zZRJdCgxMaXN0UHJvZmlsZXMSJS5jcnlwdG9zLmZsZWV0LnYxLkxpc3RQcm9maWxlc1JlcXVlc3QaJi5jcnlwdG9zLmZsZWV0LnYxLkxpc3RQcm9maWxlc1Jlc3BvbnNlEl0KDExpc3RBZGFwdGVycxIlLmNyeXB0b3MuZmxlZXQudjEuTGlzdEFkYXB0ZXJzUmVxdWVzdBomLmNyeXB0b3MuZmxlZXQudjEuTGlzdEFkYXB0ZXJzUmVzcG9uc2USVAoJTGlzdEF1ZGl0EiIuY3J5cHRvcy5mbGVldC52MS5MaXN0QXVkaXRSZXF1ZXN0GiMuY3J5cHRvcy5mbGVldC52MS5MaXN0QXVkaXRSZXNwb25zZRJmCg9MaXN0RW5yb2xsbWVudHMSKC5jcnlwdG9zLmZsZWV0LnYxLkxpc3RFbnJvbGxtZW50c1JlcXVlc3QaKS5jcnlwdG9zLmZsZWV0LnYxLkxpc3RFbnJvbGxtZW50c1Jlc3BvbnNlQjhaNmdpdGh1Yi5jb20vQ3J5cHRPUy1QS0kvYXBpL2dvL2NyeXB0b3MvZmxlZXQvdjE7ZmxlZXR2MWIGcHJvdG8z");
 
 /**
  * @generated from message cryptos.fleet.v1.ListNodesRequest
@@ -113,6 +113,126 @@ export const ListCertificatesResponseSchema: GenMessage<ListCertificatesResponse
   messageDesc(file_cryptos_fleet_v1_fleet, 5);
 
 /**
+ * @generated from message cryptos.fleet.v1.ListProfilesRequest
+ */
+export type ListProfilesRequest = Message<"cryptos.fleet.v1.ListProfilesRequest"> & {
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.ListProfilesRequest.
+ * Use `create(ListProfilesRequestSchema)` to create a new message.
+ */
+export const ListProfilesRequestSchema: GenMessage<ListProfilesRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 6);
+
+/**
+ * @generated from message cryptos.fleet.v1.ListProfilesResponse
+ */
+export type ListProfilesResponse = Message<"cryptos.fleet.v1.ListProfilesResponse"> & {
+  /**
+   * @generated from field: repeated cryptos.fleet.v1.CertProfile items = 1;
+   */
+  items: CertProfile[];
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.ListProfilesResponse.
+ * Use `create(ListProfilesResponseSchema)` to create a new message.
+ */
+export const ListProfilesResponseSchema: GenMessage<ListProfilesResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 7);
+
+/**
+ * @generated from message cryptos.fleet.v1.ListAdaptersRequest
+ */
+export type ListAdaptersRequest = Message<"cryptos.fleet.v1.ListAdaptersRequest"> & {
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.ListAdaptersRequest.
+ * Use `create(ListAdaptersRequestSchema)` to create a new message.
+ */
+export const ListAdaptersRequestSchema: GenMessage<ListAdaptersRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 8);
+
+/**
+ * @generated from message cryptos.fleet.v1.ListAdaptersResponse
+ */
+export type ListAdaptersResponse = Message<"cryptos.fleet.v1.ListAdaptersResponse"> & {
+  /**
+   * @generated from field: repeated cryptos.fleet.v1.EnrollmentAdapter items = 1;
+   */
+  items: EnrollmentAdapter[];
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.ListAdaptersResponse.
+ * Use `create(ListAdaptersResponseSchema)` to create a new message.
+ */
+export const ListAdaptersResponseSchema: GenMessage<ListAdaptersResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 9);
+
+/**
+ * @generated from message cryptos.fleet.v1.ListAuditRequest
+ */
+export type ListAuditRequest = Message<"cryptos.fleet.v1.ListAuditRequest"> & {
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.ListAuditRequest.
+ * Use `create(ListAuditRequestSchema)` to create a new message.
+ */
+export const ListAuditRequestSchema: GenMessage<ListAuditRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 10);
+
+/**
+ * @generated from message cryptos.fleet.v1.ListAuditResponse
+ */
+export type ListAuditResponse = Message<"cryptos.fleet.v1.ListAuditResponse"> & {
+  /**
+   * @generated from field: repeated cryptos.fleet.v1.AuditEvent items = 1;
+   */
+  items: AuditEvent[];
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.ListAuditResponse.
+ * Use `create(ListAuditResponseSchema)` to create a new message.
+ */
+export const ListAuditResponseSchema: GenMessage<ListAuditResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 11);
+
+/**
+ * @generated from message cryptos.fleet.v1.ListEnrollmentsRequest
+ */
+export type ListEnrollmentsRequest = Message<"cryptos.fleet.v1.ListEnrollmentsRequest"> & {
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.ListEnrollmentsRequest.
+ * Use `create(ListEnrollmentsRequestSchema)` to create a new message.
+ */
+export const ListEnrollmentsRequestSchema: GenMessage<ListEnrollmentsRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 12);
+
+/**
+ * @generated from message cryptos.fleet.v1.ListEnrollmentsResponse
+ */
+export type ListEnrollmentsResponse = Message<"cryptos.fleet.v1.ListEnrollmentsResponse"> & {
+  /**
+   * @generated from field: repeated cryptos.fleet.v1.EnrollmentRequest items = 1;
+   */
+  items: EnrollmentRequest[];
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.ListEnrollmentsResponse.
+ * Use `create(ListEnrollmentsResponseSchema)` to create a new message.
+ */
+export const ListEnrollmentsResponseSchema: GenMessage<ListEnrollmentsResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 13);
+
+/**
  * NodeSummary is the per-node row shown in the fleet list.
  *
  * @generated from message cryptos.fleet.v1.NodeSummary
@@ -168,7 +288,7 @@ export type NodeSummary = Message<"cryptos.fleet.v1.NodeSummary"> & {
  * Use `create(NodeSummarySchema)` to create a new message.
  */
 export const NodeSummarySchema: GenMessage<NodeSummary> = /*@__PURE__*/
-  messageDesc(file_cryptos_fleet_v1_fleet, 6);
+  messageDesc(file_cryptos_fleet_v1_fleet, 14);
 
 /**
  * NodeIdentity carries the node's CA chain, mirroring cryptos.v1.Identity
@@ -198,7 +318,7 @@ export type NodeIdentity = Message<"cryptos.fleet.v1.NodeIdentity"> & {
  * Use `create(NodeIdentitySchema)` to create a new message.
  */
 export const NodeIdentitySchema: GenMessage<NodeIdentity> = /*@__PURE__*/
-  messageDesc(file_cryptos_fleet_v1_fleet, 7);
+  messageDesc(file_cryptos_fleet_v1_fleet, 15);
 
 /**
  * NodeDetail is the full per-node view returned by GetNode.
@@ -237,7 +357,7 @@ export type NodeDetail = Message<"cryptos.fleet.v1.NodeDetail"> & {
  * Use `create(NodeDetailSchema)` to create a new message.
  */
 export const NodeDetailSchema: GenMessage<NodeDetail> = /*@__PURE__*/
-  messageDesc(file_cryptos_fleet_v1_fleet, 8);
+  messageDesc(file_cryptos_fleet_v1_fleet, 16);
 
 /**
  * Certificate is a single issued or revoked certificate as aggregated from a
@@ -307,7 +427,254 @@ export type Certificate = Message<"cryptos.fleet.v1.Certificate"> & {
  * Use `create(CertificateSchema)` to create a new message.
  */
 export const CertificateSchema: GenMessage<Certificate> = /*@__PURE__*/
-  messageDesc(file_cryptos_fleet_v1_fleet, 9);
+  messageDesc(file_cryptos_fleet_v1_fleet, 17);
+
+/**
+ * CertProfile is a reusable issuance template, mirroring the web UI's
+ * profile catalog entry.
+ *
+ * @generated from message cryptos.fleet.v1.CertProfile
+ */
+export type CertProfile = Message<"cryptos.fleet.v1.CertProfile"> & {
+  /**
+   * @generated from field: string name = 1;
+   */
+  name: string;
+
+  /**
+   * ECDSA-P256|ECDSA-P384|RSA-3072|RSA-4096
+   *
+   * @generated from field: string key_alg = 2;
+   */
+  keyAlg: string;
+
+  /**
+   * @generated from field: repeated string key_usage = 3;
+   */
+  keyUsage: string[];
+
+  /**
+   * @generated from field: repeated string ext_key_usage = 4;
+   */
+  extKeyUsage: string[];
+
+  /**
+   * @generated from field: bool is_ca = 5;
+   */
+  isCa: boolean;
+
+  /**
+   * @generated from field: int32 path_len = 6;
+   */
+  pathLen: number;
+
+  /**
+   * @generated from field: repeated string sans = 7;
+   */
+  sans: string[];
+
+  /**
+   * @generated from field: int32 validity_days = 8;
+   */
+  validityDays: number;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.CertProfile.
+ * Use `create(CertProfileSchema)` to create a new message.
+ */
+export const CertProfileSchema: GenMessage<CertProfile> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 18);
+
+/**
+ * EnrollmentAdapter is an enrollment protocol adapter binding, mirroring the
+ * web UI's protocol catalog entry.
+ *
+ * @generated from message cryptos.fleet.v1.EnrollmentAdapter
+ */
+export type EnrollmentAdapter = Message<"cryptos.fleet.v1.EnrollmentAdapter"> & {
+  /**
+   * acme|est|ms-autoenroll|scep
+   *
+   * @generated from field: string kind = 1;
+   */
+  kind: string;
+
+  /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
+
+  /**
+   * @generated from field: string endpoint = 3;
+   */
+  endpoint: string;
+
+  /**
+   * @generated from field: string profile = 4;
+   */
+  profile: string;
+
+  /**
+   * @generated from field: bool enabled = 5;
+   */
+  enabled: boolean;
+
+  /**
+   * @generated from field: repeated string challenges = 6;
+   */
+  challenges: string[];
+
+  /**
+   * @generated from field: string gpo_template = 7;
+   */
+  gpoTemplate: string;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.EnrollmentAdapter.
+ * Use `create(EnrollmentAdapterSchema)` to create a new message.
+ */
+export const EnrollmentAdapterSchema: GenMessage<EnrollmentAdapter> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 19);
+
+/**
+ * AuditEvent is a single manager audit log entry.
+ *
+ * @generated from message cryptos.fleet.v1.AuditEvent
+ */
+export type AuditEvent = Message<"cryptos.fleet.v1.AuditEvent"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
+
+  /**
+   * @generated from field: string at = 2;
+   */
+  at: string;
+
+  /**
+   * config-applied|enroll-approved|enroll-rejected|issued|profile-created|
+   * profile-updated|protocol-toggled|rekeyed|renewed|revoked
+   *
+   * @generated from field: string kind = 3;
+   */
+  kind: string;
+
+  /**
+   * @generated from field: string summary = 4;
+   */
+  summary: string;
+
+  /**
+   * cert|enrollment|node|profile|protocol
+   *
+   * @generated from field: string target_kind = 5;
+   */
+  targetKind: string;
+
+  /**
+   * @generated from field: string target_path = 6;
+   */
+  targetPath: string;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.AuditEvent.
+ * Use `create(AuditEventSchema)` to create a new message.
+ */
+export const AuditEventSchema: GenMessage<AuditEvent> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 20);
+
+/**
+ * EnrollmentRequest is a node enrollment request awaiting (or resolved by)
+ * admin approval. Attestation and CSR detail are flattened to display
+ * strings for this read-only surface.
+ *
+ * @generated from message cryptos.fleet.v1.EnrollmentRequest
+ */
+export type EnrollmentRequest = Message<"cryptos.fleet.v1.EnrollmentRequest"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
+
+  /**
+   * @generated from field: string proposed_name = 2;
+   */
+  proposedName: string;
+
+  /**
+   * root|intermediate|issuing
+   *
+   * @generated from field: string role = 3;
+   */
+  role: string;
+
+  /**
+   * @generated from field: string parent_cn = 4;
+   */
+  parentCn: string;
+
+  /**
+   * @generated from field: string address = 5;
+   */
+  address: string;
+
+  /**
+   * PENDING|APPROVED|REJECTED
+   *
+   * @generated from field: string status = 6;
+   */
+  status: string;
+
+  /**
+   * attestation detail, e.g. "TPM . sealed" or "UNAVAILABLE . nodeID"
+   *
+   * @generated from field: string attestation_summary = 7;
+   */
+  attestationSummary: string;
+
+  /**
+   * @generated from field: string attestation_node_id = 8;
+   */
+  attestationNodeId: string;
+
+  /**
+   * CSR detail, e.g. "ECDSA P-384"
+   *
+   * @generated from field: string csr_key_type = 9;
+   */
+  csrKeyType: string;
+
+  /**
+   * @generated from field: string csr_subject_cn = 10;
+   */
+  csrSubjectCn: string;
+
+  /**
+   * @generated from field: string requested_at = 11;
+   */
+  requestedAt: string;
+
+  /**
+   * @generated from field: string rejection_reason = 12;
+   */
+  rejectionReason: string;
+
+  /**
+   * @generated from field: string admitted_node_name = 13;
+   */
+  admittedNodeName: string;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.EnrollmentRequest.
+ * Use `create(EnrollmentRequestSchema)` to create a new message.
+ */
+export const EnrollmentRequestSchema: GenMessage<EnrollmentRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 21);
 
 /**
  * Health reports the manager's view of node reachability, independent of
@@ -381,6 +748,49 @@ export const FleetService: GenService<{
     methodKind: "unary";
     input: typeof ListCertificatesRequestSchema;
     output: typeof ListCertificatesResponseSchema;
+  },
+  /**
+   * ListProfiles returns the manager's catalog of certificate issuance
+   * profiles.
+   *
+   * @generated from rpc cryptos.fleet.v1.FleetService.ListProfiles
+   */
+  listProfiles: {
+    methodKind: "unary";
+    input: typeof ListProfilesRequestSchema;
+    output: typeof ListProfilesResponseSchema;
+  },
+  /**
+   * ListAdapters returns the manager's catalog of enrollment protocol
+   * adapters.
+   *
+   * @generated from rpc cryptos.fleet.v1.FleetService.ListAdapters
+   */
+  listAdapters: {
+    methodKind: "unary";
+    input: typeof ListAdaptersRequestSchema;
+    output: typeof ListAdaptersResponseSchema;
+  },
+  /**
+   * ListAudit returns the manager's audit log.
+   *
+   * @generated from rpc cryptos.fleet.v1.FleetService.ListAudit
+   */
+  listAudit: {
+    methodKind: "unary";
+    input: typeof ListAuditRequestSchema;
+    output: typeof ListAuditResponseSchema;
+  },
+  /**
+   * ListEnrollments returns the manager's pending and resolved enrollment
+   * requests.
+   *
+   * @generated from rpc cryptos.fleet.v1.FleetService.ListEnrollments
+   */
+  listEnrollments: {
+    methodKind: "unary";
+    input: typeof ListEnrollmentsRequestSchema;
+    output: typeof ListEnrollmentsResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_cryptos_fleet_v1_fleet, 0);

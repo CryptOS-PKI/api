@@ -22,6 +22,10 @@ const (
 	FleetService_ListNodes_FullMethodName        = "/cryptos.fleet.v1.FleetService/ListNodes"
 	FleetService_GetNode_FullMethodName          = "/cryptos.fleet.v1.FleetService/GetNode"
 	FleetService_ListCertificates_FullMethodName = "/cryptos.fleet.v1.FleetService/ListCertificates"
+	FleetService_ListProfiles_FullMethodName     = "/cryptos.fleet.v1.FleetService/ListProfiles"
+	FleetService_ListAdapters_FullMethodName     = "/cryptos.fleet.v1.FleetService/ListAdapters"
+	FleetService_ListAudit_FullMethodName        = "/cryptos.fleet.v1.FleetService/ListAudit"
+	FleetService_ListEnrollments_FullMethodName  = "/cryptos.fleet.v1.FleetService/ListEnrollments"
 )
 
 // FleetServiceClient is the client API for FleetService service.
@@ -39,6 +43,17 @@ type FleetServiceClient interface {
 	// ListCertificates returns the aggregated certificate set across nodes,
 	// optionally scoped to a single node.
 	ListCertificates(ctx context.Context, in *ListCertificatesRequest, opts ...grpc.CallOption) (*ListCertificatesResponse, error)
+	// ListProfiles returns the manager's catalog of certificate issuance
+	// profiles.
+	ListProfiles(ctx context.Context, in *ListProfilesRequest, opts ...grpc.CallOption) (*ListProfilesResponse, error)
+	// ListAdapters returns the manager's catalog of enrollment protocol
+	// adapters.
+	ListAdapters(ctx context.Context, in *ListAdaptersRequest, opts ...grpc.CallOption) (*ListAdaptersResponse, error)
+	// ListAudit returns the manager's audit log.
+	ListAudit(ctx context.Context, in *ListAuditRequest, opts ...grpc.CallOption) (*ListAuditResponse, error)
+	// ListEnrollments returns the manager's pending and resolved enrollment
+	// requests.
+	ListEnrollments(ctx context.Context, in *ListEnrollmentsRequest, opts ...grpc.CallOption) (*ListEnrollmentsResponse, error)
 }
 
 type fleetServiceClient struct {
@@ -79,6 +94,46 @@ func (c *fleetServiceClient) ListCertificates(ctx context.Context, in *ListCerti
 	return out, nil
 }
 
+func (c *fleetServiceClient) ListProfiles(ctx context.Context, in *ListProfilesRequest, opts ...grpc.CallOption) (*ListProfilesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListProfilesResponse)
+	err := c.cc.Invoke(ctx, FleetService_ListProfiles_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) ListAdapters(ctx context.Context, in *ListAdaptersRequest, opts ...grpc.CallOption) (*ListAdaptersResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListAdaptersResponse)
+	err := c.cc.Invoke(ctx, FleetService_ListAdapters_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) ListAudit(ctx context.Context, in *ListAuditRequest, opts ...grpc.CallOption) (*ListAuditResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListAuditResponse)
+	err := c.cc.Invoke(ctx, FleetService_ListAudit_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) ListEnrollments(ctx context.Context, in *ListEnrollmentsRequest, opts ...grpc.CallOption) (*ListEnrollmentsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListEnrollmentsResponse)
+	err := c.cc.Invoke(ctx, FleetService_ListEnrollments_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FleetServiceServer is the server API for FleetService service.
 // All implementations should embed UnimplementedFleetServiceServer
 // for forward compatibility.
@@ -94,6 +149,17 @@ type FleetServiceServer interface {
 	// ListCertificates returns the aggregated certificate set across nodes,
 	// optionally scoped to a single node.
 	ListCertificates(context.Context, *ListCertificatesRequest) (*ListCertificatesResponse, error)
+	// ListProfiles returns the manager's catalog of certificate issuance
+	// profiles.
+	ListProfiles(context.Context, *ListProfilesRequest) (*ListProfilesResponse, error)
+	// ListAdapters returns the manager's catalog of enrollment protocol
+	// adapters.
+	ListAdapters(context.Context, *ListAdaptersRequest) (*ListAdaptersResponse, error)
+	// ListAudit returns the manager's audit log.
+	ListAudit(context.Context, *ListAuditRequest) (*ListAuditResponse, error)
+	// ListEnrollments returns the manager's pending and resolved enrollment
+	// requests.
+	ListEnrollments(context.Context, *ListEnrollmentsRequest) (*ListEnrollmentsResponse, error)
 }
 
 // UnimplementedFleetServiceServer should be embedded to have
@@ -111,6 +177,18 @@ func (UnimplementedFleetServiceServer) GetNode(context.Context, *GetNodeRequest)
 }
 func (UnimplementedFleetServiceServer) ListCertificates(context.Context, *ListCertificatesRequest) (*ListCertificatesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListCertificates not implemented")
+}
+func (UnimplementedFleetServiceServer) ListProfiles(context.Context, *ListProfilesRequest) (*ListProfilesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListProfiles not implemented")
+}
+func (UnimplementedFleetServiceServer) ListAdapters(context.Context, *ListAdaptersRequest) (*ListAdaptersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListAdapters not implemented")
+}
+func (UnimplementedFleetServiceServer) ListAudit(context.Context, *ListAuditRequest) (*ListAuditResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListAudit not implemented")
+}
+func (UnimplementedFleetServiceServer) ListEnrollments(context.Context, *ListEnrollmentsRequest) (*ListEnrollmentsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListEnrollments not implemented")
 }
 func (UnimplementedFleetServiceServer) testEmbeddedByValue() {}
 
@@ -186,6 +264,78 @@ func _FleetService_ListCertificates_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FleetService_ListProfiles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListProfilesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).ListProfiles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_ListProfiles_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).ListProfiles(ctx, req.(*ListProfilesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_ListAdapters_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAdaptersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).ListAdapters(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_ListAdapters_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).ListAdapters(ctx, req.(*ListAdaptersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_ListAudit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAuditRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).ListAudit(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_ListAudit_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).ListAudit(ctx, req.(*ListAuditRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_ListEnrollments_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListEnrollmentsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).ListEnrollments(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_ListEnrollments_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).ListEnrollments(ctx, req.(*ListEnrollmentsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FleetService_ServiceDesc is the grpc.ServiceDesc for FleetService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -204,6 +354,22 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListCertificates",
 			Handler:    _FleetService_ListCertificates_Handler,
+		},
+		{
+			MethodName: "ListProfiles",
+			Handler:    _FleetService_ListProfiles_Handler,
+		},
+		{
+			MethodName: "ListAdapters",
+			Handler:    _FleetService_ListAdapters_Handler,
+		},
+		{
+			MethodName: "ListAudit",
+			Handler:    _FleetService_ListAudit_Handler,
+		},
+		{
+			MethodName: "ListEnrollments",
+			Handler:    _FleetService_ListEnrollments_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

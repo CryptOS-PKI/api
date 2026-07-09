@@ -34,6 +34,21 @@ service FleetService {
   // ListCertificates returns the aggregated certificate set across nodes,
   // optionally scoped to a single node.
   rpc ListCertificates(ListCertificatesRequest) returns (ListCertificatesResponse);
+
+  // ListProfiles returns the manager's catalog of certificate issuance
+  // profiles.
+  rpc ListProfiles(ListProfilesRequest) returns (ListProfilesResponse);
+
+  // ListAdapters returns the manager's catalog of enrollment protocol
+  // adapters.
+  rpc ListAdapters(ListAdaptersRequest) returns (ListAdaptersResponse);
+
+  // ListAudit returns the manager's audit log.
+  rpc ListAudit(ListAuditRequest) returns (ListAuditResponse);
+
+  // ListEnrollments returns the manager's pending and resolved enrollment
+  // requests.
+  rpc ListEnrollments(ListEnrollmentsRequest) returns (ListEnrollmentsResponse);
 }
 
 message ListNodesRequest {}
@@ -57,6 +72,30 @@ message ListCertificatesRequest {
 
 message ListCertificatesResponse {
   repeated Certificate certificates = 1;
+}
+
+message ListProfilesRequest {}
+
+message ListProfilesResponse {
+  repeated CertProfile items = 1;
+}
+
+message ListAdaptersRequest {}
+
+message ListAdaptersResponse {
+  repeated EnrollmentAdapter items = 1;
+}
+
+message ListAuditRequest {}
+
+message ListAuditResponse {
+  repeated AuditEvent items = 1;
+}
+
+message ListEnrollmentsRequest {}
+
+message ListEnrollmentsResponse {
+  repeated EnrollmentRequest items = 1;
 }
 
 // Health reports the manager's view of node reachability, independent of
@@ -115,4 +154,67 @@ message Certificate {
   string profile = 8;
   string revoked_at = 9;
   string reason = 10;
+}
+
+// CertProfile is a reusable issuance template, mirroring the web UI's
+// profile catalog entry.
+message CertProfile {
+  string name = 1;
+  // ECDSA-P256|ECDSA-P384|RSA-3072|RSA-4096
+  string key_alg = 2;
+  repeated string key_usage = 3;
+  repeated string ext_key_usage = 4;
+  bool is_ca = 5;
+  int32 path_len = 6;
+  repeated string sans = 7;
+  int32 validity_days = 8;
+}
+
+// EnrollmentAdapter is an enrollment protocol adapter binding, mirroring the
+// web UI's protocol catalog entry.
+message EnrollmentAdapter {
+  // acme|est|ms-autoenroll|scep
+  string kind = 1;
+  string name = 2;
+  string endpoint = 3;
+  string profile = 4;
+  bool enabled = 5;
+  repeated string challenges = 6;
+  string gpo_template = 7;
+}
+
+// AuditEvent is a single manager audit log entry.
+message AuditEvent {
+  string id = 1;
+  string at = 2;
+  // config-applied|enroll-approved|enroll-rejected|issued|profile-created|
+  // profile-updated|protocol-toggled|rekeyed|renewed|revoked
+  string kind = 3;
+  string summary = 4;
+  // cert|enrollment|node|profile|protocol
+  string target_kind = 5;
+  string target_path = 6;
+}
+
+// EnrollmentRequest is a node enrollment request awaiting (or resolved by)
+// admin approval. Attestation and CSR detail are flattened to display
+// strings for this read-only surface.
+message EnrollmentRequest {
+  string id = 1;
+  string proposed_name = 2;
+  // root|intermediate|issuing
+  string role = 3;
+  string parent_cn = 4;
+  string address = 5;
+  // PENDING|APPROVED|REJECTED
+  string status = 6;
+  // attestation detail, e.g. "TPM . sealed" or "UNAVAILABLE . nodeID"
+  string attestation_summary = 7;
+  string attestation_node_id = 8;
+  // CSR detail, e.g. "ECDSA P-384"
+  string csr_key_type = 9;
+  string csr_subject_cn = 10;
+  string requested_at = 11;
+  string rejection_reason = 12;
+  string admitted_node_name = 13;
 }

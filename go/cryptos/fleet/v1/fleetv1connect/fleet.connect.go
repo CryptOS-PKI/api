@@ -40,6 +40,17 @@ const (
 	// FleetServiceListCertificatesProcedure is the fully-qualified name of the FleetService's
 	// ListCertificates RPC.
 	FleetServiceListCertificatesProcedure = "/cryptos.fleet.v1.FleetService/ListCertificates"
+	// FleetServiceListProfilesProcedure is the fully-qualified name of the FleetService's ListProfiles
+	// RPC.
+	FleetServiceListProfilesProcedure = "/cryptos.fleet.v1.FleetService/ListProfiles"
+	// FleetServiceListAdaptersProcedure is the fully-qualified name of the FleetService's ListAdapters
+	// RPC.
+	FleetServiceListAdaptersProcedure = "/cryptos.fleet.v1.FleetService/ListAdapters"
+	// FleetServiceListAuditProcedure is the fully-qualified name of the FleetService's ListAudit RPC.
+	FleetServiceListAuditProcedure = "/cryptos.fleet.v1.FleetService/ListAudit"
+	// FleetServiceListEnrollmentsProcedure is the fully-qualified name of the FleetService's
+	// ListEnrollments RPC.
+	FleetServiceListEnrollmentsProcedure = "/cryptos.fleet.v1.FleetService/ListEnrollments"
 )
 
 // FleetServiceClient is a client for the cryptos.fleet.v1.FleetService service.
@@ -51,6 +62,17 @@ type FleetServiceClient interface {
 	// ListCertificates returns the aggregated certificate set across nodes,
 	// optionally scoped to a single node.
 	ListCertificates(context.Context, *connect.Request[v1.ListCertificatesRequest]) (*connect.Response[v1.ListCertificatesResponse], error)
+	// ListProfiles returns the manager's catalog of certificate issuance
+	// profiles.
+	ListProfiles(context.Context, *connect.Request[v1.ListProfilesRequest]) (*connect.Response[v1.ListProfilesResponse], error)
+	// ListAdapters returns the manager's catalog of enrollment protocol
+	// adapters.
+	ListAdapters(context.Context, *connect.Request[v1.ListAdaptersRequest]) (*connect.Response[v1.ListAdaptersResponse], error)
+	// ListAudit returns the manager's audit log.
+	ListAudit(context.Context, *connect.Request[v1.ListAuditRequest]) (*connect.Response[v1.ListAuditResponse], error)
+	// ListEnrollments returns the manager's pending and resolved enrollment
+	// requests.
+	ListEnrollments(context.Context, *connect.Request[v1.ListEnrollmentsRequest]) (*connect.Response[v1.ListEnrollmentsResponse], error)
 }
 
 // NewFleetServiceClient constructs a client for the cryptos.fleet.v1.FleetService service. By
@@ -82,6 +104,30 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(fleetServiceMethods.ByName("ListCertificates")),
 			connect.WithClientOptions(opts...),
 		),
+		listProfiles: connect.NewClient[v1.ListProfilesRequest, v1.ListProfilesResponse](
+			httpClient,
+			baseURL+FleetServiceListProfilesProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("ListProfiles")),
+			connect.WithClientOptions(opts...),
+		),
+		listAdapters: connect.NewClient[v1.ListAdaptersRequest, v1.ListAdaptersResponse](
+			httpClient,
+			baseURL+FleetServiceListAdaptersProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("ListAdapters")),
+			connect.WithClientOptions(opts...),
+		),
+		listAudit: connect.NewClient[v1.ListAuditRequest, v1.ListAuditResponse](
+			httpClient,
+			baseURL+FleetServiceListAuditProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("ListAudit")),
+			connect.WithClientOptions(opts...),
+		),
+		listEnrollments: connect.NewClient[v1.ListEnrollmentsRequest, v1.ListEnrollmentsResponse](
+			httpClient,
+			baseURL+FleetServiceListEnrollmentsProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("ListEnrollments")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -90,6 +136,10 @@ type fleetServiceClient struct {
 	listNodes        *connect.Client[v1.ListNodesRequest, v1.ListNodesResponse]
 	getNode          *connect.Client[v1.GetNodeRequest, v1.GetNodeResponse]
 	listCertificates *connect.Client[v1.ListCertificatesRequest, v1.ListCertificatesResponse]
+	listProfiles     *connect.Client[v1.ListProfilesRequest, v1.ListProfilesResponse]
+	listAdapters     *connect.Client[v1.ListAdaptersRequest, v1.ListAdaptersResponse]
+	listAudit        *connect.Client[v1.ListAuditRequest, v1.ListAuditResponse]
+	listEnrollments  *connect.Client[v1.ListEnrollmentsRequest, v1.ListEnrollmentsResponse]
 }
 
 // ListNodes calls cryptos.fleet.v1.FleetService.ListNodes.
@@ -107,6 +157,26 @@ func (c *fleetServiceClient) ListCertificates(ctx context.Context, req *connect.
 	return c.listCertificates.CallUnary(ctx, req)
 }
 
+// ListProfiles calls cryptos.fleet.v1.FleetService.ListProfiles.
+func (c *fleetServiceClient) ListProfiles(ctx context.Context, req *connect.Request[v1.ListProfilesRequest]) (*connect.Response[v1.ListProfilesResponse], error) {
+	return c.listProfiles.CallUnary(ctx, req)
+}
+
+// ListAdapters calls cryptos.fleet.v1.FleetService.ListAdapters.
+func (c *fleetServiceClient) ListAdapters(ctx context.Context, req *connect.Request[v1.ListAdaptersRequest]) (*connect.Response[v1.ListAdaptersResponse], error) {
+	return c.listAdapters.CallUnary(ctx, req)
+}
+
+// ListAudit calls cryptos.fleet.v1.FleetService.ListAudit.
+func (c *fleetServiceClient) ListAudit(ctx context.Context, req *connect.Request[v1.ListAuditRequest]) (*connect.Response[v1.ListAuditResponse], error) {
+	return c.listAudit.CallUnary(ctx, req)
+}
+
+// ListEnrollments calls cryptos.fleet.v1.FleetService.ListEnrollments.
+func (c *fleetServiceClient) ListEnrollments(ctx context.Context, req *connect.Request[v1.ListEnrollmentsRequest]) (*connect.Response[v1.ListEnrollmentsResponse], error) {
+	return c.listEnrollments.CallUnary(ctx, req)
+}
+
 // FleetServiceHandler is an implementation of the cryptos.fleet.v1.FleetService service.
 type FleetServiceHandler interface {
 	// ListNodes returns a summary for every node the manager knows about.
@@ -116,6 +186,17 @@ type FleetServiceHandler interface {
 	// ListCertificates returns the aggregated certificate set across nodes,
 	// optionally scoped to a single node.
 	ListCertificates(context.Context, *connect.Request[v1.ListCertificatesRequest]) (*connect.Response[v1.ListCertificatesResponse], error)
+	// ListProfiles returns the manager's catalog of certificate issuance
+	// profiles.
+	ListProfiles(context.Context, *connect.Request[v1.ListProfilesRequest]) (*connect.Response[v1.ListProfilesResponse], error)
+	// ListAdapters returns the manager's catalog of enrollment protocol
+	// adapters.
+	ListAdapters(context.Context, *connect.Request[v1.ListAdaptersRequest]) (*connect.Response[v1.ListAdaptersResponse], error)
+	// ListAudit returns the manager's audit log.
+	ListAudit(context.Context, *connect.Request[v1.ListAuditRequest]) (*connect.Response[v1.ListAuditResponse], error)
+	// ListEnrollments returns the manager's pending and resolved enrollment
+	// requests.
+	ListEnrollments(context.Context, *connect.Request[v1.ListEnrollmentsRequest]) (*connect.Response[v1.ListEnrollmentsResponse], error)
 }
 
 // NewFleetServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -143,6 +224,30 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(fleetServiceMethods.ByName("ListCertificates")),
 		connect.WithHandlerOptions(opts...),
 	)
+	fleetServiceListProfilesHandler := connect.NewUnaryHandler(
+		FleetServiceListProfilesProcedure,
+		svc.ListProfiles,
+		connect.WithSchema(fleetServiceMethods.ByName("ListProfiles")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceListAdaptersHandler := connect.NewUnaryHandler(
+		FleetServiceListAdaptersProcedure,
+		svc.ListAdapters,
+		connect.WithSchema(fleetServiceMethods.ByName("ListAdapters")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceListAuditHandler := connect.NewUnaryHandler(
+		FleetServiceListAuditProcedure,
+		svc.ListAudit,
+		connect.WithSchema(fleetServiceMethods.ByName("ListAudit")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceListEnrollmentsHandler := connect.NewUnaryHandler(
+		FleetServiceListEnrollmentsProcedure,
+		svc.ListEnrollments,
+		connect.WithSchema(fleetServiceMethods.ByName("ListEnrollments")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/cryptos.fleet.v1.FleetService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case FleetServiceListNodesProcedure:
@@ -151,6 +256,14 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 			fleetServiceGetNodeHandler.ServeHTTP(w, r)
 		case FleetServiceListCertificatesProcedure:
 			fleetServiceListCertificatesHandler.ServeHTTP(w, r)
+		case FleetServiceListProfilesProcedure:
+			fleetServiceListProfilesHandler.ServeHTTP(w, r)
+		case FleetServiceListAdaptersProcedure:
+			fleetServiceListAdaptersHandler.ServeHTTP(w, r)
+		case FleetServiceListAuditProcedure:
+			fleetServiceListAuditHandler.ServeHTTP(w, r)
+		case FleetServiceListEnrollmentsProcedure:
+			fleetServiceListEnrollmentsHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -170,4 +283,20 @@ func (UnimplementedFleetServiceHandler) GetNode(context.Context, *connect.Reques
 
 func (UnimplementedFleetServiceHandler) ListCertificates(context.Context, *connect.Request[v1.ListCertificatesRequest]) (*connect.Response[v1.ListCertificatesResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ListCertificates is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) ListProfiles(context.Context, *connect.Request[v1.ListProfilesRequest]) (*connect.Response[v1.ListProfilesResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ListProfiles is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) ListAdapters(context.Context, *connect.Request[v1.ListAdaptersRequest]) (*connect.Response[v1.ListAdaptersResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ListAdapters is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) ListAudit(context.Context, *connect.Request[v1.ListAuditRequest]) (*connect.Response[v1.ListAuditResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ListAudit is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) ListEnrollments(context.Context, *connect.Request[v1.ListEnrollmentsRequest]) (*connect.Response[v1.ListEnrollmentsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ListEnrollments is not implemented"))
 }

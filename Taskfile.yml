@@ -1,7 +1,12 @@
 version: '3'
 
 # Task targets for the CryptOS-PKI api/ module.
-# Requires on PATH: buf, protoc-gen-go, protoc-gen-go-grpc, golic.
+# Requires on PATH: buf, protoc-gen-go, protoc-gen-go-grpc, protoc-gen-connect-go, golic, npx.
+# The TypeScript plugin (@bufbuild/protoc-gen-es) runs via `npx -y`, pinned by version
+# in buf.gen.yaml; no local npm install needed, but `buf generate` requires network
+# access to fetch it on first run (npx caches after that). Connect-ES v2's unified
+# protoc-gen-es also emits the Connect service definitions -- there is no separate
+# connect-es codegen plugin in the v2 line.
 
 tasks:
   default:

@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	FleetService_ListNodes_FullMethodName = "/cryptos.fleet.v1.FleetService/ListNodes"
-	FleetService_GetNode_FullMethodName   = "/cryptos.fleet.v1.FleetService/GetNode"
+	FleetService_ListNodes_FullMethodName        = "/cryptos.fleet.v1.FleetService/ListNodes"
+	FleetService_GetNode_FullMethodName          = "/cryptos.fleet.v1.FleetService/GetNode"
+	FleetService_ListCertificates_FullMethodName = "/cryptos.fleet.v1.FleetService/ListCertificates"
 )
 
 // FleetServiceClient is the client API for FleetService service.
@@ -35,6 +36,9 @@ type FleetServiceClient interface {
 	ListNodes(ctx context.Context, in *ListNodesRequest, opts ...grpc.CallOption) (*ListNodesResponse, error)
 	// GetNode returns full detail, including the identity chain, for one node.
 	GetNode(ctx context.Context, in *GetNodeRequest, opts ...grpc.CallOption) (*GetNodeResponse, error)
+	// ListCertificates returns the aggregated certificate set across nodes,
+	// optionally scoped to a single node.
+	ListCertificates(ctx context.Context, in *ListCertificatesRequest, opts ...grpc.CallOption) (*ListCertificatesResponse, error)
 }
 
 type fleetServiceClient struct {
@@ -65,6 +69,16 @@ func (c *fleetServiceClient) GetNode(ctx context.Context, in *GetNodeRequest, op
 	return out, nil
 }
 
+func (c *fleetServiceClient) ListCertificates(ctx context.Context, in *ListCertificatesRequest, opts ...grpc.CallOption) (*ListCertificatesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListCertificatesResponse)
+	err := c.cc.Invoke(ctx, FleetService_ListCertificates_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FleetServiceServer is the server API for FleetService service.
 // All implementations should embed UnimplementedFleetServiceServer
 // for forward compatibility.
@@ -77,6 +91,9 @@ type FleetServiceServer interface {
 	ListNodes(context.Context, *ListNodesRequest) (*ListNodesResponse, error)
 	// GetNode returns full detail, including the identity chain, for one node.
 	GetNode(context.Context, *GetNodeRequest) (*GetNodeResponse, error)
+	// ListCertificates returns the aggregated certificate set across nodes,
+	// optionally scoped to a single node.
+	ListCertificates(context.Context, *ListCertificatesRequest) (*ListCertificatesResponse, error)
 }
 
 // UnimplementedFleetServiceServer should be embedded to have
@@ -91,6 +108,9 @@ func (UnimplementedFleetServiceServer) ListNodes(context.Context, *ListNodesRequ
 }
 func (UnimplementedFleetServiceServer) GetNode(context.Context, *GetNodeRequest) (*GetNodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetNode not implemented")
+}
+func (UnimplementedFleetServiceServer) ListCertificates(context.Context, *ListCertificatesRequest) (*ListCertificatesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListCertificates not implemented")
 }
 func (UnimplementedFleetServiceServer) testEmbeddedByValue() {}
 
@@ -148,6 +168,24 @@ func _FleetService_GetNode_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FleetService_ListCertificates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListCertificatesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).ListCertificates(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_ListCertificates_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).ListCertificates(ctx, req.(*ListCertificatesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FleetService_ServiceDesc is the grpc.ServiceDesc for FleetService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -162,6 +200,10 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetNode",
 			Handler:    _FleetService_GetNode_Handler,
+		},
+		{
+			MethodName: "ListCertificates",
+			Handler:    _FleetService_ListCertificates_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

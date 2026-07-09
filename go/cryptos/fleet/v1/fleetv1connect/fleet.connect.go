@@ -37,6 +37,9 @@ const (
 	FleetServiceListNodesProcedure = "/cryptos.fleet.v1.FleetService/ListNodes"
 	// FleetServiceGetNodeProcedure is the fully-qualified name of the FleetService's GetNode RPC.
 	FleetServiceGetNodeProcedure = "/cryptos.fleet.v1.FleetService/GetNode"
+	// FleetServiceListCertificatesProcedure is the fully-qualified name of the FleetService's
+	// ListCertificates RPC.
+	FleetServiceListCertificatesProcedure = "/cryptos.fleet.v1.FleetService/ListCertificates"
 )
 
 // FleetServiceClient is a client for the cryptos.fleet.v1.FleetService service.
@@ -45,6 +48,9 @@ type FleetServiceClient interface {
 	ListNodes(context.Context, *connect.Request[v1.ListNodesRequest]) (*connect.Response[v1.ListNodesResponse], error)
 	// GetNode returns full detail, including the identity chain, for one node.
 	GetNode(context.Context, *connect.Request[v1.GetNodeRequest]) (*connect.Response[v1.GetNodeResponse], error)
+	// ListCertificates returns the aggregated certificate set across nodes,
+	// optionally scoped to a single node.
+	ListCertificates(context.Context, *connect.Request[v1.ListCertificatesRequest]) (*connect.Response[v1.ListCertificatesResponse], error)
 }
 
 // NewFleetServiceClient constructs a client for the cryptos.fleet.v1.FleetService service. By
@@ -70,13 +76,20 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(fleetServiceMethods.ByName("GetNode")),
 			connect.WithClientOptions(opts...),
 		),
+		listCertificates: connect.NewClient[v1.ListCertificatesRequest, v1.ListCertificatesResponse](
+			httpClient,
+			baseURL+FleetServiceListCertificatesProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("ListCertificates")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // fleetServiceClient implements FleetServiceClient.
 type fleetServiceClient struct {
-	listNodes *connect.Client[v1.ListNodesRequest, v1.ListNodesResponse]
-	getNode   *connect.Client[v1.GetNodeRequest, v1.GetNodeResponse]
+	listNodes        *connect.Client[v1.ListNodesRequest, v1.ListNodesResponse]
+	getNode          *connect.Client[v1.GetNodeRequest, v1.GetNodeResponse]
+	listCertificates *connect.Client[v1.ListCertificatesRequest, v1.ListCertificatesResponse]
 }
 
 // ListNodes calls cryptos.fleet.v1.FleetService.ListNodes.
@@ -89,12 +102,20 @@ func (c *fleetServiceClient) GetNode(ctx context.Context, req *connect.Request[v
 	return c.getNode.CallUnary(ctx, req)
 }
 
+// ListCertificates calls cryptos.fleet.v1.FleetService.ListCertificates.
+func (c *fleetServiceClient) ListCertificates(ctx context.Context, req *connect.Request[v1.ListCertificatesRequest]) (*connect.Response[v1.ListCertificatesResponse], error) {
+	return c.listCertificates.CallUnary(ctx, req)
+}
+
 // FleetServiceHandler is an implementation of the cryptos.fleet.v1.FleetService service.
 type FleetServiceHandler interface {
 	// ListNodes returns a summary for every node the manager knows about.
 	ListNodes(context.Context, *connect.Request[v1.ListNodesRequest]) (*connect.Response[v1.ListNodesResponse], error)
 	// GetNode returns full detail, including the identity chain, for one node.
 	GetNode(context.Context, *connect.Request[v1.GetNodeRequest]) (*connect.Response[v1.GetNodeResponse], error)
+	// ListCertificates returns the aggregated certificate set across nodes,
+	// optionally scoped to a single node.
+	ListCertificates(context.Context, *connect.Request[v1.ListCertificatesRequest]) (*connect.Response[v1.ListCertificatesResponse], error)
 }
 
 // NewFleetServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -116,12 +137,20 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(fleetServiceMethods.ByName("GetNode")),
 		connect.WithHandlerOptions(opts...),
 	)
+	fleetServiceListCertificatesHandler := connect.NewUnaryHandler(
+		FleetServiceListCertificatesProcedure,
+		svc.ListCertificates,
+		connect.WithSchema(fleetServiceMethods.ByName("ListCertificates")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/cryptos.fleet.v1.FleetService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case FleetServiceListNodesProcedure:
 			fleetServiceListNodesHandler.ServeHTTP(w, r)
 		case FleetServiceGetNodeProcedure:
 			fleetServiceGetNodeHandler.ServeHTTP(w, r)
+		case FleetServiceListCertificatesProcedure:
+			fleetServiceListCertificatesHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -137,4 +166,8 @@ func (UnimplementedFleetServiceHandler) ListNodes(context.Context, *connect.Requ
 
 func (UnimplementedFleetServiceHandler) GetNode(context.Context, *connect.Request[v1.GetNodeRequest]) (*connect.Response[v1.GetNodeResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.GetNode is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) ListCertificates(context.Context, *connect.Request[v1.ListCertificatesRequest]) (*connect.Response[v1.ListCertificatesResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ListCertificates is not implemented"))
 }

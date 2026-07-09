@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file cryptos/fleet/v1/fleet.proto.
  */
 export const file_cryptos_fleet_v1_fleet: GenFile = /*@__PURE__*/
-  fileDesc("ChxjcnlwdG9zL2ZsZWV0L3YxL2ZsZWV0LnByb3RvEhBjcnlwdG9zLmZsZWV0LnYxIhIKEExpc3ROb2Rlc1JlcXVlc3QiQQoRTGlzdE5vZGVzUmVzcG9uc2USLAoFbm9kZXMYASADKAsyHS5jcnlwdG9zLmZsZWV0LnYxLk5vZGVTdW1tYXJ5Ih4KDkdldE5vZGVSZXF1ZXN0EgwKBG5hbWUYASABKAkiPQoPR2V0Tm9kZVJlc3BvbnNlEioKBG5vZGUYASABKAsyHC5jcnlwdG9zLmZsZWV0LnYxLk5vZGVEZXRhaWwirwEKC05vZGVTdW1tYXJ5EgwKBG5hbWUYASABKAkSDwoHYWRkcmVzcxgCIAEoCRIMCgRyb2xlGAMgASgJEhYKDmlkZW50aXR5X3N0YXRlGAQgASgJEgoKAmNuGAUgASgJEg4KBmlzc3VlchgGIAEoCRIoCgZoZWFsdGgYByABKA4yGC5jcnlwdG9zLmZsZWV0LnYxLkhlYWx0aBIVCg1oZWFsdGhfZGV0YWlsGAggASgJIkkKDE5vZGVJZGVudGl0eRIRCgljaGFpbl9wZW0YASABKAkSEQoJY2hhaW5fZGVyGAIgAygMEhMKC2xlYWZfc2hhMjU2GAMgASgJIqkBCgpOb2RlRGV0YWlsEi4KB3N1bW1hcnkYASABKAsyHS5jcnlwdG9zLmZsZWV0LnYxLk5vZGVTdW1tYXJ5EjAKCGlkZW50aXR5GAIgASgLMh4uY3J5cHRvcy5mbGVldC52MS5Ob2RlSWRlbnRpdHkSFQoNdHBtX2F2YWlsYWJsZRgDIAEoCBISCgpib290X2NvdW50GAQgASgEEg4KBnVwdGltZRgFIAEoCSpSCgZIZWFsdGgSFgoSSEVBTFRIX1VOU1BFQ0lGSUVEEAASDQoJSEVBTFRIX1VQEAESDwoLSEVBTFRIX0RPV04QAhIQCgxIRUFMVEhfRVJST1IQAzK0AQoMRmxlZXRTZXJ2aWNlElQKCUxpc3ROb2RlcxIiLmNyeXB0b3MuZmxlZXQudjEuTGlzdE5vZGVzUmVxdWVzdBojLmNyeXB0b3MuZmxlZXQudjEuTGlzdE5vZGVzUmVzcG9uc2USTgoHR2V0Tm9kZRIgLmNyeXB0b3MuZmxlZXQudjEuR2V0Tm9kZVJlcXVlc3QaIS5jcnlwdG9zLmZsZWV0LnYxLkdldE5vZGVSZXNwb25zZUI4WjZnaXRodWIuY29tL0NyeXB0T1MtUEtJL2FwaS9nby9jcnlwdG9zL2ZsZWV0L3YxO2ZsZWV0djFiBnByb3RvMw");
+  fileDesc("ChxjcnlwdG9zL2ZsZWV0L3YxL2ZsZWV0LnByb3RvEhBjcnlwdG9zLmZsZWV0LnYxIhIKEExpc3ROb2Rlc1JlcXVlc3QiQQoRTGlzdE5vZGVzUmVzcG9uc2USLAoFbm9kZXMYASADKAsyHS5jcnlwdG9zLmZsZWV0LnYxLk5vZGVTdW1tYXJ5Ih4KDkdldE5vZGVSZXF1ZXN0EgwKBG5hbWUYASABKAkiPQoPR2V0Tm9kZVJlc3BvbnNlEioKBG5vZGUYASABKAsyHC5jcnlwdG9zLmZsZWV0LnYxLk5vZGVEZXRhaWwiJwoXTGlzdENlcnRpZmljYXRlc1JlcXVlc3QSDAoEbm9kZRgBIAEoCSJPChhMaXN0Q2VydGlmaWNhdGVzUmVzcG9uc2USMwoMY2VydGlmaWNhdGVzGAEgAygLMh0uY3J5cHRvcy5mbGVldC52MS5DZXJ0aWZpY2F0ZSKvAQoLTm9kZVN1bW1hcnkSDAoEbmFtZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJEgwKBHJvbGUYAyABKAkSFgoOaWRlbnRpdHlfc3RhdGUYBCABKAkSCgoCY24YBSABKAkSDgoGaXNzdWVyGAYgASgJEigKBmhlYWx0aBgHIAEoDjIYLmNyeXB0b3MuZmxlZXQudjEuSGVhbHRoEhUKDWhlYWx0aF9kZXRhaWwYCCABKAkiSQoMTm9kZUlkZW50aXR5EhEKCWNoYWluX3BlbRgBIAEoCRIRCgljaGFpbl9kZXIYAiADKAwSEwoLbGVhZl9zaGEyNTYYAyABKAkiqQEKCk5vZGVEZXRhaWwSLgoHc3VtbWFyeRgBIAEoCzIdLmNyeXB0b3MuZmxlZXQudjEuTm9kZVN1bW1hcnkSMAoIaWRlbnRpdHkYAiABKAsyHi5jcnlwdG9zLmZsZWV0LnYxLk5vZGVJZGVudGl0eRIVCg10cG1fYXZhaWxhYmxlGAMgASgIEhIKCmJvb3RfY291bnQYBCABKAQSDgoGdXB0aW1lGAUgASgJIsABCgtDZXJ0aWZpY2F0ZRIOCgZzZXJpYWwYASABKAkSEgoKc3ViamVjdF9jbhgCIAEoCRITCgtpc3N1ZXJfbm9kZRgDIAEoCRIMCgRraW5kGAQgASgJEg4KBnN0YXR1cxgFIAEoCRISCgpub3RfYmVmb3JlGAYgASgJEhEKCW5vdF9hZnRlchgHIAEoCRIPCgdwcm9maWxlGAggASgJEhIKCnJldm9rZWRfYXQYCSABKAkSDgoGcmVhc29uGAogASgJKlIKBkhlYWx0aBIWChJIRUFMVEhfVU5TUEVDSUZJRUQQABINCglIRUFMVEhfVVAQARIPCgtIRUFMVEhfRE9XThACEhAKDEhFQUxUSF9FUlJPUhADMp8CCgxGbGVldFNlcnZpY2USVAoJTGlzdE5vZGVzEiIuY3J5cHRvcy5mbGVldC52MS5MaXN0Tm9kZXNSZXF1ZXN0GiMuY3J5cHRvcy5mbGVldC52MS5MaXN0Tm9kZXNSZXNwb25zZRJOCgdHZXROb2RlEiAuY3J5cHRvcy5mbGVldC52MS5HZXROb2RlUmVxdWVzdBohLmNyeXB0b3MuZmxlZXQudjEuR2V0Tm9kZVJlc3BvbnNlEmkKEExpc3RDZXJ0aWZpY2F0ZXMSKS5jcnlwdG9zLmZsZWV0LnYxLkxpc3RDZXJ0aWZpY2F0ZXNSZXF1ZXN0GiouY3J5cHRvcy5mbGVldC52MS5MaXN0Q2VydGlmaWNhdGVzUmVzcG9uc2VCOFo2Z2l0aHViLmNvbS9DcnlwdE9TLVBLSS9hcGkvZ28vY3J5cHRvcy9mbGVldC92MTtmbGVldHYxYgZwcm90bzM");
 
 /**
  * @generated from message cryptos.fleet.v1.ListNodesRequest
@@ -77,6 +77,42 @@ export const GetNodeResponseSchema: GenMessage<GetNodeResponse> = /*@__PURE__*/
   messageDesc(file_cryptos_fleet_v1_fleet, 3);
 
 /**
+ * @generated from message cryptos.fleet.v1.ListCertificatesRequest
+ */
+export type ListCertificatesRequest = Message<"cryptos.fleet.v1.ListCertificatesRequest"> & {
+  /**
+   * node scopes the result to a single node by name; empty means all nodes.
+   *
+   * @generated from field: string node = 1;
+   */
+  node: string;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.ListCertificatesRequest.
+ * Use `create(ListCertificatesRequestSchema)` to create a new message.
+ */
+export const ListCertificatesRequestSchema: GenMessage<ListCertificatesRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 4);
+
+/**
+ * @generated from message cryptos.fleet.v1.ListCertificatesResponse
+ */
+export type ListCertificatesResponse = Message<"cryptos.fleet.v1.ListCertificatesResponse"> & {
+  /**
+   * @generated from field: repeated cryptos.fleet.v1.Certificate certificates = 1;
+   */
+  certificates: Certificate[];
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.ListCertificatesResponse.
+ * Use `create(ListCertificatesResponseSchema)` to create a new message.
+ */
+export const ListCertificatesResponseSchema: GenMessage<ListCertificatesResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 5);
+
+/**
  * NodeSummary is the per-node row shown in the fleet list.
  *
  * @generated from message cryptos.fleet.v1.NodeSummary
@@ -132,7 +168,7 @@ export type NodeSummary = Message<"cryptos.fleet.v1.NodeSummary"> & {
  * Use `create(NodeSummarySchema)` to create a new message.
  */
 export const NodeSummarySchema: GenMessage<NodeSummary> = /*@__PURE__*/
-  messageDesc(file_cryptos_fleet_v1_fleet, 4);
+  messageDesc(file_cryptos_fleet_v1_fleet, 6);
 
 /**
  * NodeIdentity carries the node's CA chain, mirroring cryptos.v1.Identity
@@ -162,7 +198,7 @@ export type NodeIdentity = Message<"cryptos.fleet.v1.NodeIdentity"> & {
  * Use `create(NodeIdentitySchema)` to create a new message.
  */
 export const NodeIdentitySchema: GenMessage<NodeIdentity> = /*@__PURE__*/
-  messageDesc(file_cryptos_fleet_v1_fleet, 5);
+  messageDesc(file_cryptos_fleet_v1_fleet, 7);
 
 /**
  * NodeDetail is the full per-node view returned by GetNode.
@@ -201,7 +237,77 @@ export type NodeDetail = Message<"cryptos.fleet.v1.NodeDetail"> & {
  * Use `create(NodeDetailSchema)` to create a new message.
  */
 export const NodeDetailSchema: GenMessage<NodeDetail> = /*@__PURE__*/
-  messageDesc(file_cryptos_fleet_v1_fleet, 6);
+  messageDesc(file_cryptos_fleet_v1_fleet, 8);
+
+/**
+ * Certificate is a single issued or revoked certificate as aggregated from a
+ * node's cert surface. Timestamps are RFC3339 strings for display parity
+ * with the web UI.
+ *
+ * @generated from message cryptos.fleet.v1.Certificate
+ */
+export type Certificate = Message<"cryptos.fleet.v1.Certificate"> & {
+  /**
+   * @generated from field: string serial = 1;
+   */
+  serial: string;
+
+  /**
+   * @generated from field: string subject_cn = 2;
+   */
+  subjectCn: string;
+
+  /**
+   * @generated from field: string issuer_node = 3;
+   */
+  issuerNode: string;
+
+  /**
+   * leaf|subordinate-ca
+   *
+   * @generated from field: string kind = 4;
+   */
+  kind: string;
+
+  /**
+   * VALID|EXPIRED|REVOKED
+   *
+   * @generated from field: string status = 5;
+   */
+  status: string;
+
+  /**
+   * @generated from field: string not_before = 6;
+   */
+  notBefore: string;
+
+  /**
+   * @generated from field: string not_after = 7;
+   */
+  notAfter: string;
+
+  /**
+   * @generated from field: string profile = 8;
+   */
+  profile: string;
+
+  /**
+   * @generated from field: string revoked_at = 9;
+   */
+  revokedAt: string;
+
+  /**
+   * @generated from field: string reason = 10;
+   */
+  reason: string;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.Certificate.
+ * Use `create(CertificateSchema)` to create a new message.
+ */
+export const CertificateSchema: GenMessage<Certificate> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 9);
 
 /**
  * Health reports the manager's view of node reachability, independent of
@@ -264,6 +370,17 @@ export const FleetService: GenService<{
     methodKind: "unary";
     input: typeof GetNodeRequestSchema;
     output: typeof GetNodeResponseSchema;
+  },
+  /**
+   * ListCertificates returns the aggregated certificate set across nodes,
+   * optionally scoped to a single node.
+   *
+   * @generated from rpc cryptos.fleet.v1.FleetService.ListCertificates
+   */
+  listCertificates: {
+    methodKind: "unary";
+    input: typeof ListCertificatesRequestSchema;
+    output: typeof ListCertificatesResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_cryptos_fleet_v1_fleet, 0);

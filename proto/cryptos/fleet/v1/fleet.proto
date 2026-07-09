@@ -30,6 +30,10 @@ service FleetService {
 
   // GetNode returns full detail, including the identity chain, for one node.
   rpc GetNode(GetNodeRequest) returns (GetNodeResponse);
+
+  // ListCertificates returns the aggregated certificate set across nodes,
+  // optionally scoped to a single node.
+  rpc ListCertificates(ListCertificatesRequest) returns (ListCertificatesResponse);
 }
 
 message ListNodesRequest {}
@@ -44,6 +48,15 @@ message GetNodeRequest {
 
 message GetNodeResponse {
   NodeDetail node = 1;
+}
+
+message ListCertificatesRequest {
+  // node scopes the result to a single node by name; empty means all nodes.
+  string node = 1;
+}
+
+message ListCertificatesResponse {
+  repeated Certificate certificates = 1;
 }
 
 // Health reports the manager's view of node reachability, independent of
@@ -84,4 +97,22 @@ message NodeDetail {
   bool tpm_available = 3;
   uint64 boot_count = 4;
   string uptime = 5;
+}
+
+// Certificate is a single issued or revoked certificate as aggregated from a
+// node's cert surface. Timestamps are RFC3339 strings for display parity
+// with the web UI.
+message Certificate {
+  string serial = 1;
+  string subject_cn = 2;
+  string issuer_node = 3;
+  // leaf|subordinate-ca
+  string kind = 4;
+  // VALID|EXPIRED|REVOKED
+  string status = 5;
+  string not_before = 6;
+  string not_after = 7;
+  string profile = 8;
+  string revoked_at = 9;
+  string reason = 10;
 }

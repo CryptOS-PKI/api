@@ -1,0 +1,220 @@
+syntax = "proto3";
+/*
+   Apache License 2.0
+
+   Copyright 2026 Shane
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+
+package cryptos.fleet.v1;
+
+option go_package = "github.com/CryptOS-PKI/api/go/cryptos/fleet/v1;fleetv1";
+
+// FleetService is the Fleet Manager's read surface over a set of CryptOS
+// nodes. It aggregates each node's status and identity behind a single
+// Connect endpoint for the manager's web UI.
+service FleetService {
+  // ListNodes returns a summary for every node the manager knows about.
+  rpc ListNodes(ListNodesRequest) returns (ListNodesResponse);
+
+  // GetNode returns full detail, including the identity chain, for one node.
+  rpc GetNode(GetNodeRequest) returns (GetNodeResponse);
+
+  // ListCertificates returns the aggregated certificate set across nodes,
+  // optionally scoped to a single node.
+  rpc ListCertificates(ListCertificatesRequest) returns (ListCertificatesResponse);
+
+  // ListProfiles returns the manager's catalog of certificate issuance
+  // profiles.
+  rpc ListProfiles(ListProfilesRequest) returns (ListProfilesResponse);
+
+  // ListAdapters returns the manager's catalog of enrollment protocol
+  // adapters.
+  rpc ListAdapters(ListAdaptersRequest) returns (ListAdaptersResponse);
+
+  // ListAudit returns the manager's audit log.
+  rpc ListAudit(ListAuditRequest) returns (ListAuditResponse);
+
+  // ListEnrollments returns the manager's pending and resolved enrollment
+  // requests.
+  rpc ListEnrollments(ListEnrollmentsRequest) returns (ListEnrollmentsResponse);
+}
+
+message ListNodesRequest {}
+
+message ListNodesResponse {
+  repeated NodeSummary nodes = 1;
+}
+
+message GetNodeRequest {
+  string name = 1;
+}
+
+message GetNodeResponse {
+  NodeDetail node = 1;
+}
+
+message ListCertificatesRequest {
+  // node scopes the result to a single node by name; empty means all nodes.
+  string node = 1;
+}
+
+message ListCertificatesResponse {
+  repeated Certificate certificates = 1;
+}
+
+message ListProfilesRequest {}
+
+message ListProfilesResponse {
+  repeated CertProfile items = 1;
+}
+
+message ListAdaptersRequest {}
+
+message ListAdaptersResponse {
+  repeated EnrollmentAdapter items = 1;
+}
+
+message ListAuditRequest {}
+
+message ListAuditResponse {
+  repeated AuditEvent items = 1;
+}
+
+message ListEnrollmentsRequest {}
+
+message ListEnrollmentsResponse {
+  repeated EnrollmentRequest items = 1;
+}
+
+// Health reports the manager's view of node reachability, independent of
+// the node's own reported identity state.
+enum Health {
+  HEALTH_UNSPECIFIED = 0;
+  HEALTH_UP = 1;
+  HEALTH_DOWN = 2;
+  HEALTH_ERROR = 3;
+}
+
+// NodeSummary is the per-node row shown in the fleet list.
+message NodeSummary {
+  string name = 1;
+  string address = 2;
+  // root|intermediate|issuing
+  string role = 3;
+  // ESTABLISHED|AWAITING_CERT|REVOKED|UNKNOWN
+  string identity_state = 4;
+  string cn = 5;
+  string issuer = 6;
+  Health health = 7;
+  string health_detail = 8;
+}
+
+// NodeIdentity carries the node's CA chain, mirroring cryptos.v1.Identity
+// but scoped to the FleetService's own message set.
+message NodeIdentity {
+  string chain_pem = 1;
+  repeated bytes chain_der = 2;
+  string leaf_sha256 = 3;
+}
+
+// NodeDetail is the full per-node view returned by GetNode.
+message NodeDetail {
+  NodeSummary summary = 1;
+  NodeIdentity identity = 2;
+  bool tpm_available = 3;
+  uint64 boot_count = 4;
+  string uptime = 5;
+}
+
+// Certificate is a single issued or revoked certificate as aggregated from a
+// node's cert surface. Timestamps are RFC3339 strings for display parity
+// with the web UI.
+message Certificate {
+  string serial = 1;
+  string subject_cn = 2;
+  string issuer_node = 3;
+  // leaf|subordinate-ca
+  string kind = 4;
+  // VALID|EXPIRED|REVOKED
+  string status = 5;
+  string not_before = 6;
+  string not_after = 7;
+  string profile = 8;
+  string revoked_at = 9;
+  string reason = 10;
+}
+
+// CertProfile is a reusable issuance template, mirroring the web UI's
+// profile catalog entry.
+message CertProfile {
+  string name = 1;
+  // ECDSA-P256|ECDSA-P384|RSA-3072|RSA-4096
+  string key_alg = 2;
+  repeated string key_usage = 3;
+  repeated string ext_key_usage = 4;
+  bool is_ca = 5;
+  int32 path_len = 6;
+  repeated string sans = 7;
+  int32 validity_days = 8;
+}
+
+// EnrollmentAdapter is an enrollment protocol adapter binding, mirroring the
+// web UI's protocol catalog entry.
+message EnrollmentAdapter {
+  // acme|est|ms-autoenroll|scep
+  string kind = 1;
+  string name = 2;
+  string endpoint = 3;
+  string profile = 4;
+  bool enabled = 5;
+  repeated string challenges = 6;
+  string gpo_template = 7;
+}
+
+// AuditEvent is a single manager audit log entry.
+message AuditEvent {
+  string id = 1;
+  string at = 2;
+  // config-applied|enroll-approved|enroll-rejected|issued|profile-created|
+  // profile-updated|protocol-toggled|rekeyed|renewed|revoked
+  string kind = 3;
+  string summary = 4;
+  // cert|enrollment|node|profile|protocol
+  string target_kind = 5;
+  string target_path = 6;
+}
+
+// EnrollmentRequest is a node enrollment request awaiting (or resolved by)
+// admin approval. Attestation and CSR detail are flattened to display
+// strings for this read-only surface.
+message EnrollmentRequest {
+  string id = 1;
+  string proposed_name = 2;
+  // root|intermediate|issuing
+  string role = 3;
+  string parent_cn = 4;
+  string address = 5;
+  // PENDING|APPROVED|REJECTED
+  string status = 6;
+  // attestation detail, e.g. "TPM . sealed" or "UNAVAILABLE . nodeID"
+  string attestation_summary = 7;
+  string attestation_node_id = 8;
+  // CSR detail, e.g. "ECDSA P-384"
+  string csr_key_type = 9;
+  string csr_subject_cn = 10;
+  string requested_at = 11;
+  string rejection_reason = 12;
+  string admitted_node_name = 13;
+}

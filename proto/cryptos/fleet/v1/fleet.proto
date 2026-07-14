@@ -49,6 +49,10 @@ service FleetService {
   // ListEnrollments returns the manager's pending and resolved enrollment
   // requests.
   rpc ListEnrollments(ListEnrollmentsRequest) returns (ListEnrollmentsResponse);
+
+  // WhoAmI echoes the operator identity the manager verified from the
+  // presented client certificate (subject CN, cert serial, access level).
+  rpc WhoAmI(WhoAmIRequest) returns (WhoAmIResponse);
 }
 
 message ListNodesRequest {}
@@ -217,4 +221,19 @@ message EnrollmentRequest {
   string requested_at = 11;
   string rejection_reason = 12;
   string admitted_node_name = 13;
+}
+
+message WhoAmIRequest {}
+
+// OperatorIdentity is the operator the manager verified from the mTLS client
+// certificate presented on the management-plane connection.
+message OperatorIdentity {
+  string cn = 1;
+  string serial = 2;
+  // access level: "viewer" | "operator" | "admin"
+  string level = 3;
+}
+
+message WhoAmIResponse {
+  OperatorIdentity operator = 1;
 }

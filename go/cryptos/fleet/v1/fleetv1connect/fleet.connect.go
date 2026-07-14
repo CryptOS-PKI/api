@@ -51,6 +51,8 @@ const (
 	// FleetServiceListEnrollmentsProcedure is the fully-qualified name of the FleetService's
 	// ListEnrollments RPC.
 	FleetServiceListEnrollmentsProcedure = "/cryptos.fleet.v1.FleetService/ListEnrollments"
+	// FleetServiceWhoAmIProcedure is the fully-qualified name of the FleetService's WhoAmI RPC.
+	FleetServiceWhoAmIProcedure = "/cryptos.fleet.v1.FleetService/WhoAmI"
 )
 
 // FleetServiceClient is a client for the cryptos.fleet.v1.FleetService service.
@@ -73,6 +75,9 @@ type FleetServiceClient interface {
 	// ListEnrollments returns the manager's pending and resolved enrollment
 	// requests.
 	ListEnrollments(context.Context, *connect.Request[v1.ListEnrollmentsRequest]) (*connect.Response[v1.ListEnrollmentsResponse], error)
+	// WhoAmI echoes the operator identity the manager verified from the
+	// presented client certificate (subject CN, cert serial, access level).
+	WhoAmI(context.Context, *connect.Request[v1.WhoAmIRequest]) (*connect.Response[v1.WhoAmIResponse], error)
 }
 
 // NewFleetServiceClient constructs a client for the cryptos.fleet.v1.FleetService service. By
@@ -128,6 +133,12 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(fleetServiceMethods.ByName("ListEnrollments")),
 			connect.WithClientOptions(opts...),
 		),
+		whoAmI: connect.NewClient[v1.WhoAmIRequest, v1.WhoAmIResponse](
+			httpClient,
+			baseURL+FleetServiceWhoAmIProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("WhoAmI")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -140,6 +151,7 @@ type fleetServiceClient struct {
 	listAdapters     *connect.Client[v1.ListAdaptersRequest, v1.ListAdaptersResponse]
 	listAudit        *connect.Client[v1.ListAuditRequest, v1.ListAuditResponse]
 	listEnrollments  *connect.Client[v1.ListEnrollmentsRequest, v1.ListEnrollmentsResponse]
+	whoAmI           *connect.Client[v1.WhoAmIRequest, v1.WhoAmIResponse]
 }
 
 // ListNodes calls cryptos.fleet.v1.FleetService.ListNodes.
@@ -177,6 +189,11 @@ func (c *fleetServiceClient) ListEnrollments(ctx context.Context, req *connect.R
 	return c.listEnrollments.CallUnary(ctx, req)
 }
 
+// WhoAmI calls cryptos.fleet.v1.FleetService.WhoAmI.
+func (c *fleetServiceClient) WhoAmI(ctx context.Context, req *connect.Request[v1.WhoAmIRequest]) (*connect.Response[v1.WhoAmIResponse], error) {
+	return c.whoAmI.CallUnary(ctx, req)
+}
+
 // FleetServiceHandler is an implementation of the cryptos.fleet.v1.FleetService service.
 type FleetServiceHandler interface {
 	// ListNodes returns a summary for every node the manager knows about.
@@ -197,6 +214,9 @@ type FleetServiceHandler interface {
 	// ListEnrollments returns the manager's pending and resolved enrollment
 	// requests.
 	ListEnrollments(context.Context, *connect.Request[v1.ListEnrollmentsRequest]) (*connect.Response[v1.ListEnrollmentsResponse], error)
+	// WhoAmI echoes the operator identity the manager verified from the
+	// presented client certificate (subject CN, cert serial, access level).
+	WhoAmI(context.Context, *connect.Request[v1.WhoAmIRequest]) (*connect.Response[v1.WhoAmIResponse], error)
 }
 
 // NewFleetServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -248,6 +268,12 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(fleetServiceMethods.ByName("ListEnrollments")),
 		connect.WithHandlerOptions(opts...),
 	)
+	fleetServiceWhoAmIHandler := connect.NewUnaryHandler(
+		FleetServiceWhoAmIProcedure,
+		svc.WhoAmI,
+		connect.WithSchema(fleetServiceMethods.ByName("WhoAmI")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/cryptos.fleet.v1.FleetService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case FleetServiceListNodesProcedure:
@@ -264,6 +290,8 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 			fleetServiceListAuditHandler.ServeHTTP(w, r)
 		case FleetServiceListEnrollmentsProcedure:
 			fleetServiceListEnrollmentsHandler.ServeHTTP(w, r)
+		case FleetServiceWhoAmIProcedure:
+			fleetServiceWhoAmIHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -299,4 +327,8 @@ func (UnimplementedFleetServiceHandler) ListAudit(context.Context, *connect.Requ
 
 func (UnimplementedFleetServiceHandler) ListEnrollments(context.Context, *connect.Request[v1.ListEnrollmentsRequest]) (*connect.Response[v1.ListEnrollmentsResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ListEnrollments is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) WhoAmI(context.Context, *connect.Request[v1.WhoAmIRequest]) (*connect.Response[v1.WhoAmIResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.WhoAmI is not implemented"))
 }

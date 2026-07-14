@@ -26,6 +26,7 @@ const (
 	FleetService_ListAdapters_FullMethodName     = "/cryptos.fleet.v1.FleetService/ListAdapters"
 	FleetService_ListAudit_FullMethodName        = "/cryptos.fleet.v1.FleetService/ListAudit"
 	FleetService_ListEnrollments_FullMethodName  = "/cryptos.fleet.v1.FleetService/ListEnrollments"
+	FleetService_WhoAmI_FullMethodName           = "/cryptos.fleet.v1.FleetService/WhoAmI"
 )
 
 // FleetServiceClient is the client API for FleetService service.
@@ -54,6 +55,9 @@ type FleetServiceClient interface {
 	// ListEnrollments returns the manager's pending and resolved enrollment
 	// requests.
 	ListEnrollments(ctx context.Context, in *ListEnrollmentsRequest, opts ...grpc.CallOption) (*ListEnrollmentsResponse, error)
+	// WhoAmI echoes the operator identity the manager verified from the
+	// presented client certificate (subject CN, cert serial, access level).
+	WhoAmI(ctx context.Context, in *WhoAmIRequest, opts ...grpc.CallOption) (*WhoAmIResponse, error)
 }
 
 type fleetServiceClient struct {
@@ -134,6 +138,16 @@ func (c *fleetServiceClient) ListEnrollments(ctx context.Context, in *ListEnroll
 	return out, nil
 }
 
+func (c *fleetServiceClient) WhoAmI(ctx context.Context, in *WhoAmIRequest, opts ...grpc.CallOption) (*WhoAmIResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(WhoAmIResponse)
+	err := c.cc.Invoke(ctx, FleetService_WhoAmI_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FleetServiceServer is the server API for FleetService service.
 // All implementations should embed UnimplementedFleetServiceServer
 // for forward compatibility.
@@ -160,6 +174,9 @@ type FleetServiceServer interface {
 	// ListEnrollments returns the manager's pending and resolved enrollment
 	// requests.
 	ListEnrollments(context.Context, *ListEnrollmentsRequest) (*ListEnrollmentsResponse, error)
+	// WhoAmI echoes the operator identity the manager verified from the
+	// presented client certificate (subject CN, cert serial, access level).
+	WhoAmI(context.Context, *WhoAmIRequest) (*WhoAmIResponse, error)
 }
 
 // UnimplementedFleetServiceServer should be embedded to have
@@ -189,6 +206,9 @@ func (UnimplementedFleetServiceServer) ListAudit(context.Context, *ListAuditRequ
 }
 func (UnimplementedFleetServiceServer) ListEnrollments(context.Context, *ListEnrollmentsRequest) (*ListEnrollmentsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListEnrollments not implemented")
+}
+func (UnimplementedFleetServiceServer) WhoAmI(context.Context, *WhoAmIRequest) (*WhoAmIResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WhoAmI not implemented")
 }
 func (UnimplementedFleetServiceServer) testEmbeddedByValue() {}
 
@@ -336,6 +356,24 @@ func _FleetService_ListEnrollments_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FleetService_WhoAmI_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WhoAmIRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).WhoAmI(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_WhoAmI_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).WhoAmI(ctx, req.(*WhoAmIRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FleetService_ServiceDesc is the grpc.ServiceDesc for FleetService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -370,6 +408,10 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListEnrollments",
 			Handler:    _FleetService_ListEnrollments_Handler,
+		},
+		{
+			MethodName: "WhoAmI",
+			Handler:    _FleetService_WhoAmI_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

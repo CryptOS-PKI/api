@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file cryptos/v1/config.proto.
  */
 export const file_cryptos_v1_config: GenFile = /*@__PURE__*/
-  fileDesc("ChdjcnlwdG9zL3YxL2NvbmZpZy5wcm90bxIKY3J5cHRvcy52MSLdAgoNTWFjaGluZUNvbmZpZxITCgthcGlfdmVyc2lvbhgBIAEoCRIMCgRraW5kGAIgASgJEiYKCG1ldGFkYXRhGAMgASgLMhQuY3J5cHRvcy52MS5NZXRhZGF0YRIeCgRyb2xlGAQgASgLMhAuY3J5cHRvcy52MS5Sb2xlEiQKB25ldHdvcmsYBSABKAsyEy5jcnlwdG9zLnYxLk5ldHdvcmsSJAoHc3RvcmFnZRgGIAEoCzITLmNyeXB0b3MudjEuU3RvcmFnZRIoCglib290c3RyYXAYByABKAsyFS5jcnlwdG9zLnYxLkJvb3RzdHJhcBIcCgNwa2kYCCABKAsyDy5jcnlwdG9zLnYxLlBraRIkCgdpbnN0YWxsGAkgASgLMhMuY3J5cHRvcy52MS5JbnN0YWxsEicKCXN0YXRlX2tleRgKIAEoCzIULmNyeXB0b3MudjEuU3RhdGVLZXkiPgoIU3RhdGVLZXkSDAoEbW9kZRgBIAEoCRIkCgNrbXMYAiABKAsyFy5jcnlwdG9zLnYxLkttc1N0YXRlS2V5IjIKC0ttc1N0YXRlS2V5EhAKCGVuZHBvaW50GAEgASgJEhEKCXRydXN0X3BlbRgCIAEoCSIYCghNZXRhZGF0YRIMCgRuYW1lGAEgASgJIhQKBFJvbGUSDAoEa2luZBgBIAEoCSI+CgdOZXR3b3JrEhEKCWludGVyZmFjZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJEg8KB2dhdGV3YXkYAyABKAkiPAoHU3RvcmFnZRIdChVzdGF0ZV9wYXJ0aXRpb25fbGFiZWwYASABKAkSEgoKZmlyc3RfYm9vdBgCIAEoCCI+CglCb290c3RyYXASFgoOYWRtaW5fY2VydF9wZW0YASABKAkSGQoRYWRtaW5fY2VydF9zaGEyNTYYAiABKAki9QIKA1BraRIUCgxyb290X2tleV9hbGcYASABKAkSKQoMcm9vdF9zdWJqZWN0GAIgASgLMhMuY3J5cHRvcy52MS5TdWJqZWN0EhsKE3Jvb3RfdmFsaWRpdHlfeWVhcnMYAyABKA0SGwoTcGF0aF9sZW5fY29uc3RyYWludBgEIAEoDRIwCghwcm9maWxlcxgFIAMoCzIeLmNyeXB0b3MudjEuQ2VydGlmaWNhdGVQcm9maWxlEiIKBnBhcmVudBgGIAEoCzISLmNyeXB0b3MudjEuUGFyZW50EhsKE3Jldm9jYXRpb25fYmFzZV91cmwYByABKAkSJwofYWxsb3dfdW52ZXJpZmllZF9yZXZvY2F0aW9uX3VybBgIIAEoCBIdChVjcmxfbmV4dF91cGRhdGVfaG91cnMYCSABKA0SHAoUcmV2b2NhdGlvbl9odHRwX3BvcnQYCiABKA0SGgoScm9vdF9sZWFmX2lzc3VhbmNlGAsgASgJIjUKBlBhcmVudBITCgtjYV9jZXJ0X3BlbRgBIAEoCRIWCg5jYV9jZXJ0X3NoYTI1NhgCIAEoCSKzAgoSQ2VydGlmaWNhdGVQcm9maWxlEgwKBG5hbWUYASABKAkSDwoHa2V5X2FsZxgCIAEoCRIkCgdzdWJqZWN0GAMgASgLMhMuY3J5cHRvcy52MS5TdWJqZWN0EhUKDXZhbGlkaXR5X2RheXMYBCABKA0SNwoRYmFzaWNfY29uc3RyYWludHMYBSABKAsyHC5jcnlwdG9zLnYxLkJhc2ljQ29uc3RyYWludHMSEQoJa2V5X3VzYWdlGAYgAygJEhUKDWV4dF9rZXlfdXNhZ2UYByADKAkSKQoEc2FucxgIIAEoCzIbLmNyeXB0b3MudjEuU3ViamVjdEFsdE5hbWVzEjMKEGV4dHJhX2V4dGVuc2lvbnMYCSADKAsyGS5jcnlwdG9zLnYxLlg1MDlFeHRlbnNpb24iRQoQQmFzaWNDb25zdHJhaW50cxINCgVpc19jYRgBIAEoCBIVCghwYXRoX2xlbhgCIAEoDUgAiAEBQgsKCV9wYXRoX2xlbiJGCg9TdWJqZWN0QWx0TmFtZXMSCwoDZG5zGAEgAygJEgoKAmlwGAIgAygJEg0KBWVtYWlsGAMgAygJEgsKA3VyaRgEIAMoCSI9Cg1YNTA5RXh0ZW5zaW9uEgsKA29pZBgBIAEoCRIQCghjcml0aWNhbBgCIAEoCBINCgV2YWx1ZRgDIAEoDCIXCgdJbnN0YWxsEgwKBGRpc2sYASABKAkiRQoHU3ViamVjdBITCgtjb21tb25fbmFtZRgBIAEoCRIUCgxvcmdhbml6YXRpb24YAiABKAkSDwoHY291bnRyeRgDIAEoCUI0WjJnaXRodWIuY29tL0NyeXB0T1MtUEtJL2FwaS9nby9jcnlwdG9zL3YxO2NyeXB0b3N2MWIGcHJvdG8z");
+  fileDesc("ChdjcnlwdG9zL3YxL2NvbmZpZy5wcm90bxIKY3J5cHRvcy52MSKJAwoNTWFjaGluZUNvbmZpZxITCgthcGlfdmVyc2lvbhgBIAEoCRIMCgRraW5kGAIgASgJEiYKCG1ldGFkYXRhGAMgASgLMhQuY3J5cHRvcy52MS5NZXRhZGF0YRIeCgRyb2xlGAQgASgLMhAuY3J5cHRvcy52MS5Sb2xlEiQKB25ldHdvcmsYBSABKAsyEy5jcnlwdG9zLnYxLk5ldHdvcmsSJAoHc3RvcmFnZRgGIAEoCzITLmNyeXB0b3MudjEuU3RvcmFnZRIoCglib290c3RyYXAYByABKAsyFS5jcnlwdG9zLnYxLkJvb3RzdHJhcBIcCgNwa2kYCCABKAsyDy5jcnlwdG9zLnYxLlBraRIkCgdpbnN0YWxsGAkgASgLMhMuY3J5cHRvcy52MS5JbnN0YWxsEicKCXN0YXRlX2tleRgKIAEoCzIULmNyeXB0b3MudjEuU3RhdGVLZXkSKgoKbWFuYWdlbWVudBgLIAEoCzIWLmNyeXB0b3MudjEuTWFuYWdlbWVudCJWCgpNYW5hZ2VtZW50EhIKCm1hbmFnZXJfY24YASABKAkSEQoJdHJ1c3RfcGVtGAIgASgJEiEKGW9wZXJhdG9yX3N1cmZhY2VfcmVhZG9ubHkYAyABKAgiPgoIU3RhdGVLZXkSDAoEbW9kZRgBIAEoCRIkCgNrbXMYAiABKAsyFy5jcnlwdG9zLnYxLkttc1N0YXRlS2V5IjIKC0ttc1N0YXRlS2V5EhAKCGVuZHBvaW50GAEgASgJEhEKCXRydXN0X3BlbRgCIAEoCSIYCghNZXRhZGF0YRIMCgRuYW1lGAEgASgJIhQKBFJvbGUSDAoEa2luZBgBIAEoCSI+CgdOZXR3b3JrEhEKCWludGVyZmFjZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJEg8KB2dhdGV3YXkYAyABKAkiPAoHU3RvcmFnZRIdChVzdGF0ZV9wYXJ0aXRpb25fbGFiZWwYASABKAkSEgoKZmlyc3RfYm9vdBgCIAEoCCI+CglCb290c3RyYXASFgoOYWRtaW5fY2VydF9wZW0YASABKAkSGQoRYWRtaW5fY2VydF9zaGEyNTYYAiABKAki9QIKA1BraRIUCgxyb290X2tleV9hbGcYASABKAkSKQoMcm9vdF9zdWJqZWN0GAIgASgLMhMuY3J5cHRvcy52MS5TdWJqZWN0EhsKE3Jvb3RfdmFsaWRpdHlfeWVhcnMYAyABKA0SGwoTcGF0aF9sZW5fY29uc3RyYWludBgEIAEoDRIwCghwcm9maWxlcxgFIAMoCzIeLmNyeXB0b3MudjEuQ2VydGlmaWNhdGVQcm9maWxlEiIKBnBhcmVudBgGIAEoCzISLmNyeXB0b3MudjEuUGFyZW50EhsKE3Jldm9jYXRpb25fYmFzZV91cmwYByABKAkSJwofYWxsb3dfdW52ZXJpZmllZF9yZXZvY2F0aW9uX3VybBgIIAEoCBIdChVjcmxfbmV4dF91cGRhdGVfaG91cnMYCSABKA0SHAoUcmV2b2NhdGlvbl9odHRwX3BvcnQYCiABKA0SGgoScm9vdF9sZWFmX2lzc3VhbmNlGAsgASgJIjUKBlBhcmVudBITCgtjYV9jZXJ0X3BlbRgBIAEoCRIWCg5jYV9jZXJ0X3NoYTI1NhgCIAEoCSKzAgoSQ2VydGlmaWNhdGVQcm9maWxlEgwKBG5hbWUYASABKAkSDwoHa2V5X2FsZxgCIAEoCRIkCgdzdWJqZWN0GAMgASgLMhMuY3J5cHRvcy52MS5TdWJqZWN0EhUKDXZhbGlkaXR5X2RheXMYBCABKA0SNwoRYmFzaWNfY29uc3RyYWludHMYBSABKAsyHC5jcnlwdG9zLnYxLkJhc2ljQ29uc3RyYWludHMSEQoJa2V5X3VzYWdlGAYgAygJEhUKDWV4dF9rZXlfdXNhZ2UYByADKAkSKQoEc2FucxgIIAEoCzIbLmNyeXB0b3MudjEuU3ViamVjdEFsdE5hbWVzEjMKEGV4dHJhX2V4dGVuc2lvbnMYCSADKAsyGS5jcnlwdG9zLnYxLlg1MDlFeHRlbnNpb24iRQoQQmFzaWNDb25zdHJhaW50cxINCgVpc19jYRgBIAEoCBIVCghwYXRoX2xlbhgCIAEoDUgAiAEBQgsKCV9wYXRoX2xlbiJGCg9TdWJqZWN0QWx0TmFtZXMSCwoDZG5zGAEgAygJEgoKAmlwGAIgAygJEg0KBWVtYWlsGAMgAygJEgsKA3VyaRgEIAMoCSI9Cg1YNTA5RXh0ZW5zaW9uEgsKA29pZBgBIAEoCRIQCghjcml0aWNhbBgCIAEoCBINCgV2YWx1ZRgDIAEoDCIXCgdJbnN0YWxsEgwKBGRpc2sYASABKAkiRQoHU3ViamVjdBITCgtjb21tb25fbmFtZRgBIAEoCRIUCgxvcmdhbml6YXRpb24YAiABKAkSDwoHY291bnRyeRgDIAEoCUI0WjJnaXRodWIuY29tL0NyeXB0T1MtUEtJL2FwaS9nby9jcnlwdG9zL3YxO2NyeXB0b3N2MWIGcHJvdG8z");
 
 /**
  * MachineConfig is the declarative configuration applied via ApplyConfig.
@@ -79,6 +79,14 @@ export type MachineConfig = Message<"cryptos.v1.MachineConfig"> & {
    * @generated from field: cryptos.v1.StateKey state_key = 10;
    */
   stateKey?: StateKey | undefined;
+
+  /**
+   * management carries FM-managed state pushed via ApplyConfig when a node is
+   * linked to a Fleet Manager (LINK enrollment). Empty on unmanaged nodes.
+   *
+   * @generated from field: cryptos.v1.Management management = 11;
+   */
+  management?: Management | undefined;
 };
 
 /**
@@ -87,6 +95,42 @@ export type MachineConfig = Message<"cryptos.v1.MachineConfig"> & {
  */
 export const MachineConfigSchema: GenMessage<MachineConfig> = /*@__PURE__*/
   messageDesc(file_cryptos_v1_config, 0);
+
+/**
+ * Management marks a node as Fleet-Manager-managed. Set by a LINK enrollment
+ * approval via ApplyConfig; takes effect on reboot.
+ *
+ * @generated from message cryptos.v1.Management
+ */
+export type Management = Message<"cryptos.v1.Management"> & {
+  /**
+   * Subject CN of the managing Fleet Manager operator identity.
+   *
+   * @generated from field: string manager_cn = 1;
+   */
+  managerCn: string;
+
+  /**
+   * PEM trust anchor (operator CA) the node adds to its authorized client CAs.
+   *
+   * @generated from field: string trust_pem = 2;
+   */
+  trustPem: string;
+
+  /**
+   * When true, the node's embedded operator surface is read-only.
+   *
+   * @generated from field: bool operator_surface_readonly = 3;
+   */
+  operatorSurfaceReadonly: boolean;
+};
+
+/**
+ * Describes the message cryptos.v1.Management.
+ * Use `create(ManagementSchema)` to create a new message.
+ */
+export const ManagementSchema: GenMessage<Management> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 1);
 
 /**
  * StateKey selects the protector for the encrypted state-partition key.
@@ -114,7 +158,7 @@ export type StateKey = Message<"cryptos.v1.StateKey"> & {
  * Use `create(StateKeySchema)` to create a new message.
  */
 export const StateKeySchema: GenMessage<StateKey> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 1);
+  messageDesc(file_cryptos_v1_config, 2);
 
 /**
  * KmsStateKey configures the envelope-encryption KMS that seals/unseals the
@@ -144,7 +188,7 @@ export type KmsStateKey = Message<"cryptos.v1.KmsStateKey"> & {
  * Use `create(KmsStateKeySchema)` to create a new message.
  */
 export const KmsStateKeySchema: GenMessage<KmsStateKey> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 2);
+  messageDesc(file_cryptos_v1_config, 3);
 
 /**
  * @generated from message cryptos.v1.Metadata
@@ -161,7 +205,7 @@ export type Metadata = Message<"cryptos.v1.Metadata"> & {
  * Use `create(MetadataSchema)` to create a new message.
  */
 export const MetadataSchema: GenMessage<Metadata> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 3);
+  messageDesc(file_cryptos_v1_config, 4);
 
 /**
  * @generated from message cryptos.v1.Role
@@ -180,7 +224,7 @@ export type Role = Message<"cryptos.v1.Role"> & {
  * Use `create(RoleSchema)` to create a new message.
  */
 export const RoleSchema: GenMessage<Role> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 4);
+  messageDesc(file_cryptos_v1_config, 5);
 
 /**
  * @generated from message cryptos.v1.Network
@@ -209,7 +253,7 @@ export type Network = Message<"cryptos.v1.Network"> & {
  * Use `create(NetworkSchema)` to create a new message.
  */
 export const NetworkSchema: GenMessage<Network> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 5);
+  messageDesc(file_cryptos_v1_config, 6);
 
 /**
  * @generated from message cryptos.v1.Storage
@@ -231,7 +275,7 @@ export type Storage = Message<"cryptos.v1.Storage"> & {
  * Use `create(StorageSchema)` to create a new message.
  */
 export const StorageSchema: GenMessage<Storage> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 6);
+  messageDesc(file_cryptos_v1_config, 7);
 
 /**
  * Bootstrap carries the administrator credential trusted on first boot.
@@ -256,7 +300,7 @@ export type Bootstrap = Message<"cryptos.v1.Bootstrap"> & {
  * Use `create(BootstrapSchema)` to create a new message.
  */
 export const BootstrapSchema: GenMessage<Bootstrap> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 7);
+  messageDesc(file_cryptos_v1_config, 8);
 
 /**
  * @generated from message cryptos.v1.Pki
@@ -350,7 +394,7 @@ export type Pki = Message<"cryptos.v1.Pki"> & {
  * Use `create(PkiSchema)` to create a new message.
  */
 export const PkiSchema: GenMessage<Pki> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 8);
+  messageDesc(file_cryptos_v1_config, 9);
 
 /**
  * Parent is the trust anchor a subordinate CA pins for its issuer: the parent
@@ -376,7 +420,7 @@ export type Parent = Message<"cryptos.v1.Parent"> & {
  * Use `create(ParentSchema)` to create a new message.
  */
 export const ParentSchema: GenMessage<Parent> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 9);
+  messageDesc(file_cryptos_v1_config, 10);
 
 /**
  * CertificateProfile drives CSR generation and certificate signing: key
@@ -446,7 +490,7 @@ export type CertificateProfile = Message<"cryptos.v1.CertificateProfile"> & {
  * Use `create(CertificateProfileSchema)` to create a new message.
  */
 export const CertificateProfileSchema: GenMessage<CertificateProfile> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 10);
+  messageDesc(file_cryptos_v1_config, 11);
 
 /**
  * @generated from message cryptos.v1.BasicConstraints
@@ -471,7 +515,7 @@ export type BasicConstraints = Message<"cryptos.v1.BasicConstraints"> & {
  * Use `create(BasicConstraintsSchema)` to create a new message.
  */
 export const BasicConstraintsSchema: GenMessage<BasicConstraints> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 11);
+  messageDesc(file_cryptos_v1_config, 12);
 
 /**
  * @generated from message cryptos.v1.SubjectAltNames
@@ -503,7 +547,7 @@ export type SubjectAltNames = Message<"cryptos.v1.SubjectAltNames"> & {
  * Use `create(SubjectAltNamesSchema)` to create a new message.
  */
 export const SubjectAltNamesSchema: GenMessage<SubjectAltNames> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 12);
+  messageDesc(file_cryptos_v1_config, 13);
 
 /**
  * X509Extension is the raw escape hatch: a dotted OID, criticality flag, and the
@@ -533,7 +577,7 @@ export type X509Extension = Message<"cryptos.v1.X509Extension"> & {
  * Use `create(X509ExtensionSchema)` to create a new message.
  */
 export const X509ExtensionSchema: GenMessage<X509Extension> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 13);
+  messageDesc(file_cryptos_v1_config, 14);
 
 /**
  * Install declares how the node provisions itself to persistent storage during
@@ -556,7 +600,7 @@ export type Install = Message<"cryptos.v1.Install"> & {
  * Use `create(InstallSchema)` to create a new message.
  */
 export const InstallSchema: GenMessage<Install> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 14);
+  messageDesc(file_cryptos_v1_config, 15);
 
 /**
  * @generated from message cryptos.v1.Subject
@@ -583,5 +627,5 @@ export type Subject = Message<"cryptos.v1.Subject"> & {
  * Use `create(SubjectSchema)` to create a new message.
  */
 export const SubjectSchema: GenMessage<Subject> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 15);
+  messageDesc(file_cryptos_v1_config, 16);
 

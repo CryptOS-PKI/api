@@ -123,6 +123,11 @@ service NodeService {
   // maintenance mode. The caller must echo the current Root CA CN as
   // confirmation.
   rpc Reset(ResetRequest) returns (ResetResponse);
+
+  // Attest signs the caller's nonce with the node's CA identity key so the
+  // Fleet Manager can verify possession of the node identity (challenge-
+  // response). ek_pub/ek_cert are reserved for future TPM EK attestation.
+  rpc Attest(AttestRequest) returns (AttestResponse);
 }
 
 message ApplyConfigRequest {
@@ -181,6 +186,21 @@ message ResetRequest {
 }
 
 message ResetResponse {}
+
+message AttestRequest {
+  // Random challenge from the manager; the node signs it with its identity key.
+  bytes nonce = 1;
+}
+
+message AttestResponse {
+  // ECDSA signature (ASN.1 DER) over SHA-384 of the nonce.
+  bytes signature = 1;
+  // The node's CA identity public key, PKIX/DER encoded.
+  bytes identity_pub_der = 2;
+  // Reserved for v1.1 TPM EK attestation (not populated in v1.0.0).
+  bytes ek_pub = 3;
+  bytes ek_cert = 4;
+}
 
 // SignSubordinateCSRRequest carries a DER PKCS#10 CSR and the name of the
 // certificate profile the signer stamps (which sets CA:TRUE + pathLen).

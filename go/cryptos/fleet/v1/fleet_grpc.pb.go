@@ -19,23 +19,27 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	FleetService_ListNodes_FullMethodName        = "/cryptos.fleet.v1.FleetService/ListNodes"
-	FleetService_GetNode_FullMethodName          = "/cryptos.fleet.v1.FleetService/GetNode"
-	FleetService_ListCertificates_FullMethodName = "/cryptos.fleet.v1.FleetService/ListCertificates"
-	FleetService_ListProfiles_FullMethodName     = "/cryptos.fleet.v1.FleetService/ListProfiles"
-	FleetService_ListAdapters_FullMethodName     = "/cryptos.fleet.v1.FleetService/ListAdapters"
-	FleetService_ListAudit_FullMethodName        = "/cryptos.fleet.v1.FleetService/ListAudit"
-	FleetService_ListEnrollments_FullMethodName  = "/cryptos.fleet.v1.FleetService/ListEnrollments"
-	FleetService_WhoAmI_FullMethodName           = "/cryptos.fleet.v1.FleetService/WhoAmI"
+	FleetService_ListNodes_FullMethodName         = "/cryptos.fleet.v1.FleetService/ListNodes"
+	FleetService_GetNode_FullMethodName           = "/cryptos.fleet.v1.FleetService/GetNode"
+	FleetService_ListCertificates_FullMethodName  = "/cryptos.fleet.v1.FleetService/ListCertificates"
+	FleetService_ListProfiles_FullMethodName      = "/cryptos.fleet.v1.FleetService/ListProfiles"
+	FleetService_ListAdapters_FullMethodName      = "/cryptos.fleet.v1.FleetService/ListAdapters"
+	FleetService_ListAudit_FullMethodName         = "/cryptos.fleet.v1.FleetService/ListAudit"
+	FleetService_ListEnrollments_FullMethodName   = "/cryptos.fleet.v1.FleetService/ListEnrollments"
+	FleetService_CreateEnrollment_FullMethodName  = "/cryptos.fleet.v1.FleetService/CreateEnrollment"
+	FleetService_ApproveEnrollment_FullMethodName = "/cryptos.fleet.v1.FleetService/ApproveEnrollment"
+	FleetService_RejectEnrollment_FullMethodName  = "/cryptos.fleet.v1.FleetService/RejectEnrollment"
+	FleetService_WhoAmI_FullMethodName            = "/cryptos.fleet.v1.FleetService/WhoAmI"
 )
 
 // FleetServiceClient is the client API for FleetService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// FleetService is the Fleet Manager's read surface over a set of CryptOS
-// nodes. It aggregates each node's status and identity behind a single
-// Connect endpoint for the manager's web UI.
+// FleetService is the Fleet Manager's surface over a set of CryptOS nodes:
+// read aggregation (status, identity, certificates, catalog) plus the
+// operator-driven enrollment writes. A single Connect endpoint for the
+// manager's web UI.
 type FleetServiceClient interface {
 	// ListNodes returns a summary for every node the manager knows about.
 	ListNodes(ctx context.Context, in *ListNodesRequest, opts ...grpc.CallOption) (*ListNodesResponse, error)
@@ -55,6 +59,14 @@ type FleetServiceClient interface {
 	// ListEnrollments returns the manager's pending and resolved enrollment
 	// requests.
 	ListEnrollments(ctx context.Context, in *ListEnrollmentsRequest, opts ...grpc.CallOption) (*ListEnrollmentsResponse, error)
+	// CreateEnrollment opens a new enrollment request (LINK a node or provision a
+	// SUBORDINATE CA); the manager verifies attestation for LINK.
+	CreateEnrollment(ctx context.Context, in *CreateEnrollmentRequest, opts ...grpc.CallOption) (*CreateEnrollmentResponse, error)
+	// ApproveEnrollment approves a pending request (LINK -> ApplyConfig managed
+	// state; SUBORDINATE -> CSR-ferry).
+	ApproveEnrollment(ctx context.Context, in *ApproveEnrollmentRequest, opts ...grpc.CallOption) (*ApproveEnrollmentResponse, error)
+	// RejectEnrollment rejects a pending request with a reason.
+	RejectEnrollment(ctx context.Context, in *RejectEnrollmentRequest, opts ...grpc.CallOption) (*RejectEnrollmentResponse, error)
 	// WhoAmI echoes the operator identity the manager verified from the
 	// presented client certificate (subject CN, cert serial, access level).
 	WhoAmI(ctx context.Context, in *WhoAmIRequest, opts ...grpc.CallOption) (*WhoAmIResponse, error)
@@ -138,6 +150,36 @@ func (c *fleetServiceClient) ListEnrollments(ctx context.Context, in *ListEnroll
 	return out, nil
 }
 
+func (c *fleetServiceClient) CreateEnrollment(ctx context.Context, in *CreateEnrollmentRequest, opts ...grpc.CallOption) (*CreateEnrollmentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateEnrollmentResponse)
+	err := c.cc.Invoke(ctx, FleetService_CreateEnrollment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) ApproveEnrollment(ctx context.Context, in *ApproveEnrollmentRequest, opts ...grpc.CallOption) (*ApproveEnrollmentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ApproveEnrollmentResponse)
+	err := c.cc.Invoke(ctx, FleetService_ApproveEnrollment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) RejectEnrollment(ctx context.Context, in *RejectEnrollmentRequest, opts ...grpc.CallOption) (*RejectEnrollmentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RejectEnrollmentResponse)
+	err := c.cc.Invoke(ctx, FleetService_RejectEnrollment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *fleetServiceClient) WhoAmI(ctx context.Context, in *WhoAmIRequest, opts ...grpc.CallOption) (*WhoAmIResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(WhoAmIResponse)
@@ -152,9 +194,10 @@ func (c *fleetServiceClient) WhoAmI(ctx context.Context, in *WhoAmIRequest, opts
 // All implementations should embed UnimplementedFleetServiceServer
 // for forward compatibility.
 //
-// FleetService is the Fleet Manager's read surface over a set of CryptOS
-// nodes. It aggregates each node's status and identity behind a single
-// Connect endpoint for the manager's web UI.
+// FleetService is the Fleet Manager's surface over a set of CryptOS nodes:
+// read aggregation (status, identity, certificates, catalog) plus the
+// operator-driven enrollment writes. A single Connect endpoint for the
+// manager's web UI.
 type FleetServiceServer interface {
 	// ListNodes returns a summary for every node the manager knows about.
 	ListNodes(context.Context, *ListNodesRequest) (*ListNodesResponse, error)
@@ -174,6 +217,14 @@ type FleetServiceServer interface {
 	// ListEnrollments returns the manager's pending and resolved enrollment
 	// requests.
 	ListEnrollments(context.Context, *ListEnrollmentsRequest) (*ListEnrollmentsResponse, error)
+	// CreateEnrollment opens a new enrollment request (LINK a node or provision a
+	// SUBORDINATE CA); the manager verifies attestation for LINK.
+	CreateEnrollment(context.Context, *CreateEnrollmentRequest) (*CreateEnrollmentResponse, error)
+	// ApproveEnrollment approves a pending request (LINK -> ApplyConfig managed
+	// state; SUBORDINATE -> CSR-ferry).
+	ApproveEnrollment(context.Context, *ApproveEnrollmentRequest) (*ApproveEnrollmentResponse, error)
+	// RejectEnrollment rejects a pending request with a reason.
+	RejectEnrollment(context.Context, *RejectEnrollmentRequest) (*RejectEnrollmentResponse, error)
 	// WhoAmI echoes the operator identity the manager verified from the
 	// presented client certificate (subject CN, cert serial, access level).
 	WhoAmI(context.Context, *WhoAmIRequest) (*WhoAmIResponse, error)
@@ -206,6 +257,15 @@ func (UnimplementedFleetServiceServer) ListAudit(context.Context, *ListAuditRequ
 }
 func (UnimplementedFleetServiceServer) ListEnrollments(context.Context, *ListEnrollmentsRequest) (*ListEnrollmentsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListEnrollments not implemented")
+}
+func (UnimplementedFleetServiceServer) CreateEnrollment(context.Context, *CreateEnrollmentRequest) (*CreateEnrollmentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateEnrollment not implemented")
+}
+func (UnimplementedFleetServiceServer) ApproveEnrollment(context.Context, *ApproveEnrollmentRequest) (*ApproveEnrollmentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ApproveEnrollment not implemented")
+}
+func (UnimplementedFleetServiceServer) RejectEnrollment(context.Context, *RejectEnrollmentRequest) (*RejectEnrollmentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RejectEnrollment not implemented")
 }
 func (UnimplementedFleetServiceServer) WhoAmI(context.Context, *WhoAmIRequest) (*WhoAmIResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WhoAmI not implemented")
@@ -356,6 +416,60 @@ func _FleetService_ListEnrollments_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FleetService_CreateEnrollment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateEnrollmentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).CreateEnrollment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_CreateEnrollment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).CreateEnrollment(ctx, req.(*CreateEnrollmentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_ApproveEnrollment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ApproveEnrollmentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).ApproveEnrollment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_ApproveEnrollment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).ApproveEnrollment(ctx, req.(*ApproveEnrollmentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_RejectEnrollment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RejectEnrollmentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).RejectEnrollment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_RejectEnrollment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).RejectEnrollment(ctx, req.(*RejectEnrollmentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _FleetService_WhoAmI_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WhoAmIRequest)
 	if err := dec(in); err != nil {
@@ -408,6 +522,18 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListEnrollments",
 			Handler:    _FleetService_ListEnrollments_Handler,
+		},
+		{
+			MethodName: "CreateEnrollment",
+			Handler:    _FleetService_CreateEnrollment_Handler,
+		},
+		{
+			MethodName: "ApproveEnrollment",
+			Handler:    _FleetService_ApproveEnrollment_Handler,
+		},
+		{
+			MethodName: "RejectEnrollment",
+			Handler:    _FleetService_RejectEnrollment_Handler,
 		},
 		{
 			MethodName: "WhoAmI",

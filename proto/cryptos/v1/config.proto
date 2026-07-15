@@ -41,6 +41,20 @@ message MachineConfig {
   // state_key selects how the LUKS state-partition key is protected. Empty
   // uses the node's build-time default (nodeid or tpm).
   StateKey state_key = 10;
+  // management carries FM-managed state pushed via ApplyConfig when a node is
+  // linked to a Fleet Manager (LINK enrollment). Empty on unmanaged nodes.
+  Management management = 11;
+}
+
+// Management marks a node as Fleet-Manager-managed. Set by a LINK enrollment
+// approval via ApplyConfig; takes effect on reboot.
+message Management {
+  // Subject CN of the managing Fleet Manager operator identity.
+  string manager_cn = 1;
+  // PEM trust anchor (operator CA) the node adds to its authorized client CAs.
+  string trust_pem = 2;
+  // When true, the node's embedded operator surface is read-only.
+  bool operator_surface_readonly = 3;
 }
 
 // StateKey selects the protector for the encrypted state-partition key.

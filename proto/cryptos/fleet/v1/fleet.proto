@@ -21,9 +21,10 @@ package cryptos.fleet.v1;
 
 option go_package = "github.com/CryptOS-PKI/api/go/cryptos/fleet/v1;fleetv1";
 
-// FleetService is the Fleet Manager's read surface over a set of CryptOS
-// nodes. It aggregates each node's status and identity behind a single
-// Connect endpoint for the manager's web UI.
+// FleetService is the Fleet Manager's surface over a set of CryptOS nodes:
+// read aggregation (status, identity, certificates, catalog) plus the
+// operator-driven enrollment writes. A single Connect endpoint for the
+// manager's web UI.
 service FleetService {
   // ListNodes returns a summary for every node the manager knows about.
   rpc ListNodes(ListNodesRequest) returns (ListNodesResponse);
@@ -49,6 +50,17 @@ service FleetService {
   // ListEnrollments returns the manager's pending and resolved enrollment
   // requests.
   rpc ListEnrollments(ListEnrollmentsRequest) returns (ListEnrollmentsResponse);
+
+  // CreateEnrollment opens a new enrollment request (LINK a node or provision a
+  // SUBORDINATE CA); the manager verifies attestation for LINK.
+  rpc CreateEnrollment(CreateEnrollmentRequest) returns (CreateEnrollmentResponse);
+
+  // ApproveEnrollment approves a pending request (LINK -> ApplyConfig managed
+  // state; SUBORDINATE -> CSR-ferry).
+  rpc ApproveEnrollment(ApproveEnrollmentRequest) returns (ApproveEnrollmentResponse);
+
+  // RejectEnrollment rejects a pending request with a reason.
+  rpc RejectEnrollment(RejectEnrollmentRequest) returns (RejectEnrollmentResponse);
 
   // WhoAmI echoes the operator identity the manager verified from the
   // presented client certificate (subject CN, cert serial, access level).
@@ -221,6 +233,45 @@ message EnrollmentRequest {
   string requested_at = 11;
   string rejection_reason = 12;
   string admitted_node_name = 13;
+  // LINK|SUBORDINATE
+  string kind = 14;
+  // SPKI SHA-256 (hex) of the node identity pinned at first enroll (TOFU).
+  string pinned_key_sha256 = 15;
+}
+
+message CreateEnrollmentRequest {
+  // LINK|SUBORDINATE
+  string kind = 1;
+  // LINK: how to reach + initially trust the node.
+  string node_endpoint = 2;
+  string admin_cert_pem = 3;
+  string admin_key_pem = 4;
+  string ca_pem = 5;
+  // SUBORDINATE: the child node, its parent CA, and the issuing profile.
+  string child_node = 6;
+  string parent_cn = 7;
+  string profile = 8;
+}
+
+message CreateEnrollmentResponse {
+  EnrollmentRequest enrollment = 1;
+}
+
+message ApproveEnrollmentRequest {
+  string id = 1;
+}
+
+message ApproveEnrollmentResponse {
+  EnrollmentRequest enrollment = 1;
+}
+
+message RejectEnrollmentRequest {
+  string id = 1;
+  string reason = 2;
+}
+
+message RejectEnrollmentResponse {
+  EnrollmentRequest enrollment = 1;
 }
 
 message WhoAmIRequest {}

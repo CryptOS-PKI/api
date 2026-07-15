@@ -75,6 +75,8 @@ const (
 	NodeServiceCompleteKeyRotationProcedure = "/cryptos.v1.NodeService/CompleteKeyRotation"
 	// NodeServiceResetProcedure is the fully-qualified name of the NodeService's Reset RPC.
 	NodeServiceResetProcedure = "/cryptos.v1.NodeService/Reset"
+	// NodeServiceAttestProcedure is the fully-qualified name of the NodeService's Attest RPC.
+	NodeServiceAttestProcedure = "/cryptos.v1.NodeService/Attest"
 )
 
 // NodeServiceClient is a client for the cryptos.v1.NodeService service.
@@ -152,6 +154,10 @@ type NodeServiceClient interface {
 	// maintenance mode. The caller must echo the current Root CA CN as
 	// confirmation.
 	Reset(context.Context, *connect.Request[v1.ResetRequest]) (*connect.Response[v1.ResetResponse], error)
+	// Attest signs the caller's nonce with the node's CA identity key so the
+	// Fleet Manager can verify possession of the node identity (challenge-
+	// response). ek_pub/ek_cert are reserved for future TPM EK attestation.
+	Attest(context.Context, *connect.Request[v1.AttestRequest]) (*connect.Response[v1.AttestResponse], error)
 }
 
 // NewNodeServiceClient constructs a client for the cryptos.v1.NodeService service. By default, it
@@ -267,6 +273,12 @@ func NewNodeServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(nodeServiceMethods.ByName("Reset")),
 			connect.WithClientOptions(opts...),
 		),
+		attest: connect.NewClient[v1.AttestRequest, v1.AttestResponse](
+			httpClient,
+			baseURL+NodeServiceAttestProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("Attest")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -289,6 +301,7 @@ type nodeServiceClient struct {
 	beginKeyRotation             *connect.Client[v1.BeginKeyRotationRequest, v1.BeginKeyRotationResponse]
 	completeKeyRotation          *connect.Client[v1.CompleteKeyRotationRequest, v1.CompleteKeyRotationResponse]
 	reset                        *connect.Client[v1.ResetRequest, v1.ResetResponse]
+	attest                       *connect.Client[v1.AttestRequest, v1.AttestResponse]
 }
 
 // ApplyConfig calls cryptos.v1.NodeService.ApplyConfig.
@@ -376,6 +389,11 @@ func (c *nodeServiceClient) Reset(ctx context.Context, req *connect.Request[v1.R
 	return c.reset.CallUnary(ctx, req)
 }
 
+// Attest calls cryptos.v1.NodeService.Attest.
+func (c *nodeServiceClient) Attest(ctx context.Context, req *connect.Request[v1.AttestRequest]) (*connect.Response[v1.AttestResponse], error) {
+	return c.attest.CallUnary(ctx, req)
+}
+
 // NodeServiceHandler is an implementation of the cryptos.v1.NodeService service.
 type NodeServiceHandler interface {
 	// ApplyConfig sets the node's declarative machine configuration.
@@ -451,6 +469,10 @@ type NodeServiceHandler interface {
 	// maintenance mode. The caller must echo the current Root CA CN as
 	// confirmation.
 	Reset(context.Context, *connect.Request[v1.ResetRequest]) (*connect.Response[v1.ResetResponse], error)
+	// Attest signs the caller's nonce with the node's CA identity key so the
+	// Fleet Manager can verify possession of the node identity (challenge-
+	// response). ek_pub/ek_cert are reserved for future TPM EK attestation.
+	Attest(context.Context, *connect.Request[v1.AttestRequest]) (*connect.Response[v1.AttestResponse], error)
 }
 
 // NewNodeServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -562,6 +584,12 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(nodeServiceMethods.ByName("Reset")),
 		connect.WithHandlerOptions(opts...),
 	)
+	nodeServiceAttestHandler := connect.NewUnaryHandler(
+		NodeServiceAttestProcedure,
+		svc.Attest,
+		connect.WithSchema(nodeServiceMethods.ByName("Attest")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/cryptos.v1.NodeService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case NodeServiceApplyConfigProcedure:
@@ -598,6 +626,8 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 			nodeServiceCompleteKeyRotationHandler.ServeHTTP(w, r)
 		case NodeServiceResetProcedure:
 			nodeServiceResetHandler.ServeHTTP(w, r)
+		case NodeServiceAttestProcedure:
+			nodeServiceAttestHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -673,4 +703,8 @@ func (UnimplementedNodeServiceHandler) CompleteKeyRotation(context.Context, *con
 
 func (UnimplementedNodeServiceHandler) Reset(context.Context, *connect.Request[v1.ResetRequest]) (*connect.Response[v1.ResetResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.Reset is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) Attest(context.Context, *connect.Request[v1.AttestRequest]) (*connect.Response[v1.AttestResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.Attest is not implemented"))
 }

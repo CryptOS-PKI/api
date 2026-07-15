@@ -51,6 +51,15 @@ const (
 	// FleetServiceListEnrollmentsProcedure is the fully-qualified name of the FleetService's
 	// ListEnrollments RPC.
 	FleetServiceListEnrollmentsProcedure = "/cryptos.fleet.v1.FleetService/ListEnrollments"
+	// FleetServiceCreateEnrollmentProcedure is the fully-qualified name of the FleetService's
+	// CreateEnrollment RPC.
+	FleetServiceCreateEnrollmentProcedure = "/cryptos.fleet.v1.FleetService/CreateEnrollment"
+	// FleetServiceApproveEnrollmentProcedure is the fully-qualified name of the FleetService's
+	// ApproveEnrollment RPC.
+	FleetServiceApproveEnrollmentProcedure = "/cryptos.fleet.v1.FleetService/ApproveEnrollment"
+	// FleetServiceRejectEnrollmentProcedure is the fully-qualified name of the FleetService's
+	// RejectEnrollment RPC.
+	FleetServiceRejectEnrollmentProcedure = "/cryptos.fleet.v1.FleetService/RejectEnrollment"
 	// FleetServiceWhoAmIProcedure is the fully-qualified name of the FleetService's WhoAmI RPC.
 	FleetServiceWhoAmIProcedure = "/cryptos.fleet.v1.FleetService/WhoAmI"
 )
@@ -75,6 +84,14 @@ type FleetServiceClient interface {
 	// ListEnrollments returns the manager's pending and resolved enrollment
 	// requests.
 	ListEnrollments(context.Context, *connect.Request[v1.ListEnrollmentsRequest]) (*connect.Response[v1.ListEnrollmentsResponse], error)
+	// CreateEnrollment opens a new enrollment request (LINK a node or provision a
+	// SUBORDINATE CA); the manager verifies attestation for LINK.
+	CreateEnrollment(context.Context, *connect.Request[v1.CreateEnrollmentRequest]) (*connect.Response[v1.CreateEnrollmentResponse], error)
+	// ApproveEnrollment approves a pending request (LINK -> ApplyConfig managed
+	// state; SUBORDINATE -> CSR-ferry).
+	ApproveEnrollment(context.Context, *connect.Request[v1.ApproveEnrollmentRequest]) (*connect.Response[v1.ApproveEnrollmentResponse], error)
+	// RejectEnrollment rejects a pending request with a reason.
+	RejectEnrollment(context.Context, *connect.Request[v1.RejectEnrollmentRequest]) (*connect.Response[v1.RejectEnrollmentResponse], error)
 	// WhoAmI echoes the operator identity the manager verified from the
 	// presented client certificate (subject CN, cert serial, access level).
 	WhoAmI(context.Context, *connect.Request[v1.WhoAmIRequest]) (*connect.Response[v1.WhoAmIResponse], error)
@@ -133,6 +150,24 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(fleetServiceMethods.ByName("ListEnrollments")),
 			connect.WithClientOptions(opts...),
 		),
+		createEnrollment: connect.NewClient[v1.CreateEnrollmentRequest, v1.CreateEnrollmentResponse](
+			httpClient,
+			baseURL+FleetServiceCreateEnrollmentProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("CreateEnrollment")),
+			connect.WithClientOptions(opts...),
+		),
+		approveEnrollment: connect.NewClient[v1.ApproveEnrollmentRequest, v1.ApproveEnrollmentResponse](
+			httpClient,
+			baseURL+FleetServiceApproveEnrollmentProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("ApproveEnrollment")),
+			connect.WithClientOptions(opts...),
+		),
+		rejectEnrollment: connect.NewClient[v1.RejectEnrollmentRequest, v1.RejectEnrollmentResponse](
+			httpClient,
+			baseURL+FleetServiceRejectEnrollmentProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("RejectEnrollment")),
+			connect.WithClientOptions(opts...),
+		),
 		whoAmI: connect.NewClient[v1.WhoAmIRequest, v1.WhoAmIResponse](
 			httpClient,
 			baseURL+FleetServiceWhoAmIProcedure,
@@ -144,14 +179,17 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 
 // fleetServiceClient implements FleetServiceClient.
 type fleetServiceClient struct {
-	listNodes        *connect.Client[v1.ListNodesRequest, v1.ListNodesResponse]
-	getNode          *connect.Client[v1.GetNodeRequest, v1.GetNodeResponse]
-	listCertificates *connect.Client[v1.ListCertificatesRequest, v1.ListCertificatesResponse]
-	listProfiles     *connect.Client[v1.ListProfilesRequest, v1.ListProfilesResponse]
-	listAdapters     *connect.Client[v1.ListAdaptersRequest, v1.ListAdaptersResponse]
-	listAudit        *connect.Client[v1.ListAuditRequest, v1.ListAuditResponse]
-	listEnrollments  *connect.Client[v1.ListEnrollmentsRequest, v1.ListEnrollmentsResponse]
-	whoAmI           *connect.Client[v1.WhoAmIRequest, v1.WhoAmIResponse]
+	listNodes         *connect.Client[v1.ListNodesRequest, v1.ListNodesResponse]
+	getNode           *connect.Client[v1.GetNodeRequest, v1.GetNodeResponse]
+	listCertificates  *connect.Client[v1.ListCertificatesRequest, v1.ListCertificatesResponse]
+	listProfiles      *connect.Client[v1.ListProfilesRequest, v1.ListProfilesResponse]
+	listAdapters      *connect.Client[v1.ListAdaptersRequest, v1.ListAdaptersResponse]
+	listAudit         *connect.Client[v1.ListAuditRequest, v1.ListAuditResponse]
+	listEnrollments   *connect.Client[v1.ListEnrollmentsRequest, v1.ListEnrollmentsResponse]
+	createEnrollment  *connect.Client[v1.CreateEnrollmentRequest, v1.CreateEnrollmentResponse]
+	approveEnrollment *connect.Client[v1.ApproveEnrollmentRequest, v1.ApproveEnrollmentResponse]
+	rejectEnrollment  *connect.Client[v1.RejectEnrollmentRequest, v1.RejectEnrollmentResponse]
+	whoAmI            *connect.Client[v1.WhoAmIRequest, v1.WhoAmIResponse]
 }
 
 // ListNodes calls cryptos.fleet.v1.FleetService.ListNodes.
@@ -189,6 +227,21 @@ func (c *fleetServiceClient) ListEnrollments(ctx context.Context, req *connect.R
 	return c.listEnrollments.CallUnary(ctx, req)
 }
 
+// CreateEnrollment calls cryptos.fleet.v1.FleetService.CreateEnrollment.
+func (c *fleetServiceClient) CreateEnrollment(ctx context.Context, req *connect.Request[v1.CreateEnrollmentRequest]) (*connect.Response[v1.CreateEnrollmentResponse], error) {
+	return c.createEnrollment.CallUnary(ctx, req)
+}
+
+// ApproveEnrollment calls cryptos.fleet.v1.FleetService.ApproveEnrollment.
+func (c *fleetServiceClient) ApproveEnrollment(ctx context.Context, req *connect.Request[v1.ApproveEnrollmentRequest]) (*connect.Response[v1.ApproveEnrollmentResponse], error) {
+	return c.approveEnrollment.CallUnary(ctx, req)
+}
+
+// RejectEnrollment calls cryptos.fleet.v1.FleetService.RejectEnrollment.
+func (c *fleetServiceClient) RejectEnrollment(ctx context.Context, req *connect.Request[v1.RejectEnrollmentRequest]) (*connect.Response[v1.RejectEnrollmentResponse], error) {
+	return c.rejectEnrollment.CallUnary(ctx, req)
+}
+
 // WhoAmI calls cryptos.fleet.v1.FleetService.WhoAmI.
 func (c *fleetServiceClient) WhoAmI(ctx context.Context, req *connect.Request[v1.WhoAmIRequest]) (*connect.Response[v1.WhoAmIResponse], error) {
 	return c.whoAmI.CallUnary(ctx, req)
@@ -214,6 +267,14 @@ type FleetServiceHandler interface {
 	// ListEnrollments returns the manager's pending and resolved enrollment
 	// requests.
 	ListEnrollments(context.Context, *connect.Request[v1.ListEnrollmentsRequest]) (*connect.Response[v1.ListEnrollmentsResponse], error)
+	// CreateEnrollment opens a new enrollment request (LINK a node or provision a
+	// SUBORDINATE CA); the manager verifies attestation for LINK.
+	CreateEnrollment(context.Context, *connect.Request[v1.CreateEnrollmentRequest]) (*connect.Response[v1.CreateEnrollmentResponse], error)
+	// ApproveEnrollment approves a pending request (LINK -> ApplyConfig managed
+	// state; SUBORDINATE -> CSR-ferry).
+	ApproveEnrollment(context.Context, *connect.Request[v1.ApproveEnrollmentRequest]) (*connect.Response[v1.ApproveEnrollmentResponse], error)
+	// RejectEnrollment rejects a pending request with a reason.
+	RejectEnrollment(context.Context, *connect.Request[v1.RejectEnrollmentRequest]) (*connect.Response[v1.RejectEnrollmentResponse], error)
 	// WhoAmI echoes the operator identity the manager verified from the
 	// presented client certificate (subject CN, cert serial, access level).
 	WhoAmI(context.Context, *connect.Request[v1.WhoAmIRequest]) (*connect.Response[v1.WhoAmIResponse], error)
@@ -268,6 +329,24 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(fleetServiceMethods.ByName("ListEnrollments")),
 		connect.WithHandlerOptions(opts...),
 	)
+	fleetServiceCreateEnrollmentHandler := connect.NewUnaryHandler(
+		FleetServiceCreateEnrollmentProcedure,
+		svc.CreateEnrollment,
+		connect.WithSchema(fleetServiceMethods.ByName("CreateEnrollment")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceApproveEnrollmentHandler := connect.NewUnaryHandler(
+		FleetServiceApproveEnrollmentProcedure,
+		svc.ApproveEnrollment,
+		connect.WithSchema(fleetServiceMethods.ByName("ApproveEnrollment")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceRejectEnrollmentHandler := connect.NewUnaryHandler(
+		FleetServiceRejectEnrollmentProcedure,
+		svc.RejectEnrollment,
+		connect.WithSchema(fleetServiceMethods.ByName("RejectEnrollment")),
+		connect.WithHandlerOptions(opts...),
+	)
 	fleetServiceWhoAmIHandler := connect.NewUnaryHandler(
 		FleetServiceWhoAmIProcedure,
 		svc.WhoAmI,
@@ -290,6 +369,12 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 			fleetServiceListAuditHandler.ServeHTTP(w, r)
 		case FleetServiceListEnrollmentsProcedure:
 			fleetServiceListEnrollmentsHandler.ServeHTTP(w, r)
+		case FleetServiceCreateEnrollmentProcedure:
+			fleetServiceCreateEnrollmentHandler.ServeHTTP(w, r)
+		case FleetServiceApproveEnrollmentProcedure:
+			fleetServiceApproveEnrollmentHandler.ServeHTTP(w, r)
+		case FleetServiceRejectEnrollmentProcedure:
+			fleetServiceRejectEnrollmentHandler.ServeHTTP(w, r)
 		case FleetServiceWhoAmIProcedure:
 			fleetServiceWhoAmIHandler.ServeHTTP(w, r)
 		default:
@@ -327,6 +412,18 @@ func (UnimplementedFleetServiceHandler) ListAudit(context.Context, *connect.Requ
 
 func (UnimplementedFleetServiceHandler) ListEnrollments(context.Context, *connect.Request[v1.ListEnrollmentsRequest]) (*connect.Response[v1.ListEnrollmentsResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ListEnrollments is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) CreateEnrollment(context.Context, *connect.Request[v1.CreateEnrollmentRequest]) (*connect.Response[v1.CreateEnrollmentResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.CreateEnrollment is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) ApproveEnrollment(context.Context, *connect.Request[v1.ApproveEnrollmentRequest]) (*connect.Response[v1.ApproveEnrollmentResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ApproveEnrollment is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) RejectEnrollment(context.Context, *connect.Request[v1.RejectEnrollmentRequest]) (*connect.Response[v1.RejectEnrollmentResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.RejectEnrollment is not implemented"))
 }
 
 func (UnimplementedFleetServiceHandler) WhoAmI(context.Context, *connect.Request[v1.WhoAmIRequest]) (*connect.Response[v1.WhoAmIResponse], error) {

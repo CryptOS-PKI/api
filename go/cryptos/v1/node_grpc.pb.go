@@ -36,6 +36,7 @@ const (
 	NodeService_BeginKeyRotation_FullMethodName             = "/cryptos.v1.NodeService/BeginKeyRotation"
 	NodeService_CompleteKeyRotation_FullMethodName          = "/cryptos.v1.NodeService/CompleteKeyRotation"
 	NodeService_Reset_FullMethodName                        = "/cryptos.v1.NodeService/Reset"
+	NodeService_Attest_FullMethodName                       = "/cryptos.v1.NodeService/Attest"
 )
 
 // NodeServiceClient is the client API for NodeService service.
@@ -122,6 +123,10 @@ type NodeServiceClient interface {
 	// maintenance mode. The caller must echo the current Root CA CN as
 	// confirmation.
 	Reset(ctx context.Context, in *ResetRequest, opts ...grpc.CallOption) (*ResetResponse, error)
+	// Attest signs the caller's nonce with the node's CA identity key so the
+	// Fleet Manager can verify possession of the node identity (challenge-
+	// response). ek_pub/ek_cert are reserved for future TPM EK attestation.
+	Attest(ctx context.Context, in *AttestRequest, opts ...grpc.CallOption) (*AttestResponse, error)
 }
 
 type nodeServiceClient struct {
@@ -311,6 +316,16 @@ func (c *nodeServiceClient) Reset(ctx context.Context, in *ResetRequest, opts ..
 	return out, nil
 }
 
+func (c *nodeServiceClient) Attest(ctx context.Context, in *AttestRequest, opts ...grpc.CallOption) (*AttestResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AttestResponse)
+	err := c.cc.Invoke(ctx, NodeService_Attest_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NodeServiceServer is the server API for NodeService service.
 // All implementations should embed UnimplementedNodeServiceServer
 // for forward compatibility.
@@ -395,6 +410,10 @@ type NodeServiceServer interface {
 	// maintenance mode. The caller must echo the current Root CA CN as
 	// confirmation.
 	Reset(context.Context, *ResetRequest) (*ResetResponse, error)
+	// Attest signs the caller's nonce with the node's CA identity key so the
+	// Fleet Manager can verify possession of the node identity (challenge-
+	// response). ek_pub/ek_cert are reserved for future TPM EK attestation.
+	Attest(context.Context, *AttestRequest) (*AttestResponse, error)
 }
 
 // UnimplementedNodeServiceServer should be embedded to have
@@ -454,6 +473,9 @@ func (UnimplementedNodeServiceServer) CompleteKeyRotation(context.Context, *Comp
 }
 func (UnimplementedNodeServiceServer) Reset(context.Context, *ResetRequest) (*ResetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Reset not implemented")
+}
+func (UnimplementedNodeServiceServer) Attest(context.Context, *AttestRequest) (*AttestResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Attest not implemented")
 }
 func (UnimplementedNodeServiceServer) testEmbeddedByValue() {}
 
@@ -774,6 +796,24 @@ func _NodeService_Reset_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NodeService_Attest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AttestRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).Attest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_Attest_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).Attest(ctx, req.(*AttestRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NodeService_ServiceDesc is the grpc.ServiceDesc for NodeService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -844,6 +884,10 @@ var NodeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Reset",
 			Handler:    _NodeService_Reset_Handler,
+		},
+		{
+			MethodName: "Attest",
+			Handler:    _NodeService_Attest_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

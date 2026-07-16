@@ -259,6 +259,12 @@ message CreateEnrollmentResponse {
 
 message ApproveEnrollmentRequest {
   string id = 1;
+  // LINK approval re-supplies the node connection material (nothing sensitive
+  // is persisted between create and approve). Ignored for SUBORDINATE.
+  string node_endpoint = 2;
+  string admin_cert_pem = 3;
+  string admin_key_pem = 4;
+  string ca_pem = 5;
 }
 
 message ApproveEnrollmentResponse {

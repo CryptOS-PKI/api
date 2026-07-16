@@ -77,6 +77,9 @@ const (
 	NodeServiceResetProcedure = "/cryptos.v1.NodeService/Reset"
 	// NodeServiceAttestProcedure is the fully-qualified name of the NodeService's Attest RPC.
 	NodeServiceAttestProcedure = "/cryptos.v1.NodeService/Attest"
+	// NodeServiceSetManagementProcedure is the fully-qualified name of the NodeService's SetManagement
+	// RPC.
+	NodeServiceSetManagementProcedure = "/cryptos.v1.NodeService/SetManagement"
 )
 
 // NodeServiceClient is a client for the cryptos.v1.NodeService service.
@@ -158,6 +161,10 @@ type NodeServiceClient interface {
 	// Fleet Manager can verify possession of the node identity (challenge-
 	// response). ek_pub/ek_cert are reserved for future TPM EK attestation.
 	Attest(context.Context, *connect.Request[v1.AttestRequest]) (*connect.Response[v1.AttestResponse], error)
+	// SetManagement merges FM managed-state into the node's persisted config
+	// (read-modify-write on the node) without replacing the whole config; used by
+	// a LINK enrollment approval. Clearing management (nil) unlinks.
+	SetManagement(context.Context, *connect.Request[v1.SetManagementRequest]) (*connect.Response[v1.SetManagementResponse], error)
 }
 
 // NewNodeServiceClient constructs a client for the cryptos.v1.NodeService service. By default, it
@@ -279,6 +286,12 @@ func NewNodeServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(nodeServiceMethods.ByName("Attest")),
 			connect.WithClientOptions(opts...),
 		),
+		setManagement: connect.NewClient[v1.SetManagementRequest, v1.SetManagementResponse](
+			httpClient,
+			baseURL+NodeServiceSetManagementProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("SetManagement")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -302,6 +315,7 @@ type nodeServiceClient struct {
 	completeKeyRotation          *connect.Client[v1.CompleteKeyRotationRequest, v1.CompleteKeyRotationResponse]
 	reset                        *connect.Client[v1.ResetRequest, v1.ResetResponse]
 	attest                       *connect.Client[v1.AttestRequest, v1.AttestResponse]
+	setManagement                *connect.Client[v1.SetManagementRequest, v1.SetManagementResponse]
 }
 
 // ApplyConfig calls cryptos.v1.NodeService.ApplyConfig.
@@ -394,6 +408,11 @@ func (c *nodeServiceClient) Attest(ctx context.Context, req *connect.Request[v1.
 	return c.attest.CallUnary(ctx, req)
 }
 
+// SetManagement calls cryptos.v1.NodeService.SetManagement.
+func (c *nodeServiceClient) SetManagement(ctx context.Context, req *connect.Request[v1.SetManagementRequest]) (*connect.Response[v1.SetManagementResponse], error) {
+	return c.setManagement.CallUnary(ctx, req)
+}
+
 // NodeServiceHandler is an implementation of the cryptos.v1.NodeService service.
 type NodeServiceHandler interface {
 	// ApplyConfig sets the node's declarative machine configuration.
@@ -473,6 +492,10 @@ type NodeServiceHandler interface {
 	// Fleet Manager can verify possession of the node identity (challenge-
 	// response). ek_pub/ek_cert are reserved for future TPM EK attestation.
 	Attest(context.Context, *connect.Request[v1.AttestRequest]) (*connect.Response[v1.AttestResponse], error)
+	// SetManagement merges FM managed-state into the node's persisted config
+	// (read-modify-write on the node) without replacing the whole config; used by
+	// a LINK enrollment approval. Clearing management (nil) unlinks.
+	SetManagement(context.Context, *connect.Request[v1.SetManagementRequest]) (*connect.Response[v1.SetManagementResponse], error)
 }
 
 // NewNodeServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -590,6 +613,12 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(nodeServiceMethods.ByName("Attest")),
 		connect.WithHandlerOptions(opts...),
 	)
+	nodeServiceSetManagementHandler := connect.NewUnaryHandler(
+		NodeServiceSetManagementProcedure,
+		svc.SetManagement,
+		connect.WithSchema(nodeServiceMethods.ByName("SetManagement")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/cryptos.v1.NodeService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case NodeServiceApplyConfigProcedure:
@@ -628,6 +657,8 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 			nodeServiceResetHandler.ServeHTTP(w, r)
 		case NodeServiceAttestProcedure:
 			nodeServiceAttestHandler.ServeHTTP(w, r)
+		case NodeServiceSetManagementProcedure:
+			nodeServiceSetManagementHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -707,4 +738,8 @@ func (UnimplementedNodeServiceHandler) Reset(context.Context, *connect.Request[v
 
 func (UnimplementedNodeServiceHandler) Attest(context.Context, *connect.Request[v1.AttestRequest]) (*connect.Response[v1.AttestResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.Attest is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) SetManagement(context.Context, *connect.Request[v1.SetManagementRequest]) (*connect.Response[v1.SetManagementResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.SetManagement is not implemented"))
 }

@@ -128,10 +128,27 @@ service NodeService {
   // Fleet Manager can verify possession of the node identity (challenge-
   // response). ek_pub/ek_cert are reserved for future TPM EK attestation.
   rpc Attest(AttestRequest) returns (AttestResponse);
+
+  // SetManagement merges FM managed-state into the node's persisted config
+  // (read-modify-write on the node) without replacing the whole config; used by
+  // a LINK enrollment approval. Clearing management (nil) unlinks.
+  rpc SetManagement(SetManagementRequest) returns (SetManagementResponse);
 }
 
 message ApplyConfigRequest {
   MachineConfig config = 1;
+}
+
+message SetManagementRequest {
+  // The managed-state to merge into the node's config. Nil/empty unlinks.
+  Management management = 1;
+}
+
+message SetManagementResponse {
+  // Monotonically increasing config generation after the merge.
+  uint64 generation = 1;
+  // True when the change takes effect only on reboot.
+  bool requires_reboot = 2;
 }
 
 message ApplyConfigResponse {

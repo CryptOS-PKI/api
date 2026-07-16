@@ -37,6 +37,7 @@ const (
 	NodeService_CompleteKeyRotation_FullMethodName          = "/cryptos.v1.NodeService/CompleteKeyRotation"
 	NodeService_Reset_FullMethodName                        = "/cryptos.v1.NodeService/Reset"
 	NodeService_Attest_FullMethodName                       = "/cryptos.v1.NodeService/Attest"
+	NodeService_SetManagement_FullMethodName                = "/cryptos.v1.NodeService/SetManagement"
 )
 
 // NodeServiceClient is the client API for NodeService service.
@@ -127,6 +128,10 @@ type NodeServiceClient interface {
 	// Fleet Manager can verify possession of the node identity (challenge-
 	// response). ek_pub/ek_cert are reserved for future TPM EK attestation.
 	Attest(ctx context.Context, in *AttestRequest, opts ...grpc.CallOption) (*AttestResponse, error)
+	// SetManagement merges FM managed-state into the node's persisted config
+	// (read-modify-write on the node) without replacing the whole config; used by
+	// a LINK enrollment approval. Clearing management (nil) unlinks.
+	SetManagement(ctx context.Context, in *SetManagementRequest, opts ...grpc.CallOption) (*SetManagementResponse, error)
 }
 
 type nodeServiceClient struct {
@@ -326,6 +331,16 @@ func (c *nodeServiceClient) Attest(ctx context.Context, in *AttestRequest, opts 
 	return out, nil
 }
 
+func (c *nodeServiceClient) SetManagement(ctx context.Context, in *SetManagementRequest, opts ...grpc.CallOption) (*SetManagementResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetManagementResponse)
+	err := c.cc.Invoke(ctx, NodeService_SetManagement_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NodeServiceServer is the server API for NodeService service.
 // All implementations should embed UnimplementedNodeServiceServer
 // for forward compatibility.
@@ -414,6 +429,10 @@ type NodeServiceServer interface {
 	// Fleet Manager can verify possession of the node identity (challenge-
 	// response). ek_pub/ek_cert are reserved for future TPM EK attestation.
 	Attest(context.Context, *AttestRequest) (*AttestResponse, error)
+	// SetManagement merges FM managed-state into the node's persisted config
+	// (read-modify-write on the node) without replacing the whole config; used by
+	// a LINK enrollment approval. Clearing management (nil) unlinks.
+	SetManagement(context.Context, *SetManagementRequest) (*SetManagementResponse, error)
 }
 
 // UnimplementedNodeServiceServer should be embedded to have
@@ -476,6 +495,9 @@ func (UnimplementedNodeServiceServer) Reset(context.Context, *ResetRequest) (*Re
 }
 func (UnimplementedNodeServiceServer) Attest(context.Context, *AttestRequest) (*AttestResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Attest not implemented")
+}
+func (UnimplementedNodeServiceServer) SetManagement(context.Context, *SetManagementRequest) (*SetManagementResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetManagement not implemented")
 }
 func (UnimplementedNodeServiceServer) testEmbeddedByValue() {}
 
@@ -814,6 +836,24 @@ func _NodeService_Attest_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NodeService_SetManagement_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetManagementRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).SetManagement(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_SetManagement_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).SetManagement(ctx, req.(*SetManagementRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NodeService_ServiceDesc is the grpc.ServiceDesc for NodeService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -888,6 +928,10 @@ var NodeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Attest",
 			Handler:    _NodeService_Attest_Handler,
+		},
+		{
+			MethodName: "SetManagement",
+			Handler:    _NodeService_SetManagement_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

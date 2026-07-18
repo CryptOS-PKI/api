@@ -30,6 +30,7 @@ const (
 	FleetService_ApproveEnrollment_FullMethodName = "/cryptos.fleet.v1.FleetService/ApproveEnrollment"
 	FleetService_RejectEnrollment_FullMethodName  = "/cryptos.fleet.v1.FleetService/RejectEnrollment"
 	FleetService_WhoAmI_FullMethodName            = "/cryptos.fleet.v1.FleetService/WhoAmI"
+	FleetService_RevokeCertificate_FullMethodName = "/cryptos.fleet.v1.FleetService/RevokeCertificate"
 )
 
 // FleetServiceClient is the client API for FleetService service.
@@ -70,6 +71,9 @@ type FleetServiceClient interface {
 	// WhoAmI echoes the operator identity the manager verified from the
 	// presented client certificate (subject CN, cert serial, access level).
 	WhoAmI(ctx context.Context, in *WhoAmIRequest, opts ...grpc.CallOption) (*WhoAmIResponse, error)
+	// RevokeCertificate revokes an issued certificate on the node that issued
+	// it, identified by node name and hex serial, with an RFC 5280 reason code.
+	RevokeCertificate(ctx context.Context, in *RevokeCertificateRequest, opts ...grpc.CallOption) (*RevokeCertificateResponse, error)
 }
 
 type fleetServiceClient struct {
@@ -190,6 +194,16 @@ func (c *fleetServiceClient) WhoAmI(ctx context.Context, in *WhoAmIRequest, opts
 	return out, nil
 }
 
+func (c *fleetServiceClient) RevokeCertificate(ctx context.Context, in *RevokeCertificateRequest, opts ...grpc.CallOption) (*RevokeCertificateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RevokeCertificateResponse)
+	err := c.cc.Invoke(ctx, FleetService_RevokeCertificate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FleetServiceServer is the server API for FleetService service.
 // All implementations should embed UnimplementedFleetServiceServer
 // for forward compatibility.
@@ -228,6 +242,9 @@ type FleetServiceServer interface {
 	// WhoAmI echoes the operator identity the manager verified from the
 	// presented client certificate (subject CN, cert serial, access level).
 	WhoAmI(context.Context, *WhoAmIRequest) (*WhoAmIResponse, error)
+	// RevokeCertificate revokes an issued certificate on the node that issued
+	// it, identified by node name and hex serial, with an RFC 5280 reason code.
+	RevokeCertificate(context.Context, *RevokeCertificateRequest) (*RevokeCertificateResponse, error)
 }
 
 // UnimplementedFleetServiceServer should be embedded to have
@@ -269,6 +286,9 @@ func (UnimplementedFleetServiceServer) RejectEnrollment(context.Context, *Reject
 }
 func (UnimplementedFleetServiceServer) WhoAmI(context.Context, *WhoAmIRequest) (*WhoAmIResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WhoAmI not implemented")
+}
+func (UnimplementedFleetServiceServer) RevokeCertificate(context.Context, *RevokeCertificateRequest) (*RevokeCertificateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RevokeCertificate not implemented")
 }
 func (UnimplementedFleetServiceServer) testEmbeddedByValue() {}
 
@@ -488,6 +508,24 @@ func _FleetService_WhoAmI_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FleetService_RevokeCertificate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevokeCertificateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).RevokeCertificate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_RevokeCertificate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).RevokeCertificate(ctx, req.(*RevokeCertificateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FleetService_ServiceDesc is the grpc.ServiceDesc for FleetService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -538,6 +576,10 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "WhoAmI",
 			Handler:    _FleetService_WhoAmI_Handler,
+		},
+		{
+			MethodName: "RevokeCertificate",
+			Handler:    _FleetService_RevokeCertificate_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -62,6 +62,9 @@ const (
 	FleetServiceRejectEnrollmentProcedure = "/cryptos.fleet.v1.FleetService/RejectEnrollment"
 	// FleetServiceWhoAmIProcedure is the fully-qualified name of the FleetService's WhoAmI RPC.
 	FleetServiceWhoAmIProcedure = "/cryptos.fleet.v1.FleetService/WhoAmI"
+	// FleetServiceRevokeCertificateProcedure is the fully-qualified name of the FleetService's
+	// RevokeCertificate RPC.
+	FleetServiceRevokeCertificateProcedure = "/cryptos.fleet.v1.FleetService/RevokeCertificate"
 )
 
 // FleetServiceClient is a client for the cryptos.fleet.v1.FleetService service.
@@ -95,6 +98,9 @@ type FleetServiceClient interface {
 	// WhoAmI echoes the operator identity the manager verified from the
 	// presented client certificate (subject CN, cert serial, access level).
 	WhoAmI(context.Context, *connect.Request[v1.WhoAmIRequest]) (*connect.Response[v1.WhoAmIResponse], error)
+	// RevokeCertificate revokes an issued certificate on the node that issued
+	// it, identified by node name and hex serial, with an RFC 5280 reason code.
+	RevokeCertificate(context.Context, *connect.Request[v1.RevokeCertificateRequest]) (*connect.Response[v1.RevokeCertificateResponse], error)
 }
 
 // NewFleetServiceClient constructs a client for the cryptos.fleet.v1.FleetService service. By
@@ -174,6 +180,12 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(fleetServiceMethods.ByName("WhoAmI")),
 			connect.WithClientOptions(opts...),
 		),
+		revokeCertificate: connect.NewClient[v1.RevokeCertificateRequest, v1.RevokeCertificateResponse](
+			httpClient,
+			baseURL+FleetServiceRevokeCertificateProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("RevokeCertificate")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -190,6 +202,7 @@ type fleetServiceClient struct {
 	approveEnrollment *connect.Client[v1.ApproveEnrollmentRequest, v1.ApproveEnrollmentResponse]
 	rejectEnrollment  *connect.Client[v1.RejectEnrollmentRequest, v1.RejectEnrollmentResponse]
 	whoAmI            *connect.Client[v1.WhoAmIRequest, v1.WhoAmIResponse]
+	revokeCertificate *connect.Client[v1.RevokeCertificateRequest, v1.RevokeCertificateResponse]
 }
 
 // ListNodes calls cryptos.fleet.v1.FleetService.ListNodes.
@@ -247,6 +260,11 @@ func (c *fleetServiceClient) WhoAmI(ctx context.Context, req *connect.Request[v1
 	return c.whoAmI.CallUnary(ctx, req)
 }
 
+// RevokeCertificate calls cryptos.fleet.v1.FleetService.RevokeCertificate.
+func (c *fleetServiceClient) RevokeCertificate(ctx context.Context, req *connect.Request[v1.RevokeCertificateRequest]) (*connect.Response[v1.RevokeCertificateResponse], error) {
+	return c.revokeCertificate.CallUnary(ctx, req)
+}
+
 // FleetServiceHandler is an implementation of the cryptos.fleet.v1.FleetService service.
 type FleetServiceHandler interface {
 	// ListNodes returns a summary for every node the manager knows about.
@@ -278,6 +296,9 @@ type FleetServiceHandler interface {
 	// WhoAmI echoes the operator identity the manager verified from the
 	// presented client certificate (subject CN, cert serial, access level).
 	WhoAmI(context.Context, *connect.Request[v1.WhoAmIRequest]) (*connect.Response[v1.WhoAmIResponse], error)
+	// RevokeCertificate revokes an issued certificate on the node that issued
+	// it, identified by node name and hex serial, with an RFC 5280 reason code.
+	RevokeCertificate(context.Context, *connect.Request[v1.RevokeCertificateRequest]) (*connect.Response[v1.RevokeCertificateResponse], error)
 }
 
 // NewFleetServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -353,6 +374,12 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(fleetServiceMethods.ByName("WhoAmI")),
 		connect.WithHandlerOptions(opts...),
 	)
+	fleetServiceRevokeCertificateHandler := connect.NewUnaryHandler(
+		FleetServiceRevokeCertificateProcedure,
+		svc.RevokeCertificate,
+		connect.WithSchema(fleetServiceMethods.ByName("RevokeCertificate")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/cryptos.fleet.v1.FleetService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case FleetServiceListNodesProcedure:
@@ -377,6 +404,8 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 			fleetServiceRejectEnrollmentHandler.ServeHTTP(w, r)
 		case FleetServiceWhoAmIProcedure:
 			fleetServiceWhoAmIHandler.ServeHTTP(w, r)
+		case FleetServiceRevokeCertificateProcedure:
+			fleetServiceRevokeCertificateHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -428,4 +457,8 @@ func (UnimplementedFleetServiceHandler) RejectEnrollment(context.Context, *conne
 
 func (UnimplementedFleetServiceHandler) WhoAmI(context.Context, *connect.Request[v1.WhoAmIRequest]) (*connect.Response[v1.WhoAmIResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.WhoAmI is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) RevokeCertificate(context.Context, *connect.Request[v1.RevokeCertificateRequest]) (*connect.Response[v1.RevokeCertificateResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.RevokeCertificate is not implemented"))
 }

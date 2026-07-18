@@ -65,6 +65,10 @@ service FleetService {
   // WhoAmI echoes the operator identity the manager verified from the
   // presented client certificate (subject CN, cert serial, access level).
   rpc WhoAmI(WhoAmIRequest) returns (WhoAmIResponse);
+
+  // RevokeCertificate revokes an issued certificate on the node that issued
+  // it, identified by node name and hex serial, with an RFC 5280 reason code.
+  rpc RevokeCertificate(RevokeCertificateRequest) returns (RevokeCertificateResponse);
 }
 
 message ListNodesRequest {}
@@ -293,4 +297,23 @@ message OperatorIdentity {
 
 message WhoAmIResponse {
   OperatorIdentity operator = 1;
+}
+
+// RevokeCertificateRequest identifies the certificate to revoke by its issuing
+// node and hex serial, with the RFC 5280 reason code for the revocation.
+message RevokeCertificateRequest {
+  // node_name is the issuing node the certificate lives on.
+  string node_name = 1;
+  // serial_hex is the certificate to revoke.
+  string serial_hex = 2;
+  // reason_code is the RFC 5280 CRLReason code.
+  int32 reason_code = 3;
+}
+
+// RevokeCertificateResponse echoes the revoked certificate's serial, the time
+// it was revoked (RFC3339), and the reason code the node recorded.
+message RevokeCertificateResponse {
+  string serial_hex = 1;
+  string revoked_at = 2;
+  int32 reason_code = 3;
 }

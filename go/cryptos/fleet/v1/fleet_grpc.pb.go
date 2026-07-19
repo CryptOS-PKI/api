@@ -32,6 +32,7 @@ const (
 	FleetService_WhoAmI_FullMethodName            = "/cryptos.fleet.v1.FleetService/WhoAmI"
 	FleetService_RevokeCertificate_FullMethodName = "/cryptos.fleet.v1.FleetService/RevokeCertificate"
 	FleetService_IssueLeaf_FullMethodName         = "/cryptos.fleet.v1.FleetService/IssueLeaf"
+	FleetService_RekeyNode_FullMethodName         = "/cryptos.fleet.v1.FleetService/RekeyNode"
 )
 
 // FleetServiceClient is the client API for FleetService service.
@@ -79,6 +80,12 @@ type FleetServiceClient interface {
 	// browser-generated PKCS#10 CSR under a named issuance profile. Only the
 	// CSR crosses the wire; the leaf private key stays in the browser.
 	IssueLeaf(ctx context.Context, in *IssueLeafRequest, opts ...grpc.CallOption) (*IssueLeafResponse, error)
+	// RekeyNode re-keys a subordinate CA node in one orchestrated call: the
+	// manager has the child mint a new key + CSR, routes the CSR to the parent
+	// (resolved from the child's issuer CN) for signing under profile_name, and
+	// delivers the signed chain back to the child. The parent must be a node the
+	// manager already knows about.
+	RekeyNode(ctx context.Context, in *RekeyNodeRequest, opts ...grpc.CallOption) (*RekeyNodeResponse, error)
 }
 
 type fleetServiceClient struct {
@@ -219,6 +226,16 @@ func (c *fleetServiceClient) IssueLeaf(ctx context.Context, in *IssueLeafRequest
 	return out, nil
 }
 
+func (c *fleetServiceClient) RekeyNode(ctx context.Context, in *RekeyNodeRequest, opts ...grpc.CallOption) (*RekeyNodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RekeyNodeResponse)
+	err := c.cc.Invoke(ctx, FleetService_RekeyNode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FleetServiceServer is the server API for FleetService service.
 // All implementations should embed UnimplementedFleetServiceServer
 // for forward compatibility.
@@ -264,6 +281,12 @@ type FleetServiceServer interface {
 	// browser-generated PKCS#10 CSR under a named issuance profile. Only the
 	// CSR crosses the wire; the leaf private key stays in the browser.
 	IssueLeaf(context.Context, *IssueLeafRequest) (*IssueLeafResponse, error)
+	// RekeyNode re-keys a subordinate CA node in one orchestrated call: the
+	// manager has the child mint a new key + CSR, routes the CSR to the parent
+	// (resolved from the child's issuer CN) for signing under profile_name, and
+	// delivers the signed chain back to the child. The parent must be a node the
+	// manager already knows about.
+	RekeyNode(context.Context, *RekeyNodeRequest) (*RekeyNodeResponse, error)
 }
 
 // UnimplementedFleetServiceServer should be embedded to have
@@ -311,6 +334,9 @@ func (UnimplementedFleetServiceServer) RevokeCertificate(context.Context, *Revok
 }
 func (UnimplementedFleetServiceServer) IssueLeaf(context.Context, *IssueLeafRequest) (*IssueLeafResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IssueLeaf not implemented")
+}
+func (UnimplementedFleetServiceServer) RekeyNode(context.Context, *RekeyNodeRequest) (*RekeyNodeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RekeyNode not implemented")
 }
 func (UnimplementedFleetServiceServer) testEmbeddedByValue() {}
 
@@ -566,6 +592,24 @@ func _FleetService_IssueLeaf_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FleetService_RekeyNode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RekeyNodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).RekeyNode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_RekeyNode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).RekeyNode(ctx, req.(*RekeyNodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FleetService_ServiceDesc is the grpc.ServiceDesc for FleetService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -624,6 +668,10 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "IssueLeaf",
 			Handler:    _FleetService_IssueLeaf_Handler,
+		},
+		{
+			MethodName: "RekeyNode",
+			Handler:    _FleetService_RekeyNode_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

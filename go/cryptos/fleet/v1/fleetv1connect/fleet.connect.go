@@ -65,6 +65,8 @@ const (
 	// FleetServiceRevokeCertificateProcedure is the fully-qualified name of the FleetService's
 	// RevokeCertificate RPC.
 	FleetServiceRevokeCertificateProcedure = "/cryptos.fleet.v1.FleetService/RevokeCertificate"
+	// FleetServiceIssueLeafProcedure is the fully-qualified name of the FleetService's IssueLeaf RPC.
+	FleetServiceIssueLeafProcedure = "/cryptos.fleet.v1.FleetService/IssueLeaf"
 )
 
 // FleetServiceClient is a client for the cryptos.fleet.v1.FleetService service.
@@ -101,6 +103,10 @@ type FleetServiceClient interface {
 	// RevokeCertificate revokes an issued certificate on the node that issued
 	// it, identified by node name and hex serial, with an RFC 5280 reason code.
 	RevokeCertificate(context.Context, *connect.Request[v1.RevokeCertificateRequest]) (*connect.Response[v1.RevokeCertificateResponse], error)
+	// IssueLeaf signs a leaf certificate on the named issuing node from a
+	// browser-generated PKCS#10 CSR under a named issuance profile. Only the
+	// CSR crosses the wire; the leaf private key stays in the browser.
+	IssueLeaf(context.Context, *connect.Request[v1.IssueLeafRequest]) (*connect.Response[v1.IssueLeafResponse], error)
 }
 
 // NewFleetServiceClient constructs a client for the cryptos.fleet.v1.FleetService service. By
@@ -186,6 +192,12 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(fleetServiceMethods.ByName("RevokeCertificate")),
 			connect.WithClientOptions(opts...),
 		),
+		issueLeaf: connect.NewClient[v1.IssueLeafRequest, v1.IssueLeafResponse](
+			httpClient,
+			baseURL+FleetServiceIssueLeafProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("IssueLeaf")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -203,6 +215,7 @@ type fleetServiceClient struct {
 	rejectEnrollment  *connect.Client[v1.RejectEnrollmentRequest, v1.RejectEnrollmentResponse]
 	whoAmI            *connect.Client[v1.WhoAmIRequest, v1.WhoAmIResponse]
 	revokeCertificate *connect.Client[v1.RevokeCertificateRequest, v1.RevokeCertificateResponse]
+	issueLeaf         *connect.Client[v1.IssueLeafRequest, v1.IssueLeafResponse]
 }
 
 // ListNodes calls cryptos.fleet.v1.FleetService.ListNodes.
@@ -265,6 +278,11 @@ func (c *fleetServiceClient) RevokeCertificate(ctx context.Context, req *connect
 	return c.revokeCertificate.CallUnary(ctx, req)
 }
 
+// IssueLeaf calls cryptos.fleet.v1.FleetService.IssueLeaf.
+func (c *fleetServiceClient) IssueLeaf(ctx context.Context, req *connect.Request[v1.IssueLeafRequest]) (*connect.Response[v1.IssueLeafResponse], error) {
+	return c.issueLeaf.CallUnary(ctx, req)
+}
+
 // FleetServiceHandler is an implementation of the cryptos.fleet.v1.FleetService service.
 type FleetServiceHandler interface {
 	// ListNodes returns a summary for every node the manager knows about.
@@ -299,6 +317,10 @@ type FleetServiceHandler interface {
 	// RevokeCertificate revokes an issued certificate on the node that issued
 	// it, identified by node name and hex serial, with an RFC 5280 reason code.
 	RevokeCertificate(context.Context, *connect.Request[v1.RevokeCertificateRequest]) (*connect.Response[v1.RevokeCertificateResponse], error)
+	// IssueLeaf signs a leaf certificate on the named issuing node from a
+	// browser-generated PKCS#10 CSR under a named issuance profile. Only the
+	// CSR crosses the wire; the leaf private key stays in the browser.
+	IssueLeaf(context.Context, *connect.Request[v1.IssueLeafRequest]) (*connect.Response[v1.IssueLeafResponse], error)
 }
 
 // NewFleetServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -380,6 +402,12 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(fleetServiceMethods.ByName("RevokeCertificate")),
 		connect.WithHandlerOptions(opts...),
 	)
+	fleetServiceIssueLeafHandler := connect.NewUnaryHandler(
+		FleetServiceIssueLeafProcedure,
+		svc.IssueLeaf,
+		connect.WithSchema(fleetServiceMethods.ByName("IssueLeaf")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/cryptos.fleet.v1.FleetService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case FleetServiceListNodesProcedure:
@@ -406,6 +434,8 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 			fleetServiceWhoAmIHandler.ServeHTTP(w, r)
 		case FleetServiceRevokeCertificateProcedure:
 			fleetServiceRevokeCertificateHandler.ServeHTTP(w, r)
+		case FleetServiceIssueLeafProcedure:
+			fleetServiceIssueLeafHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -461,4 +491,8 @@ func (UnimplementedFleetServiceHandler) WhoAmI(context.Context, *connect.Request
 
 func (UnimplementedFleetServiceHandler) RevokeCertificate(context.Context, *connect.Request[v1.RevokeCertificateRequest]) (*connect.Response[v1.RevokeCertificateResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.RevokeCertificate is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) IssueLeaf(context.Context, *connect.Request[v1.IssueLeafRequest]) (*connect.Response[v1.IssueLeafResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.IssueLeaf is not implemented"))
 }

@@ -69,6 +69,11 @@ service FleetService {
   // RevokeCertificate revokes an issued certificate on the node that issued
   // it, identified by node name and hex serial, with an RFC 5280 reason code.
   rpc RevokeCertificate(RevokeCertificateRequest) returns (RevokeCertificateResponse);
+
+  // IssueLeaf signs a leaf certificate on the named issuing node from a
+  // browser-generated PKCS#10 CSR under a named issuance profile. Only the
+  // CSR crosses the wire; the leaf private key stays in the browser.
+  rpc IssueLeaf(IssueLeafRequest) returns (IssueLeafResponse);
 }
 
 message ListNodesRequest {}
@@ -316,4 +321,21 @@ message RevokeCertificateResponse {
   string serial_hex = 1;
   string revoked_at = 2;
   int32 reason_code = 3;
+}
+
+// IssueLeafRequest carries the issuing node, the browser-generated PKCS#10
+// CSR, and the issuance profile to sign the leaf under.
+message IssueLeafRequest {
+  // node_name is the issuing node that signs the leaf.
+  string node_name = 1;
+  // csr_der is the DER-encoded PKCS#10 CSR from the browser.
+  bytes csr_der = 2;
+  // profile_name is the issuance profile the node signs under.
+  string profile_name = 3;
+}
+
+// IssueLeafResponse carries the signed leaf certificate.
+message IssueLeafResponse {
+  // cert_der is the signed leaf certificate, DER-encoded.
+  bytes cert_der = 1;
 }

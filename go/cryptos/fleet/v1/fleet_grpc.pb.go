@@ -31,6 +31,7 @@ const (
 	FleetService_RejectEnrollment_FullMethodName  = "/cryptos.fleet.v1.FleetService/RejectEnrollment"
 	FleetService_WhoAmI_FullMethodName            = "/cryptos.fleet.v1.FleetService/WhoAmI"
 	FleetService_RevokeCertificate_FullMethodName = "/cryptos.fleet.v1.FleetService/RevokeCertificate"
+	FleetService_IssueLeaf_FullMethodName         = "/cryptos.fleet.v1.FleetService/IssueLeaf"
 )
 
 // FleetServiceClient is the client API for FleetService service.
@@ -74,6 +75,10 @@ type FleetServiceClient interface {
 	// RevokeCertificate revokes an issued certificate on the node that issued
 	// it, identified by node name and hex serial, with an RFC 5280 reason code.
 	RevokeCertificate(ctx context.Context, in *RevokeCertificateRequest, opts ...grpc.CallOption) (*RevokeCertificateResponse, error)
+	// IssueLeaf signs a leaf certificate on the named issuing node from a
+	// browser-generated PKCS#10 CSR under a named issuance profile. Only the
+	// CSR crosses the wire; the leaf private key stays in the browser.
+	IssueLeaf(ctx context.Context, in *IssueLeafRequest, opts ...grpc.CallOption) (*IssueLeafResponse, error)
 }
 
 type fleetServiceClient struct {
@@ -204,6 +209,16 @@ func (c *fleetServiceClient) RevokeCertificate(ctx context.Context, in *RevokeCe
 	return out, nil
 }
 
+func (c *fleetServiceClient) IssueLeaf(ctx context.Context, in *IssueLeafRequest, opts ...grpc.CallOption) (*IssueLeafResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(IssueLeafResponse)
+	err := c.cc.Invoke(ctx, FleetService_IssueLeaf_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FleetServiceServer is the server API for FleetService service.
 // All implementations should embed UnimplementedFleetServiceServer
 // for forward compatibility.
@@ -245,6 +260,10 @@ type FleetServiceServer interface {
 	// RevokeCertificate revokes an issued certificate on the node that issued
 	// it, identified by node name and hex serial, with an RFC 5280 reason code.
 	RevokeCertificate(context.Context, *RevokeCertificateRequest) (*RevokeCertificateResponse, error)
+	// IssueLeaf signs a leaf certificate on the named issuing node from a
+	// browser-generated PKCS#10 CSR under a named issuance profile. Only the
+	// CSR crosses the wire; the leaf private key stays in the browser.
+	IssueLeaf(context.Context, *IssueLeafRequest) (*IssueLeafResponse, error)
 }
 
 // UnimplementedFleetServiceServer should be embedded to have
@@ -289,6 +308,9 @@ func (UnimplementedFleetServiceServer) WhoAmI(context.Context, *WhoAmIRequest) (
 }
 func (UnimplementedFleetServiceServer) RevokeCertificate(context.Context, *RevokeCertificateRequest) (*RevokeCertificateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RevokeCertificate not implemented")
+}
+func (UnimplementedFleetServiceServer) IssueLeaf(context.Context, *IssueLeafRequest) (*IssueLeafResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IssueLeaf not implemented")
 }
 func (UnimplementedFleetServiceServer) testEmbeddedByValue() {}
 
@@ -526,6 +548,24 @@ func _FleetService_RevokeCertificate_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FleetService_IssueLeaf_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IssueLeafRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).IssueLeaf(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_IssueLeaf_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).IssueLeaf(ctx, req.(*IssueLeafRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FleetService_ServiceDesc is the grpc.ServiceDesc for FleetService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -580,6 +620,10 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RevokeCertificate",
 			Handler:    _FleetService_RevokeCertificate_Handler,
+		},
+		{
+			MethodName: "IssueLeaf",
+			Handler:    _FleetService_IssueLeaf_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

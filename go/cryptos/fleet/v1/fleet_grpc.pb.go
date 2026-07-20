@@ -19,22 +19,26 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	FleetService_ListNodes_FullMethodName         = "/cryptos.fleet.v1.FleetService/ListNodes"
-	FleetService_GetNode_FullMethodName           = "/cryptos.fleet.v1.FleetService/GetNode"
-	FleetService_ListCertificates_FullMethodName  = "/cryptos.fleet.v1.FleetService/ListCertificates"
-	FleetService_ListProfiles_FullMethodName      = "/cryptos.fleet.v1.FleetService/ListProfiles"
-	FleetService_ListAdapters_FullMethodName      = "/cryptos.fleet.v1.FleetService/ListAdapters"
-	FleetService_ListAudit_FullMethodName         = "/cryptos.fleet.v1.FleetService/ListAudit"
-	FleetService_ListEnrollments_FullMethodName   = "/cryptos.fleet.v1.FleetService/ListEnrollments"
-	FleetService_CreateEnrollment_FullMethodName  = "/cryptos.fleet.v1.FleetService/CreateEnrollment"
-	FleetService_ApproveEnrollment_FullMethodName = "/cryptos.fleet.v1.FleetService/ApproveEnrollment"
-	FleetService_RejectEnrollment_FullMethodName  = "/cryptos.fleet.v1.FleetService/RejectEnrollment"
-	FleetService_WhoAmI_FullMethodName            = "/cryptos.fleet.v1.FleetService/WhoAmI"
-	FleetService_RevokeCertificate_FullMethodName = "/cryptos.fleet.v1.FleetService/RevokeCertificate"
-	FleetService_IssueLeaf_FullMethodName         = "/cryptos.fleet.v1.FleetService/IssueLeaf"
-	FleetService_RekeyNode_FullMethodName         = "/cryptos.fleet.v1.FleetService/RekeyNode"
-	FleetService_GetNodeConfig_FullMethodName     = "/cryptos.fleet.v1.FleetService/GetNodeConfig"
-	FleetService_ApplyNodeConfig_FullMethodName   = "/cryptos.fleet.v1.FleetService/ApplyNodeConfig"
+	FleetService_ListNodes_FullMethodName          = "/cryptos.fleet.v1.FleetService/ListNodes"
+	FleetService_GetNode_FullMethodName            = "/cryptos.fleet.v1.FleetService/GetNode"
+	FleetService_ListCertificates_FullMethodName   = "/cryptos.fleet.v1.FleetService/ListCertificates"
+	FleetService_ListProfiles_FullMethodName       = "/cryptos.fleet.v1.FleetService/ListProfiles"
+	FleetService_CreateProfile_FullMethodName      = "/cryptos.fleet.v1.FleetService/CreateProfile"
+	FleetService_UpdateProfile_FullMethodName      = "/cryptos.fleet.v1.FleetService/UpdateProfile"
+	FleetService_DeleteProfile_FullMethodName      = "/cryptos.fleet.v1.FleetService/DeleteProfile"
+	FleetService_ApplyProfileToNode_FullMethodName = "/cryptos.fleet.v1.FleetService/ApplyProfileToNode"
+	FleetService_ListAdapters_FullMethodName       = "/cryptos.fleet.v1.FleetService/ListAdapters"
+	FleetService_ListAudit_FullMethodName          = "/cryptos.fleet.v1.FleetService/ListAudit"
+	FleetService_ListEnrollments_FullMethodName    = "/cryptos.fleet.v1.FleetService/ListEnrollments"
+	FleetService_CreateEnrollment_FullMethodName   = "/cryptos.fleet.v1.FleetService/CreateEnrollment"
+	FleetService_ApproveEnrollment_FullMethodName  = "/cryptos.fleet.v1.FleetService/ApproveEnrollment"
+	FleetService_RejectEnrollment_FullMethodName   = "/cryptos.fleet.v1.FleetService/RejectEnrollment"
+	FleetService_WhoAmI_FullMethodName             = "/cryptos.fleet.v1.FleetService/WhoAmI"
+	FleetService_RevokeCertificate_FullMethodName  = "/cryptos.fleet.v1.FleetService/RevokeCertificate"
+	FleetService_IssueLeaf_FullMethodName          = "/cryptos.fleet.v1.FleetService/IssueLeaf"
+	FleetService_RekeyNode_FullMethodName          = "/cryptos.fleet.v1.FleetService/RekeyNode"
+	FleetService_GetNodeConfig_FullMethodName      = "/cryptos.fleet.v1.FleetService/GetNodeConfig"
+	FleetService_ApplyNodeConfig_FullMethodName    = "/cryptos.fleet.v1.FleetService/ApplyNodeConfig"
 )
 
 // FleetServiceClient is the client API for FleetService service.
@@ -54,8 +58,24 @@ type FleetServiceClient interface {
 	// optionally scoped to a single node.
 	ListCertificates(ctx context.Context, in *ListCertificatesRequest, opts ...grpc.CallOption) (*ListCertificatesResponse, error)
 	// ListProfiles returns the manager's catalog of certificate issuance
-	// profiles.
+	// profiles. Each is a cryptos.v1.CertificateProfile, the same shape a node
+	// stores in pki.profiles[], so the catalog is a lossless superset the node
+	// accepts verbatim. Operator-readable.
 	ListProfiles(ctx context.Context, in *ListProfilesRequest, opts ...grpc.CallOption) (*ListProfilesResponse, error)
+	// CreateProfile adds a new certificate profile to the manager's catalog.
+	// The profile name must be unique. Admin-gated and audited.
+	CreateProfile(ctx context.Context, in *CreateProfileRequest, opts ...grpc.CallOption) (*CreateProfileResponse, error)
+	// UpdateProfile replaces an existing catalog profile, matched by name.
+	// Admin-gated and audited.
+	UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...grpc.CallOption) (*UpdateProfileResponse, error)
+	// DeleteProfile removes a catalog profile by name. Non-cascading: it does
+	// not touch any node's existing pki.profiles[]. Admin-gated and audited.
+	DeleteProfile(ctx context.Context, in *DeleteProfileRequest, opts ...grpc.CallOption) (*DeleteProfileResponse, error)
+	// ApplyProfileToNode pushes a catalog profile onto a managed node: the
+	// manager fetches the node's full config, inserts-or-replaces the named
+	// profile in pki.profiles[] (matched by name), and applies the whole config
+	// back via the node's ApplyConfig. Admin-gated and audited.
+	ApplyProfileToNode(ctx context.Context, in *ApplyProfileToNodeRequest, opts ...grpc.CallOption) (*ApplyProfileToNodeResponse, error)
 	// ListAdapters returns the manager's catalog of enrollment protocol
 	// adapters.
 	ListAdapters(ctx context.Context, in *ListAdaptersRequest, opts ...grpc.CallOption) (*ListAdaptersResponse, error)
@@ -141,6 +161,46 @@ func (c *fleetServiceClient) ListProfiles(ctx context.Context, in *ListProfilesR
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListProfilesResponse)
 	err := c.cc.Invoke(ctx, FleetService_ListProfiles_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) CreateProfile(ctx context.Context, in *CreateProfileRequest, opts ...grpc.CallOption) (*CreateProfileResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateProfileResponse)
+	err := c.cc.Invoke(ctx, FleetService_CreateProfile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...grpc.CallOption) (*UpdateProfileResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateProfileResponse)
+	err := c.cc.Invoke(ctx, FleetService_UpdateProfile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) DeleteProfile(ctx context.Context, in *DeleteProfileRequest, opts ...grpc.CallOption) (*DeleteProfileResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteProfileResponse)
+	err := c.cc.Invoke(ctx, FleetService_DeleteProfile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) ApplyProfileToNode(ctx context.Context, in *ApplyProfileToNodeRequest, opts ...grpc.CallOption) (*ApplyProfileToNodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ApplyProfileToNodeResponse)
+	err := c.cc.Invoke(ctx, FleetService_ApplyProfileToNode_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -284,8 +344,24 @@ type FleetServiceServer interface {
 	// optionally scoped to a single node.
 	ListCertificates(context.Context, *ListCertificatesRequest) (*ListCertificatesResponse, error)
 	// ListProfiles returns the manager's catalog of certificate issuance
-	// profiles.
+	// profiles. Each is a cryptos.v1.CertificateProfile, the same shape a node
+	// stores in pki.profiles[], so the catalog is a lossless superset the node
+	// accepts verbatim. Operator-readable.
 	ListProfiles(context.Context, *ListProfilesRequest) (*ListProfilesResponse, error)
+	// CreateProfile adds a new certificate profile to the manager's catalog.
+	// The profile name must be unique. Admin-gated and audited.
+	CreateProfile(context.Context, *CreateProfileRequest) (*CreateProfileResponse, error)
+	// UpdateProfile replaces an existing catalog profile, matched by name.
+	// Admin-gated and audited.
+	UpdateProfile(context.Context, *UpdateProfileRequest) (*UpdateProfileResponse, error)
+	// DeleteProfile removes a catalog profile by name. Non-cascading: it does
+	// not touch any node's existing pki.profiles[]. Admin-gated and audited.
+	DeleteProfile(context.Context, *DeleteProfileRequest) (*DeleteProfileResponse, error)
+	// ApplyProfileToNode pushes a catalog profile onto a managed node: the
+	// manager fetches the node's full config, inserts-or-replaces the named
+	// profile in pki.profiles[] (matched by name), and applies the whole config
+	// back via the node's ApplyConfig. Admin-gated and audited.
+	ApplyProfileToNode(context.Context, *ApplyProfileToNodeRequest) (*ApplyProfileToNodeResponse, error)
 	// ListAdapters returns the manager's catalog of enrollment protocol
 	// adapters.
 	ListAdapters(context.Context, *ListAdaptersRequest) (*ListAdaptersResponse, error)
@@ -347,6 +423,18 @@ func (UnimplementedFleetServiceServer) ListCertificates(context.Context, *ListCe
 }
 func (UnimplementedFleetServiceServer) ListProfiles(context.Context, *ListProfilesRequest) (*ListProfilesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListProfiles not implemented")
+}
+func (UnimplementedFleetServiceServer) CreateProfile(context.Context, *CreateProfileRequest) (*CreateProfileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateProfile not implemented")
+}
+func (UnimplementedFleetServiceServer) UpdateProfile(context.Context, *UpdateProfileRequest) (*UpdateProfileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateProfile not implemented")
+}
+func (UnimplementedFleetServiceServer) DeleteProfile(context.Context, *DeleteProfileRequest) (*DeleteProfileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteProfile not implemented")
+}
+func (UnimplementedFleetServiceServer) ApplyProfileToNode(context.Context, *ApplyProfileToNodeRequest) (*ApplyProfileToNodeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ApplyProfileToNode not implemented")
 }
 func (UnimplementedFleetServiceServer) ListAdapters(context.Context, *ListAdaptersRequest) (*ListAdaptersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListAdapters not implemented")
@@ -472,6 +560,78 @@ func _FleetService_ListProfiles_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FleetServiceServer).ListProfiles(ctx, req.(*ListProfilesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_CreateProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).CreateProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_CreateProfile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).CreateProfile(ctx, req.(*CreateProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_UpdateProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).UpdateProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_UpdateProfile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).UpdateProfile(ctx, req.(*UpdateProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_DeleteProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).DeleteProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_DeleteProfile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).DeleteProfile(ctx, req.(*DeleteProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_ApplyProfileToNode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ApplyProfileToNodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).ApplyProfileToNode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_ApplyProfileToNode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).ApplyProfileToNode(ctx, req.(*ApplyProfileToNodeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -714,6 +874,22 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListProfiles",
 			Handler:    _FleetService_ListProfiles_Handler,
+		},
+		{
+			MethodName: "CreateProfile",
+			Handler:    _FleetService_CreateProfile_Handler,
+		},
+		{
+			MethodName: "UpdateProfile",
+			Handler:    _FleetService_UpdateProfile_Handler,
+		},
+		{
+			MethodName: "DeleteProfile",
+			Handler:    _FleetService_DeleteProfile_Handler,
+		},
+		{
+			MethodName: "ApplyProfileToNode",
+			Handler:    _FleetService_ApplyProfileToNode_Handler,
 		},
 		{
 			MethodName: "ListAdapters",

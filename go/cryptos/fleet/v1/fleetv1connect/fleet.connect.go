@@ -58,6 +58,9 @@ const (
 	// FleetServiceListAdaptersProcedure is the fully-qualified name of the FleetService's ListAdapters
 	// RPC.
 	FleetServiceListAdaptersProcedure = "/cryptos.fleet.v1.FleetService/ListAdapters"
+	// FleetServiceSetAdapterEnabledProcedure is the fully-qualified name of the FleetService's
+	// SetAdapterEnabled RPC.
+	FleetServiceSetAdapterEnabledProcedure = "/cryptos.fleet.v1.FleetService/SetAdapterEnabled"
 	// FleetServiceListAuditProcedure is the fully-qualified name of the FleetService's ListAudit RPC.
 	FleetServiceListAuditProcedure = "/cryptos.fleet.v1.FleetService/ListAudit"
 	// FleetServiceListEnrollmentsProcedure is the fully-qualified name of the FleetService's
@@ -120,6 +123,11 @@ type FleetServiceClient interface {
 	// ListAdapters returns the manager's catalog of enrollment protocol
 	// adapters.
 	ListAdapters(context.Context, *connect.Request[v1.ListAdaptersRequest]) (*connect.Response[v1.ListAdaptersResponse], error)
+	// SetAdapterEnabled records whether an enrollment protocol adapter is
+	// enabled, matched by adapter name. This persists intent; the protocol
+	// engines that serve enrollment requests ship in a later program, so an
+	// enabled adapter does not yet answer requests. Admin-gated and audited.
+	SetAdapterEnabled(context.Context, *connect.Request[v1.SetAdapterEnabledRequest]) (*connect.Response[v1.SetAdapterEnabledResponse], error)
 	// ListAudit returns the manager's audit log.
 	ListAudit(context.Context, *connect.Request[v1.ListAuditRequest]) (*connect.Response[v1.ListAuditResponse], error)
 	// ListEnrollments returns the manager's pending and resolved enrollment
@@ -225,6 +233,12 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(fleetServiceMethods.ByName("ListAdapters")),
 			connect.WithClientOptions(opts...),
 		),
+		setAdapterEnabled: connect.NewClient[v1.SetAdapterEnabledRequest, v1.SetAdapterEnabledResponse](
+			httpClient,
+			baseURL+FleetServiceSetAdapterEnabledProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("SetAdapterEnabled")),
+			connect.WithClientOptions(opts...),
+		),
 		listAudit: connect.NewClient[v1.ListAuditRequest, v1.ListAuditResponse](
 			httpClient,
 			baseURL+FleetServiceListAuditProcedure,
@@ -305,6 +319,7 @@ type fleetServiceClient struct {
 	deleteProfile      *connect.Client[v1.DeleteProfileRequest, v1.DeleteProfileResponse]
 	applyProfileToNode *connect.Client[v1.ApplyProfileToNodeRequest, v1.ApplyProfileToNodeResponse]
 	listAdapters       *connect.Client[v1.ListAdaptersRequest, v1.ListAdaptersResponse]
+	setAdapterEnabled  *connect.Client[v1.SetAdapterEnabledRequest, v1.SetAdapterEnabledResponse]
 	listAudit          *connect.Client[v1.ListAuditRequest, v1.ListAuditResponse]
 	listEnrollments    *connect.Client[v1.ListEnrollmentsRequest, v1.ListEnrollmentsResponse]
 	createEnrollment   *connect.Client[v1.CreateEnrollmentRequest, v1.CreateEnrollmentResponse]
@@ -361,6 +376,11 @@ func (c *fleetServiceClient) ApplyProfileToNode(ctx context.Context, req *connec
 // ListAdapters calls cryptos.fleet.v1.FleetService.ListAdapters.
 func (c *fleetServiceClient) ListAdapters(ctx context.Context, req *connect.Request[v1.ListAdaptersRequest]) (*connect.Response[v1.ListAdaptersResponse], error) {
 	return c.listAdapters.CallUnary(ctx, req)
+}
+
+// SetAdapterEnabled calls cryptos.fleet.v1.FleetService.SetAdapterEnabled.
+func (c *fleetServiceClient) SetAdapterEnabled(ctx context.Context, req *connect.Request[v1.SetAdapterEnabledRequest]) (*connect.Response[v1.SetAdapterEnabledResponse], error) {
+	return c.setAdapterEnabled.CallUnary(ctx, req)
 }
 
 // ListAudit calls cryptos.fleet.v1.FleetService.ListAudit.
@@ -449,6 +469,11 @@ type FleetServiceHandler interface {
 	// ListAdapters returns the manager's catalog of enrollment protocol
 	// adapters.
 	ListAdapters(context.Context, *connect.Request[v1.ListAdaptersRequest]) (*connect.Response[v1.ListAdaptersResponse], error)
+	// SetAdapterEnabled records whether an enrollment protocol adapter is
+	// enabled, matched by adapter name. This persists intent; the protocol
+	// engines that serve enrollment requests ship in a later program, so an
+	// enabled adapter does not yet answer requests. Admin-gated and audited.
+	SetAdapterEnabled(context.Context, *connect.Request[v1.SetAdapterEnabledRequest]) (*connect.Response[v1.SetAdapterEnabledResponse], error)
 	// ListAudit returns the manager's audit log.
 	ListAudit(context.Context, *connect.Request[v1.ListAuditRequest]) (*connect.Response[v1.ListAuditResponse], error)
 	// ListEnrollments returns the manager's pending and resolved enrollment
@@ -550,6 +575,12 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(fleetServiceMethods.ByName("ListAdapters")),
 		connect.WithHandlerOptions(opts...),
 	)
+	fleetServiceSetAdapterEnabledHandler := connect.NewUnaryHandler(
+		FleetServiceSetAdapterEnabledProcedure,
+		svc.SetAdapterEnabled,
+		connect.WithSchema(fleetServiceMethods.ByName("SetAdapterEnabled")),
+		connect.WithHandlerOptions(opts...),
+	)
 	fleetServiceListAuditHandler := connect.NewUnaryHandler(
 		FleetServiceListAuditProcedure,
 		svc.ListAudit,
@@ -636,6 +667,8 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 			fleetServiceApplyProfileToNodeHandler.ServeHTTP(w, r)
 		case FleetServiceListAdaptersProcedure:
 			fleetServiceListAdaptersHandler.ServeHTTP(w, r)
+		case FleetServiceSetAdapterEnabledProcedure:
+			fleetServiceSetAdapterEnabledHandler.ServeHTTP(w, r)
 		case FleetServiceListAuditProcedure:
 			fleetServiceListAuditHandler.ServeHTTP(w, r)
 		case FleetServiceListEnrollmentsProcedure:
@@ -701,6 +734,10 @@ func (UnimplementedFleetServiceHandler) ApplyProfileToNode(context.Context, *con
 
 func (UnimplementedFleetServiceHandler) ListAdapters(context.Context, *connect.Request[v1.ListAdaptersRequest]) (*connect.Response[v1.ListAdaptersResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ListAdapters is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) SetAdapterEnabled(context.Context, *connect.Request[v1.SetAdapterEnabledRequest]) (*connect.Response[v1.SetAdapterEnabledResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.SetAdapterEnabled is not implemented"))
 }
 
 func (UnimplementedFleetServiceHandler) ListAudit(context.Context, *connect.Request[v1.ListAuditRequest]) (*connect.Response[v1.ListAuditResponse], error) {

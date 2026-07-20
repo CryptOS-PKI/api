@@ -28,6 +28,7 @@ const (
 	FleetService_DeleteProfile_FullMethodName      = "/cryptos.fleet.v1.FleetService/DeleteProfile"
 	FleetService_ApplyProfileToNode_FullMethodName = "/cryptos.fleet.v1.FleetService/ApplyProfileToNode"
 	FleetService_ListAdapters_FullMethodName       = "/cryptos.fleet.v1.FleetService/ListAdapters"
+	FleetService_SetAdapterEnabled_FullMethodName  = "/cryptos.fleet.v1.FleetService/SetAdapterEnabled"
 	FleetService_ListAudit_FullMethodName          = "/cryptos.fleet.v1.FleetService/ListAudit"
 	FleetService_ListEnrollments_FullMethodName    = "/cryptos.fleet.v1.FleetService/ListEnrollments"
 	FleetService_CreateEnrollment_FullMethodName   = "/cryptos.fleet.v1.FleetService/CreateEnrollment"
@@ -79,6 +80,11 @@ type FleetServiceClient interface {
 	// ListAdapters returns the manager's catalog of enrollment protocol
 	// adapters.
 	ListAdapters(ctx context.Context, in *ListAdaptersRequest, opts ...grpc.CallOption) (*ListAdaptersResponse, error)
+	// SetAdapterEnabled records whether an enrollment protocol adapter is
+	// enabled, matched by adapter name. This persists intent; the protocol
+	// engines that serve enrollment requests ship in a later program, so an
+	// enabled adapter does not yet answer requests. Admin-gated and audited.
+	SetAdapterEnabled(ctx context.Context, in *SetAdapterEnabledRequest, opts ...grpc.CallOption) (*SetAdapterEnabledResponse, error)
 	// ListAudit returns the manager's audit log.
 	ListAudit(ctx context.Context, in *ListAuditRequest, opts ...grpc.CallOption) (*ListAuditResponse, error)
 	// ListEnrollments returns the manager's pending and resolved enrollment
@@ -211,6 +217,16 @@ func (c *fleetServiceClient) ListAdapters(ctx context.Context, in *ListAdaptersR
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListAdaptersResponse)
 	err := c.cc.Invoke(ctx, FleetService_ListAdapters_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) SetAdapterEnabled(ctx context.Context, in *SetAdapterEnabledRequest, opts ...grpc.CallOption) (*SetAdapterEnabledResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetAdapterEnabledResponse)
+	err := c.cc.Invoke(ctx, FleetService_SetAdapterEnabled_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -365,6 +381,11 @@ type FleetServiceServer interface {
 	// ListAdapters returns the manager's catalog of enrollment protocol
 	// adapters.
 	ListAdapters(context.Context, *ListAdaptersRequest) (*ListAdaptersResponse, error)
+	// SetAdapterEnabled records whether an enrollment protocol adapter is
+	// enabled, matched by adapter name. This persists intent; the protocol
+	// engines that serve enrollment requests ship in a later program, so an
+	// enabled adapter does not yet answer requests. Admin-gated and audited.
+	SetAdapterEnabled(context.Context, *SetAdapterEnabledRequest) (*SetAdapterEnabledResponse, error)
 	// ListAudit returns the manager's audit log.
 	ListAudit(context.Context, *ListAuditRequest) (*ListAuditResponse, error)
 	// ListEnrollments returns the manager's pending and resolved enrollment
@@ -438,6 +459,9 @@ func (UnimplementedFleetServiceServer) ApplyProfileToNode(context.Context, *Appl
 }
 func (UnimplementedFleetServiceServer) ListAdapters(context.Context, *ListAdaptersRequest) (*ListAdaptersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListAdapters not implemented")
+}
+func (UnimplementedFleetServiceServer) SetAdapterEnabled(context.Context, *SetAdapterEnabledRequest) (*SetAdapterEnabledResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetAdapterEnabled not implemented")
 }
 func (UnimplementedFleetServiceServer) ListAudit(context.Context, *ListAuditRequest) (*ListAuditResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListAudit not implemented")
@@ -650,6 +674,24 @@ func _FleetService_ListAdapters_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FleetServiceServer).ListAdapters(ctx, req.(*ListAdaptersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_SetAdapterEnabled_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetAdapterEnabledRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).SetAdapterEnabled(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_SetAdapterEnabled_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).SetAdapterEnabled(ctx, req.(*SetAdapterEnabledRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -894,6 +936,10 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListAdapters",
 			Handler:    _FleetService_ListAdapters_Handler,
+		},
+		{
+			MethodName: "SetAdapterEnabled",
+			Handler:    _FleetService_SetAdapterEnabled_Handler,
 		},
 		{
 			MethodName: "ListAudit",

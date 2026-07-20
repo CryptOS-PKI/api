@@ -66,6 +66,12 @@ service FleetService {
   // adapters.
   rpc ListAdapters(ListAdaptersRequest) returns (ListAdaptersResponse);
 
+  // SetAdapterEnabled records whether an enrollment protocol adapter is
+  // enabled, matched by adapter name. This persists intent; the protocol
+  // engines that serve enrollment requests ship in a later program, so an
+  // enabled adapter does not yet answer requests. Admin-gated and audited.
+  rpc SetAdapterEnabled(SetAdapterEnabledRequest) returns (SetAdapterEnabledResponse);
+
   // ListAudit returns the manager's audit log.
   rpc ListAudit(ListAuditRequest) returns (ListAuditResponse);
 
@@ -181,6 +187,17 @@ message ListAdaptersRequest {}
 
 message ListAdaptersResponse {
   repeated EnrollmentAdapter items = 1;
+}
+
+message SetAdapterEnabledRequest {
+  // name identifies the adapter to update (the store's primary key).
+  string name = 1;
+  bool enabled = 2;
+}
+
+message SetAdapterEnabledResponse {
+  // adapter is the updated adapter after the toggle.
+  EnrollmentAdapter adapter = 1;
 }
 
 message ListAuditRequest {}

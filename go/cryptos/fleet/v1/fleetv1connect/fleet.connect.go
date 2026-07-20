@@ -69,6 +69,12 @@ const (
 	FleetServiceIssueLeafProcedure = "/cryptos.fleet.v1.FleetService/IssueLeaf"
 	// FleetServiceRekeyNodeProcedure is the fully-qualified name of the FleetService's RekeyNode RPC.
 	FleetServiceRekeyNodeProcedure = "/cryptos.fleet.v1.FleetService/RekeyNode"
+	// FleetServiceGetNodeConfigProcedure is the fully-qualified name of the FleetService's
+	// GetNodeConfig RPC.
+	FleetServiceGetNodeConfigProcedure = "/cryptos.fleet.v1.FleetService/GetNodeConfig"
+	// FleetServiceApplyNodeConfigProcedure is the fully-qualified name of the FleetService's
+	// ApplyNodeConfig RPC.
+	FleetServiceApplyNodeConfigProcedure = "/cryptos.fleet.v1.FleetService/ApplyNodeConfig"
 )
 
 // FleetServiceClient is a client for the cryptos.fleet.v1.FleetService service.
@@ -115,6 +121,15 @@ type FleetServiceClient interface {
 	// delivers the signed chain back to the child. The parent must be a node the
 	// manager already knows about.
 	RekeyNode(context.Context, *connect.Request[v1.RekeyNodeRequest]) (*connect.Response[v1.RekeyNodeResponse], error)
+	// GetNodeConfig fetches the current machine configuration of a managed node,
+	// so an operator can view it (and the web can edit a subset before applying
+	// the whole config back). Operator-gated; a read, so it is not audited.
+	GetNodeConfig(context.Context, *connect.Request[v1.GetNodeConfigRequest]) (*connect.Response[v1.GetNodeConfigResponse], error)
+	// ApplyNodeConfig applies a full machine configuration to a managed node.
+	// The config is the fetched baseline with the operator's edits merged in; the
+	// node's ApplyConfig is a whole-config replace, so the caller must send the
+	// complete config, never a partial one. Admin-gated and audited.
+	ApplyNodeConfig(context.Context, *connect.Request[v1.ApplyNodeConfigRequest]) (*connect.Response[v1.ApplyNodeConfigResponse], error)
 }
 
 // NewFleetServiceClient constructs a client for the cryptos.fleet.v1.FleetService service. By
@@ -212,6 +227,18 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(fleetServiceMethods.ByName("RekeyNode")),
 			connect.WithClientOptions(opts...),
 		),
+		getNodeConfig: connect.NewClient[v1.GetNodeConfigRequest, v1.GetNodeConfigResponse](
+			httpClient,
+			baseURL+FleetServiceGetNodeConfigProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("GetNodeConfig")),
+			connect.WithClientOptions(opts...),
+		),
+		applyNodeConfig: connect.NewClient[v1.ApplyNodeConfigRequest, v1.ApplyNodeConfigResponse](
+			httpClient,
+			baseURL+FleetServiceApplyNodeConfigProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("ApplyNodeConfig")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -231,6 +258,8 @@ type fleetServiceClient struct {
 	revokeCertificate *connect.Client[v1.RevokeCertificateRequest, v1.RevokeCertificateResponse]
 	issueLeaf         *connect.Client[v1.IssueLeafRequest, v1.IssueLeafResponse]
 	rekeyNode         *connect.Client[v1.RekeyNodeRequest, v1.RekeyNodeResponse]
+	getNodeConfig     *connect.Client[v1.GetNodeConfigRequest, v1.GetNodeConfigResponse]
+	applyNodeConfig   *connect.Client[v1.ApplyNodeConfigRequest, v1.ApplyNodeConfigResponse]
 }
 
 // ListNodes calls cryptos.fleet.v1.FleetService.ListNodes.
@@ -303,6 +332,16 @@ func (c *fleetServiceClient) RekeyNode(ctx context.Context, req *connect.Request
 	return c.rekeyNode.CallUnary(ctx, req)
 }
 
+// GetNodeConfig calls cryptos.fleet.v1.FleetService.GetNodeConfig.
+func (c *fleetServiceClient) GetNodeConfig(ctx context.Context, req *connect.Request[v1.GetNodeConfigRequest]) (*connect.Response[v1.GetNodeConfigResponse], error) {
+	return c.getNodeConfig.CallUnary(ctx, req)
+}
+
+// ApplyNodeConfig calls cryptos.fleet.v1.FleetService.ApplyNodeConfig.
+func (c *fleetServiceClient) ApplyNodeConfig(ctx context.Context, req *connect.Request[v1.ApplyNodeConfigRequest]) (*connect.Response[v1.ApplyNodeConfigResponse], error) {
+	return c.applyNodeConfig.CallUnary(ctx, req)
+}
+
 // FleetServiceHandler is an implementation of the cryptos.fleet.v1.FleetService service.
 type FleetServiceHandler interface {
 	// ListNodes returns a summary for every node the manager knows about.
@@ -347,6 +386,15 @@ type FleetServiceHandler interface {
 	// delivers the signed chain back to the child. The parent must be a node the
 	// manager already knows about.
 	RekeyNode(context.Context, *connect.Request[v1.RekeyNodeRequest]) (*connect.Response[v1.RekeyNodeResponse], error)
+	// GetNodeConfig fetches the current machine configuration of a managed node,
+	// so an operator can view it (and the web can edit a subset before applying
+	// the whole config back). Operator-gated; a read, so it is not audited.
+	GetNodeConfig(context.Context, *connect.Request[v1.GetNodeConfigRequest]) (*connect.Response[v1.GetNodeConfigResponse], error)
+	// ApplyNodeConfig applies a full machine configuration to a managed node.
+	// The config is the fetched baseline with the operator's edits merged in; the
+	// node's ApplyConfig is a whole-config replace, so the caller must send the
+	// complete config, never a partial one. Admin-gated and audited.
+	ApplyNodeConfig(context.Context, *connect.Request[v1.ApplyNodeConfigRequest]) (*connect.Response[v1.ApplyNodeConfigResponse], error)
 }
 
 // NewFleetServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -440,6 +488,18 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(fleetServiceMethods.ByName("RekeyNode")),
 		connect.WithHandlerOptions(opts...),
 	)
+	fleetServiceGetNodeConfigHandler := connect.NewUnaryHandler(
+		FleetServiceGetNodeConfigProcedure,
+		svc.GetNodeConfig,
+		connect.WithSchema(fleetServiceMethods.ByName("GetNodeConfig")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceApplyNodeConfigHandler := connect.NewUnaryHandler(
+		FleetServiceApplyNodeConfigProcedure,
+		svc.ApplyNodeConfig,
+		connect.WithSchema(fleetServiceMethods.ByName("ApplyNodeConfig")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/cryptos.fleet.v1.FleetService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case FleetServiceListNodesProcedure:
@@ -470,6 +530,10 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 			fleetServiceIssueLeafHandler.ServeHTTP(w, r)
 		case FleetServiceRekeyNodeProcedure:
 			fleetServiceRekeyNodeHandler.ServeHTTP(w, r)
+		case FleetServiceGetNodeConfigProcedure:
+			fleetServiceGetNodeConfigHandler.ServeHTTP(w, r)
+		case FleetServiceApplyNodeConfigProcedure:
+			fleetServiceApplyNodeConfigHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -533,4 +597,12 @@ func (UnimplementedFleetServiceHandler) IssueLeaf(context.Context, *connect.Requ
 
 func (UnimplementedFleetServiceHandler) RekeyNode(context.Context, *connect.Request[v1.RekeyNodeRequest]) (*connect.Response[v1.RekeyNodeResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.RekeyNode is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) GetNodeConfig(context.Context, *connect.Request[v1.GetNodeConfigRequest]) (*connect.Response[v1.GetNodeConfigResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.GetNodeConfig is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) ApplyNodeConfig(context.Context, *connect.Request[v1.ApplyNodeConfigRequest]) (*connect.Response[v1.ApplyNodeConfigResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ApplyNodeConfig is not implemented"))
 }

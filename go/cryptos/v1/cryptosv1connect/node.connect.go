@@ -80,6 +80,8 @@ const (
 	// NodeServiceSetManagementProcedure is the fully-qualified name of the NodeService's SetManagement
 	// RPC.
 	NodeServiceSetManagementProcedure = "/cryptos.v1.NodeService/SetManagement"
+	// NodeServiceGetConfigProcedure is the fully-qualified name of the NodeService's GetConfig RPC.
+	NodeServiceGetConfigProcedure = "/cryptos.v1.NodeService/GetConfig"
 )
 
 // NodeServiceClient is a client for the cryptos.v1.NodeService service.
@@ -165,6 +167,10 @@ type NodeServiceClient interface {
 	// (read-modify-write on the node) without replacing the whole config; used by
 	// a LINK enrollment approval. Clearing management (nil) unlinks.
 	SetManagement(context.Context, *connect.Request[v1.SetManagementRequest]) (*connect.Response[v1.SetManagementResponse], error)
+	// GetConfig returns the node's current machine configuration. A caller reads
+	// the full config here, edits a subset, and applies the whole config back via
+	// ApplyConfig (a whole-config replace), so untouched fields survive.
+	GetConfig(context.Context, *connect.Request[v1.GetConfigRequest]) (*connect.Response[v1.GetConfigResponse], error)
 }
 
 // NewNodeServiceClient constructs a client for the cryptos.v1.NodeService service. By default, it
@@ -292,6 +298,12 @@ func NewNodeServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(nodeServiceMethods.ByName("SetManagement")),
 			connect.WithClientOptions(opts...),
 		),
+		getConfig: connect.NewClient[v1.GetConfigRequest, v1.GetConfigResponse](
+			httpClient,
+			baseURL+NodeServiceGetConfigProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("GetConfig")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -316,6 +328,7 @@ type nodeServiceClient struct {
 	reset                        *connect.Client[v1.ResetRequest, v1.ResetResponse]
 	attest                       *connect.Client[v1.AttestRequest, v1.AttestResponse]
 	setManagement                *connect.Client[v1.SetManagementRequest, v1.SetManagementResponse]
+	getConfig                    *connect.Client[v1.GetConfigRequest, v1.GetConfigResponse]
 }
 
 // ApplyConfig calls cryptos.v1.NodeService.ApplyConfig.
@@ -413,6 +426,11 @@ func (c *nodeServiceClient) SetManagement(ctx context.Context, req *connect.Requ
 	return c.setManagement.CallUnary(ctx, req)
 }
 
+// GetConfig calls cryptos.v1.NodeService.GetConfig.
+func (c *nodeServiceClient) GetConfig(ctx context.Context, req *connect.Request[v1.GetConfigRequest]) (*connect.Response[v1.GetConfigResponse], error) {
+	return c.getConfig.CallUnary(ctx, req)
+}
+
 // NodeServiceHandler is an implementation of the cryptos.v1.NodeService service.
 type NodeServiceHandler interface {
 	// ApplyConfig sets the node's declarative machine configuration.
@@ -496,6 +514,10 @@ type NodeServiceHandler interface {
 	// (read-modify-write on the node) without replacing the whole config; used by
 	// a LINK enrollment approval. Clearing management (nil) unlinks.
 	SetManagement(context.Context, *connect.Request[v1.SetManagementRequest]) (*connect.Response[v1.SetManagementResponse], error)
+	// GetConfig returns the node's current machine configuration. A caller reads
+	// the full config here, edits a subset, and applies the whole config back via
+	// ApplyConfig (a whole-config replace), so untouched fields survive.
+	GetConfig(context.Context, *connect.Request[v1.GetConfigRequest]) (*connect.Response[v1.GetConfigResponse], error)
 }
 
 // NewNodeServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -619,6 +641,12 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(nodeServiceMethods.ByName("SetManagement")),
 		connect.WithHandlerOptions(opts...),
 	)
+	nodeServiceGetConfigHandler := connect.NewUnaryHandler(
+		NodeServiceGetConfigProcedure,
+		svc.GetConfig,
+		connect.WithSchema(nodeServiceMethods.ByName("GetConfig")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/cryptos.v1.NodeService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case NodeServiceApplyConfigProcedure:
@@ -659,6 +687,8 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 			nodeServiceAttestHandler.ServeHTTP(w, r)
 		case NodeServiceSetManagementProcedure:
 			nodeServiceSetManagementHandler.ServeHTTP(w, r)
+		case NodeServiceGetConfigProcedure:
+			nodeServiceGetConfigHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -742,4 +772,8 @@ func (UnimplementedNodeServiceHandler) Attest(context.Context, *connect.Request[
 
 func (UnimplementedNodeServiceHandler) SetManagement(context.Context, *connect.Request[v1.SetManagementRequest]) (*connect.Response[v1.SetManagementResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.SetManagement is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) GetConfig(context.Context, *connect.Request[v1.GetConfigRequest]) (*connect.Response[v1.GetConfigResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.GetConfig is not implemented"))
 }

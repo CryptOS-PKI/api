@@ -133,9 +133,20 @@ service NodeService {
   // (read-modify-write on the node) without replacing the whole config; used by
   // a LINK enrollment approval. Clearing management (nil) unlinks.
   rpc SetManagement(SetManagementRequest) returns (SetManagementResponse);
+
+  // GetConfig returns the node's current machine configuration. A caller reads
+  // the full config here, edits a subset, and applies the whole config back via
+  // ApplyConfig (a whole-config replace), so untouched fields survive.
+  rpc GetConfig(GetConfigRequest) returns (GetConfigResponse);
 }
 
 message ApplyConfigRequest {
+  MachineConfig config = 1;
+}
+
+message GetConfigRequest {}
+
+message GetConfigResponse {
   MachineConfig config = 1;
 }
 

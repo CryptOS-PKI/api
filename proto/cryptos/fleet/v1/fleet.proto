@@ -19,6 +19,8 @@ syntax = "proto3";
 
 package cryptos.fleet.v1;
 
+import "cryptos/v1/config.proto";
+
 option go_package = "github.com/CryptOS-PKI/api/go/cryptos/fleet/v1;fleetv1";
 
 // FleetService is the Fleet Manager's surface over a set of CryptOS nodes:
@@ -81,6 +83,17 @@ service FleetService {
   // delivers the signed chain back to the child. The parent must be a node the
   // manager already knows about.
   rpc RekeyNode(RekeyNodeRequest) returns (RekeyNodeResponse);
+
+  // GetNodeConfig fetches the current machine configuration of a managed node,
+  // so an operator can view it (and the web can edit a subset before applying
+  // the whole config back). Operator-gated; a read, so it is not audited.
+  rpc GetNodeConfig(GetNodeConfigRequest) returns (GetNodeConfigResponse);
+
+  // ApplyNodeConfig applies a full machine configuration to a managed node.
+  // The config is the fetched baseline with the operator's edits merged in; the
+  // node's ApplyConfig is a whole-config replace, so the caller must send the
+  // complete config, never a partial one. Admin-gated and audited.
+  rpc ApplyNodeConfig(ApplyNodeConfigRequest) returns (ApplyNodeConfigResponse);
 }
 
 message ListNodesRequest {}
@@ -366,4 +379,34 @@ message RekeyNodeResponse {
   string issuer_cn = 2;
   // chain_len is the number of certificates in the new chain.
   int32 chain_len = 3;
+}
+
+// GetNodeConfigRequest names the managed node whose current config to fetch.
+message GetNodeConfigRequest {
+  // node_name is the managed node to read the configuration from.
+  string node_name = 1;
+}
+
+// GetNodeConfigResponse carries the node's current full machine configuration.
+message GetNodeConfigResponse {
+  cryptos.v1.MachineConfig config = 1;
+}
+
+// ApplyNodeConfigRequest names the managed node and carries the FULL config to
+// apply (the fetched baseline with edits merged in, never a partial config).
+message ApplyNodeConfigRequest {
+  // node_name is the managed node to apply the configuration to.
+  string node_name = 1;
+  // config is the complete machine configuration to replace the node's current
+  // config with.
+  cryptos.v1.MachineConfig config = 2;
+}
+
+// ApplyNodeConfigResponse reports the node's config generation after the apply
+// and whether the change takes effect only on reboot.
+message ApplyNodeConfigResponse {
+  // generation is the node's monotonically increasing config generation.
+  uint64 generation = 1;
+  // requires_reboot is true when the applied change takes effect only on reboot.
+  bool requires_reboot = 2;
 }

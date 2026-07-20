@@ -33,6 +33,8 @@ const (
 	FleetService_RevokeCertificate_FullMethodName = "/cryptos.fleet.v1.FleetService/RevokeCertificate"
 	FleetService_IssueLeaf_FullMethodName         = "/cryptos.fleet.v1.FleetService/IssueLeaf"
 	FleetService_RekeyNode_FullMethodName         = "/cryptos.fleet.v1.FleetService/RekeyNode"
+	FleetService_GetNodeConfig_FullMethodName     = "/cryptos.fleet.v1.FleetService/GetNodeConfig"
+	FleetService_ApplyNodeConfig_FullMethodName   = "/cryptos.fleet.v1.FleetService/ApplyNodeConfig"
 )
 
 // FleetServiceClient is the client API for FleetService service.
@@ -86,6 +88,15 @@ type FleetServiceClient interface {
 	// delivers the signed chain back to the child. The parent must be a node the
 	// manager already knows about.
 	RekeyNode(ctx context.Context, in *RekeyNodeRequest, opts ...grpc.CallOption) (*RekeyNodeResponse, error)
+	// GetNodeConfig fetches the current machine configuration of a managed node,
+	// so an operator can view it (and the web can edit a subset before applying
+	// the whole config back). Operator-gated; a read, so it is not audited.
+	GetNodeConfig(ctx context.Context, in *GetNodeConfigRequest, opts ...grpc.CallOption) (*GetNodeConfigResponse, error)
+	// ApplyNodeConfig applies a full machine configuration to a managed node.
+	// The config is the fetched baseline with the operator's edits merged in; the
+	// node's ApplyConfig is a whole-config replace, so the caller must send the
+	// complete config, never a partial one. Admin-gated and audited.
+	ApplyNodeConfig(ctx context.Context, in *ApplyNodeConfigRequest, opts ...grpc.CallOption) (*ApplyNodeConfigResponse, error)
 }
 
 type fleetServiceClient struct {
@@ -236,6 +247,26 @@ func (c *fleetServiceClient) RekeyNode(ctx context.Context, in *RekeyNodeRequest
 	return out, nil
 }
 
+func (c *fleetServiceClient) GetNodeConfig(ctx context.Context, in *GetNodeConfigRequest, opts ...grpc.CallOption) (*GetNodeConfigResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetNodeConfigResponse)
+	err := c.cc.Invoke(ctx, FleetService_GetNodeConfig_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) ApplyNodeConfig(ctx context.Context, in *ApplyNodeConfigRequest, opts ...grpc.CallOption) (*ApplyNodeConfigResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ApplyNodeConfigResponse)
+	err := c.cc.Invoke(ctx, FleetService_ApplyNodeConfig_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FleetServiceServer is the server API for FleetService service.
 // All implementations should embed UnimplementedFleetServiceServer
 // for forward compatibility.
@@ -287,6 +318,15 @@ type FleetServiceServer interface {
 	// delivers the signed chain back to the child. The parent must be a node the
 	// manager already knows about.
 	RekeyNode(context.Context, *RekeyNodeRequest) (*RekeyNodeResponse, error)
+	// GetNodeConfig fetches the current machine configuration of a managed node,
+	// so an operator can view it (and the web can edit a subset before applying
+	// the whole config back). Operator-gated; a read, so it is not audited.
+	GetNodeConfig(context.Context, *GetNodeConfigRequest) (*GetNodeConfigResponse, error)
+	// ApplyNodeConfig applies a full machine configuration to a managed node.
+	// The config is the fetched baseline with the operator's edits merged in; the
+	// node's ApplyConfig is a whole-config replace, so the caller must send the
+	// complete config, never a partial one. Admin-gated and audited.
+	ApplyNodeConfig(context.Context, *ApplyNodeConfigRequest) (*ApplyNodeConfigResponse, error)
 }
 
 // UnimplementedFleetServiceServer should be embedded to have
@@ -337,6 +377,12 @@ func (UnimplementedFleetServiceServer) IssueLeaf(context.Context, *IssueLeafRequ
 }
 func (UnimplementedFleetServiceServer) RekeyNode(context.Context, *RekeyNodeRequest) (*RekeyNodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RekeyNode not implemented")
+}
+func (UnimplementedFleetServiceServer) GetNodeConfig(context.Context, *GetNodeConfigRequest) (*GetNodeConfigResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetNodeConfig not implemented")
+}
+func (UnimplementedFleetServiceServer) ApplyNodeConfig(context.Context, *ApplyNodeConfigRequest) (*ApplyNodeConfigResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ApplyNodeConfig not implemented")
 }
 func (UnimplementedFleetServiceServer) testEmbeddedByValue() {}
 
@@ -610,6 +656,42 @@ func _FleetService_RekeyNode_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FleetService_GetNodeConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetNodeConfigRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).GetNodeConfig(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_GetNodeConfig_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).GetNodeConfig(ctx, req.(*GetNodeConfigRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_ApplyNodeConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ApplyNodeConfigRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).ApplyNodeConfig(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_ApplyNodeConfig_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).ApplyNodeConfig(ctx, req.(*ApplyNodeConfigRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FleetService_ServiceDesc is the grpc.ServiceDesc for FleetService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -672,6 +754,14 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RekeyNode",
 			Handler:    _FleetService_RekeyNode_Handler,
+		},
+		{
+			MethodName: "GetNodeConfig",
+			Handler:    _FleetService_GetNodeConfig_Handler,
+		},
+		{
+			MethodName: "ApplyNodeConfig",
+			Handler:    _FleetService_ApplyNodeConfig_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

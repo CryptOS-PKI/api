@@ -20,7 +20,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file cryptos/v1/node.proto.
  */
 export const file_cryptos_v1_node: GenFile = /*@__PURE__*/
-  fileDesc("ChVjcnlwdG9zL3YxL25vZGUucHJvdG8SCmNyeXB0b3MudjEiPwoSQXBwbHlDb25maWdSZXF1ZXN0EikKBmNvbmZpZxgBIAEoCzIZLmNyeXB0b3MudjEuTWFjaGluZUNvbmZpZyJCChRTZXRNYW5hZ2VtZW50UmVxdWVzdBIqCgptYW5hZ2VtZW50GAEgASgLMhYuY3J5cHRvcy52MS5NYW5hZ2VtZW50IkQKFVNldE1hbmFnZW1lbnRSZXNwb25zZRISCgpnZW5lcmF0aW9uGAEgASgEEhcKD3JlcXVpcmVzX3JlYm9vdBgCIAEoCCJZChNBcHBseUNvbmZpZ1Jlc3BvbnNlEhIKCmdlbmVyYXRpb24YASABKAQSFwoPcmVxdWlyZXNfcmVib290GAIgASgIEhUKDWNvbmZpZ19kaWdlc3QYAyABKAwiEgoQR2V0U3RhdHVzUmVxdWVzdCI7ChFHZXRTdGF0dXNSZXNwb25zZRImCgZzdGF0dXMYASABKAsyFi5jcnlwdG9zLnYxLk5vZGVTdGF0dXMiFAoSR2V0SWRlbnRpdHlSZXF1ZXN0Ij0KE0dldElkZW50aXR5UmVzcG9uc2USJgoIaWRlbnRpdHkYASABKAsyFC5jcnlwdG9zLnYxLklkZW50aXR5IlsKFFN0YXJ0Q2VyZW1vbnlSZXF1ZXN0EiYKBGtpbmQYASABKA4yGC5jcnlwdG9zLnYxLkNlcmVtb255S2luZBIbChNtYWNoaW5lX2NvbmZpZ195YW1sGAIgASgMIkEKFVN0YXJ0Q2VyZW1vbnlSZXNwb25zZRIoCgVldmVudBgBIAEoCzIZLmNyeXB0b3MudjEuQ2VyZW1vbnlFdmVudCIyCg5TaWduQ1NSUmVxdWVzdBIPCgdjc3JfZGVyGAEgASgMEg8KB3Byb2ZpbGUYAiABKAkiIwoPU2lnbkNTUlJlc3BvbnNlEhAKCGNlcnRfZGVyGAEgASgMIisKDFJlc2V0UmVxdWVzdBIbChNjb25maXJtX2NvbW1vbl9uYW1lGAEgASgJIg8KDVJlc2V0UmVzcG9uc2UiHgoNQXR0ZXN0UmVxdWVzdBINCgVub25jZRgBIAEoDCJeCg5BdHRlc3RSZXNwb25zZRIRCglzaWduYXR1cmUYASABKAwSGAoQaWRlbnRpdHlfcHViX2RlchgCIAEoDBIOCgZla19wdWIYAyABKAwSDwoHZWtfY2VydBgEIAEoDCJCChlTaWduU3Vib3JkaW5hdGVDU1JSZXF1ZXN0Eg8KB2Nzcl9kZXIYASABKAwSFAoMcHJvZmlsZV9uYW1lGAIgASgJIkIKGlNpZ25TdWJvcmRpbmF0ZUNTUlJlc3BvbnNlEhEKCWNoYWluX2RlchgBIAMoDBIRCgljaGFpbl9wZW0YAiABKAkiOQoQSXNzdWVMZWFmUmVxdWVzdBIPCgdjc3JfZGVyGAEgASgMEhQKDHByb2ZpbGVfbmFtZRgCIAEoCSIlChFJc3N1ZUxlYWZSZXNwb25zZRIQCghjZXJ0X2RlchgBIAEoDCIaChhHZXRTdWJvcmRpbmF0ZUNTUlJlcXVlc3QiLAoZR2V0U3Vib3JkaW5hdGVDU1JSZXNwb25zZRIPCgdjc3JfZGVyGAEgASgMIksKI1N1Ym1pdFN1Ym9yZGluYXRlQ2VydGlmaWNhdGVSZXF1ZXN0EhEKCWNoYWluX2RlchgBIAMoDBIRCgljaGFpbl9wZW0YAiABKAkiTgokU3VibWl0U3Vib3JkaW5hdGVDZXJ0aWZpY2F0ZVJlc3BvbnNlEiYKCGlkZW50aXR5GAEgASgLMhQuY3J5cHRvcy52MS5JZGVudGl0eSIoChJFeHBvcnRDQUtleVJlcXVlc3QSEgoKcGFzc3BocmFzZRgBIAEoDCInChNFeHBvcnRDQUtleVJlc3BvbnNlEhAKCGVudmVsb3BlGAEgASgMIjoKEkltcG9ydENBS2V5UmVxdWVzdBIQCghlbnZlbG9wZRgBIAEoDBISCgpwYXNzcGhyYXNlGAIgASgMIj0KE0ltcG9ydENBS2V5UmVzcG9uc2USJgoIaWRlbnRpdHkYASABKAsyFC5jcnlwdG9zLnYxLklkZW50aXR5IhkKF0JlZ2luS2V5Um90YXRpb25SZXF1ZXN0IisKGEJlZ2luS2V5Um90YXRpb25SZXNwb25zZRIPCgdjc3JfZGVyGAEgASgMIkIKGkNvbXBsZXRlS2V5Um90YXRpb25SZXF1ZXN0EhEKCWNoYWluX2RlchgBIAMoDBIRCgljaGFpbl9wZW0YAiABKAkiRQobQ29tcGxldGVLZXlSb3RhdGlvblJlc3BvbnNlEiYKCGlkZW50aXR5GAEgASgLMhQuY3J5cHRvcy52MS5JZGVudGl0eSLpAQoKSXNzdWVkQ2VydBISCgpzZXJpYWxfaGV4GAEgASgJEhIKCnN1YmplY3RfZG4YAiABKAkSLgoKbm90X2JlZm9yZRgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLQoJbm90X2FmdGVyGAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIPCgdza2lfaGV4GAUgASgJEhQKDHByb2ZpbGVfbmFtZRgGIAEoCRItCglpc3N1ZWRfYXQYByABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wImUKClJldm9jYXRpb24SEgoKc2VyaWFsX2hleBgBIAEoCRIuCgpyZXZva2VkX2F0GAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBITCgtyZWFzb25fY29kZRgDIAEoBSJDChhSZXZva2VDZXJ0aWZpY2F0ZVJlcXVlc3QSEgoKc2VyaWFsX2hleBgBIAEoCRITCgtyZWFzb25fY29kZRgCIAEoBSJHChlSZXZva2VDZXJ0aWZpY2F0ZVJlc3BvbnNlEioKCnJldm9jYXRpb24YASABKAsyFi5jcnlwdG9zLnYxLlJldm9jYXRpb24iEwoRTGlzdElzc3VlZFJlcXVlc3QiPAoSTGlzdElzc3VlZFJlc3BvbnNlEiYKBmlzc3VlZBgBIAMoCzIWLmNyeXB0b3MudjEuSXNzdWVkQ2VydCIYChZMaXN0UmV2b2NhdGlvbnNSZXF1ZXN0IkYKF0xpc3RSZXZvY2F0aW9uc1Jlc3BvbnNlEisKC3Jldm9jYXRpb25zGAEgAygLMhYuY3J5cHRvcy52MS5SZXZvY2F0aW9uMu8MCgtOb2RlU2VydmljZRJOCgtBcHBseUNvbmZpZxIeLmNyeXB0b3MudjEuQXBwbHlDb25maWdSZXF1ZXN0Gh8uY3J5cHRvcy52MS5BcHBseUNvbmZpZ1Jlc3BvbnNlEkgKCUdldFN0YXR1cxIcLmNyeXB0b3MudjEuR2V0U3RhdHVzUmVxdWVzdBodLmNyeXB0b3MudjEuR2V0U3RhdHVzUmVzcG9uc2USTgoLR2V0SWRlbnRpdHkSHi5jcnlwdG9zLnYxLkdldElkZW50aXR5UmVxdWVzdBofLmNyeXB0b3MudjEuR2V0SWRlbnRpdHlSZXNwb25zZRJWCg1TdGFydENlcmVtb255EiAuY3J5cHRvcy52MS5TdGFydENlcmVtb255UmVxdWVzdBohLmNyeXB0b3MudjEuU3RhcnRDZXJlbW9ueVJlc3BvbnNlMAESQgoHU2lnbkNTUhIaLmNyeXB0b3MudjEuU2lnbkNTUlJlcXVlc3QaGy5jcnlwdG9zLnYxLlNpZ25DU1JSZXNwb25zZRJjChJTaWduU3Vib3JkaW5hdGVDU1ISJS5jcnlwdG9zLnYxLlNpZ25TdWJvcmRpbmF0ZUNTUlJlcXVlc3QaJi5jcnlwdG9zLnYxLlNpZ25TdWJvcmRpbmF0ZUNTUlJlc3BvbnNlEkgKCUlzc3VlTGVhZhIcLmNyeXB0b3MudjEuSXNzdWVMZWFmUmVxdWVzdBodLmNyeXB0b3MudjEuSXNzdWVMZWFmUmVzcG9uc2USYAoRR2V0U3Vib3JkaW5hdGVDU1ISJC5jcnlwdG9zLnYxLkdldFN1Ym9yZGluYXRlQ1NSUmVxdWVzdBolLmNyeXB0b3MudjEuR2V0U3Vib3JkaW5hdGVDU1JSZXNwb25zZRKBAQocU3VibWl0U3Vib3JkaW5hdGVDZXJ0aWZpY2F0ZRIvLmNyeXB0b3MudjEuU3VibWl0U3Vib3JkaW5hdGVDZXJ0aWZpY2F0ZVJlcXVlc3QaMC5jcnlwdG9zLnYxLlN1Ym1pdFN1Ym9yZGluYXRlQ2VydGlmaWNhdGVSZXNwb25zZRJgChFSZXZva2VDZXJ0aWZpY2F0ZRIkLmNyeXB0b3MudjEuUmV2b2tlQ2VydGlmaWNhdGVSZXF1ZXN0GiUuY3J5cHRvcy52MS5SZXZva2VDZXJ0aWZpY2F0ZVJlc3BvbnNlEksKCkxpc3RJc3N1ZWQSHS5jcnlwdG9zLnYxLkxpc3RJc3N1ZWRSZXF1ZXN0Gh4uY3J5cHRvcy52MS5MaXN0SXNzdWVkUmVzcG9uc2USWgoPTGlzdFJldm9jYXRpb25zEiIuY3J5cHRvcy52MS5MaXN0UmV2b2NhdGlvbnNSZXF1ZXN0GiMuY3J5cHRvcy52MS5MaXN0UmV2b2NhdGlvbnNSZXNwb25zZRJOCgtFeHBvcnRDQUtleRIeLmNyeXB0b3MudjEuRXhwb3J0Q0FLZXlSZXF1ZXN0Gh8uY3J5cHRvcy52MS5FeHBvcnRDQUtleVJlc3BvbnNlEk4KC0ltcG9ydENBS2V5Eh4uY3J5cHRvcy52MS5JbXBvcnRDQUtleVJlcXVlc3QaHy5jcnlwdG9zLnYxLkltcG9ydENBS2V5UmVzcG9uc2USXQoQQmVnaW5LZXlSb3RhdGlvbhIjLmNyeXB0b3MudjEuQmVnaW5LZXlSb3RhdGlvblJlcXVlc3QaJC5jcnlwdG9zLnYxLkJlZ2luS2V5Um90YXRpb25SZXNwb25zZRJmChNDb21wbGV0ZUtleVJvdGF0aW9uEiYuY3J5cHRvcy52MS5Db21wbGV0ZUtleVJvdGF0aW9uUmVxdWVzdBonLmNyeXB0b3MudjEuQ29tcGxldGVLZXlSb3RhdGlvblJlc3BvbnNlEjwKBVJlc2V0EhguY3J5cHRvcy52MS5SZXNldFJlcXVlc3QaGS5jcnlwdG9zLnYxLlJlc2V0UmVzcG9uc2USPwoGQXR0ZXN0EhkuY3J5cHRvcy52MS5BdHRlc3RSZXF1ZXN0GhouY3J5cHRvcy52MS5BdHRlc3RSZXNwb25zZRJUCg1TZXRNYW5hZ2VtZW50EiAuY3J5cHRvcy52MS5TZXRNYW5hZ2VtZW50UmVxdWVzdBohLmNyeXB0b3MudjEuU2V0TWFuYWdlbWVudFJlc3BvbnNlQjRaMmdpdGh1Yi5jb20vQ3J5cHRPUy1QS0kvYXBpL2dvL2NyeXB0b3MvdjE7Y3J5cHRvc3YxYgZwcm90bzM", [file_cryptos_v1_ceremony, file_cryptos_v1_config, file_cryptos_v1_identity, file_cryptos_v1_status, file_google_protobuf_timestamp]);
+  fileDesc("ChVjcnlwdG9zL3YxL25vZGUucHJvdG8SCmNyeXB0b3MudjEiPwoSQXBwbHlDb25maWdSZXF1ZXN0EikKBmNvbmZpZxgBIAEoCzIZLmNyeXB0b3MudjEuTWFjaGluZUNvbmZpZyISChBHZXRDb25maWdSZXF1ZXN0Ij4KEUdldENvbmZpZ1Jlc3BvbnNlEikKBmNvbmZpZxgBIAEoCzIZLmNyeXB0b3MudjEuTWFjaGluZUNvbmZpZyJCChRTZXRNYW5hZ2VtZW50UmVxdWVzdBIqCgptYW5hZ2VtZW50GAEgASgLMhYuY3J5cHRvcy52MS5NYW5hZ2VtZW50IkQKFVNldE1hbmFnZW1lbnRSZXNwb25zZRISCgpnZW5lcmF0aW9uGAEgASgEEhcKD3JlcXVpcmVzX3JlYm9vdBgCIAEoCCJZChNBcHBseUNvbmZpZ1Jlc3BvbnNlEhIKCmdlbmVyYXRpb24YASABKAQSFwoPcmVxdWlyZXNfcmVib290GAIgASgIEhUKDWNvbmZpZ19kaWdlc3QYAyABKAwiEgoQR2V0U3RhdHVzUmVxdWVzdCI7ChFHZXRTdGF0dXNSZXNwb25zZRImCgZzdGF0dXMYASABKAsyFi5jcnlwdG9zLnYxLk5vZGVTdGF0dXMiFAoSR2V0SWRlbnRpdHlSZXF1ZXN0Ij0KE0dldElkZW50aXR5UmVzcG9uc2USJgoIaWRlbnRpdHkYASABKAsyFC5jcnlwdG9zLnYxLklkZW50aXR5IlsKFFN0YXJ0Q2VyZW1vbnlSZXF1ZXN0EiYKBGtpbmQYASABKA4yGC5jcnlwdG9zLnYxLkNlcmVtb255S2luZBIbChNtYWNoaW5lX2NvbmZpZ195YW1sGAIgASgMIkEKFVN0YXJ0Q2VyZW1vbnlSZXNwb25zZRIoCgVldmVudBgBIAEoCzIZLmNyeXB0b3MudjEuQ2VyZW1vbnlFdmVudCIyCg5TaWduQ1NSUmVxdWVzdBIPCgdjc3JfZGVyGAEgASgMEg8KB3Byb2ZpbGUYAiABKAkiIwoPU2lnbkNTUlJlc3BvbnNlEhAKCGNlcnRfZGVyGAEgASgMIisKDFJlc2V0UmVxdWVzdBIbChNjb25maXJtX2NvbW1vbl9uYW1lGAEgASgJIg8KDVJlc2V0UmVzcG9uc2UiHgoNQXR0ZXN0UmVxdWVzdBINCgVub25jZRgBIAEoDCJeCg5BdHRlc3RSZXNwb25zZRIRCglzaWduYXR1cmUYASABKAwSGAoQaWRlbnRpdHlfcHViX2RlchgCIAEoDBIOCgZla19wdWIYAyABKAwSDwoHZWtfY2VydBgEIAEoDCJCChlTaWduU3Vib3JkaW5hdGVDU1JSZXF1ZXN0Eg8KB2Nzcl9kZXIYASABKAwSFAoMcHJvZmlsZV9uYW1lGAIgASgJIkIKGlNpZ25TdWJvcmRpbmF0ZUNTUlJlc3BvbnNlEhEKCWNoYWluX2RlchgBIAMoDBIRCgljaGFpbl9wZW0YAiABKAkiOQoQSXNzdWVMZWFmUmVxdWVzdBIPCgdjc3JfZGVyGAEgASgMEhQKDHByb2ZpbGVfbmFtZRgCIAEoCSIlChFJc3N1ZUxlYWZSZXNwb25zZRIQCghjZXJ0X2RlchgBIAEoDCIaChhHZXRTdWJvcmRpbmF0ZUNTUlJlcXVlc3QiLAoZR2V0U3Vib3JkaW5hdGVDU1JSZXNwb25zZRIPCgdjc3JfZGVyGAEgASgMIksKI1N1Ym1pdFN1Ym9yZGluYXRlQ2VydGlmaWNhdGVSZXF1ZXN0EhEKCWNoYWluX2RlchgBIAMoDBIRCgljaGFpbl9wZW0YAiABKAkiTgokU3VibWl0U3Vib3JkaW5hdGVDZXJ0aWZpY2F0ZVJlc3BvbnNlEiYKCGlkZW50aXR5GAEgASgLMhQuY3J5cHRvcy52MS5JZGVudGl0eSIoChJFeHBvcnRDQUtleVJlcXVlc3QSEgoKcGFzc3BocmFzZRgBIAEoDCInChNFeHBvcnRDQUtleVJlc3BvbnNlEhAKCGVudmVsb3BlGAEgASgMIjoKEkltcG9ydENBS2V5UmVxdWVzdBIQCghlbnZlbG9wZRgBIAEoDBISCgpwYXNzcGhyYXNlGAIgASgMIj0KE0ltcG9ydENBS2V5UmVzcG9uc2USJgoIaWRlbnRpdHkYASABKAsyFC5jcnlwdG9zLnYxLklkZW50aXR5IhkKF0JlZ2luS2V5Um90YXRpb25SZXF1ZXN0IisKGEJlZ2luS2V5Um90YXRpb25SZXNwb25zZRIPCgdjc3JfZGVyGAEgASgMIkIKGkNvbXBsZXRlS2V5Um90YXRpb25SZXF1ZXN0EhEKCWNoYWluX2RlchgBIAMoDBIRCgljaGFpbl9wZW0YAiABKAkiRQobQ29tcGxldGVLZXlSb3RhdGlvblJlc3BvbnNlEiYKCGlkZW50aXR5GAEgASgLMhQuY3J5cHRvcy52MS5JZGVudGl0eSLpAQoKSXNzdWVkQ2VydBISCgpzZXJpYWxfaGV4GAEgASgJEhIKCnN1YmplY3RfZG4YAiABKAkSLgoKbm90X2JlZm9yZRgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLQoJbm90X2FmdGVyGAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIPCgdza2lfaGV4GAUgASgJEhQKDHByb2ZpbGVfbmFtZRgGIAEoCRItCglpc3N1ZWRfYXQYByABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wImUKClJldm9jYXRpb24SEgoKc2VyaWFsX2hleBgBIAEoCRIuCgpyZXZva2VkX2F0GAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBITCgtyZWFzb25fY29kZRgDIAEoBSJDChhSZXZva2VDZXJ0aWZpY2F0ZVJlcXVlc3QSEgoKc2VyaWFsX2hleBgBIAEoCRITCgtyZWFzb25fY29kZRgCIAEoBSJHChlSZXZva2VDZXJ0aWZpY2F0ZVJlc3BvbnNlEioKCnJldm9jYXRpb24YASABKAsyFi5jcnlwdG9zLnYxLlJldm9jYXRpb24iEwoRTGlzdElzc3VlZFJlcXVlc3QiPAoSTGlzdElzc3VlZFJlc3BvbnNlEiYKBmlzc3VlZBgBIAMoCzIWLmNyeXB0b3MudjEuSXNzdWVkQ2VydCIYChZMaXN0UmV2b2NhdGlvbnNSZXF1ZXN0IkYKF0xpc3RSZXZvY2F0aW9uc1Jlc3BvbnNlEisKC3Jldm9jYXRpb25zGAEgAygLMhYuY3J5cHRvcy52MS5SZXZvY2F0aW9uMrkNCgtOb2RlU2VydmljZRJOCgtBcHBseUNvbmZpZxIeLmNyeXB0b3MudjEuQXBwbHlDb25maWdSZXF1ZXN0Gh8uY3J5cHRvcy52MS5BcHBseUNvbmZpZ1Jlc3BvbnNlEkgKCUdldFN0YXR1cxIcLmNyeXB0b3MudjEuR2V0U3RhdHVzUmVxdWVzdBodLmNyeXB0b3MudjEuR2V0U3RhdHVzUmVzcG9uc2USTgoLR2V0SWRlbnRpdHkSHi5jcnlwdG9zLnYxLkdldElkZW50aXR5UmVxdWVzdBofLmNyeXB0b3MudjEuR2V0SWRlbnRpdHlSZXNwb25zZRJWCg1TdGFydENlcmVtb255EiAuY3J5cHRvcy52MS5TdGFydENlcmVtb255UmVxdWVzdBohLmNyeXB0b3MudjEuU3RhcnRDZXJlbW9ueVJlc3BvbnNlMAESQgoHU2lnbkNTUhIaLmNyeXB0b3MudjEuU2lnbkNTUlJlcXVlc3QaGy5jcnlwdG9zLnYxLlNpZ25DU1JSZXNwb25zZRJjChJTaWduU3Vib3JkaW5hdGVDU1ISJS5jcnlwdG9zLnYxLlNpZ25TdWJvcmRpbmF0ZUNTUlJlcXVlc3QaJi5jcnlwdG9zLnYxLlNpZ25TdWJvcmRpbmF0ZUNTUlJlc3BvbnNlEkgKCUlzc3VlTGVhZhIcLmNyeXB0b3MudjEuSXNzdWVMZWFmUmVxdWVzdBodLmNyeXB0b3MudjEuSXNzdWVMZWFmUmVzcG9uc2USYAoRR2V0U3Vib3JkaW5hdGVDU1ISJC5jcnlwdG9zLnYxLkdldFN1Ym9yZGluYXRlQ1NSUmVxdWVzdBolLmNyeXB0b3MudjEuR2V0U3Vib3JkaW5hdGVDU1JSZXNwb25zZRKBAQocU3VibWl0U3Vib3JkaW5hdGVDZXJ0aWZpY2F0ZRIvLmNyeXB0b3MudjEuU3VibWl0U3Vib3JkaW5hdGVDZXJ0aWZpY2F0ZVJlcXVlc3QaMC5jcnlwdG9zLnYxLlN1Ym1pdFN1Ym9yZGluYXRlQ2VydGlmaWNhdGVSZXNwb25zZRJgChFSZXZva2VDZXJ0aWZpY2F0ZRIkLmNyeXB0b3MudjEuUmV2b2tlQ2VydGlmaWNhdGVSZXF1ZXN0GiUuY3J5cHRvcy52MS5SZXZva2VDZXJ0aWZpY2F0ZVJlc3BvbnNlEksKCkxpc3RJc3N1ZWQSHS5jcnlwdG9zLnYxLkxpc3RJc3N1ZWRSZXF1ZXN0Gh4uY3J5cHRvcy52MS5MaXN0SXNzdWVkUmVzcG9uc2USWgoPTGlzdFJldm9jYXRpb25zEiIuY3J5cHRvcy52MS5MaXN0UmV2b2NhdGlvbnNSZXF1ZXN0GiMuY3J5cHRvcy52MS5MaXN0UmV2b2NhdGlvbnNSZXNwb25zZRJOCgtFeHBvcnRDQUtleRIeLmNyeXB0b3MudjEuRXhwb3J0Q0FLZXlSZXF1ZXN0Gh8uY3J5cHRvcy52MS5FeHBvcnRDQUtleVJlc3BvbnNlEk4KC0ltcG9ydENBS2V5Eh4uY3J5cHRvcy52MS5JbXBvcnRDQUtleVJlcXVlc3QaHy5jcnlwdG9zLnYxLkltcG9ydENBS2V5UmVzcG9uc2USXQoQQmVnaW5LZXlSb3RhdGlvbhIjLmNyeXB0b3MudjEuQmVnaW5LZXlSb3RhdGlvblJlcXVlc3QaJC5jcnlwdG9zLnYxLkJlZ2luS2V5Um90YXRpb25SZXNwb25zZRJmChNDb21wbGV0ZUtleVJvdGF0aW9uEiYuY3J5cHRvcy52MS5Db21wbGV0ZUtleVJvdGF0aW9uUmVxdWVzdBonLmNyeXB0b3MudjEuQ29tcGxldGVLZXlSb3RhdGlvblJlc3BvbnNlEjwKBVJlc2V0EhguY3J5cHRvcy52MS5SZXNldFJlcXVlc3QaGS5jcnlwdG9zLnYxLlJlc2V0UmVzcG9uc2USPwoGQXR0ZXN0EhkuY3J5cHRvcy52MS5BdHRlc3RSZXF1ZXN0GhouY3J5cHRvcy52MS5BdHRlc3RSZXNwb25zZRJUCg1TZXRNYW5hZ2VtZW50EiAuY3J5cHRvcy52MS5TZXRNYW5hZ2VtZW50UmVxdWVzdBohLmNyeXB0b3MudjEuU2V0TWFuYWdlbWVudFJlc3BvbnNlEkgKCUdldENvbmZpZxIcLmNyeXB0b3MudjEuR2V0Q29uZmlnUmVxdWVzdBodLmNyeXB0b3MudjEuR2V0Q29uZmlnUmVzcG9uc2VCNFoyZ2l0aHViLmNvbS9DcnlwdE9TLVBLSS9hcGkvZ28vY3J5cHRvcy92MTtjcnlwdG9zdjFiBnByb3RvMw", [file_cryptos_v1_ceremony, file_cryptos_v1_config, file_cryptos_v1_identity, file_cryptos_v1_status, file_google_protobuf_timestamp]);
 
 /**
  * @generated from message cryptos.v1.ApplyConfigRequest
@@ -40,6 +40,36 @@ export const ApplyConfigRequestSchema: GenMessage<ApplyConfigRequest> = /*@__PUR
   messageDesc(file_cryptos_v1_node, 0);
 
 /**
+ * @generated from message cryptos.v1.GetConfigRequest
+ */
+export type GetConfigRequest = Message<"cryptos.v1.GetConfigRequest"> & {
+};
+
+/**
+ * Describes the message cryptos.v1.GetConfigRequest.
+ * Use `create(GetConfigRequestSchema)` to create a new message.
+ */
+export const GetConfigRequestSchema: GenMessage<GetConfigRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_node, 1);
+
+/**
+ * @generated from message cryptos.v1.GetConfigResponse
+ */
+export type GetConfigResponse = Message<"cryptos.v1.GetConfigResponse"> & {
+  /**
+   * @generated from field: cryptos.v1.MachineConfig config = 1;
+   */
+  config?: MachineConfig | undefined;
+};
+
+/**
+ * Describes the message cryptos.v1.GetConfigResponse.
+ * Use `create(GetConfigResponseSchema)` to create a new message.
+ */
+export const GetConfigResponseSchema: GenMessage<GetConfigResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_node, 2);
+
+/**
  * @generated from message cryptos.v1.SetManagementRequest
  */
 export type SetManagementRequest = Message<"cryptos.v1.SetManagementRequest"> & {
@@ -56,7 +86,7 @@ export type SetManagementRequest = Message<"cryptos.v1.SetManagementRequest"> & 
  * Use `create(SetManagementRequestSchema)` to create a new message.
  */
 export const SetManagementRequestSchema: GenMessage<SetManagementRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 1);
+  messageDesc(file_cryptos_v1_node, 3);
 
 /**
  * @generated from message cryptos.v1.SetManagementResponse
@@ -82,7 +112,7 @@ export type SetManagementResponse = Message<"cryptos.v1.SetManagementResponse"> 
  * Use `create(SetManagementResponseSchema)` to create a new message.
  */
 export const SetManagementResponseSchema: GenMessage<SetManagementResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 2);
+  messageDesc(file_cryptos_v1_node, 4);
 
 /**
  * @generated from message cryptos.v1.ApplyConfigResponse
@@ -115,7 +145,7 @@ export type ApplyConfigResponse = Message<"cryptos.v1.ApplyConfigResponse"> & {
  * Use `create(ApplyConfigResponseSchema)` to create a new message.
  */
 export const ApplyConfigResponseSchema: GenMessage<ApplyConfigResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 3);
+  messageDesc(file_cryptos_v1_node, 5);
 
 /**
  * @generated from message cryptos.v1.GetStatusRequest
@@ -128,7 +158,7 @@ export type GetStatusRequest = Message<"cryptos.v1.GetStatusRequest"> & {
  * Use `create(GetStatusRequestSchema)` to create a new message.
  */
 export const GetStatusRequestSchema: GenMessage<GetStatusRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 4);
+  messageDesc(file_cryptos_v1_node, 6);
 
 /**
  * @generated from message cryptos.v1.GetStatusResponse
@@ -145,7 +175,7 @@ export type GetStatusResponse = Message<"cryptos.v1.GetStatusResponse"> & {
  * Use `create(GetStatusResponseSchema)` to create a new message.
  */
 export const GetStatusResponseSchema: GenMessage<GetStatusResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 5);
+  messageDesc(file_cryptos_v1_node, 7);
 
 /**
  * @generated from message cryptos.v1.GetIdentityRequest
@@ -158,7 +188,7 @@ export type GetIdentityRequest = Message<"cryptos.v1.GetIdentityRequest"> & {
  * Use `create(GetIdentityRequestSchema)` to create a new message.
  */
 export const GetIdentityRequestSchema: GenMessage<GetIdentityRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 6);
+  messageDesc(file_cryptos_v1_node, 8);
 
 /**
  * @generated from message cryptos.v1.GetIdentityResponse
@@ -175,7 +205,7 @@ export type GetIdentityResponse = Message<"cryptos.v1.GetIdentityResponse"> & {
  * Use `create(GetIdentityResponseSchema)` to create a new message.
  */
 export const GetIdentityResponseSchema: GenMessage<GetIdentityResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 7);
+  messageDesc(file_cryptos_v1_node, 9);
 
 /**
  * @generated from message cryptos.v1.StartCeremonyRequest
@@ -200,7 +230,7 @@ export type StartCeremonyRequest = Message<"cryptos.v1.StartCeremonyRequest"> & 
  * Use `create(StartCeremonyRequestSchema)` to create a new message.
  */
 export const StartCeremonyRequestSchema: GenMessage<StartCeremonyRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 8);
+  messageDesc(file_cryptos_v1_node, 10);
 
 /**
  * StartCeremonyResponse is the unit streamed back during a ceremony.
@@ -220,7 +250,7 @@ export type StartCeremonyResponse = Message<"cryptos.v1.StartCeremonyResponse"> 
  * Use `create(StartCeremonyResponseSchema)` to create a new message.
  */
 export const StartCeremonyResponseSchema: GenMessage<StartCeremonyResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 9);
+  messageDesc(file_cryptos_v1_node, 11);
 
 /**
  * SignCSRRequest carries a DER-encoded PKCS#10 CSR and the profile to apply.
@@ -245,7 +275,7 @@ export type SignCSRRequest = Message<"cryptos.v1.SignCSRRequest"> & {
  * Use `create(SignCSRRequestSchema)` to create a new message.
  */
 export const SignCSRRequestSchema: GenMessage<SignCSRRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 10);
+  messageDesc(file_cryptos_v1_node, 12);
 
 /**
  * @generated from message cryptos.v1.SignCSRResponse
@@ -262,7 +292,7 @@ export type SignCSRResponse = Message<"cryptos.v1.SignCSRResponse"> & {
  * Use `create(SignCSRResponseSchema)` to create a new message.
  */
 export const SignCSRResponseSchema: GenMessage<SignCSRResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 11);
+  messageDesc(file_cryptos_v1_node, 13);
 
 /**
  * ResetRequest confirms a destructive node reset. confirm_common_name must
@@ -282,7 +312,7 @@ export type ResetRequest = Message<"cryptos.v1.ResetRequest"> & {
  * Use `create(ResetRequestSchema)` to create a new message.
  */
 export const ResetRequestSchema: GenMessage<ResetRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 12);
+  messageDesc(file_cryptos_v1_node, 14);
 
 /**
  * @generated from message cryptos.v1.ResetResponse
@@ -295,7 +325,7 @@ export type ResetResponse = Message<"cryptos.v1.ResetResponse"> & {
  * Use `create(ResetResponseSchema)` to create a new message.
  */
 export const ResetResponseSchema: GenMessage<ResetResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 13);
+  messageDesc(file_cryptos_v1_node, 15);
 
 /**
  * @generated from message cryptos.v1.AttestRequest
@@ -314,7 +344,7 @@ export type AttestRequest = Message<"cryptos.v1.AttestRequest"> & {
  * Use `create(AttestRequestSchema)` to create a new message.
  */
 export const AttestRequestSchema: GenMessage<AttestRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 14);
+  messageDesc(file_cryptos_v1_node, 16);
 
 /**
  * @generated from message cryptos.v1.AttestResponse
@@ -352,7 +382,7 @@ export type AttestResponse = Message<"cryptos.v1.AttestResponse"> & {
  * Use `create(AttestResponseSchema)` to create a new message.
  */
 export const AttestResponseSchema: GenMessage<AttestResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 15);
+  messageDesc(file_cryptos_v1_node, 17);
 
 /**
  * SignSubordinateCSRRequest carries a DER PKCS#10 CSR and the name of the
@@ -377,7 +407,7 @@ export type SignSubordinateCSRRequest = Message<"cryptos.v1.SignSubordinateCSRRe
  * Use `create(SignSubordinateCSRRequestSchema)` to create a new message.
  */
 export const SignSubordinateCSRRequestSchema: GenMessage<SignSubordinateCSRRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 16);
+  messageDesc(file_cryptos_v1_node, 18);
 
 /**
  * SignSubordinateCSRResponse returns the signed child CA certificate and the
@@ -402,7 +432,7 @@ export type SignSubordinateCSRResponse = Message<"cryptos.v1.SignSubordinateCSRR
  * Use `create(SignSubordinateCSRResponseSchema)` to create a new message.
  */
 export const SignSubordinateCSRResponseSchema: GenMessage<SignSubordinateCSRResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 17);
+  messageDesc(file_cryptos_v1_node, 19);
 
 /**
  * IssueLeafRequest carries a DER PKCS#10 CSR and the leaf profile name.
@@ -426,7 +456,7 @@ export type IssueLeafRequest = Message<"cryptos.v1.IssueLeafRequest"> & {
  * Use `create(IssueLeafRequestSchema)` to create a new message.
  */
 export const IssueLeafRequestSchema: GenMessage<IssueLeafRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 18);
+  messageDesc(file_cryptos_v1_node, 20);
 
 /**
  * @generated from message cryptos.v1.IssueLeafResponse
@@ -443,7 +473,7 @@ export type IssueLeafResponse = Message<"cryptos.v1.IssueLeafResponse"> & {
  * Use `create(IssueLeafResponseSchema)` to create a new message.
  */
 export const IssueLeafResponseSchema: GenMessage<IssueLeafResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 19);
+  messageDesc(file_cryptos_v1_node, 21);
 
 /**
  * @generated from message cryptos.v1.GetSubordinateCSRRequest
@@ -456,7 +486,7 @@ export type GetSubordinateCSRRequest = Message<"cryptos.v1.GetSubordinateCSRRequ
  * Use `create(GetSubordinateCSRRequestSchema)` to create a new message.
  */
 export const GetSubordinateCSRRequestSchema: GenMessage<GetSubordinateCSRRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 20);
+  messageDesc(file_cryptos_v1_node, 22);
 
 /**
  * @generated from message cryptos.v1.GetSubordinateCSRResponse
@@ -473,7 +503,7 @@ export type GetSubordinateCSRResponse = Message<"cryptos.v1.GetSubordinateCSRRes
  * Use `create(GetSubordinateCSRResponseSchema)` to create a new message.
  */
 export const GetSubordinateCSRResponseSchema: GenMessage<GetSubordinateCSRResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 21);
+  messageDesc(file_cryptos_v1_node, 23);
 
 /**
  * SubmitSubordinateCertificateRequest carries the parent-signed chain,
@@ -498,7 +528,7 @@ export type SubmitSubordinateCertificateRequest = Message<"cryptos.v1.SubmitSubo
  * Use `create(SubmitSubordinateCertificateRequestSchema)` to create a new message.
  */
 export const SubmitSubordinateCertificateRequestSchema: GenMessage<SubmitSubordinateCertificateRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 22);
+  messageDesc(file_cryptos_v1_node, 24);
 
 /**
  * @generated from message cryptos.v1.SubmitSubordinateCertificateResponse
@@ -515,7 +545,7 @@ export type SubmitSubordinateCertificateResponse = Message<"cryptos.v1.SubmitSub
  * Use `create(SubmitSubordinateCertificateResponseSchema)` to create a new message.
  */
 export const SubmitSubordinateCertificateResponseSchema: GenMessage<SubmitSubordinateCertificateResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 23);
+  messageDesc(file_cryptos_v1_node, 25);
 
 /**
  * ExportCAKeyRequest carries the operator passphrase the node seals the backup
@@ -535,7 +565,7 @@ export type ExportCAKeyRequest = Message<"cryptos.v1.ExportCAKeyRequest"> & {
  * Use `create(ExportCAKeyRequestSchema)` to create a new message.
  */
 export const ExportCAKeyRequestSchema: GenMessage<ExportCAKeyRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 24);
+  messageDesc(file_cryptos_v1_node, 26);
 
 /**
  * ExportCAKeyResponse returns the encrypted backup envelope (KDF + AEAD over the
@@ -555,7 +585,7 @@ export type ExportCAKeyResponse = Message<"cryptos.v1.ExportCAKeyResponse"> & {
  * Use `create(ExportCAKeyResponseSchema)` to create a new message.
  */
 export const ExportCAKeyResponseSchema: GenMessage<ExportCAKeyResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 25);
+  messageDesc(file_cryptos_v1_node, 27);
 
 /**
  * ImportCAKeyRequest carries an encrypted backup envelope and the passphrase to
@@ -580,7 +610,7 @@ export type ImportCAKeyRequest = Message<"cryptos.v1.ImportCAKeyRequest"> & {
  * Use `create(ImportCAKeyRequestSchema)` to create a new message.
  */
 export const ImportCAKeyRequestSchema: GenMessage<ImportCAKeyRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 26);
+  messageDesc(file_cryptos_v1_node, 28);
 
 /**
  * @generated from message cryptos.v1.ImportCAKeyResponse
@@ -597,7 +627,7 @@ export type ImportCAKeyResponse = Message<"cryptos.v1.ImportCAKeyResponse"> & {
  * Use `create(ImportCAKeyResponseSchema)` to create a new message.
  */
 export const ImportCAKeyResponseSchema: GenMessage<ImportCAKeyResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 27);
+  messageDesc(file_cryptos_v1_node, 29);
 
 /**
  * @generated from message cryptos.v1.BeginKeyRotationRequest
@@ -610,7 +640,7 @@ export type BeginKeyRotationRequest = Message<"cryptos.v1.BeginKeyRotationReques
  * Use `create(BeginKeyRotationRequestSchema)` to create a new message.
  */
 export const BeginKeyRotationRequestSchema: GenMessage<BeginKeyRotationRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 28);
+  messageDesc(file_cryptos_v1_node, 30);
 
 /**
  * BeginKeyRotationResponse returns the DER CSR for the newly generated key, to
@@ -630,7 +660,7 @@ export type BeginKeyRotationResponse = Message<"cryptos.v1.BeginKeyRotationRespo
  * Use `create(BeginKeyRotationResponseSchema)` to create a new message.
  */
 export const BeginKeyRotationResponseSchema: GenMessage<BeginKeyRotationResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 29);
+  messageDesc(file_cryptos_v1_node, 31);
 
 /**
  * CompleteKeyRotationRequest carries the parent-signed chain for the new key,
@@ -655,7 +685,7 @@ export type CompleteKeyRotationRequest = Message<"cryptos.v1.CompleteKeyRotation
  * Use `create(CompleteKeyRotationRequestSchema)` to create a new message.
  */
 export const CompleteKeyRotationRequestSchema: GenMessage<CompleteKeyRotationRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 30);
+  messageDesc(file_cryptos_v1_node, 32);
 
 /**
  * @generated from message cryptos.v1.CompleteKeyRotationResponse
@@ -672,7 +702,7 @@ export type CompleteKeyRotationResponse = Message<"cryptos.v1.CompleteKeyRotatio
  * Use `create(CompleteKeyRotationResponseSchema)` to create a new message.
  */
 export const CompleteKeyRotationResponseSchema: GenMessage<CompleteKeyRotationResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 31);
+  messageDesc(file_cryptos_v1_node, 33);
 
 /**
  * IssuedCert is one entry in a node's issued-certificate inventory.
@@ -725,7 +755,7 @@ export type IssuedCert = Message<"cryptos.v1.IssuedCert"> & {
  * Use `create(IssuedCertSchema)` to create a new message.
  */
 export const IssuedCertSchema: GenMessage<IssuedCert> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 32);
+  messageDesc(file_cryptos_v1_node, 34);
 
 /**
  * Revocation records a revoked certificate.
@@ -756,7 +786,7 @@ export type Revocation = Message<"cryptos.v1.Revocation"> & {
  * Use `create(RevocationSchema)` to create a new message.
  */
 export const RevocationSchema: GenMessage<Revocation> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 33);
+  messageDesc(file_cryptos_v1_node, 35);
 
 /**
  * RevokeCertificateRequest identifies the certificate to revoke by hex serial
@@ -781,7 +811,7 @@ export type RevokeCertificateRequest = Message<"cryptos.v1.RevokeCertificateRequ
  * Use `create(RevokeCertificateRequestSchema)` to create a new message.
  */
 export const RevokeCertificateRequestSchema: GenMessage<RevokeCertificateRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 34);
+  messageDesc(file_cryptos_v1_node, 36);
 
 /**
  * @generated from message cryptos.v1.RevokeCertificateResponse
@@ -798,7 +828,7 @@ export type RevokeCertificateResponse = Message<"cryptos.v1.RevokeCertificateRes
  * Use `create(RevokeCertificateResponseSchema)` to create a new message.
  */
 export const RevokeCertificateResponseSchema: GenMessage<RevokeCertificateResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 35);
+  messageDesc(file_cryptos_v1_node, 37);
 
 /**
  * @generated from message cryptos.v1.ListIssuedRequest
@@ -811,7 +841,7 @@ export type ListIssuedRequest = Message<"cryptos.v1.ListIssuedRequest"> & {
  * Use `create(ListIssuedRequestSchema)` to create a new message.
  */
 export const ListIssuedRequestSchema: GenMessage<ListIssuedRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 36);
+  messageDesc(file_cryptos_v1_node, 38);
 
 /**
  * @generated from message cryptos.v1.ListIssuedResponse
@@ -828,7 +858,7 @@ export type ListIssuedResponse = Message<"cryptos.v1.ListIssuedResponse"> & {
  * Use `create(ListIssuedResponseSchema)` to create a new message.
  */
 export const ListIssuedResponseSchema: GenMessage<ListIssuedResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 37);
+  messageDesc(file_cryptos_v1_node, 39);
 
 /**
  * @generated from message cryptos.v1.ListRevocationsRequest
@@ -841,7 +871,7 @@ export type ListRevocationsRequest = Message<"cryptos.v1.ListRevocationsRequest"
  * Use `create(ListRevocationsRequestSchema)` to create a new message.
  */
 export const ListRevocationsRequestSchema: GenMessage<ListRevocationsRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 38);
+  messageDesc(file_cryptos_v1_node, 40);
 
 /**
  * @generated from message cryptos.v1.ListRevocationsResponse
@@ -858,7 +888,7 @@ export type ListRevocationsResponse = Message<"cryptos.v1.ListRevocationsRespons
  * Use `create(ListRevocationsResponseSchema)` to create a new message.
  */
 export const ListRevocationsResponseSchema: GenMessage<ListRevocationsResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 39);
+  messageDesc(file_cryptos_v1_node, 41);
 
 /**
  * NodeService is the Phase 1 management surface for a single CryptOS node.
@@ -1103,6 +1133,18 @@ export const NodeService: GenService<{
     methodKind: "unary";
     input: typeof SetManagementRequestSchema;
     output: typeof SetManagementResponseSchema;
+  },
+  /**
+   * GetConfig returns the node's current machine configuration. A caller reads
+   * the full config here, edits a subset, and applies the whole config back via
+   * ApplyConfig (a whole-config replace), so untouched fields survive.
+   *
+   * @generated from rpc cryptos.v1.NodeService.GetConfig
+   */
+  getConfig: {
+    methodKind: "unary";
+    input: typeof GetConfigRequestSchema;
+    output: typeof GetConfigResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_cryptos_v1_node, 0);

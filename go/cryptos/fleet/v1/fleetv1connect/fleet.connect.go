@@ -43,6 +43,18 @@ const (
 	// FleetServiceListProfilesProcedure is the fully-qualified name of the FleetService's ListProfiles
 	// RPC.
 	FleetServiceListProfilesProcedure = "/cryptos.fleet.v1.FleetService/ListProfiles"
+	// FleetServiceCreateProfileProcedure is the fully-qualified name of the FleetService's
+	// CreateProfile RPC.
+	FleetServiceCreateProfileProcedure = "/cryptos.fleet.v1.FleetService/CreateProfile"
+	// FleetServiceUpdateProfileProcedure is the fully-qualified name of the FleetService's
+	// UpdateProfile RPC.
+	FleetServiceUpdateProfileProcedure = "/cryptos.fleet.v1.FleetService/UpdateProfile"
+	// FleetServiceDeleteProfileProcedure is the fully-qualified name of the FleetService's
+	// DeleteProfile RPC.
+	FleetServiceDeleteProfileProcedure = "/cryptos.fleet.v1.FleetService/DeleteProfile"
+	// FleetServiceApplyProfileToNodeProcedure is the fully-qualified name of the FleetService's
+	// ApplyProfileToNode RPC.
+	FleetServiceApplyProfileToNodeProcedure = "/cryptos.fleet.v1.FleetService/ApplyProfileToNode"
 	// FleetServiceListAdaptersProcedure is the fully-qualified name of the FleetService's ListAdapters
 	// RPC.
 	FleetServiceListAdaptersProcedure = "/cryptos.fleet.v1.FleetService/ListAdapters"
@@ -87,8 +99,24 @@ type FleetServiceClient interface {
 	// optionally scoped to a single node.
 	ListCertificates(context.Context, *connect.Request[v1.ListCertificatesRequest]) (*connect.Response[v1.ListCertificatesResponse], error)
 	// ListProfiles returns the manager's catalog of certificate issuance
-	// profiles.
+	// profiles. Each is a cryptos.v1.CertificateProfile, the same shape a node
+	// stores in pki.profiles[], so the catalog is a lossless superset the node
+	// accepts verbatim. Operator-readable.
 	ListProfiles(context.Context, *connect.Request[v1.ListProfilesRequest]) (*connect.Response[v1.ListProfilesResponse], error)
+	// CreateProfile adds a new certificate profile to the manager's catalog.
+	// The profile name must be unique. Admin-gated and audited.
+	CreateProfile(context.Context, *connect.Request[v1.CreateProfileRequest]) (*connect.Response[v1.CreateProfileResponse], error)
+	// UpdateProfile replaces an existing catalog profile, matched by name.
+	// Admin-gated and audited.
+	UpdateProfile(context.Context, *connect.Request[v1.UpdateProfileRequest]) (*connect.Response[v1.UpdateProfileResponse], error)
+	// DeleteProfile removes a catalog profile by name. Non-cascading: it does
+	// not touch any node's existing pki.profiles[]. Admin-gated and audited.
+	DeleteProfile(context.Context, *connect.Request[v1.DeleteProfileRequest]) (*connect.Response[v1.DeleteProfileResponse], error)
+	// ApplyProfileToNode pushes a catalog profile onto a managed node: the
+	// manager fetches the node's full config, inserts-or-replaces the named
+	// profile in pki.profiles[] (matched by name), and applies the whole config
+	// back via the node's ApplyConfig. Admin-gated and audited.
+	ApplyProfileToNode(context.Context, *connect.Request[v1.ApplyProfileToNodeRequest]) (*connect.Response[v1.ApplyProfileToNodeResponse], error)
 	// ListAdapters returns the manager's catalog of enrollment protocol
 	// adapters.
 	ListAdapters(context.Context, *connect.Request[v1.ListAdaptersRequest]) (*connect.Response[v1.ListAdaptersResponse], error)
@@ -165,6 +193,30 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			httpClient,
 			baseURL+FleetServiceListProfilesProcedure,
 			connect.WithSchema(fleetServiceMethods.ByName("ListProfiles")),
+			connect.WithClientOptions(opts...),
+		),
+		createProfile: connect.NewClient[v1.CreateProfileRequest, v1.CreateProfileResponse](
+			httpClient,
+			baseURL+FleetServiceCreateProfileProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("CreateProfile")),
+			connect.WithClientOptions(opts...),
+		),
+		updateProfile: connect.NewClient[v1.UpdateProfileRequest, v1.UpdateProfileResponse](
+			httpClient,
+			baseURL+FleetServiceUpdateProfileProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("UpdateProfile")),
+			connect.WithClientOptions(opts...),
+		),
+		deleteProfile: connect.NewClient[v1.DeleteProfileRequest, v1.DeleteProfileResponse](
+			httpClient,
+			baseURL+FleetServiceDeleteProfileProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("DeleteProfile")),
+			connect.WithClientOptions(opts...),
+		),
+		applyProfileToNode: connect.NewClient[v1.ApplyProfileToNodeRequest, v1.ApplyProfileToNodeResponse](
+			httpClient,
+			baseURL+FleetServiceApplyProfileToNodeProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("ApplyProfileToNode")),
 			connect.WithClientOptions(opts...),
 		),
 		listAdapters: connect.NewClient[v1.ListAdaptersRequest, v1.ListAdaptersResponse](
@@ -244,22 +296,26 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 
 // fleetServiceClient implements FleetServiceClient.
 type fleetServiceClient struct {
-	listNodes         *connect.Client[v1.ListNodesRequest, v1.ListNodesResponse]
-	getNode           *connect.Client[v1.GetNodeRequest, v1.GetNodeResponse]
-	listCertificates  *connect.Client[v1.ListCertificatesRequest, v1.ListCertificatesResponse]
-	listProfiles      *connect.Client[v1.ListProfilesRequest, v1.ListProfilesResponse]
-	listAdapters      *connect.Client[v1.ListAdaptersRequest, v1.ListAdaptersResponse]
-	listAudit         *connect.Client[v1.ListAuditRequest, v1.ListAuditResponse]
-	listEnrollments   *connect.Client[v1.ListEnrollmentsRequest, v1.ListEnrollmentsResponse]
-	createEnrollment  *connect.Client[v1.CreateEnrollmentRequest, v1.CreateEnrollmentResponse]
-	approveEnrollment *connect.Client[v1.ApproveEnrollmentRequest, v1.ApproveEnrollmentResponse]
-	rejectEnrollment  *connect.Client[v1.RejectEnrollmentRequest, v1.RejectEnrollmentResponse]
-	whoAmI            *connect.Client[v1.WhoAmIRequest, v1.WhoAmIResponse]
-	revokeCertificate *connect.Client[v1.RevokeCertificateRequest, v1.RevokeCertificateResponse]
-	issueLeaf         *connect.Client[v1.IssueLeafRequest, v1.IssueLeafResponse]
-	rekeyNode         *connect.Client[v1.RekeyNodeRequest, v1.RekeyNodeResponse]
-	getNodeConfig     *connect.Client[v1.GetNodeConfigRequest, v1.GetNodeConfigResponse]
-	applyNodeConfig   *connect.Client[v1.ApplyNodeConfigRequest, v1.ApplyNodeConfigResponse]
+	listNodes          *connect.Client[v1.ListNodesRequest, v1.ListNodesResponse]
+	getNode            *connect.Client[v1.GetNodeRequest, v1.GetNodeResponse]
+	listCertificates   *connect.Client[v1.ListCertificatesRequest, v1.ListCertificatesResponse]
+	listProfiles       *connect.Client[v1.ListProfilesRequest, v1.ListProfilesResponse]
+	createProfile      *connect.Client[v1.CreateProfileRequest, v1.CreateProfileResponse]
+	updateProfile      *connect.Client[v1.UpdateProfileRequest, v1.UpdateProfileResponse]
+	deleteProfile      *connect.Client[v1.DeleteProfileRequest, v1.DeleteProfileResponse]
+	applyProfileToNode *connect.Client[v1.ApplyProfileToNodeRequest, v1.ApplyProfileToNodeResponse]
+	listAdapters       *connect.Client[v1.ListAdaptersRequest, v1.ListAdaptersResponse]
+	listAudit          *connect.Client[v1.ListAuditRequest, v1.ListAuditResponse]
+	listEnrollments    *connect.Client[v1.ListEnrollmentsRequest, v1.ListEnrollmentsResponse]
+	createEnrollment   *connect.Client[v1.CreateEnrollmentRequest, v1.CreateEnrollmentResponse]
+	approveEnrollment  *connect.Client[v1.ApproveEnrollmentRequest, v1.ApproveEnrollmentResponse]
+	rejectEnrollment   *connect.Client[v1.RejectEnrollmentRequest, v1.RejectEnrollmentResponse]
+	whoAmI             *connect.Client[v1.WhoAmIRequest, v1.WhoAmIResponse]
+	revokeCertificate  *connect.Client[v1.RevokeCertificateRequest, v1.RevokeCertificateResponse]
+	issueLeaf          *connect.Client[v1.IssueLeafRequest, v1.IssueLeafResponse]
+	rekeyNode          *connect.Client[v1.RekeyNodeRequest, v1.RekeyNodeResponse]
+	getNodeConfig      *connect.Client[v1.GetNodeConfigRequest, v1.GetNodeConfigResponse]
+	applyNodeConfig    *connect.Client[v1.ApplyNodeConfigRequest, v1.ApplyNodeConfigResponse]
 }
 
 // ListNodes calls cryptos.fleet.v1.FleetService.ListNodes.
@@ -280,6 +336,26 @@ func (c *fleetServiceClient) ListCertificates(ctx context.Context, req *connect.
 // ListProfiles calls cryptos.fleet.v1.FleetService.ListProfiles.
 func (c *fleetServiceClient) ListProfiles(ctx context.Context, req *connect.Request[v1.ListProfilesRequest]) (*connect.Response[v1.ListProfilesResponse], error) {
 	return c.listProfiles.CallUnary(ctx, req)
+}
+
+// CreateProfile calls cryptos.fleet.v1.FleetService.CreateProfile.
+func (c *fleetServiceClient) CreateProfile(ctx context.Context, req *connect.Request[v1.CreateProfileRequest]) (*connect.Response[v1.CreateProfileResponse], error) {
+	return c.createProfile.CallUnary(ctx, req)
+}
+
+// UpdateProfile calls cryptos.fleet.v1.FleetService.UpdateProfile.
+func (c *fleetServiceClient) UpdateProfile(ctx context.Context, req *connect.Request[v1.UpdateProfileRequest]) (*connect.Response[v1.UpdateProfileResponse], error) {
+	return c.updateProfile.CallUnary(ctx, req)
+}
+
+// DeleteProfile calls cryptos.fleet.v1.FleetService.DeleteProfile.
+func (c *fleetServiceClient) DeleteProfile(ctx context.Context, req *connect.Request[v1.DeleteProfileRequest]) (*connect.Response[v1.DeleteProfileResponse], error) {
+	return c.deleteProfile.CallUnary(ctx, req)
+}
+
+// ApplyProfileToNode calls cryptos.fleet.v1.FleetService.ApplyProfileToNode.
+func (c *fleetServiceClient) ApplyProfileToNode(ctx context.Context, req *connect.Request[v1.ApplyProfileToNodeRequest]) (*connect.Response[v1.ApplyProfileToNodeResponse], error) {
+	return c.applyProfileToNode.CallUnary(ctx, req)
 }
 
 // ListAdapters calls cryptos.fleet.v1.FleetService.ListAdapters.
@@ -352,8 +428,24 @@ type FleetServiceHandler interface {
 	// optionally scoped to a single node.
 	ListCertificates(context.Context, *connect.Request[v1.ListCertificatesRequest]) (*connect.Response[v1.ListCertificatesResponse], error)
 	// ListProfiles returns the manager's catalog of certificate issuance
-	// profiles.
+	// profiles. Each is a cryptos.v1.CertificateProfile, the same shape a node
+	// stores in pki.profiles[], so the catalog is a lossless superset the node
+	// accepts verbatim. Operator-readable.
 	ListProfiles(context.Context, *connect.Request[v1.ListProfilesRequest]) (*connect.Response[v1.ListProfilesResponse], error)
+	// CreateProfile adds a new certificate profile to the manager's catalog.
+	// The profile name must be unique. Admin-gated and audited.
+	CreateProfile(context.Context, *connect.Request[v1.CreateProfileRequest]) (*connect.Response[v1.CreateProfileResponse], error)
+	// UpdateProfile replaces an existing catalog profile, matched by name.
+	// Admin-gated and audited.
+	UpdateProfile(context.Context, *connect.Request[v1.UpdateProfileRequest]) (*connect.Response[v1.UpdateProfileResponse], error)
+	// DeleteProfile removes a catalog profile by name. Non-cascading: it does
+	// not touch any node's existing pki.profiles[]. Admin-gated and audited.
+	DeleteProfile(context.Context, *connect.Request[v1.DeleteProfileRequest]) (*connect.Response[v1.DeleteProfileResponse], error)
+	// ApplyProfileToNode pushes a catalog profile onto a managed node: the
+	// manager fetches the node's full config, inserts-or-replaces the named
+	// profile in pki.profiles[] (matched by name), and applies the whole config
+	// back via the node's ApplyConfig. Admin-gated and audited.
+	ApplyProfileToNode(context.Context, *connect.Request[v1.ApplyProfileToNodeRequest]) (*connect.Response[v1.ApplyProfileToNodeResponse], error)
 	// ListAdapters returns the manager's catalog of enrollment protocol
 	// adapters.
 	ListAdapters(context.Context, *connect.Request[v1.ListAdaptersRequest]) (*connect.Response[v1.ListAdaptersResponse], error)
@@ -426,6 +518,30 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		FleetServiceListProfilesProcedure,
 		svc.ListProfiles,
 		connect.WithSchema(fleetServiceMethods.ByName("ListProfiles")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceCreateProfileHandler := connect.NewUnaryHandler(
+		FleetServiceCreateProfileProcedure,
+		svc.CreateProfile,
+		connect.WithSchema(fleetServiceMethods.ByName("CreateProfile")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceUpdateProfileHandler := connect.NewUnaryHandler(
+		FleetServiceUpdateProfileProcedure,
+		svc.UpdateProfile,
+		connect.WithSchema(fleetServiceMethods.ByName("UpdateProfile")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceDeleteProfileHandler := connect.NewUnaryHandler(
+		FleetServiceDeleteProfileProcedure,
+		svc.DeleteProfile,
+		connect.WithSchema(fleetServiceMethods.ByName("DeleteProfile")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceApplyProfileToNodeHandler := connect.NewUnaryHandler(
+		FleetServiceApplyProfileToNodeProcedure,
+		svc.ApplyProfileToNode,
+		connect.WithSchema(fleetServiceMethods.ByName("ApplyProfileToNode")),
 		connect.WithHandlerOptions(opts...),
 	)
 	fleetServiceListAdaptersHandler := connect.NewUnaryHandler(
@@ -510,6 +626,14 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 			fleetServiceListCertificatesHandler.ServeHTTP(w, r)
 		case FleetServiceListProfilesProcedure:
 			fleetServiceListProfilesHandler.ServeHTTP(w, r)
+		case FleetServiceCreateProfileProcedure:
+			fleetServiceCreateProfileHandler.ServeHTTP(w, r)
+		case FleetServiceUpdateProfileProcedure:
+			fleetServiceUpdateProfileHandler.ServeHTTP(w, r)
+		case FleetServiceDeleteProfileProcedure:
+			fleetServiceDeleteProfileHandler.ServeHTTP(w, r)
+		case FleetServiceApplyProfileToNodeProcedure:
+			fleetServiceApplyProfileToNodeHandler.ServeHTTP(w, r)
 		case FleetServiceListAdaptersProcedure:
 			fleetServiceListAdaptersHandler.ServeHTTP(w, r)
 		case FleetServiceListAuditProcedure:
@@ -557,6 +681,22 @@ func (UnimplementedFleetServiceHandler) ListCertificates(context.Context, *conne
 
 func (UnimplementedFleetServiceHandler) ListProfiles(context.Context, *connect.Request[v1.ListProfilesRequest]) (*connect.Response[v1.ListProfilesResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ListProfiles is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) CreateProfile(context.Context, *connect.Request[v1.CreateProfileRequest]) (*connect.Response[v1.CreateProfileResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.CreateProfile is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) UpdateProfile(context.Context, *connect.Request[v1.UpdateProfileRequest]) (*connect.Response[v1.UpdateProfileResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.UpdateProfile is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) DeleteProfile(context.Context, *connect.Request[v1.DeleteProfileRequest]) (*connect.Response[v1.DeleteProfileResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.DeleteProfile is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) ApplyProfileToNode(context.Context, *connect.Request[v1.ApplyProfileToNodeRequest]) (*connect.Response[v1.ApplyProfileToNodeResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ApplyProfileToNode is not implemented"))
 }
 
 func (UnimplementedFleetServiceHandler) ListAdapters(context.Context, *connect.Request[v1.ListAdaptersRequest]) (*connect.Response[v1.ListAdaptersResponse], error) {

@@ -67,6 +67,8 @@ const (
 	FleetServiceRevokeCertificateProcedure = "/cryptos.fleet.v1.FleetService/RevokeCertificate"
 	// FleetServiceIssueLeafProcedure is the fully-qualified name of the FleetService's IssueLeaf RPC.
 	FleetServiceIssueLeafProcedure = "/cryptos.fleet.v1.FleetService/IssueLeaf"
+	// FleetServiceRekeyNodeProcedure is the fully-qualified name of the FleetService's RekeyNode RPC.
+	FleetServiceRekeyNodeProcedure = "/cryptos.fleet.v1.FleetService/RekeyNode"
 )
 
 // FleetServiceClient is a client for the cryptos.fleet.v1.FleetService service.
@@ -107,6 +109,12 @@ type FleetServiceClient interface {
 	// browser-generated PKCS#10 CSR under a named issuance profile. Only the
 	// CSR crosses the wire; the leaf private key stays in the browser.
 	IssueLeaf(context.Context, *connect.Request[v1.IssueLeafRequest]) (*connect.Response[v1.IssueLeafResponse], error)
+	// RekeyNode re-keys a subordinate CA node in one orchestrated call: the
+	// manager has the child mint a new key + CSR, routes the CSR to the parent
+	// (resolved from the child's issuer CN) for signing under profile_name, and
+	// delivers the signed chain back to the child. The parent must be a node the
+	// manager already knows about.
+	RekeyNode(context.Context, *connect.Request[v1.RekeyNodeRequest]) (*connect.Response[v1.RekeyNodeResponse], error)
 }
 
 // NewFleetServiceClient constructs a client for the cryptos.fleet.v1.FleetService service. By
@@ -198,6 +206,12 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(fleetServiceMethods.ByName("IssueLeaf")),
 			connect.WithClientOptions(opts...),
 		),
+		rekeyNode: connect.NewClient[v1.RekeyNodeRequest, v1.RekeyNodeResponse](
+			httpClient,
+			baseURL+FleetServiceRekeyNodeProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("RekeyNode")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -216,6 +230,7 @@ type fleetServiceClient struct {
 	whoAmI            *connect.Client[v1.WhoAmIRequest, v1.WhoAmIResponse]
 	revokeCertificate *connect.Client[v1.RevokeCertificateRequest, v1.RevokeCertificateResponse]
 	issueLeaf         *connect.Client[v1.IssueLeafRequest, v1.IssueLeafResponse]
+	rekeyNode         *connect.Client[v1.RekeyNodeRequest, v1.RekeyNodeResponse]
 }
 
 // ListNodes calls cryptos.fleet.v1.FleetService.ListNodes.
@@ -283,6 +298,11 @@ func (c *fleetServiceClient) IssueLeaf(ctx context.Context, req *connect.Request
 	return c.issueLeaf.CallUnary(ctx, req)
 }
 
+// RekeyNode calls cryptos.fleet.v1.FleetService.RekeyNode.
+func (c *fleetServiceClient) RekeyNode(ctx context.Context, req *connect.Request[v1.RekeyNodeRequest]) (*connect.Response[v1.RekeyNodeResponse], error) {
+	return c.rekeyNode.CallUnary(ctx, req)
+}
+
 // FleetServiceHandler is an implementation of the cryptos.fleet.v1.FleetService service.
 type FleetServiceHandler interface {
 	// ListNodes returns a summary for every node the manager knows about.
@@ -321,6 +341,12 @@ type FleetServiceHandler interface {
 	// browser-generated PKCS#10 CSR under a named issuance profile. Only the
 	// CSR crosses the wire; the leaf private key stays in the browser.
 	IssueLeaf(context.Context, *connect.Request[v1.IssueLeafRequest]) (*connect.Response[v1.IssueLeafResponse], error)
+	// RekeyNode re-keys a subordinate CA node in one orchestrated call: the
+	// manager has the child mint a new key + CSR, routes the CSR to the parent
+	// (resolved from the child's issuer CN) for signing under profile_name, and
+	// delivers the signed chain back to the child. The parent must be a node the
+	// manager already knows about.
+	RekeyNode(context.Context, *connect.Request[v1.RekeyNodeRequest]) (*connect.Response[v1.RekeyNodeResponse], error)
 }
 
 // NewFleetServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -408,6 +434,12 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(fleetServiceMethods.ByName("IssueLeaf")),
 		connect.WithHandlerOptions(opts...),
 	)
+	fleetServiceRekeyNodeHandler := connect.NewUnaryHandler(
+		FleetServiceRekeyNodeProcedure,
+		svc.RekeyNode,
+		connect.WithSchema(fleetServiceMethods.ByName("RekeyNode")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/cryptos.fleet.v1.FleetService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case FleetServiceListNodesProcedure:
@@ -436,6 +468,8 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 			fleetServiceRevokeCertificateHandler.ServeHTTP(w, r)
 		case FleetServiceIssueLeafProcedure:
 			fleetServiceIssueLeafHandler.ServeHTTP(w, r)
+		case FleetServiceRekeyNodeProcedure:
+			fleetServiceRekeyNodeHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -495,4 +529,8 @@ func (UnimplementedFleetServiceHandler) RevokeCertificate(context.Context, *conn
 
 func (UnimplementedFleetServiceHandler) IssueLeaf(context.Context, *connect.Request[v1.IssueLeafRequest]) (*connect.Response[v1.IssueLeafResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.IssueLeaf is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) RekeyNode(context.Context, *connect.Request[v1.RekeyNodeRequest]) (*connect.Response[v1.RekeyNodeResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.RekeyNode is not implemented"))
 }

@@ -74,6 +74,13 @@ service FleetService {
   // browser-generated PKCS#10 CSR under a named issuance profile. Only the
   // CSR crosses the wire; the leaf private key stays in the browser.
   rpc IssueLeaf(IssueLeafRequest) returns (IssueLeafResponse);
+
+  // RekeyNode re-keys a subordinate CA node in one orchestrated call: the
+  // manager has the child mint a new key + CSR, routes the CSR to the parent
+  // (resolved from the child's issuer CN) for signing under profile_name, and
+  // delivers the signed chain back to the child. The parent must be a node the
+  // manager already knows about.
+  rpc RekeyNode(RekeyNodeRequest) returns (RekeyNodeResponse);
 }
 
 message ListNodesRequest {}
@@ -338,4 +345,25 @@ message IssueLeafRequest {
 message IssueLeafResponse {
   // cert_der is the signed leaf certificate, DER-encoded.
   bytes cert_der = 1;
+}
+
+// RekeyNodeRequest names the subordinate to re-key and the CA profile the
+// parent signs the new key under.
+message RekeyNodeRequest {
+  // node_name is the subordinate CA to re-key.
+  string node_name = 1;
+  // profile_name is the CA profile the parent signs the new CSR under (e.g.
+  // "sub-ca").
+  string profile_name = 2;
+}
+
+// RekeyNodeResponse reports the re-keyed identity: the node's own subject CN,
+// the parent that signed it, and the number of certificates in the new chain.
+message RekeyNodeResponse {
+  // subject_cn is the re-keyed node's identity CN.
+  string subject_cn = 1;
+  // issuer_cn is the parent CA that signed the new key.
+  string issuer_cn = 2;
+  // chain_len is the number of certificates in the new chain.
+  int32 chain_len = 3;
 }

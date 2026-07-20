@@ -120,6 +120,22 @@ service FleetService {
   // node's ApplyConfig is a whole-config replace, so the caller must send the
   // complete config, never a partial one. Admin-gated and audited.
   rpc ApplyNodeConfig(ApplyNodeConfigRequest) returns (ApplyNodeConfigResponse);
+
+  // ExportCAKey backs up a managed node's CA private key to an encrypted
+  // envelope. The node seals the backup with the operator passphrase
+  // (Argon2id + AES-256-GCM) so the plaintext key never leaves the node; the
+  // manager only relays the envelope through to the caller. The passphrase is
+  // used in transit and is never persisted. A TPM-backed node refuses export.
+  // Admin-gated and audited (the audit names the node only, never the secret).
+  rpc ExportCAKey(ExportCAKeyRequest) returns (ExportCAKeyResponse);
+
+  // ImportCAKey restores a CA identity onto a fresh managed node from an
+  // encrypted envelope produced by ExportCAKey. The node decrypts the envelope
+  // with the operator passphrase and adopts the key; it refuses the import if
+  // it already holds an identity. The passphrase transits the manager only to
+  // reach the node and is never persisted. Admin-gated and audited (the audit
+  // names the node and restored subject only, never the secret or envelope).
+  rpc ImportCAKey(ImportCAKeyRequest) returns (ImportCAKeyResponse);
 }
 
 message ListNodesRequest {}
@@ -465,4 +481,42 @@ message ApplyNodeConfigResponse {
   uint64 generation = 1;
   // requires_reboot is true when the applied change takes effect only on reboot.
   bool requires_reboot = 2;
+}
+
+// ExportCAKeyRequest names the managed node to back up and carries the operator
+// passphrase the node seals the backup with. The passphrase is relayed to the
+// node in transit and is never persisted by the manager.
+message ExportCAKeyRequest {
+  // node_name is the managed node whose CA key to export.
+  string node_name = 1;
+  // passphrase seals the backup node-side; it is never persisted.
+  bytes passphrase = 2;
+}
+
+// ExportCAKeyResponse carries the encrypted backup envelope (Argon2id +
+// AES-256-GCM over the node's CA key material). It is opaque to the manager.
+message ExportCAKeyResponse {
+  // envelope is the encrypted CA key backup.
+  bytes envelope = 1;
+}
+
+// ImportCAKeyRequest names the fresh target node, the encrypted envelope to
+// restore, and the passphrase that unseals it. The passphrase is relayed to
+// the node in transit and is never persisted by the manager.
+message ImportCAKeyRequest {
+  // node_name is the fresh managed node to restore the identity onto.
+  string node_name = 1;
+  // envelope is the encrypted CA key backup produced by ExportCAKey.
+  bytes envelope = 2;
+  // passphrase unseals the envelope node-side; it is never persisted.
+  bytes passphrase = 3;
+}
+
+// ImportCAKeyResponse summarizes the restored identity so the web can confirm
+// what was imported, without returning the full identity chain.
+message ImportCAKeyResponse {
+  // subject_cn is the restored identity's subject common name.
+  string subject_cn = 1;
+  // issuer_cn is the restored identity's issuer common name.
+  string issuer_cn = 2;
 }

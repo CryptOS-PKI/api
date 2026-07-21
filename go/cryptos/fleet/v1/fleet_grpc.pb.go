@@ -40,6 +40,8 @@ const (
 	FleetService_RekeyNode_FullMethodName          = "/cryptos.fleet.v1.FleetService/RekeyNode"
 	FleetService_GetNodeConfig_FullMethodName      = "/cryptos.fleet.v1.FleetService/GetNodeConfig"
 	FleetService_ApplyNodeConfig_FullMethodName    = "/cryptos.fleet.v1.FleetService/ApplyNodeConfig"
+	FleetService_ExportCAKey_FullMethodName        = "/cryptos.fleet.v1.FleetService/ExportCAKey"
+	FleetService_ImportCAKey_FullMethodName        = "/cryptos.fleet.v1.FleetService/ImportCAKey"
 )
 
 // FleetServiceClient is the client API for FleetService service.
@@ -123,6 +125,20 @@ type FleetServiceClient interface {
 	// node's ApplyConfig is a whole-config replace, so the caller must send the
 	// complete config, never a partial one. Admin-gated and audited.
 	ApplyNodeConfig(ctx context.Context, in *ApplyNodeConfigRequest, opts ...grpc.CallOption) (*ApplyNodeConfigResponse, error)
+	// ExportCAKey backs up a managed node's CA private key to an encrypted
+	// envelope. The node seals the backup with the operator passphrase
+	// (Argon2id + AES-256-GCM) so the plaintext key never leaves the node; the
+	// manager only relays the envelope through to the caller. The passphrase is
+	// used in transit and is never persisted. A TPM-backed node refuses export.
+	// Admin-gated and audited (the audit names the node only, never the secret).
+	ExportCAKey(ctx context.Context, in *ExportCAKeyRequest, opts ...grpc.CallOption) (*ExportCAKeyResponse, error)
+	// ImportCAKey restores a CA identity onto a fresh managed node from an
+	// encrypted envelope produced by ExportCAKey. The node decrypts the envelope
+	// with the operator passphrase and adopts the key; it refuses the import if
+	// it already holds an identity. The passphrase transits the manager only to
+	// reach the node and is never persisted. Admin-gated and audited (the audit
+	// names the node and restored subject only, never the secret or envelope).
+	ImportCAKey(ctx context.Context, in *ImportCAKeyRequest, opts ...grpc.CallOption) (*ImportCAKeyResponse, error)
 }
 
 type fleetServiceClient struct {
@@ -343,6 +359,26 @@ func (c *fleetServiceClient) ApplyNodeConfig(ctx context.Context, in *ApplyNodeC
 	return out, nil
 }
 
+func (c *fleetServiceClient) ExportCAKey(ctx context.Context, in *ExportCAKeyRequest, opts ...grpc.CallOption) (*ExportCAKeyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ExportCAKeyResponse)
+	err := c.cc.Invoke(ctx, FleetService_ExportCAKey_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) ImportCAKey(ctx context.Context, in *ImportCAKeyRequest, opts ...grpc.CallOption) (*ImportCAKeyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ImportCAKeyResponse)
+	err := c.cc.Invoke(ctx, FleetService_ImportCAKey_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FleetServiceServer is the server API for FleetService service.
 // All implementations should embed UnimplementedFleetServiceServer
 // for forward compatibility.
@@ -424,6 +460,20 @@ type FleetServiceServer interface {
 	// node's ApplyConfig is a whole-config replace, so the caller must send the
 	// complete config, never a partial one. Admin-gated and audited.
 	ApplyNodeConfig(context.Context, *ApplyNodeConfigRequest) (*ApplyNodeConfigResponse, error)
+	// ExportCAKey backs up a managed node's CA private key to an encrypted
+	// envelope. The node seals the backup with the operator passphrase
+	// (Argon2id + AES-256-GCM) so the plaintext key never leaves the node; the
+	// manager only relays the envelope through to the caller. The passphrase is
+	// used in transit and is never persisted. A TPM-backed node refuses export.
+	// Admin-gated and audited (the audit names the node only, never the secret).
+	ExportCAKey(context.Context, *ExportCAKeyRequest) (*ExportCAKeyResponse, error)
+	// ImportCAKey restores a CA identity onto a fresh managed node from an
+	// encrypted envelope produced by ExportCAKey. The node decrypts the envelope
+	// with the operator passphrase and adopts the key; it refuses the import if
+	// it already holds an identity. The passphrase transits the manager only to
+	// reach the node and is never persisted. Admin-gated and audited (the audit
+	// names the node and restored subject only, never the secret or envelope).
+	ImportCAKey(context.Context, *ImportCAKeyRequest) (*ImportCAKeyResponse, error)
 }
 
 // UnimplementedFleetServiceServer should be embedded to have
@@ -495,6 +545,12 @@ func (UnimplementedFleetServiceServer) GetNodeConfig(context.Context, *GetNodeCo
 }
 func (UnimplementedFleetServiceServer) ApplyNodeConfig(context.Context, *ApplyNodeConfigRequest) (*ApplyNodeConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ApplyNodeConfig not implemented")
+}
+func (UnimplementedFleetServiceServer) ExportCAKey(context.Context, *ExportCAKeyRequest) (*ExportCAKeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ExportCAKey not implemented")
+}
+func (UnimplementedFleetServiceServer) ImportCAKey(context.Context, *ImportCAKeyRequest) (*ImportCAKeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ImportCAKey not implemented")
 }
 func (UnimplementedFleetServiceServer) testEmbeddedByValue() {}
 
@@ -894,6 +950,42 @@ func _FleetService_ApplyNodeConfig_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FleetService_ExportCAKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExportCAKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).ExportCAKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_ExportCAKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).ExportCAKey(ctx, req.(*ExportCAKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_ImportCAKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ImportCAKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).ImportCAKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_ImportCAKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).ImportCAKey(ctx, req.(*ImportCAKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FleetService_ServiceDesc is the grpc.ServiceDesc for FleetService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -984,6 +1076,14 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ApplyNodeConfig",
 			Handler:    _FleetService_ApplyNodeConfig_Handler,
+		},
+		{
+			MethodName: "ExportCAKey",
+			Handler:    _FleetService_ExportCAKey_Handler,
+		},
+		{
+			MethodName: "ImportCAKey",
+			Handler:    _FleetService_ImportCAKey_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

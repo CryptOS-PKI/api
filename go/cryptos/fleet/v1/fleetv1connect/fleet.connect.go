@@ -90,6 +90,12 @@ const (
 	// FleetServiceApplyNodeConfigProcedure is the fully-qualified name of the FleetService's
 	// ApplyNodeConfig RPC.
 	FleetServiceApplyNodeConfigProcedure = "/cryptos.fleet.v1.FleetService/ApplyNodeConfig"
+	// FleetServiceExportCAKeyProcedure is the fully-qualified name of the FleetService's ExportCAKey
+	// RPC.
+	FleetServiceExportCAKeyProcedure = "/cryptos.fleet.v1.FleetService/ExportCAKey"
+	// FleetServiceImportCAKeyProcedure is the fully-qualified name of the FleetService's ImportCAKey
+	// RPC.
+	FleetServiceImportCAKeyProcedure = "/cryptos.fleet.v1.FleetService/ImportCAKey"
 )
 
 // FleetServiceClient is a client for the cryptos.fleet.v1.FleetService service.
@@ -166,6 +172,20 @@ type FleetServiceClient interface {
 	// node's ApplyConfig is a whole-config replace, so the caller must send the
 	// complete config, never a partial one. Admin-gated and audited.
 	ApplyNodeConfig(context.Context, *connect.Request[v1.ApplyNodeConfigRequest]) (*connect.Response[v1.ApplyNodeConfigResponse], error)
+	// ExportCAKey backs up a managed node's CA private key to an encrypted
+	// envelope. The node seals the backup with the operator passphrase
+	// (Argon2id + AES-256-GCM) so the plaintext key never leaves the node; the
+	// manager only relays the envelope through to the caller. The passphrase is
+	// used in transit and is never persisted. A TPM-backed node refuses export.
+	// Admin-gated and audited (the audit names the node only, never the secret).
+	ExportCAKey(context.Context, *connect.Request[v1.ExportCAKeyRequest]) (*connect.Response[v1.ExportCAKeyResponse], error)
+	// ImportCAKey restores a CA identity onto a fresh managed node from an
+	// encrypted envelope produced by ExportCAKey. The node decrypts the envelope
+	// with the operator passphrase and adopts the key; it refuses the import if
+	// it already holds an identity. The passphrase transits the manager only to
+	// reach the node and is never persisted. Admin-gated and audited (the audit
+	// names the node and restored subject only, never the secret or envelope).
+	ImportCAKey(context.Context, *connect.Request[v1.ImportCAKeyRequest]) (*connect.Response[v1.ImportCAKeyResponse], error)
 }
 
 // NewFleetServiceClient constructs a client for the cryptos.fleet.v1.FleetService service. By
@@ -305,6 +325,18 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(fleetServiceMethods.ByName("ApplyNodeConfig")),
 			connect.WithClientOptions(opts...),
 		),
+		exportCAKey: connect.NewClient[v1.ExportCAKeyRequest, v1.ExportCAKeyResponse](
+			httpClient,
+			baseURL+FleetServiceExportCAKeyProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("ExportCAKey")),
+			connect.WithClientOptions(opts...),
+		),
+		importCAKey: connect.NewClient[v1.ImportCAKeyRequest, v1.ImportCAKeyResponse](
+			httpClient,
+			baseURL+FleetServiceImportCAKeyProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("ImportCAKey")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -331,6 +363,8 @@ type fleetServiceClient struct {
 	rekeyNode          *connect.Client[v1.RekeyNodeRequest, v1.RekeyNodeResponse]
 	getNodeConfig      *connect.Client[v1.GetNodeConfigRequest, v1.GetNodeConfigResponse]
 	applyNodeConfig    *connect.Client[v1.ApplyNodeConfigRequest, v1.ApplyNodeConfigResponse]
+	exportCAKey        *connect.Client[v1.ExportCAKeyRequest, v1.ExportCAKeyResponse]
+	importCAKey        *connect.Client[v1.ImportCAKeyRequest, v1.ImportCAKeyResponse]
 }
 
 // ListNodes calls cryptos.fleet.v1.FleetService.ListNodes.
@@ -438,6 +472,16 @@ func (c *fleetServiceClient) ApplyNodeConfig(ctx context.Context, req *connect.R
 	return c.applyNodeConfig.CallUnary(ctx, req)
 }
 
+// ExportCAKey calls cryptos.fleet.v1.FleetService.ExportCAKey.
+func (c *fleetServiceClient) ExportCAKey(ctx context.Context, req *connect.Request[v1.ExportCAKeyRequest]) (*connect.Response[v1.ExportCAKeyResponse], error) {
+	return c.exportCAKey.CallUnary(ctx, req)
+}
+
+// ImportCAKey calls cryptos.fleet.v1.FleetService.ImportCAKey.
+func (c *fleetServiceClient) ImportCAKey(ctx context.Context, req *connect.Request[v1.ImportCAKeyRequest]) (*connect.Response[v1.ImportCAKeyResponse], error) {
+	return c.importCAKey.CallUnary(ctx, req)
+}
+
 // FleetServiceHandler is an implementation of the cryptos.fleet.v1.FleetService service.
 type FleetServiceHandler interface {
 	// ListNodes returns a summary for every node the manager knows about.
@@ -512,6 +556,20 @@ type FleetServiceHandler interface {
 	// node's ApplyConfig is a whole-config replace, so the caller must send the
 	// complete config, never a partial one. Admin-gated and audited.
 	ApplyNodeConfig(context.Context, *connect.Request[v1.ApplyNodeConfigRequest]) (*connect.Response[v1.ApplyNodeConfigResponse], error)
+	// ExportCAKey backs up a managed node's CA private key to an encrypted
+	// envelope. The node seals the backup with the operator passphrase
+	// (Argon2id + AES-256-GCM) so the plaintext key never leaves the node; the
+	// manager only relays the envelope through to the caller. The passphrase is
+	// used in transit and is never persisted. A TPM-backed node refuses export.
+	// Admin-gated and audited (the audit names the node only, never the secret).
+	ExportCAKey(context.Context, *connect.Request[v1.ExportCAKeyRequest]) (*connect.Response[v1.ExportCAKeyResponse], error)
+	// ImportCAKey restores a CA identity onto a fresh managed node from an
+	// encrypted envelope produced by ExportCAKey. The node decrypts the envelope
+	// with the operator passphrase and adopts the key; it refuses the import if
+	// it already holds an identity. The passphrase transits the manager only to
+	// reach the node and is never persisted. Admin-gated and audited (the audit
+	// names the node and restored subject only, never the secret or envelope).
+	ImportCAKey(context.Context, *connect.Request[v1.ImportCAKeyRequest]) (*connect.Response[v1.ImportCAKeyResponse], error)
 }
 
 // NewFleetServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -647,6 +705,18 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(fleetServiceMethods.ByName("ApplyNodeConfig")),
 		connect.WithHandlerOptions(opts...),
 	)
+	fleetServiceExportCAKeyHandler := connect.NewUnaryHandler(
+		FleetServiceExportCAKeyProcedure,
+		svc.ExportCAKey,
+		connect.WithSchema(fleetServiceMethods.ByName("ExportCAKey")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceImportCAKeyHandler := connect.NewUnaryHandler(
+		FleetServiceImportCAKeyProcedure,
+		svc.ImportCAKey,
+		connect.WithSchema(fleetServiceMethods.ByName("ImportCAKey")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/cryptos.fleet.v1.FleetService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case FleetServiceListNodesProcedure:
@@ -691,6 +761,10 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 			fleetServiceGetNodeConfigHandler.ServeHTTP(w, r)
 		case FleetServiceApplyNodeConfigProcedure:
 			fleetServiceApplyNodeConfigHandler.ServeHTTP(w, r)
+		case FleetServiceExportCAKeyProcedure:
+			fleetServiceExportCAKeyHandler.ServeHTTP(w, r)
+		case FleetServiceImportCAKeyProcedure:
+			fleetServiceImportCAKeyHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -782,4 +856,12 @@ func (UnimplementedFleetServiceHandler) GetNodeConfig(context.Context, *connect.
 
 func (UnimplementedFleetServiceHandler) ApplyNodeConfig(context.Context, *connect.Request[v1.ApplyNodeConfigRequest]) (*connect.Response[v1.ApplyNodeConfigResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ApplyNodeConfig is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) ExportCAKey(context.Context, *connect.Request[v1.ExportCAKeyRequest]) (*connect.Response[v1.ExportCAKeyResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ExportCAKey is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) ImportCAKey(context.Context, *connect.Request[v1.ImportCAKeyRequest]) (*connect.Response[v1.ImportCAKeyResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ImportCAKey is not implemented"))
 }

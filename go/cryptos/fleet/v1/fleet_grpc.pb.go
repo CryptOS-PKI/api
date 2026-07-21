@@ -19,29 +19,35 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	FleetService_ListNodes_FullMethodName          = "/cryptos.fleet.v1.FleetService/ListNodes"
-	FleetService_GetNode_FullMethodName            = "/cryptos.fleet.v1.FleetService/GetNode"
-	FleetService_ListCertificates_FullMethodName   = "/cryptos.fleet.v1.FleetService/ListCertificates"
-	FleetService_ListProfiles_FullMethodName       = "/cryptos.fleet.v1.FleetService/ListProfiles"
-	FleetService_CreateProfile_FullMethodName      = "/cryptos.fleet.v1.FleetService/CreateProfile"
-	FleetService_UpdateProfile_FullMethodName      = "/cryptos.fleet.v1.FleetService/UpdateProfile"
-	FleetService_DeleteProfile_FullMethodName      = "/cryptos.fleet.v1.FleetService/DeleteProfile"
-	FleetService_ApplyProfileToNode_FullMethodName = "/cryptos.fleet.v1.FleetService/ApplyProfileToNode"
-	FleetService_ListAdapters_FullMethodName       = "/cryptos.fleet.v1.FleetService/ListAdapters"
-	FleetService_SetAdapterEnabled_FullMethodName  = "/cryptos.fleet.v1.FleetService/SetAdapterEnabled"
-	FleetService_ListAudit_FullMethodName          = "/cryptos.fleet.v1.FleetService/ListAudit"
-	FleetService_ListEnrollments_FullMethodName    = "/cryptos.fleet.v1.FleetService/ListEnrollments"
-	FleetService_CreateEnrollment_FullMethodName   = "/cryptos.fleet.v1.FleetService/CreateEnrollment"
-	FleetService_ApproveEnrollment_FullMethodName  = "/cryptos.fleet.v1.FleetService/ApproveEnrollment"
-	FleetService_RejectEnrollment_FullMethodName   = "/cryptos.fleet.v1.FleetService/RejectEnrollment"
-	FleetService_WhoAmI_FullMethodName             = "/cryptos.fleet.v1.FleetService/WhoAmI"
-	FleetService_RevokeCertificate_FullMethodName  = "/cryptos.fleet.v1.FleetService/RevokeCertificate"
-	FleetService_IssueLeaf_FullMethodName          = "/cryptos.fleet.v1.FleetService/IssueLeaf"
-	FleetService_RekeyNode_FullMethodName          = "/cryptos.fleet.v1.FleetService/RekeyNode"
-	FleetService_GetNodeConfig_FullMethodName      = "/cryptos.fleet.v1.FleetService/GetNodeConfig"
-	FleetService_ApplyNodeConfig_FullMethodName    = "/cryptos.fleet.v1.FleetService/ApplyNodeConfig"
-	FleetService_ExportCAKey_FullMethodName        = "/cryptos.fleet.v1.FleetService/ExportCAKey"
-	FleetService_ImportCAKey_FullMethodName        = "/cryptos.fleet.v1.FleetService/ImportCAKey"
+	FleetService_ListNodes_FullMethodName                = "/cryptos.fleet.v1.FleetService/ListNodes"
+	FleetService_GetNode_FullMethodName                  = "/cryptos.fleet.v1.FleetService/GetNode"
+	FleetService_ListCertificates_FullMethodName         = "/cryptos.fleet.v1.FleetService/ListCertificates"
+	FleetService_ListProfiles_FullMethodName             = "/cryptos.fleet.v1.FleetService/ListProfiles"
+	FleetService_CreateProfile_FullMethodName            = "/cryptos.fleet.v1.FleetService/CreateProfile"
+	FleetService_UpdateProfile_FullMethodName            = "/cryptos.fleet.v1.FleetService/UpdateProfile"
+	FleetService_DeleteProfile_FullMethodName            = "/cryptos.fleet.v1.FleetService/DeleteProfile"
+	FleetService_ApplyProfileToNode_FullMethodName       = "/cryptos.fleet.v1.FleetService/ApplyProfileToNode"
+	FleetService_ListAdapters_FullMethodName             = "/cryptos.fleet.v1.FleetService/ListAdapters"
+	FleetService_SetAdapterEnabled_FullMethodName        = "/cryptos.fleet.v1.FleetService/SetAdapterEnabled"
+	FleetService_ListAudit_FullMethodName                = "/cryptos.fleet.v1.FleetService/ListAudit"
+	FleetService_ListEnrollments_FullMethodName          = "/cryptos.fleet.v1.FleetService/ListEnrollments"
+	FleetService_CreateEnrollment_FullMethodName         = "/cryptos.fleet.v1.FleetService/CreateEnrollment"
+	FleetService_ApproveEnrollment_FullMethodName        = "/cryptos.fleet.v1.FleetService/ApproveEnrollment"
+	FleetService_RejectEnrollment_FullMethodName         = "/cryptos.fleet.v1.FleetService/RejectEnrollment"
+	FleetService_WhoAmI_FullMethodName                   = "/cryptos.fleet.v1.FleetService/WhoAmI"
+	FleetService_RevokeCertificate_FullMethodName        = "/cryptos.fleet.v1.FleetService/RevokeCertificate"
+	FleetService_IssueLeaf_FullMethodName                = "/cryptos.fleet.v1.FleetService/IssueLeaf"
+	FleetService_RekeyNode_FullMethodName                = "/cryptos.fleet.v1.FleetService/RekeyNode"
+	FleetService_GetNodeConfig_FullMethodName            = "/cryptos.fleet.v1.FleetService/GetNodeConfig"
+	FleetService_ApplyNodeConfig_FullMethodName          = "/cryptos.fleet.v1.FleetService/ApplyNodeConfig"
+	FleetService_ExportCAKey_FullMethodName              = "/cryptos.fleet.v1.FleetService/ExportCAKey"
+	FleetService_ImportCAKey_FullMethodName              = "/cryptos.fleet.v1.FleetService/ImportCAKey"
+	FleetService_IssueOperatorCredential_FullMethodName  = "/cryptos.fleet.v1.FleetService/IssueOperatorCredential"
+	FleetService_RevokeOperatorCredential_FullMethodName = "/cryptos.fleet.v1.FleetService/RevokeOperatorCredential"
+	FleetService_ListOperatorCredentials_FullMethodName  = "/cryptos.fleet.v1.FleetService/ListOperatorCredentials"
+	FleetService_PreviewAdoption_FullMethodName          = "/cryptos.fleet.v1.FleetService/PreviewAdoption"
+	FleetService_AdoptNode_FullMethodName                = "/cryptos.fleet.v1.FleetService/AdoptNode"
+	FleetService_DecommissionNode_FullMethodName         = "/cryptos.fleet.v1.FleetService/DecommissionNode"
 )
 
 // FleetServiceClient is the client API for FleetService service.
@@ -139,6 +145,39 @@ type FleetServiceClient interface {
 	// reach the node and is never persisted. Admin-gated and audited (the audit
 	// names the node and restored subject only, never the secret or envelope).
 	ImportCAKey(ctx context.Context, in *ImportCAKeyRequest, opts ...grpc.CallOption) (*ImportCAKeyResponse, error)
+	// IssueOperatorCredential issues an operator client certificate. The browser
+	// generates the key and CSR; the manager routes signing to the node acting as
+	// the operator CA under an operator-<level> profile that carries the
+	// access-level extension. Only the CSR crosses the wire; the operator key
+	// stays in the browser. Admin-gated and audited (the audit names the subject
+	// and serial only, never the CSR or certificate bytes).
+	IssueOperatorCredential(ctx context.Context, in *IssueOperatorCredentialRequest, opts ...grpc.CallOption) (*IssueOperatorCredentialResponse, error)
+	// RevokeOperatorCredential revokes an operator credential on the operator-CA
+	// node by hex serial, with an RFC 5280 reason code. The manager enforces the
+	// revocation in the authz middleware, so a revoked operator can no longer
+	// authenticate. Admin-gated and audited.
+	RevokeOperatorCredential(ctx context.Context, in *RevokeOperatorCredentialRequest, opts ...grpc.CallOption) (*RevokeOperatorCredentialResponse, error)
+	// ListOperatorCredentials returns the operator credentials the manager has
+	// issued, with their level, expiry, and revocation state. Operator-readable.
+	ListOperatorCredentials(ctx context.Context, in *ListOperatorCredentialsRequest, opts ...grpc.CallOption) (*ListOperatorCredentialsResponse, error)
+	// PreviewAdoption performs the trust-on-first-use step of adopting a new
+	// node: it dials the maintenance endpoint (no pin yet), captures the
+	// self-signed certificate the node presents, and returns its SHA-256
+	// fingerprint and subject so the operator can confirm it before adoption.
+	// Admin-gated; a read, so it is not audited.
+	PreviewAdoption(ctx context.Context, in *PreviewAdoptionRequest, opts ...grpc.CallOption) (*PreviewAdoptionResponse, error)
+	// AdoptNode provisions a new maintenance node end to end and streams progress.
+	// Pinned to the fingerprint the operator confirmed via PreviewAdoption, the
+	// manager applies the initial config, awaits the reboot, drives the first-boot
+	// ceremony, and registers the node. Each streamed message carries a phase
+	// (applying-config, installing, awaiting-reboot, ceremony, established) with
+	// human-readable detail; the final message sets done. Admin-gated and audited.
+	AdoptNode(ctx context.Context, in *AdoptNodeRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[AdoptNodeResponse], error)
+	// DecommissionNode remotely wipes a managed node's identity and data via the
+	// node's mTLS-served RemoteReset, then reboots it into maintenance. The caller
+	// must echo the node's current Root CA CN as confirmation. Admin-gated and
+	// audited (the audit names the node and that it was wiped, never any secret).
+	DecommissionNode(ctx context.Context, in *DecommissionNodeRequest, opts ...grpc.CallOption) (*DecommissionNodeResponse, error)
 }
 
 type fleetServiceClient struct {
@@ -379,6 +418,75 @@ func (c *fleetServiceClient) ImportCAKey(ctx context.Context, in *ImportCAKeyReq
 	return out, nil
 }
 
+func (c *fleetServiceClient) IssueOperatorCredential(ctx context.Context, in *IssueOperatorCredentialRequest, opts ...grpc.CallOption) (*IssueOperatorCredentialResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(IssueOperatorCredentialResponse)
+	err := c.cc.Invoke(ctx, FleetService_IssueOperatorCredential_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) RevokeOperatorCredential(ctx context.Context, in *RevokeOperatorCredentialRequest, opts ...grpc.CallOption) (*RevokeOperatorCredentialResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RevokeOperatorCredentialResponse)
+	err := c.cc.Invoke(ctx, FleetService_RevokeOperatorCredential_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) ListOperatorCredentials(ctx context.Context, in *ListOperatorCredentialsRequest, opts ...grpc.CallOption) (*ListOperatorCredentialsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListOperatorCredentialsResponse)
+	err := c.cc.Invoke(ctx, FleetService_ListOperatorCredentials_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) PreviewAdoption(ctx context.Context, in *PreviewAdoptionRequest, opts ...grpc.CallOption) (*PreviewAdoptionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PreviewAdoptionResponse)
+	err := c.cc.Invoke(ctx, FleetService_PreviewAdoption_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) AdoptNode(ctx context.Context, in *AdoptNodeRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[AdoptNodeResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &FleetService_ServiceDesc.Streams[0], FleetService_AdoptNode_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[AdoptNodeRequest, AdoptNodeResponse]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type FleetService_AdoptNodeClient = grpc.ServerStreamingClient[AdoptNodeResponse]
+
+func (c *fleetServiceClient) DecommissionNode(ctx context.Context, in *DecommissionNodeRequest, opts ...grpc.CallOption) (*DecommissionNodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DecommissionNodeResponse)
+	err := c.cc.Invoke(ctx, FleetService_DecommissionNode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FleetServiceServer is the server API for FleetService service.
 // All implementations should embed UnimplementedFleetServiceServer
 // for forward compatibility.
@@ -474,6 +582,39 @@ type FleetServiceServer interface {
 	// reach the node and is never persisted. Admin-gated and audited (the audit
 	// names the node and restored subject only, never the secret or envelope).
 	ImportCAKey(context.Context, *ImportCAKeyRequest) (*ImportCAKeyResponse, error)
+	// IssueOperatorCredential issues an operator client certificate. The browser
+	// generates the key and CSR; the manager routes signing to the node acting as
+	// the operator CA under an operator-<level> profile that carries the
+	// access-level extension. Only the CSR crosses the wire; the operator key
+	// stays in the browser. Admin-gated and audited (the audit names the subject
+	// and serial only, never the CSR or certificate bytes).
+	IssueOperatorCredential(context.Context, *IssueOperatorCredentialRequest) (*IssueOperatorCredentialResponse, error)
+	// RevokeOperatorCredential revokes an operator credential on the operator-CA
+	// node by hex serial, with an RFC 5280 reason code. The manager enforces the
+	// revocation in the authz middleware, so a revoked operator can no longer
+	// authenticate. Admin-gated and audited.
+	RevokeOperatorCredential(context.Context, *RevokeOperatorCredentialRequest) (*RevokeOperatorCredentialResponse, error)
+	// ListOperatorCredentials returns the operator credentials the manager has
+	// issued, with their level, expiry, and revocation state. Operator-readable.
+	ListOperatorCredentials(context.Context, *ListOperatorCredentialsRequest) (*ListOperatorCredentialsResponse, error)
+	// PreviewAdoption performs the trust-on-first-use step of adopting a new
+	// node: it dials the maintenance endpoint (no pin yet), captures the
+	// self-signed certificate the node presents, and returns its SHA-256
+	// fingerprint and subject so the operator can confirm it before adoption.
+	// Admin-gated; a read, so it is not audited.
+	PreviewAdoption(context.Context, *PreviewAdoptionRequest) (*PreviewAdoptionResponse, error)
+	// AdoptNode provisions a new maintenance node end to end and streams progress.
+	// Pinned to the fingerprint the operator confirmed via PreviewAdoption, the
+	// manager applies the initial config, awaits the reboot, drives the first-boot
+	// ceremony, and registers the node. Each streamed message carries a phase
+	// (applying-config, installing, awaiting-reboot, ceremony, established) with
+	// human-readable detail; the final message sets done. Admin-gated and audited.
+	AdoptNode(*AdoptNodeRequest, grpc.ServerStreamingServer[AdoptNodeResponse]) error
+	// DecommissionNode remotely wipes a managed node's identity and data via the
+	// node's mTLS-served RemoteReset, then reboots it into maintenance. The caller
+	// must echo the node's current Root CA CN as confirmation. Admin-gated and
+	// audited (the audit names the node and that it was wiped, never any secret).
+	DecommissionNode(context.Context, *DecommissionNodeRequest) (*DecommissionNodeResponse, error)
 }
 
 // UnimplementedFleetServiceServer should be embedded to have
@@ -551,6 +692,24 @@ func (UnimplementedFleetServiceServer) ExportCAKey(context.Context, *ExportCAKey
 }
 func (UnimplementedFleetServiceServer) ImportCAKey(context.Context, *ImportCAKeyRequest) (*ImportCAKeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ImportCAKey not implemented")
+}
+func (UnimplementedFleetServiceServer) IssueOperatorCredential(context.Context, *IssueOperatorCredentialRequest) (*IssueOperatorCredentialResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IssueOperatorCredential not implemented")
+}
+func (UnimplementedFleetServiceServer) RevokeOperatorCredential(context.Context, *RevokeOperatorCredentialRequest) (*RevokeOperatorCredentialResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RevokeOperatorCredential not implemented")
+}
+func (UnimplementedFleetServiceServer) ListOperatorCredentials(context.Context, *ListOperatorCredentialsRequest) (*ListOperatorCredentialsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListOperatorCredentials not implemented")
+}
+func (UnimplementedFleetServiceServer) PreviewAdoption(context.Context, *PreviewAdoptionRequest) (*PreviewAdoptionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PreviewAdoption not implemented")
+}
+func (UnimplementedFleetServiceServer) AdoptNode(*AdoptNodeRequest, grpc.ServerStreamingServer[AdoptNodeResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method AdoptNode not implemented")
+}
+func (UnimplementedFleetServiceServer) DecommissionNode(context.Context, *DecommissionNodeRequest) (*DecommissionNodeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DecommissionNode not implemented")
 }
 func (UnimplementedFleetServiceServer) testEmbeddedByValue() {}
 
@@ -986,6 +1145,107 @@ func _FleetService_ImportCAKey_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FleetService_IssueOperatorCredential_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IssueOperatorCredentialRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).IssueOperatorCredential(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_IssueOperatorCredential_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).IssueOperatorCredential(ctx, req.(*IssueOperatorCredentialRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_RevokeOperatorCredential_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevokeOperatorCredentialRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).RevokeOperatorCredential(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_RevokeOperatorCredential_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).RevokeOperatorCredential(ctx, req.(*RevokeOperatorCredentialRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_ListOperatorCredentials_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListOperatorCredentialsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).ListOperatorCredentials(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_ListOperatorCredentials_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).ListOperatorCredentials(ctx, req.(*ListOperatorCredentialsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_PreviewAdoption_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PreviewAdoptionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).PreviewAdoption(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_PreviewAdoption_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).PreviewAdoption(ctx, req.(*PreviewAdoptionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_AdoptNode_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(AdoptNodeRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(FleetServiceServer).AdoptNode(m, &grpc.GenericServerStream[AdoptNodeRequest, AdoptNodeResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type FleetService_AdoptNodeServer = grpc.ServerStreamingServer[AdoptNodeResponse]
+
+func _FleetService_DecommissionNode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DecommissionNodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).DecommissionNode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_DecommissionNode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).DecommissionNode(ctx, req.(*DecommissionNodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FleetService_ServiceDesc is the grpc.ServiceDesc for FleetService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1085,7 +1345,33 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "ImportCAKey",
 			Handler:    _FleetService_ImportCAKey_Handler,
 		},
+		{
+			MethodName: "IssueOperatorCredential",
+			Handler:    _FleetService_IssueOperatorCredential_Handler,
+		},
+		{
+			MethodName: "RevokeOperatorCredential",
+			Handler:    _FleetService_RevokeOperatorCredential_Handler,
+		},
+		{
+			MethodName: "ListOperatorCredentials",
+			Handler:    _FleetService_ListOperatorCredentials_Handler,
+		},
+		{
+			MethodName: "PreviewAdoption",
+			Handler:    _FleetService_PreviewAdoption_Handler,
+		},
+		{
+			MethodName: "DecommissionNode",
+			Handler:    _FleetService_DecommissionNode_Handler,
+		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "AdoptNode",
+			Handler:       _FleetService_AdoptNode_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "cryptos/fleet/v1/fleet.proto",
 }

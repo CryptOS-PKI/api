@@ -3261,6 +3261,750 @@ func (x *ImportCAKeyResponse) GetIssuerCn() string {
 	return ""
 }
 
+// IssueOperatorCredentialRequest carries the operator subject CN, the access
+// level to grant, and the browser-generated CSR to sign under the matching
+// operator-<level> profile.
+type IssueOperatorCredentialRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	CommonName string `protobuf:"bytes,1,opt,name=common_name,json=commonName,proto3" json:"common_name,omitempty"`
+	Level      string `protobuf:"bytes,2,opt,name=level,proto3" json:"level,omitempty"`                 // "viewer"|"operator"|"admin"
+	CsrDer     []byte `protobuf:"bytes,3,opt,name=csr_der,json=csrDer,proto3" json:"csr_der,omitempty"` // browser-generated
+}
+
+func (x *IssueOperatorCredentialRequest) Reset() {
+	*x = IssueOperatorCredentialRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[54]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *IssueOperatorCredentialRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IssueOperatorCredentialRequest) ProtoMessage() {}
+
+func (x *IssueOperatorCredentialRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[54]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IssueOperatorCredentialRequest.ProtoReflect.Descriptor instead.
+func (*IssueOperatorCredentialRequest) Descriptor() ([]byte, []int) {
+	return file_cryptos_fleet_v1_fleet_proto_rawDescGZIP(), []int{54}
+}
+
+func (x *IssueOperatorCredentialRequest) GetCommonName() string {
+	if x != nil {
+		return x.CommonName
+	}
+	return ""
+}
+
+func (x *IssueOperatorCredentialRequest) GetLevel() string {
+	if x != nil {
+		return x.Level
+	}
+	return ""
+}
+
+func (x *IssueOperatorCredentialRequest) GetCsrDer() []byte {
+	if x != nil {
+		return x.CsrDer
+	}
+	return nil
+}
+
+// IssueOperatorCredentialResponse carries the signed operator certificate and
+// its hex serial. The browser assembles the PKCS#12 with its own key.
+type IssueOperatorCredentialResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	CertDer   []byte `protobuf:"bytes,1,opt,name=cert_der,json=certDer,proto3" json:"cert_der,omitempty"`
+	SerialHex string `protobuf:"bytes,2,opt,name=serial_hex,json=serialHex,proto3" json:"serial_hex,omitempty"`
+}
+
+func (x *IssueOperatorCredentialResponse) Reset() {
+	*x = IssueOperatorCredentialResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[55]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *IssueOperatorCredentialResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IssueOperatorCredentialResponse) ProtoMessage() {}
+
+func (x *IssueOperatorCredentialResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[55]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IssueOperatorCredentialResponse.ProtoReflect.Descriptor instead.
+func (*IssueOperatorCredentialResponse) Descriptor() ([]byte, []int) {
+	return file_cryptos_fleet_v1_fleet_proto_rawDescGZIP(), []int{55}
+}
+
+func (x *IssueOperatorCredentialResponse) GetCertDer() []byte {
+	if x != nil {
+		return x.CertDer
+	}
+	return nil
+}
+
+func (x *IssueOperatorCredentialResponse) GetSerialHex() string {
+	if x != nil {
+		return x.SerialHex
+	}
+	return ""
+}
+
+// RevokeOperatorCredentialRequest names the operator credential to revoke by
+// hex serial, with the RFC 5280 reason code.
+type RevokeOperatorCredentialRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	SerialHex  string `protobuf:"bytes,1,opt,name=serial_hex,json=serialHex,proto3" json:"serial_hex,omitempty"`
+	ReasonCode int32  `protobuf:"varint,2,opt,name=reason_code,json=reasonCode,proto3" json:"reason_code,omitempty"`
+}
+
+func (x *RevokeOperatorCredentialRequest) Reset() {
+	*x = RevokeOperatorCredentialRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[56]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *RevokeOperatorCredentialRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RevokeOperatorCredentialRequest) ProtoMessage() {}
+
+func (x *RevokeOperatorCredentialRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[56]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RevokeOperatorCredentialRequest.ProtoReflect.Descriptor instead.
+func (*RevokeOperatorCredentialRequest) Descriptor() ([]byte, []int) {
+	return file_cryptos_fleet_v1_fleet_proto_rawDescGZIP(), []int{56}
+}
+
+func (x *RevokeOperatorCredentialRequest) GetSerialHex() string {
+	if x != nil {
+		return x.SerialHex
+	}
+	return ""
+}
+
+func (x *RevokeOperatorCredentialRequest) GetReasonCode() int32 {
+	if x != nil {
+		return x.ReasonCode
+	}
+	return 0
+}
+
+// RevokeOperatorCredentialResponse echoes the revoked serial and the time it
+// was revoked (RFC3339).
+type RevokeOperatorCredentialResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	SerialHex string `protobuf:"bytes,1,opt,name=serial_hex,json=serialHex,proto3" json:"serial_hex,omitempty"`
+	RevokedAt string `protobuf:"bytes,2,opt,name=revoked_at,json=revokedAt,proto3" json:"revoked_at,omitempty"`
+}
+
+func (x *RevokeOperatorCredentialResponse) Reset() {
+	*x = RevokeOperatorCredentialResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[57]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *RevokeOperatorCredentialResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RevokeOperatorCredentialResponse) ProtoMessage() {}
+
+func (x *RevokeOperatorCredentialResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[57]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RevokeOperatorCredentialResponse.ProtoReflect.Descriptor instead.
+func (*RevokeOperatorCredentialResponse) Descriptor() ([]byte, []int) {
+	return file_cryptos_fleet_v1_fleet_proto_rawDescGZIP(), []int{57}
+}
+
+func (x *RevokeOperatorCredentialResponse) GetSerialHex() string {
+	if x != nil {
+		return x.SerialHex
+	}
+	return ""
+}
+
+func (x *RevokeOperatorCredentialResponse) GetRevokedAt() string {
+	if x != nil {
+		return x.RevokedAt
+	}
+	return ""
+}
+
+type ListOperatorCredentialsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *ListOperatorCredentialsRequest) Reset() {
+	*x = ListOperatorCredentialsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[58]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListOperatorCredentialsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListOperatorCredentialsRequest) ProtoMessage() {}
+
+func (x *ListOperatorCredentialsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[58]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListOperatorCredentialsRequest.ProtoReflect.Descriptor instead.
+func (*ListOperatorCredentialsRequest) Descriptor() ([]byte, []int) {
+	return file_cryptos_fleet_v1_fleet_proto_rawDescGZIP(), []int{58}
+}
+
+// OperatorCredential is one issued operator credential row.
+type OperatorCredential struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	CommonName string `protobuf:"bytes,1,opt,name=common_name,json=commonName,proto3" json:"common_name,omitempty"`
+	SerialHex  string `protobuf:"bytes,2,opt,name=serial_hex,json=serialHex,proto3" json:"serial_hex,omitempty"`
+	Level      string `protobuf:"bytes,3,opt,name=level,proto3" json:"level,omitempty"`
+	NotAfter   string `protobuf:"bytes,4,opt,name=not_after,json=notAfter,proto3" json:"not_after,omitempty"`
+	Revoked    bool   `protobuf:"varint,5,opt,name=revoked,proto3" json:"revoked,omitempty"`
+}
+
+func (x *OperatorCredential) Reset() {
+	*x = OperatorCredential{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[59]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *OperatorCredential) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OperatorCredential) ProtoMessage() {}
+
+func (x *OperatorCredential) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[59]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OperatorCredential.ProtoReflect.Descriptor instead.
+func (*OperatorCredential) Descriptor() ([]byte, []int) {
+	return file_cryptos_fleet_v1_fleet_proto_rawDescGZIP(), []int{59}
+}
+
+func (x *OperatorCredential) GetCommonName() string {
+	if x != nil {
+		return x.CommonName
+	}
+	return ""
+}
+
+func (x *OperatorCredential) GetSerialHex() string {
+	if x != nil {
+		return x.SerialHex
+	}
+	return ""
+}
+
+func (x *OperatorCredential) GetLevel() string {
+	if x != nil {
+		return x.Level
+	}
+	return ""
+}
+
+func (x *OperatorCredential) GetNotAfter() string {
+	if x != nil {
+		return x.NotAfter
+	}
+	return ""
+}
+
+func (x *OperatorCredential) GetRevoked() bool {
+	if x != nil {
+		return x.Revoked
+	}
+	return false
+}
+
+type ListOperatorCredentialsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Items []*OperatorCredential `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+}
+
+func (x *ListOperatorCredentialsResponse) Reset() {
+	*x = ListOperatorCredentialsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[60]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListOperatorCredentialsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListOperatorCredentialsResponse) ProtoMessage() {}
+
+func (x *ListOperatorCredentialsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[60]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListOperatorCredentialsResponse.ProtoReflect.Descriptor instead.
+func (*ListOperatorCredentialsResponse) Descriptor() ([]byte, []int) {
+	return file_cryptos_fleet_v1_fleet_proto_rawDescGZIP(), []int{60}
+}
+
+func (x *ListOperatorCredentialsResponse) GetItems() []*OperatorCredential {
+	if x != nil {
+		return x.Items
+	}
+	return nil
+}
+
+// PreviewAdoptionRequest names the maintenance endpoint to inspect.
+type PreviewAdoptionRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Endpoint string `protobuf:"bytes,1,opt,name=endpoint,proto3" json:"endpoint,omitempty"`
+}
+
+func (x *PreviewAdoptionRequest) Reset() {
+	*x = PreviewAdoptionRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[61]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *PreviewAdoptionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PreviewAdoptionRequest) ProtoMessage() {}
+
+func (x *PreviewAdoptionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[61]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PreviewAdoptionRequest.ProtoReflect.Descriptor instead.
+func (*PreviewAdoptionRequest) Descriptor() ([]byte, []int) {
+	return file_cryptos_fleet_v1_fleet_proto_rawDescGZIP(), []int{61}
+}
+
+func (x *PreviewAdoptionRequest) GetEndpoint() string {
+	if x != nil {
+		return x.Endpoint
+	}
+	return ""
+}
+
+// PreviewAdoptionResponse returns the maintenance node's certificate
+// fingerprint and subject for the operator to confirm (trust on first use).
+type PreviewAdoptionResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	CertSha256 string `protobuf:"bytes,1,opt,name=cert_sha256,json=certSha256,proto3" json:"cert_sha256,omitempty"`
+	Subject    string `protobuf:"bytes,2,opt,name=subject,proto3" json:"subject,omitempty"`
+}
+
+func (x *PreviewAdoptionResponse) Reset() {
+	*x = PreviewAdoptionResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[62]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *PreviewAdoptionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PreviewAdoptionResponse) ProtoMessage() {}
+
+func (x *PreviewAdoptionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[62]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PreviewAdoptionResponse.ProtoReflect.Descriptor instead.
+func (*PreviewAdoptionResponse) Descriptor() ([]byte, []int) {
+	return file_cryptos_fleet_v1_fleet_proto_rawDescGZIP(), []int{62}
+}
+
+func (x *PreviewAdoptionResponse) GetCertSha256() string {
+	if x != nil {
+		return x.CertSha256
+	}
+	return ""
+}
+
+func (x *PreviewAdoptionResponse) GetSubject() string {
+	if x != nil {
+		return x.Subject
+	}
+	return ""
+}
+
+// AdoptNodeRequest carries the maintenance endpoint, the fingerprint the
+// operator confirmed via PreviewAdoption, and the initial config to apply.
+type AdoptNodeRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Endpoint         string            `protobuf:"bytes,1,opt,name=endpoint,proto3" json:"endpoint,omitempty"`
+	PinnedCertSha256 string            `protobuf:"bytes,2,opt,name=pinned_cert_sha256,json=pinnedCertSha256,proto3" json:"pinned_cert_sha256,omitempty"` // operator-confirmed fingerprint from PreviewAdoption
+	Config           *v1.MachineConfig `protobuf:"bytes,3,opt,name=config,proto3" json:"config,omitempty"`                                               // initial config to apply
+}
+
+func (x *AdoptNodeRequest) Reset() {
+	*x = AdoptNodeRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[63]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AdoptNodeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdoptNodeRequest) ProtoMessage() {}
+
+func (x *AdoptNodeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[63]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdoptNodeRequest.ProtoReflect.Descriptor instead.
+func (*AdoptNodeRequest) Descriptor() ([]byte, []int) {
+	return file_cryptos_fleet_v1_fleet_proto_rawDescGZIP(), []int{63}
+}
+
+func (x *AdoptNodeRequest) GetEndpoint() string {
+	if x != nil {
+		return x.Endpoint
+	}
+	return ""
+}
+
+func (x *AdoptNodeRequest) GetPinnedCertSha256() string {
+	if x != nil {
+		return x.PinnedCertSha256
+	}
+	return ""
+}
+
+func (x *AdoptNodeRequest) GetConfig() *v1.MachineConfig {
+	if x != nil {
+		return x.Config
+	}
+	return nil
+}
+
+// AdoptNodeResponse is streamed during adoption. phase is one of
+// applying-config, installing, awaiting-reboot, ceremony, established; done is
+// set on the final message.
+type AdoptNodeResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Phase  string `protobuf:"bytes,1,opt,name=phase,proto3" json:"phase,omitempty"`
+	Detail string `protobuf:"bytes,2,opt,name=detail,proto3" json:"detail,omitempty"`
+	Done   bool   `protobuf:"varint,3,opt,name=done,proto3" json:"done,omitempty"`
+}
+
+func (x *AdoptNodeResponse) Reset() {
+	*x = AdoptNodeResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[64]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AdoptNodeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdoptNodeResponse) ProtoMessage() {}
+
+func (x *AdoptNodeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[64]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdoptNodeResponse.ProtoReflect.Descriptor instead.
+func (*AdoptNodeResponse) Descriptor() ([]byte, []int) {
+	return file_cryptos_fleet_v1_fleet_proto_rawDescGZIP(), []int{64}
+}
+
+func (x *AdoptNodeResponse) GetPhase() string {
+	if x != nil {
+		return x.Phase
+	}
+	return ""
+}
+
+func (x *AdoptNodeResponse) GetDetail() string {
+	if x != nil {
+		return x.Detail
+	}
+	return ""
+}
+
+func (x *AdoptNodeResponse) GetDone() bool {
+	if x != nil {
+		return x.Done
+	}
+	return false
+}
+
+// DecommissionNodeRequest names the managed node to wipe and echoes its current
+// Root CA CN as destructive confirmation.
+type DecommissionNodeRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	NodeName          string `protobuf:"bytes,1,opt,name=node_name,json=nodeName,proto3" json:"node_name,omitempty"`
+	ConfirmCommonName string `protobuf:"bytes,2,opt,name=confirm_common_name,json=confirmCommonName,proto3" json:"confirm_common_name,omitempty"`
+}
+
+func (x *DecommissionNodeRequest) Reset() {
+	*x = DecommissionNodeRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[65]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DecommissionNodeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DecommissionNodeRequest) ProtoMessage() {}
+
+func (x *DecommissionNodeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[65]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DecommissionNodeRequest.ProtoReflect.Descriptor instead.
+func (*DecommissionNodeRequest) Descriptor() ([]byte, []int) {
+	return file_cryptos_fleet_v1_fleet_proto_rawDescGZIP(), []int{65}
+}
+
+func (x *DecommissionNodeRequest) GetNodeName() string {
+	if x != nil {
+		return x.NodeName
+	}
+	return ""
+}
+
+func (x *DecommissionNodeRequest) GetConfirmCommonName() string {
+	if x != nil {
+		return x.ConfirmCommonName
+	}
+	return ""
+}
+
+// DecommissionNodeResponse reports that the node accepted the wipe and is
+// rebooting into maintenance.
+type DecommissionNodeResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Rebooting bool `protobuf:"varint,1,opt,name=rebooting,proto3" json:"rebooting,omitempty"`
+}
+
+func (x *DecommissionNodeResponse) Reset() {
+	*x = DecommissionNodeResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[66]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DecommissionNodeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DecommissionNodeResponse) ProtoMessage() {}
+
+func (x *DecommissionNodeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_fleet_v1_fleet_proto_msgTypes[66]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DecommissionNodeResponse.ProtoReflect.Descriptor instead.
+func (*DecommissionNodeResponse) Descriptor() ([]byte, []int) {
+	return file_cryptos_fleet_v1_fleet_proto_rawDescGZIP(), []int{66}
+}
+
+func (x *DecommissionNodeResponse) GetRebooting() bool {
+	if x != nil {
+		return x.Rebooting
+	}
+	return false
+}
+
 var File_cryptos_fleet_v1_fleet_proto protoreflect.FileDescriptor
 
 var file_cryptos_fleet_v1_fleet_proto_rawDesc = []byte{
@@ -3606,13 +4350,90 @@ var file_cryptos_fleet_v1_fleet_proto_rawDesc = []byte{
 	0x73, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x75, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x5f, 0x63, 0x6e,
 	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x75, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x43,
 	0x6e, 0x12, 0x1b, 0x0a, 0x09, 0x69, 0x73, 0x73, 0x75, 0x65, 0x72, 0x5f, 0x63, 0x6e, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x69, 0x73, 0x73, 0x75, 0x65, 0x72, 0x43, 0x6e, 0x2a, 0x52,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x69, 0x73, 0x73, 0x75, 0x65, 0x72, 0x43, 0x6e, 0x22, 0x70,
+	0x0a, 0x1e, 0x49, 0x73, 0x73, 0x75, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x43,
+	0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x12, 0x1f, 0x0a, 0x0b, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x4e, 0x61, 0x6d,
+	0x65, 0x12, 0x14, 0x0a, 0x05, 0x6c, 0x65, 0x76, 0x65, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x05, 0x6c, 0x65, 0x76, 0x65, 0x6c, 0x12, 0x17, 0x0a, 0x07, 0x63, 0x73, 0x72, 0x5f, 0x64,
+	0x65, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x06, 0x63, 0x73, 0x72, 0x44, 0x65, 0x72,
+	0x22, 0x5b, 0x0a, 0x1f, 0x49, 0x73, 0x73, 0x75, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
+	0x72, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x19, 0x0a, 0x08, 0x63, 0x65, 0x72, 0x74, 0x5f, 0x64, 0x65, 0x72, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x07, 0x63, 0x65, 0x72, 0x74, 0x44, 0x65, 0x72, 0x12, 0x1d,
+	0x0a, 0x0a, 0x73, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x5f, 0x68, 0x65, 0x78, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x09, 0x73, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x48, 0x65, 0x78, 0x22, 0x61, 0x0a,
+	0x1f, 0x52, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x43,
+	0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x5f, 0x68, 0x65, 0x78, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x48, 0x65, 0x78, 0x12,
+	0x1f, 0x0a, 0x0b, 0x72, 0x65, 0x61, 0x73, 0x6f, 0x6e, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x05, 0x52, 0x0a, 0x72, 0x65, 0x61, 0x73, 0x6f, 0x6e, 0x43, 0x6f, 0x64, 0x65,
+	0x22, 0x60, 0x0a, 0x20, 0x52, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74,
+	0x6f, 0x72, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x5f, 0x68,
+	0x65, 0x78, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x65, 0x72, 0x69, 0x61, 0x6c,
+	0x48, 0x65, 0x78, 0x12, 0x1d, 0x0a, 0x0a, 0x72, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x64, 0x5f, 0x61,
+	0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x72, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x64,
+	0x41, 0x74, 0x22, 0x20, 0x0a, 0x1e, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74,
+	0x6f, 0x72, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x22, 0xa1, 0x01, 0x0a, 0x12, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
+	0x72, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x12, 0x1f, 0x0a, 0x0b, 0x63,
+	0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x0a, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x1d, 0x0a, 0x0a,
+	0x73, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x5f, 0x68, 0x65, 0x78, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x09, 0x73, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x48, 0x65, 0x78, 0x12, 0x14, 0x0a, 0x05, 0x6c,
+	0x65, 0x76, 0x65, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x6c, 0x65, 0x76, 0x65,
+	0x6c, 0x12, 0x1b, 0x0a, 0x09, 0x6e, 0x6f, 0x74, 0x5f, 0x61, 0x66, 0x74, 0x65, 0x72, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x6e, 0x6f, 0x74, 0x41, 0x66, 0x74, 0x65, 0x72, 0x12, 0x18,
+	0x0a, 0x07, 0x72, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x08, 0x52,
+	0x07, 0x72, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x64, 0x22, 0x5d, 0x0a, 0x1f, 0x4c, 0x69, 0x73, 0x74,
+	0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x61, 0x6c, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3a, 0x0a, 0x05, 0x69,
+	0x74, 0x65, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x63, 0x72, 0x79,
+	0x70, 0x74, 0x6f, 0x73, 0x2e, 0x66, 0x6c, 0x65, 0x65, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x70,
+	0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c,
+	0x52, 0x05, 0x69, 0x74, 0x65, 0x6d, 0x73, 0x22, 0x34, 0x0a, 0x16, 0x50, 0x72, 0x65, 0x76, 0x69,
+	0x65, 0x77, 0x41, 0x64, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x12, 0x1a, 0x0a, 0x08, 0x65, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x08, 0x65, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x22, 0x54, 0x0a,
+	0x17, 0x50, 0x72, 0x65, 0x76, 0x69, 0x65, 0x77, 0x41, 0x64, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x63, 0x65, 0x72, 0x74,
+	0x5f, 0x73, 0x68, 0x61, 0x32, 0x35, 0x36, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x63,
+	0x65, 0x72, 0x74, 0x53, 0x68, 0x61, 0x32, 0x35, 0x36, 0x12, 0x18, 0x0a, 0x07, 0x73, 0x75, 0x62,
+	0x6a, 0x65, 0x63, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x73, 0x75, 0x62, 0x6a,
+	0x65, 0x63, 0x74, 0x22, 0x8f, 0x01, 0x0a, 0x10, 0x41, 0x64, 0x6f, 0x70, 0x74, 0x4e, 0x6f, 0x64,
+	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x65, 0x6e, 0x64, 0x70,
+	0x6f, 0x69, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x65, 0x6e, 0x64, 0x70,
+	0x6f, 0x69, 0x6e, 0x74, 0x12, 0x2c, 0x0a, 0x12, 0x70, 0x69, 0x6e, 0x6e, 0x65, 0x64, 0x5f, 0x63,
+	0x65, 0x72, 0x74, 0x5f, 0x73, 0x68, 0x61, 0x32, 0x35, 0x36, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x10, 0x70, 0x69, 0x6e, 0x6e, 0x65, 0x64, 0x43, 0x65, 0x72, 0x74, 0x53, 0x68, 0x61, 0x32,
+	0x35, 0x36, 0x12, 0x31, 0x0a, 0x06, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x76, 0x31, 0x2e,
+	0x4d, 0x61, 0x63, 0x68, 0x69, 0x6e, 0x65, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x52, 0x06, 0x63,
+	0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0x55, 0x0a, 0x11, 0x41, 0x64, 0x6f, 0x70, 0x74, 0x4e, 0x6f,
+	0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x68,
+	0x61, 0x73, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x70, 0x68, 0x61, 0x73, 0x65,
+	0x12, 0x16, 0x0a, 0x06, 0x64, 0x65, 0x74, 0x61, 0x69, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x06, 0x64, 0x65, 0x74, 0x61, 0x69, 0x6c, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x6f, 0x6e, 0x65,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x08, 0x52, 0x04, 0x64, 0x6f, 0x6e, 0x65, 0x22, 0x66, 0x0a, 0x17,
+	0x44, 0x65, 0x63, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x4e, 0x6f, 0x64, 0x65,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x6e, 0x6f, 0x64, 0x65, 0x5f,
+	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x6e, 0x6f, 0x64, 0x65,
+	0x4e, 0x61, 0x6d, 0x65, 0x12, 0x2e, 0x0a, 0x13, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x5f,
+	0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x11, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x43, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e,
+	0x4e, 0x61, 0x6d, 0x65, 0x22, 0x38, 0x0a, 0x18, 0x44, 0x65, 0x63, 0x6f, 0x6d, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x1c, 0x0a, 0x09, 0x72, 0x65, 0x62, 0x6f, 0x6f, 0x74, 0x69, 0x6e, 0x67, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x08, 0x52, 0x09, 0x72, 0x65, 0x62, 0x6f, 0x6f, 0x74, 0x69, 0x6e, 0x67, 0x2a, 0x52,
 	0x0a, 0x06, 0x48, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x12, 0x16, 0x0a, 0x12, 0x48, 0x45, 0x41, 0x4c,
 	0x54, 0x48, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00,
 	0x12, 0x0d, 0x0a, 0x09, 0x48, 0x45, 0x41, 0x4c, 0x54, 0x48, 0x5f, 0x55, 0x50, 0x10, 0x01, 0x12,
 	0x0f, 0x0a, 0x0b, 0x48, 0x45, 0x41, 0x4c, 0x54, 0x48, 0x5f, 0x44, 0x4f, 0x57, 0x4e, 0x10, 0x02,
 	0x12, 0x10, 0x0a, 0x0c, 0x48, 0x45, 0x41, 0x4c, 0x54, 0x48, 0x5f, 0x45, 0x52, 0x52, 0x4f, 0x52,
-	0x10, 0x03, 0x32, 0xcd, 0x11, 0x0a, 0x0c, 0x46, 0x6c, 0x65, 0x65, 0x74, 0x53, 0x65, 0x72, 0x76,
+	0x10, 0x03, 0x32, 0xfc, 0x16, 0x0a, 0x0c, 0x46, 0x6c, 0x65, 0x65, 0x74, 0x53, 0x65, 0x72, 0x76,
 	0x69, 0x63, 0x65, 0x12, 0x54, 0x0a, 0x09, 0x4c, 0x69, 0x73, 0x74, 0x4e, 0x6f, 0x64, 0x65, 0x73,
 	0x12, 0x22, 0x2e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x66, 0x6c, 0x65, 0x65, 0x74,
 	0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x4e, 0x6f, 0x64, 0x65, 0x73, 0x52, 0x65, 0x71,
@@ -3753,11 +4574,54 @@ var file_cryptos_fleet_v1_fleet_proto_rawDesc = []byte{
 	0x41, 0x4b, 0x65, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x25, 0x2e, 0x63, 0x72,
 	0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x66, 0x6c, 0x65, 0x65, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x49,
 	0x6d, 0x70, 0x6f, 0x72, 0x74, 0x43, 0x41, 0x4b, 0x65, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x42, 0x38, 0x5a, 0x36, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
-	0x2f, 0x43, 0x72, 0x79, 0x70, 0x74, 0x4f, 0x53, 0x2d, 0x50, 0x4b, 0x49, 0x2f, 0x61, 0x70, 0x69,
-	0x2f, 0x67, 0x6f, 0x2f, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2f, 0x66, 0x6c, 0x65, 0x65,
-	0x74, 0x2f, 0x76, 0x31, 0x3b, 0x66, 0x6c, 0x65, 0x65, 0x74, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x73, 0x65, 0x12, 0x7e, 0x0a, 0x17, 0x49, 0x73, 0x73, 0x75, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61,
+	0x74, 0x6f, 0x72, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x12, 0x30, 0x2e,
+	0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x66, 0x6c, 0x65, 0x65, 0x74, 0x2e, 0x76, 0x31,
+	0x2e, 0x49, 0x73, 0x73, 0x75, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x43, 0x72,
+	0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x31, 0x2e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x66, 0x6c, 0x65, 0x65, 0x74, 0x2e,
+	0x76, 0x31, 0x2e, 0x49, 0x73, 0x73, 0x75, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
+	0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x81, 0x01, 0x0a, 0x18, 0x52, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x4f, 0x70, 0x65,
+	0x72, 0x61, 0x74, 0x6f, 0x72, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x12,
+	0x31, 0x2e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x66, 0x6c, 0x65, 0x65, 0x74, 0x2e,
+	0x76, 0x31, 0x2e, 0x52, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
+	0x72, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x32, 0x2e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x66, 0x6c, 0x65,
+	0x65, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x76, 0x6f, 0x6b, 0x65, 0x4f, 0x70, 0x65, 0x72,
+	0x61, 0x74, 0x6f, 0x72, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x7e, 0x0a, 0x17, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70,
+	0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c,
+	0x73, 0x12, 0x30, 0x2e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x66, 0x6c, 0x65, 0x65,
+	0x74, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
+	0x72, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x31, 0x2e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x66, 0x6c,
+	0x65, 0x65, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x70, 0x65, 0x72, 0x61,
+	0x74, 0x6f, 0x72, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x66, 0x0a, 0x0f, 0x50, 0x72, 0x65, 0x76, 0x69, 0x65,
+	0x77, 0x41, 0x64, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x28, 0x2e, 0x63, 0x72, 0x79, 0x70,
+	0x74, 0x6f, 0x73, 0x2e, 0x66, 0x6c, 0x65, 0x65, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x72, 0x65,
+	0x76, 0x69, 0x65, 0x77, 0x41, 0x64, 0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x29, 0x2e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x66, 0x6c,
+	0x65, 0x65, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x72, 0x65, 0x76, 0x69, 0x65, 0x77, 0x41, 0x64,
+	0x6f, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x56,
+	0x0a, 0x09, 0x41, 0x64, 0x6f, 0x70, 0x74, 0x4e, 0x6f, 0x64, 0x65, 0x12, 0x22, 0x2e, 0x63, 0x72,
+	0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x66, 0x6c, 0x65, 0x65, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x41,
+	0x64, 0x6f, 0x70, 0x74, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x23, 0x2e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x66, 0x6c, 0x65, 0x65, 0x74, 0x2e,
+	0x76, 0x31, 0x2e, 0x41, 0x64, 0x6f, 0x70, 0x74, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x30, 0x01, 0x12, 0x69, 0x0a, 0x10, 0x44, 0x65, 0x63, 0x6f, 0x6d, 0x6d,
+	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x4e, 0x6f, 0x64, 0x65, 0x12, 0x29, 0x2e, 0x63, 0x72, 0x79,
+	0x70, 0x74, 0x6f, 0x73, 0x2e, 0x66, 0x6c, 0x65, 0x65, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65,
+	0x63, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e,
+	0x66, 0x6c, 0x65, 0x65, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x6f, 0x6d, 0x6d, 0x69,
+	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x4e, 0x6f, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x42, 0x38, 0x5a, 0x36, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
+	0x43, 0x72, 0x79, 0x70, 0x74, 0x4f, 0x53, 0x2d, 0x50, 0x4b, 0x49, 0x2f, 0x61, 0x70, 0x69, 0x2f,
+	0x67, 0x6f, 0x2f, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2f, 0x66, 0x6c, 0x65, 0x65, 0x74,
+	0x2f, 0x76, 0x31, 0x3b, 0x66, 0x6c, 0x65, 0x65, 0x74, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -3773,73 +4637,86 @@ func file_cryptos_fleet_v1_fleet_proto_rawDescGZIP() []byte {
 }
 
 var file_cryptos_fleet_v1_fleet_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_cryptos_fleet_v1_fleet_proto_msgTypes = make([]protoimpl.MessageInfo, 54)
+var file_cryptos_fleet_v1_fleet_proto_msgTypes = make([]protoimpl.MessageInfo, 67)
 var file_cryptos_fleet_v1_fleet_proto_goTypes = []any{
-	(Health)(0),                        // 0: cryptos.fleet.v1.Health
-	(*ListNodesRequest)(nil),           // 1: cryptos.fleet.v1.ListNodesRequest
-	(*ListNodesResponse)(nil),          // 2: cryptos.fleet.v1.ListNodesResponse
-	(*GetNodeRequest)(nil),             // 3: cryptos.fleet.v1.GetNodeRequest
-	(*GetNodeResponse)(nil),            // 4: cryptos.fleet.v1.GetNodeResponse
-	(*ListCertificatesRequest)(nil),    // 5: cryptos.fleet.v1.ListCertificatesRequest
-	(*ListCertificatesResponse)(nil),   // 6: cryptos.fleet.v1.ListCertificatesResponse
-	(*ListProfilesRequest)(nil),        // 7: cryptos.fleet.v1.ListProfilesRequest
-	(*ListProfilesResponse)(nil),       // 8: cryptos.fleet.v1.ListProfilesResponse
-	(*CreateProfileRequest)(nil),       // 9: cryptos.fleet.v1.CreateProfileRequest
-	(*CreateProfileResponse)(nil),      // 10: cryptos.fleet.v1.CreateProfileResponse
-	(*UpdateProfileRequest)(nil),       // 11: cryptos.fleet.v1.UpdateProfileRequest
-	(*UpdateProfileResponse)(nil),      // 12: cryptos.fleet.v1.UpdateProfileResponse
-	(*DeleteProfileRequest)(nil),       // 13: cryptos.fleet.v1.DeleteProfileRequest
-	(*DeleteProfileResponse)(nil),      // 14: cryptos.fleet.v1.DeleteProfileResponse
-	(*ApplyProfileToNodeRequest)(nil),  // 15: cryptos.fleet.v1.ApplyProfileToNodeRequest
-	(*ApplyProfileToNodeResponse)(nil), // 16: cryptos.fleet.v1.ApplyProfileToNodeResponse
-	(*ListAdaptersRequest)(nil),        // 17: cryptos.fleet.v1.ListAdaptersRequest
-	(*ListAdaptersResponse)(nil),       // 18: cryptos.fleet.v1.ListAdaptersResponse
-	(*SetAdapterEnabledRequest)(nil),   // 19: cryptos.fleet.v1.SetAdapterEnabledRequest
-	(*SetAdapterEnabledResponse)(nil),  // 20: cryptos.fleet.v1.SetAdapterEnabledResponse
-	(*ListAuditRequest)(nil),           // 21: cryptos.fleet.v1.ListAuditRequest
-	(*ListAuditResponse)(nil),          // 22: cryptos.fleet.v1.ListAuditResponse
-	(*ListEnrollmentsRequest)(nil),     // 23: cryptos.fleet.v1.ListEnrollmentsRequest
-	(*ListEnrollmentsResponse)(nil),    // 24: cryptos.fleet.v1.ListEnrollmentsResponse
-	(*NodeSummary)(nil),                // 25: cryptos.fleet.v1.NodeSummary
-	(*NodeIdentity)(nil),               // 26: cryptos.fleet.v1.NodeIdentity
-	(*NodeDetail)(nil),                 // 27: cryptos.fleet.v1.NodeDetail
-	(*Certificate)(nil),                // 28: cryptos.fleet.v1.Certificate
-	(*EnrollmentAdapter)(nil),          // 29: cryptos.fleet.v1.EnrollmentAdapter
-	(*AuditEvent)(nil),                 // 30: cryptos.fleet.v1.AuditEvent
-	(*EnrollmentRequest)(nil),          // 31: cryptos.fleet.v1.EnrollmentRequest
-	(*CreateEnrollmentRequest)(nil),    // 32: cryptos.fleet.v1.CreateEnrollmentRequest
-	(*CreateEnrollmentResponse)(nil),   // 33: cryptos.fleet.v1.CreateEnrollmentResponse
-	(*ApproveEnrollmentRequest)(nil),   // 34: cryptos.fleet.v1.ApproveEnrollmentRequest
-	(*ApproveEnrollmentResponse)(nil),  // 35: cryptos.fleet.v1.ApproveEnrollmentResponse
-	(*RejectEnrollmentRequest)(nil),    // 36: cryptos.fleet.v1.RejectEnrollmentRequest
-	(*RejectEnrollmentResponse)(nil),   // 37: cryptos.fleet.v1.RejectEnrollmentResponse
-	(*WhoAmIRequest)(nil),              // 38: cryptos.fleet.v1.WhoAmIRequest
-	(*OperatorIdentity)(nil),           // 39: cryptos.fleet.v1.OperatorIdentity
-	(*WhoAmIResponse)(nil),             // 40: cryptos.fleet.v1.WhoAmIResponse
-	(*RevokeCertificateRequest)(nil),   // 41: cryptos.fleet.v1.RevokeCertificateRequest
-	(*RevokeCertificateResponse)(nil),  // 42: cryptos.fleet.v1.RevokeCertificateResponse
-	(*IssueLeafRequest)(nil),           // 43: cryptos.fleet.v1.IssueLeafRequest
-	(*IssueLeafResponse)(nil),          // 44: cryptos.fleet.v1.IssueLeafResponse
-	(*RekeyNodeRequest)(nil),           // 45: cryptos.fleet.v1.RekeyNodeRequest
-	(*RekeyNodeResponse)(nil),          // 46: cryptos.fleet.v1.RekeyNodeResponse
-	(*GetNodeConfigRequest)(nil),       // 47: cryptos.fleet.v1.GetNodeConfigRequest
-	(*GetNodeConfigResponse)(nil),      // 48: cryptos.fleet.v1.GetNodeConfigResponse
-	(*ApplyNodeConfigRequest)(nil),     // 49: cryptos.fleet.v1.ApplyNodeConfigRequest
-	(*ApplyNodeConfigResponse)(nil),    // 50: cryptos.fleet.v1.ApplyNodeConfigResponse
-	(*ExportCAKeyRequest)(nil),         // 51: cryptos.fleet.v1.ExportCAKeyRequest
-	(*ExportCAKeyResponse)(nil),        // 52: cryptos.fleet.v1.ExportCAKeyResponse
-	(*ImportCAKeyRequest)(nil),         // 53: cryptos.fleet.v1.ImportCAKeyRequest
-	(*ImportCAKeyResponse)(nil),        // 54: cryptos.fleet.v1.ImportCAKeyResponse
-	(*v1.CertificateProfile)(nil),      // 55: cryptos.v1.CertificateProfile
-	(*v1.MachineConfig)(nil),           // 56: cryptos.v1.MachineConfig
+	(Health)(0),                              // 0: cryptos.fleet.v1.Health
+	(*ListNodesRequest)(nil),                 // 1: cryptos.fleet.v1.ListNodesRequest
+	(*ListNodesResponse)(nil),                // 2: cryptos.fleet.v1.ListNodesResponse
+	(*GetNodeRequest)(nil),                   // 3: cryptos.fleet.v1.GetNodeRequest
+	(*GetNodeResponse)(nil),                  // 4: cryptos.fleet.v1.GetNodeResponse
+	(*ListCertificatesRequest)(nil),          // 5: cryptos.fleet.v1.ListCertificatesRequest
+	(*ListCertificatesResponse)(nil),         // 6: cryptos.fleet.v1.ListCertificatesResponse
+	(*ListProfilesRequest)(nil),              // 7: cryptos.fleet.v1.ListProfilesRequest
+	(*ListProfilesResponse)(nil),             // 8: cryptos.fleet.v1.ListProfilesResponse
+	(*CreateProfileRequest)(nil),             // 9: cryptos.fleet.v1.CreateProfileRequest
+	(*CreateProfileResponse)(nil),            // 10: cryptos.fleet.v1.CreateProfileResponse
+	(*UpdateProfileRequest)(nil),             // 11: cryptos.fleet.v1.UpdateProfileRequest
+	(*UpdateProfileResponse)(nil),            // 12: cryptos.fleet.v1.UpdateProfileResponse
+	(*DeleteProfileRequest)(nil),             // 13: cryptos.fleet.v1.DeleteProfileRequest
+	(*DeleteProfileResponse)(nil),            // 14: cryptos.fleet.v1.DeleteProfileResponse
+	(*ApplyProfileToNodeRequest)(nil),        // 15: cryptos.fleet.v1.ApplyProfileToNodeRequest
+	(*ApplyProfileToNodeResponse)(nil),       // 16: cryptos.fleet.v1.ApplyProfileToNodeResponse
+	(*ListAdaptersRequest)(nil),              // 17: cryptos.fleet.v1.ListAdaptersRequest
+	(*ListAdaptersResponse)(nil),             // 18: cryptos.fleet.v1.ListAdaptersResponse
+	(*SetAdapterEnabledRequest)(nil),         // 19: cryptos.fleet.v1.SetAdapterEnabledRequest
+	(*SetAdapterEnabledResponse)(nil),        // 20: cryptos.fleet.v1.SetAdapterEnabledResponse
+	(*ListAuditRequest)(nil),                 // 21: cryptos.fleet.v1.ListAuditRequest
+	(*ListAuditResponse)(nil),                // 22: cryptos.fleet.v1.ListAuditResponse
+	(*ListEnrollmentsRequest)(nil),           // 23: cryptos.fleet.v1.ListEnrollmentsRequest
+	(*ListEnrollmentsResponse)(nil),          // 24: cryptos.fleet.v1.ListEnrollmentsResponse
+	(*NodeSummary)(nil),                      // 25: cryptos.fleet.v1.NodeSummary
+	(*NodeIdentity)(nil),                     // 26: cryptos.fleet.v1.NodeIdentity
+	(*NodeDetail)(nil),                       // 27: cryptos.fleet.v1.NodeDetail
+	(*Certificate)(nil),                      // 28: cryptos.fleet.v1.Certificate
+	(*EnrollmentAdapter)(nil),                // 29: cryptos.fleet.v1.EnrollmentAdapter
+	(*AuditEvent)(nil),                       // 30: cryptos.fleet.v1.AuditEvent
+	(*EnrollmentRequest)(nil),                // 31: cryptos.fleet.v1.EnrollmentRequest
+	(*CreateEnrollmentRequest)(nil),          // 32: cryptos.fleet.v1.CreateEnrollmentRequest
+	(*CreateEnrollmentResponse)(nil),         // 33: cryptos.fleet.v1.CreateEnrollmentResponse
+	(*ApproveEnrollmentRequest)(nil),         // 34: cryptos.fleet.v1.ApproveEnrollmentRequest
+	(*ApproveEnrollmentResponse)(nil),        // 35: cryptos.fleet.v1.ApproveEnrollmentResponse
+	(*RejectEnrollmentRequest)(nil),          // 36: cryptos.fleet.v1.RejectEnrollmentRequest
+	(*RejectEnrollmentResponse)(nil),         // 37: cryptos.fleet.v1.RejectEnrollmentResponse
+	(*WhoAmIRequest)(nil),                    // 38: cryptos.fleet.v1.WhoAmIRequest
+	(*OperatorIdentity)(nil),                 // 39: cryptos.fleet.v1.OperatorIdentity
+	(*WhoAmIResponse)(nil),                   // 40: cryptos.fleet.v1.WhoAmIResponse
+	(*RevokeCertificateRequest)(nil),         // 41: cryptos.fleet.v1.RevokeCertificateRequest
+	(*RevokeCertificateResponse)(nil),        // 42: cryptos.fleet.v1.RevokeCertificateResponse
+	(*IssueLeafRequest)(nil),                 // 43: cryptos.fleet.v1.IssueLeafRequest
+	(*IssueLeafResponse)(nil),                // 44: cryptos.fleet.v1.IssueLeafResponse
+	(*RekeyNodeRequest)(nil),                 // 45: cryptos.fleet.v1.RekeyNodeRequest
+	(*RekeyNodeResponse)(nil),                // 46: cryptos.fleet.v1.RekeyNodeResponse
+	(*GetNodeConfigRequest)(nil),             // 47: cryptos.fleet.v1.GetNodeConfigRequest
+	(*GetNodeConfigResponse)(nil),            // 48: cryptos.fleet.v1.GetNodeConfigResponse
+	(*ApplyNodeConfigRequest)(nil),           // 49: cryptos.fleet.v1.ApplyNodeConfigRequest
+	(*ApplyNodeConfigResponse)(nil),          // 50: cryptos.fleet.v1.ApplyNodeConfigResponse
+	(*ExportCAKeyRequest)(nil),               // 51: cryptos.fleet.v1.ExportCAKeyRequest
+	(*ExportCAKeyResponse)(nil),              // 52: cryptos.fleet.v1.ExportCAKeyResponse
+	(*ImportCAKeyRequest)(nil),               // 53: cryptos.fleet.v1.ImportCAKeyRequest
+	(*ImportCAKeyResponse)(nil),              // 54: cryptos.fleet.v1.ImportCAKeyResponse
+	(*IssueOperatorCredentialRequest)(nil),   // 55: cryptos.fleet.v1.IssueOperatorCredentialRequest
+	(*IssueOperatorCredentialResponse)(nil),  // 56: cryptos.fleet.v1.IssueOperatorCredentialResponse
+	(*RevokeOperatorCredentialRequest)(nil),  // 57: cryptos.fleet.v1.RevokeOperatorCredentialRequest
+	(*RevokeOperatorCredentialResponse)(nil), // 58: cryptos.fleet.v1.RevokeOperatorCredentialResponse
+	(*ListOperatorCredentialsRequest)(nil),   // 59: cryptos.fleet.v1.ListOperatorCredentialsRequest
+	(*OperatorCredential)(nil),               // 60: cryptos.fleet.v1.OperatorCredential
+	(*ListOperatorCredentialsResponse)(nil),  // 61: cryptos.fleet.v1.ListOperatorCredentialsResponse
+	(*PreviewAdoptionRequest)(nil),           // 62: cryptos.fleet.v1.PreviewAdoptionRequest
+	(*PreviewAdoptionResponse)(nil),          // 63: cryptos.fleet.v1.PreviewAdoptionResponse
+	(*AdoptNodeRequest)(nil),                 // 64: cryptos.fleet.v1.AdoptNodeRequest
+	(*AdoptNodeResponse)(nil),                // 65: cryptos.fleet.v1.AdoptNodeResponse
+	(*DecommissionNodeRequest)(nil),          // 66: cryptos.fleet.v1.DecommissionNodeRequest
+	(*DecommissionNodeResponse)(nil),         // 67: cryptos.fleet.v1.DecommissionNodeResponse
+	(*v1.CertificateProfile)(nil),            // 68: cryptos.v1.CertificateProfile
+	(*v1.MachineConfig)(nil),                 // 69: cryptos.v1.MachineConfig
 }
 var file_cryptos_fleet_v1_fleet_proto_depIdxs = []int32{
 	25, // 0: cryptos.fleet.v1.ListNodesResponse.nodes:type_name -> cryptos.fleet.v1.NodeSummary
 	27, // 1: cryptos.fleet.v1.GetNodeResponse.node:type_name -> cryptos.fleet.v1.NodeDetail
 	28, // 2: cryptos.fleet.v1.ListCertificatesResponse.certificates:type_name -> cryptos.fleet.v1.Certificate
-	55, // 3: cryptos.fleet.v1.ListProfilesResponse.items:type_name -> cryptos.v1.CertificateProfile
-	55, // 4: cryptos.fleet.v1.CreateProfileRequest.profile:type_name -> cryptos.v1.CertificateProfile
-	55, // 5: cryptos.fleet.v1.UpdateProfileRequest.profile:type_name -> cryptos.v1.CertificateProfile
+	68, // 3: cryptos.fleet.v1.ListProfilesResponse.items:type_name -> cryptos.v1.CertificateProfile
+	68, // 4: cryptos.fleet.v1.CreateProfileRequest.profile:type_name -> cryptos.v1.CertificateProfile
+	68, // 5: cryptos.fleet.v1.UpdateProfileRequest.profile:type_name -> cryptos.v1.CertificateProfile
 	29, // 6: cryptos.fleet.v1.ListAdaptersResponse.items:type_name -> cryptos.fleet.v1.EnrollmentAdapter
 	29, // 7: cryptos.fleet.v1.SetAdapterEnabledResponse.adapter:type_name -> cryptos.fleet.v1.EnrollmentAdapter
 	30, // 8: cryptos.fleet.v1.ListAuditResponse.items:type_name -> cryptos.fleet.v1.AuditEvent
@@ -3851,59 +4728,73 @@ var file_cryptos_fleet_v1_fleet_proto_depIdxs = []int32{
 	31, // 14: cryptos.fleet.v1.ApproveEnrollmentResponse.enrollment:type_name -> cryptos.fleet.v1.EnrollmentRequest
 	31, // 15: cryptos.fleet.v1.RejectEnrollmentResponse.enrollment:type_name -> cryptos.fleet.v1.EnrollmentRequest
 	39, // 16: cryptos.fleet.v1.WhoAmIResponse.operator:type_name -> cryptos.fleet.v1.OperatorIdentity
-	56, // 17: cryptos.fleet.v1.GetNodeConfigResponse.config:type_name -> cryptos.v1.MachineConfig
-	56, // 18: cryptos.fleet.v1.ApplyNodeConfigRequest.config:type_name -> cryptos.v1.MachineConfig
-	1,  // 19: cryptos.fleet.v1.FleetService.ListNodes:input_type -> cryptos.fleet.v1.ListNodesRequest
-	3,  // 20: cryptos.fleet.v1.FleetService.GetNode:input_type -> cryptos.fleet.v1.GetNodeRequest
-	5,  // 21: cryptos.fleet.v1.FleetService.ListCertificates:input_type -> cryptos.fleet.v1.ListCertificatesRequest
-	7,  // 22: cryptos.fleet.v1.FleetService.ListProfiles:input_type -> cryptos.fleet.v1.ListProfilesRequest
-	9,  // 23: cryptos.fleet.v1.FleetService.CreateProfile:input_type -> cryptos.fleet.v1.CreateProfileRequest
-	11, // 24: cryptos.fleet.v1.FleetService.UpdateProfile:input_type -> cryptos.fleet.v1.UpdateProfileRequest
-	13, // 25: cryptos.fleet.v1.FleetService.DeleteProfile:input_type -> cryptos.fleet.v1.DeleteProfileRequest
-	15, // 26: cryptos.fleet.v1.FleetService.ApplyProfileToNode:input_type -> cryptos.fleet.v1.ApplyProfileToNodeRequest
-	17, // 27: cryptos.fleet.v1.FleetService.ListAdapters:input_type -> cryptos.fleet.v1.ListAdaptersRequest
-	19, // 28: cryptos.fleet.v1.FleetService.SetAdapterEnabled:input_type -> cryptos.fleet.v1.SetAdapterEnabledRequest
-	21, // 29: cryptos.fleet.v1.FleetService.ListAudit:input_type -> cryptos.fleet.v1.ListAuditRequest
-	23, // 30: cryptos.fleet.v1.FleetService.ListEnrollments:input_type -> cryptos.fleet.v1.ListEnrollmentsRequest
-	32, // 31: cryptos.fleet.v1.FleetService.CreateEnrollment:input_type -> cryptos.fleet.v1.CreateEnrollmentRequest
-	34, // 32: cryptos.fleet.v1.FleetService.ApproveEnrollment:input_type -> cryptos.fleet.v1.ApproveEnrollmentRequest
-	36, // 33: cryptos.fleet.v1.FleetService.RejectEnrollment:input_type -> cryptos.fleet.v1.RejectEnrollmentRequest
-	38, // 34: cryptos.fleet.v1.FleetService.WhoAmI:input_type -> cryptos.fleet.v1.WhoAmIRequest
-	41, // 35: cryptos.fleet.v1.FleetService.RevokeCertificate:input_type -> cryptos.fleet.v1.RevokeCertificateRequest
-	43, // 36: cryptos.fleet.v1.FleetService.IssueLeaf:input_type -> cryptos.fleet.v1.IssueLeafRequest
-	45, // 37: cryptos.fleet.v1.FleetService.RekeyNode:input_type -> cryptos.fleet.v1.RekeyNodeRequest
-	47, // 38: cryptos.fleet.v1.FleetService.GetNodeConfig:input_type -> cryptos.fleet.v1.GetNodeConfigRequest
-	49, // 39: cryptos.fleet.v1.FleetService.ApplyNodeConfig:input_type -> cryptos.fleet.v1.ApplyNodeConfigRequest
-	51, // 40: cryptos.fleet.v1.FleetService.ExportCAKey:input_type -> cryptos.fleet.v1.ExportCAKeyRequest
-	53, // 41: cryptos.fleet.v1.FleetService.ImportCAKey:input_type -> cryptos.fleet.v1.ImportCAKeyRequest
-	2,  // 42: cryptos.fleet.v1.FleetService.ListNodes:output_type -> cryptos.fleet.v1.ListNodesResponse
-	4,  // 43: cryptos.fleet.v1.FleetService.GetNode:output_type -> cryptos.fleet.v1.GetNodeResponse
-	6,  // 44: cryptos.fleet.v1.FleetService.ListCertificates:output_type -> cryptos.fleet.v1.ListCertificatesResponse
-	8,  // 45: cryptos.fleet.v1.FleetService.ListProfiles:output_type -> cryptos.fleet.v1.ListProfilesResponse
-	10, // 46: cryptos.fleet.v1.FleetService.CreateProfile:output_type -> cryptos.fleet.v1.CreateProfileResponse
-	12, // 47: cryptos.fleet.v1.FleetService.UpdateProfile:output_type -> cryptos.fleet.v1.UpdateProfileResponse
-	14, // 48: cryptos.fleet.v1.FleetService.DeleteProfile:output_type -> cryptos.fleet.v1.DeleteProfileResponse
-	16, // 49: cryptos.fleet.v1.FleetService.ApplyProfileToNode:output_type -> cryptos.fleet.v1.ApplyProfileToNodeResponse
-	18, // 50: cryptos.fleet.v1.FleetService.ListAdapters:output_type -> cryptos.fleet.v1.ListAdaptersResponse
-	20, // 51: cryptos.fleet.v1.FleetService.SetAdapterEnabled:output_type -> cryptos.fleet.v1.SetAdapterEnabledResponse
-	22, // 52: cryptos.fleet.v1.FleetService.ListAudit:output_type -> cryptos.fleet.v1.ListAuditResponse
-	24, // 53: cryptos.fleet.v1.FleetService.ListEnrollments:output_type -> cryptos.fleet.v1.ListEnrollmentsResponse
-	33, // 54: cryptos.fleet.v1.FleetService.CreateEnrollment:output_type -> cryptos.fleet.v1.CreateEnrollmentResponse
-	35, // 55: cryptos.fleet.v1.FleetService.ApproveEnrollment:output_type -> cryptos.fleet.v1.ApproveEnrollmentResponse
-	37, // 56: cryptos.fleet.v1.FleetService.RejectEnrollment:output_type -> cryptos.fleet.v1.RejectEnrollmentResponse
-	40, // 57: cryptos.fleet.v1.FleetService.WhoAmI:output_type -> cryptos.fleet.v1.WhoAmIResponse
-	42, // 58: cryptos.fleet.v1.FleetService.RevokeCertificate:output_type -> cryptos.fleet.v1.RevokeCertificateResponse
-	44, // 59: cryptos.fleet.v1.FleetService.IssueLeaf:output_type -> cryptos.fleet.v1.IssueLeafResponse
-	46, // 60: cryptos.fleet.v1.FleetService.RekeyNode:output_type -> cryptos.fleet.v1.RekeyNodeResponse
-	48, // 61: cryptos.fleet.v1.FleetService.GetNodeConfig:output_type -> cryptos.fleet.v1.GetNodeConfigResponse
-	50, // 62: cryptos.fleet.v1.FleetService.ApplyNodeConfig:output_type -> cryptos.fleet.v1.ApplyNodeConfigResponse
-	52, // 63: cryptos.fleet.v1.FleetService.ExportCAKey:output_type -> cryptos.fleet.v1.ExportCAKeyResponse
-	54, // 64: cryptos.fleet.v1.FleetService.ImportCAKey:output_type -> cryptos.fleet.v1.ImportCAKeyResponse
-	42, // [42:65] is the sub-list for method output_type
-	19, // [19:42] is the sub-list for method input_type
-	19, // [19:19] is the sub-list for extension type_name
-	19, // [19:19] is the sub-list for extension extendee
-	0,  // [0:19] is the sub-list for field type_name
+	69, // 17: cryptos.fleet.v1.GetNodeConfigResponse.config:type_name -> cryptos.v1.MachineConfig
+	69, // 18: cryptos.fleet.v1.ApplyNodeConfigRequest.config:type_name -> cryptos.v1.MachineConfig
+	60, // 19: cryptos.fleet.v1.ListOperatorCredentialsResponse.items:type_name -> cryptos.fleet.v1.OperatorCredential
+	69, // 20: cryptos.fleet.v1.AdoptNodeRequest.config:type_name -> cryptos.v1.MachineConfig
+	1,  // 21: cryptos.fleet.v1.FleetService.ListNodes:input_type -> cryptos.fleet.v1.ListNodesRequest
+	3,  // 22: cryptos.fleet.v1.FleetService.GetNode:input_type -> cryptos.fleet.v1.GetNodeRequest
+	5,  // 23: cryptos.fleet.v1.FleetService.ListCertificates:input_type -> cryptos.fleet.v1.ListCertificatesRequest
+	7,  // 24: cryptos.fleet.v1.FleetService.ListProfiles:input_type -> cryptos.fleet.v1.ListProfilesRequest
+	9,  // 25: cryptos.fleet.v1.FleetService.CreateProfile:input_type -> cryptos.fleet.v1.CreateProfileRequest
+	11, // 26: cryptos.fleet.v1.FleetService.UpdateProfile:input_type -> cryptos.fleet.v1.UpdateProfileRequest
+	13, // 27: cryptos.fleet.v1.FleetService.DeleteProfile:input_type -> cryptos.fleet.v1.DeleteProfileRequest
+	15, // 28: cryptos.fleet.v1.FleetService.ApplyProfileToNode:input_type -> cryptos.fleet.v1.ApplyProfileToNodeRequest
+	17, // 29: cryptos.fleet.v1.FleetService.ListAdapters:input_type -> cryptos.fleet.v1.ListAdaptersRequest
+	19, // 30: cryptos.fleet.v1.FleetService.SetAdapterEnabled:input_type -> cryptos.fleet.v1.SetAdapterEnabledRequest
+	21, // 31: cryptos.fleet.v1.FleetService.ListAudit:input_type -> cryptos.fleet.v1.ListAuditRequest
+	23, // 32: cryptos.fleet.v1.FleetService.ListEnrollments:input_type -> cryptos.fleet.v1.ListEnrollmentsRequest
+	32, // 33: cryptos.fleet.v1.FleetService.CreateEnrollment:input_type -> cryptos.fleet.v1.CreateEnrollmentRequest
+	34, // 34: cryptos.fleet.v1.FleetService.ApproveEnrollment:input_type -> cryptos.fleet.v1.ApproveEnrollmentRequest
+	36, // 35: cryptos.fleet.v1.FleetService.RejectEnrollment:input_type -> cryptos.fleet.v1.RejectEnrollmentRequest
+	38, // 36: cryptos.fleet.v1.FleetService.WhoAmI:input_type -> cryptos.fleet.v1.WhoAmIRequest
+	41, // 37: cryptos.fleet.v1.FleetService.RevokeCertificate:input_type -> cryptos.fleet.v1.RevokeCertificateRequest
+	43, // 38: cryptos.fleet.v1.FleetService.IssueLeaf:input_type -> cryptos.fleet.v1.IssueLeafRequest
+	45, // 39: cryptos.fleet.v1.FleetService.RekeyNode:input_type -> cryptos.fleet.v1.RekeyNodeRequest
+	47, // 40: cryptos.fleet.v1.FleetService.GetNodeConfig:input_type -> cryptos.fleet.v1.GetNodeConfigRequest
+	49, // 41: cryptos.fleet.v1.FleetService.ApplyNodeConfig:input_type -> cryptos.fleet.v1.ApplyNodeConfigRequest
+	51, // 42: cryptos.fleet.v1.FleetService.ExportCAKey:input_type -> cryptos.fleet.v1.ExportCAKeyRequest
+	53, // 43: cryptos.fleet.v1.FleetService.ImportCAKey:input_type -> cryptos.fleet.v1.ImportCAKeyRequest
+	55, // 44: cryptos.fleet.v1.FleetService.IssueOperatorCredential:input_type -> cryptos.fleet.v1.IssueOperatorCredentialRequest
+	57, // 45: cryptos.fleet.v1.FleetService.RevokeOperatorCredential:input_type -> cryptos.fleet.v1.RevokeOperatorCredentialRequest
+	59, // 46: cryptos.fleet.v1.FleetService.ListOperatorCredentials:input_type -> cryptos.fleet.v1.ListOperatorCredentialsRequest
+	62, // 47: cryptos.fleet.v1.FleetService.PreviewAdoption:input_type -> cryptos.fleet.v1.PreviewAdoptionRequest
+	64, // 48: cryptos.fleet.v1.FleetService.AdoptNode:input_type -> cryptos.fleet.v1.AdoptNodeRequest
+	66, // 49: cryptos.fleet.v1.FleetService.DecommissionNode:input_type -> cryptos.fleet.v1.DecommissionNodeRequest
+	2,  // 50: cryptos.fleet.v1.FleetService.ListNodes:output_type -> cryptos.fleet.v1.ListNodesResponse
+	4,  // 51: cryptos.fleet.v1.FleetService.GetNode:output_type -> cryptos.fleet.v1.GetNodeResponse
+	6,  // 52: cryptos.fleet.v1.FleetService.ListCertificates:output_type -> cryptos.fleet.v1.ListCertificatesResponse
+	8,  // 53: cryptos.fleet.v1.FleetService.ListProfiles:output_type -> cryptos.fleet.v1.ListProfilesResponse
+	10, // 54: cryptos.fleet.v1.FleetService.CreateProfile:output_type -> cryptos.fleet.v1.CreateProfileResponse
+	12, // 55: cryptos.fleet.v1.FleetService.UpdateProfile:output_type -> cryptos.fleet.v1.UpdateProfileResponse
+	14, // 56: cryptos.fleet.v1.FleetService.DeleteProfile:output_type -> cryptos.fleet.v1.DeleteProfileResponse
+	16, // 57: cryptos.fleet.v1.FleetService.ApplyProfileToNode:output_type -> cryptos.fleet.v1.ApplyProfileToNodeResponse
+	18, // 58: cryptos.fleet.v1.FleetService.ListAdapters:output_type -> cryptos.fleet.v1.ListAdaptersResponse
+	20, // 59: cryptos.fleet.v1.FleetService.SetAdapterEnabled:output_type -> cryptos.fleet.v1.SetAdapterEnabledResponse
+	22, // 60: cryptos.fleet.v1.FleetService.ListAudit:output_type -> cryptos.fleet.v1.ListAuditResponse
+	24, // 61: cryptos.fleet.v1.FleetService.ListEnrollments:output_type -> cryptos.fleet.v1.ListEnrollmentsResponse
+	33, // 62: cryptos.fleet.v1.FleetService.CreateEnrollment:output_type -> cryptos.fleet.v1.CreateEnrollmentResponse
+	35, // 63: cryptos.fleet.v1.FleetService.ApproveEnrollment:output_type -> cryptos.fleet.v1.ApproveEnrollmentResponse
+	37, // 64: cryptos.fleet.v1.FleetService.RejectEnrollment:output_type -> cryptos.fleet.v1.RejectEnrollmentResponse
+	40, // 65: cryptos.fleet.v1.FleetService.WhoAmI:output_type -> cryptos.fleet.v1.WhoAmIResponse
+	42, // 66: cryptos.fleet.v1.FleetService.RevokeCertificate:output_type -> cryptos.fleet.v1.RevokeCertificateResponse
+	44, // 67: cryptos.fleet.v1.FleetService.IssueLeaf:output_type -> cryptos.fleet.v1.IssueLeafResponse
+	46, // 68: cryptos.fleet.v1.FleetService.RekeyNode:output_type -> cryptos.fleet.v1.RekeyNodeResponse
+	48, // 69: cryptos.fleet.v1.FleetService.GetNodeConfig:output_type -> cryptos.fleet.v1.GetNodeConfigResponse
+	50, // 70: cryptos.fleet.v1.FleetService.ApplyNodeConfig:output_type -> cryptos.fleet.v1.ApplyNodeConfigResponse
+	52, // 71: cryptos.fleet.v1.FleetService.ExportCAKey:output_type -> cryptos.fleet.v1.ExportCAKeyResponse
+	54, // 72: cryptos.fleet.v1.FleetService.ImportCAKey:output_type -> cryptos.fleet.v1.ImportCAKeyResponse
+	56, // 73: cryptos.fleet.v1.FleetService.IssueOperatorCredential:output_type -> cryptos.fleet.v1.IssueOperatorCredentialResponse
+	58, // 74: cryptos.fleet.v1.FleetService.RevokeOperatorCredential:output_type -> cryptos.fleet.v1.RevokeOperatorCredentialResponse
+	61, // 75: cryptos.fleet.v1.FleetService.ListOperatorCredentials:output_type -> cryptos.fleet.v1.ListOperatorCredentialsResponse
+	63, // 76: cryptos.fleet.v1.FleetService.PreviewAdoption:output_type -> cryptos.fleet.v1.PreviewAdoptionResponse
+	65, // 77: cryptos.fleet.v1.FleetService.AdoptNode:output_type -> cryptos.fleet.v1.AdoptNodeResponse
+	67, // 78: cryptos.fleet.v1.FleetService.DecommissionNode:output_type -> cryptos.fleet.v1.DecommissionNodeResponse
+	50, // [50:79] is the sub-list for method output_type
+	21, // [21:50] is the sub-list for method input_type
+	21, // [21:21] is the sub-list for extension type_name
+	21, // [21:21] is the sub-list for extension extendee
+	0,  // [0:21] is the sub-list for field type_name
 }
 
 func init() { file_cryptos_fleet_v1_fleet_proto_init() }
@@ -4560,6 +5451,162 @@ func file_cryptos_fleet_v1_fleet_proto_init() {
 				return nil
 			}
 		}
+		file_cryptos_fleet_v1_fleet_proto_msgTypes[54].Exporter = func(v any, i int) any {
+			switch v := v.(*IssueOperatorCredentialRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_fleet_v1_fleet_proto_msgTypes[55].Exporter = func(v any, i int) any {
+			switch v := v.(*IssueOperatorCredentialResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_fleet_v1_fleet_proto_msgTypes[56].Exporter = func(v any, i int) any {
+			switch v := v.(*RevokeOperatorCredentialRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_fleet_v1_fleet_proto_msgTypes[57].Exporter = func(v any, i int) any {
+			switch v := v.(*RevokeOperatorCredentialResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_fleet_v1_fleet_proto_msgTypes[58].Exporter = func(v any, i int) any {
+			switch v := v.(*ListOperatorCredentialsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_fleet_v1_fleet_proto_msgTypes[59].Exporter = func(v any, i int) any {
+			switch v := v.(*OperatorCredential); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_fleet_v1_fleet_proto_msgTypes[60].Exporter = func(v any, i int) any {
+			switch v := v.(*ListOperatorCredentialsResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_fleet_v1_fleet_proto_msgTypes[61].Exporter = func(v any, i int) any {
+			switch v := v.(*PreviewAdoptionRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_fleet_v1_fleet_proto_msgTypes[62].Exporter = func(v any, i int) any {
+			switch v := v.(*PreviewAdoptionResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_fleet_v1_fleet_proto_msgTypes[63].Exporter = func(v any, i int) any {
+			switch v := v.(*AdoptNodeRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_fleet_v1_fleet_proto_msgTypes[64].Exporter = func(v any, i int) any {
+			switch v := v.(*AdoptNodeResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_fleet_v1_fleet_proto_msgTypes[65].Exporter = func(v any, i int) any {
+			switch v := v.(*DecommissionNodeRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_fleet_v1_fleet_proto_msgTypes[66].Exporter = func(v any, i int) any {
+			switch v := v.(*DecommissionNodeResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -4567,7 +5614,7 @@ func file_cryptos_fleet_v1_fleet_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_cryptos_fleet_v1_fleet_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   54,
+			NumMessages:   67,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

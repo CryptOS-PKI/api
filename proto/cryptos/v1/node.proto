@@ -124,6 +124,13 @@ service NodeService {
   // confirmation.
   rpc Reset(ResetRequest) returns (ResetResponse);
 
+  // RemoteReset performs the same destructive wipe as Reset but is served over
+  // mTLS, admin-authorized, for manager-mediated decommission. It is the remote
+  // counterpart of the local-only Reset: same destructive path (Resetter +
+  // reboot into maintenance), reachable by an authenticated admin instead of
+  // only the physical console. The caller must echo the current Root CA CN.
+  rpc RemoteReset(RemoteResetRequest) returns (RemoteResetResponse);
+
   // Attest signs the caller's nonce with the node's CA identity key so the
   // Fleet Manager can verify possession of the node identity (challenge-
   // response). ek_pub/ek_cert are reserved for future TPM EK attestation.
@@ -214,6 +221,18 @@ message ResetRequest {
 }
 
 message ResetResponse {}
+
+// RemoteResetRequest confirms a destructive remote reset. confirm_common_name
+// must exactly equal the node's current Root CA CN, or the node refuses.
+message RemoteResetRequest {
+  string confirm_common_name = 1;
+}
+
+// RemoteResetResponse reports that the node accepted the wipe and is rebooting
+// into maintenance.
+message RemoteResetResponse {
+  bool rebooting = 1;
+}
 
 message AttestRequest {
   // Random challenge from the manager; the node signs it with its identity key.

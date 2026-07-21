@@ -136,6 +136,45 @@ service FleetService {
   // reach the node and is never persisted. Admin-gated and audited (the audit
   // names the node and restored subject only, never the secret or envelope).
   rpc ImportCAKey(ImportCAKeyRequest) returns (ImportCAKeyResponse);
+
+  // IssueOperatorCredential issues an operator client certificate. The browser
+  // generates the key and CSR; the manager routes signing to the node acting as
+  // the operator CA under an operator-<level> profile that carries the
+  // access-level extension. Only the CSR crosses the wire; the operator key
+  // stays in the browser. Admin-gated and audited (the audit names the subject
+  // and serial only, never the CSR or certificate bytes).
+  rpc IssueOperatorCredential(IssueOperatorCredentialRequest) returns (IssueOperatorCredentialResponse);
+
+  // RevokeOperatorCredential revokes an operator credential on the operator-CA
+  // node by hex serial, with an RFC 5280 reason code. The manager enforces the
+  // revocation in the authz middleware, so a revoked operator can no longer
+  // authenticate. Admin-gated and audited.
+  rpc RevokeOperatorCredential(RevokeOperatorCredentialRequest) returns (RevokeOperatorCredentialResponse);
+
+  // ListOperatorCredentials returns the operator credentials the manager has
+  // issued, with their level, expiry, and revocation state. Operator-readable.
+  rpc ListOperatorCredentials(ListOperatorCredentialsRequest) returns (ListOperatorCredentialsResponse);
+
+  // PreviewAdoption performs the trust-on-first-use step of adopting a new
+  // node: it dials the maintenance endpoint (no pin yet), captures the
+  // self-signed certificate the node presents, and returns its SHA-256
+  // fingerprint and subject so the operator can confirm it before adoption.
+  // Admin-gated; a read, so it is not audited.
+  rpc PreviewAdoption(PreviewAdoptionRequest) returns (PreviewAdoptionResponse);
+
+  // AdoptNode provisions a new maintenance node end to end and streams progress.
+  // Pinned to the fingerprint the operator confirmed via PreviewAdoption, the
+  // manager applies the initial config, awaits the reboot, drives the first-boot
+  // ceremony, and registers the node. Each streamed message carries a phase
+  // (applying-config, installing, awaiting-reboot, ceremony, established) with
+  // human-readable detail; the final message sets done. Admin-gated and audited.
+  rpc AdoptNode(AdoptNodeRequest) returns (stream AdoptNodeResponse);
+
+  // DecommissionNode remotely wipes a managed node's identity and data via the
+  // node's mTLS-served RemoteReset, then reboots it into maintenance. The caller
+  // must echo the node's current Root CA CN as confirmation. Admin-gated and
+  // audited (the audit names the node and that it was wiped, never any secret).
+  rpc DecommissionNode(DecommissionNodeRequest) returns (DecommissionNodeResponse);
 }
 
 message ListNodesRequest {}
@@ -519,4 +558,91 @@ message ImportCAKeyResponse {
   string subject_cn = 1;
   // issuer_cn is the restored identity's issuer common name.
   string issuer_cn = 2;
+}
+
+// IssueOperatorCredentialRequest carries the operator subject CN, the access
+// level to grant, and the browser-generated CSR to sign under the matching
+// operator-<level> profile.
+message IssueOperatorCredentialRequest {
+  string common_name = 1;
+  string level = 2; // "viewer"|"operator"|"admin"
+  bytes csr_der = 3; // browser-generated
+}
+
+// IssueOperatorCredentialResponse carries the signed operator certificate and
+// its hex serial. The browser assembles the PKCS#12 with its own key.
+message IssueOperatorCredentialResponse {
+  bytes cert_der = 1;
+  string serial_hex = 2;
+}
+
+// RevokeOperatorCredentialRequest names the operator credential to revoke by
+// hex serial, with the RFC 5280 reason code.
+message RevokeOperatorCredentialRequest {
+  string serial_hex = 1;
+  int32 reason_code = 2;
+}
+
+// RevokeOperatorCredentialResponse echoes the revoked serial and the time it
+// was revoked (RFC3339).
+message RevokeOperatorCredentialResponse {
+  string serial_hex = 1;
+  string revoked_at = 2;
+}
+
+message ListOperatorCredentialsRequest {}
+
+// OperatorCredential is one issued operator credential row.
+message OperatorCredential {
+  string common_name = 1;
+  string serial_hex = 2;
+  string level = 3;
+  string not_after = 4;
+  bool revoked = 5;
+}
+
+message ListOperatorCredentialsResponse {
+  repeated OperatorCredential items = 1;
+}
+
+// PreviewAdoptionRequest names the maintenance endpoint to inspect.
+message PreviewAdoptionRequest {
+  string endpoint = 1;
+}
+
+// PreviewAdoptionResponse returns the maintenance node's certificate
+// fingerprint and subject for the operator to confirm (trust on first use).
+message PreviewAdoptionResponse {
+  string cert_sha256 = 1;
+  string subject = 2;
+}
+
+// AdoptNodeRequest carries the maintenance endpoint, the fingerprint the
+// operator confirmed via PreviewAdoption, and the initial config to apply.
+message AdoptNodeRequest {
+  string endpoint = 1;
+  string pinned_cert_sha256 = 2; // operator-confirmed fingerprint from PreviewAdoption
+  cryptos.v1.MachineConfig config = 3; // initial config to apply
+}
+
+// AdoptNodeResponse is streamed during adoption. phase is one of
+// applying-config, installing, awaiting-reboot, ceremony, established; done is
+// set on the final message.
+message AdoptNodeResponse {
+  string phase = 1;
+  string detail = 2;
+  bool done = 3;
+}
+
+// DecommissionNodeRequest names the managed node to wipe and echoes its current
+// Root CA CN as destructive confirmation.
+message DecommissionNodeRequest {
+  string node_name = 1;
+  string confirm_common_name = 2;
+}
+
+// DecommissionNodeResponse reports that the node accepted the wipe and is
+// rebooting into maintenance.
+message DecommissionNodeResponse {
+  bool rebooting = 1;
 }

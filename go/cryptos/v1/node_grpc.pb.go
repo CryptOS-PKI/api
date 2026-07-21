@@ -36,6 +36,7 @@ const (
 	NodeService_BeginKeyRotation_FullMethodName             = "/cryptos.v1.NodeService/BeginKeyRotation"
 	NodeService_CompleteKeyRotation_FullMethodName          = "/cryptos.v1.NodeService/CompleteKeyRotation"
 	NodeService_Reset_FullMethodName                        = "/cryptos.v1.NodeService/Reset"
+	NodeService_RemoteReset_FullMethodName                  = "/cryptos.v1.NodeService/RemoteReset"
 	NodeService_Attest_FullMethodName                       = "/cryptos.v1.NodeService/Attest"
 	NodeService_SetManagement_FullMethodName                = "/cryptos.v1.NodeService/SetManagement"
 	NodeService_GetConfig_FullMethodName                    = "/cryptos.v1.NodeService/GetConfig"
@@ -125,6 +126,12 @@ type NodeServiceClient interface {
 	// maintenance mode. The caller must echo the current Root CA CN as
 	// confirmation.
 	Reset(ctx context.Context, in *ResetRequest, opts ...grpc.CallOption) (*ResetResponse, error)
+	// RemoteReset performs the same destructive wipe as Reset but is served over
+	// mTLS, admin-authorized, for manager-mediated decommission. It is the remote
+	// counterpart of the local-only Reset: same destructive path (Resetter +
+	// reboot into maintenance), reachable by an authenticated admin instead of
+	// only the physical console. The caller must echo the current Root CA CN.
+	RemoteReset(ctx context.Context, in *RemoteResetRequest, opts ...grpc.CallOption) (*RemoteResetResponse, error)
 	// Attest signs the caller's nonce with the node's CA identity key so the
 	// Fleet Manager can verify possession of the node identity (challenge-
 	// response). ek_pub/ek_cert are reserved for future TPM EK attestation.
@@ -326,6 +333,16 @@ func (c *nodeServiceClient) Reset(ctx context.Context, in *ResetRequest, opts ..
 	return out, nil
 }
 
+func (c *nodeServiceClient) RemoteReset(ctx context.Context, in *RemoteResetRequest, opts ...grpc.CallOption) (*RemoteResetResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RemoteResetResponse)
+	err := c.cc.Invoke(ctx, NodeService_RemoteReset_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *nodeServiceClient) Attest(ctx context.Context, in *AttestRequest, opts ...grpc.CallOption) (*AttestResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AttestResponse)
@@ -440,6 +457,12 @@ type NodeServiceServer interface {
 	// maintenance mode. The caller must echo the current Root CA CN as
 	// confirmation.
 	Reset(context.Context, *ResetRequest) (*ResetResponse, error)
+	// RemoteReset performs the same destructive wipe as Reset but is served over
+	// mTLS, admin-authorized, for manager-mediated decommission. It is the remote
+	// counterpart of the local-only Reset: same destructive path (Resetter +
+	// reboot into maintenance), reachable by an authenticated admin instead of
+	// only the physical console. The caller must echo the current Root CA CN.
+	RemoteReset(context.Context, *RemoteResetRequest) (*RemoteResetResponse, error)
 	// Attest signs the caller's nonce with the node's CA identity key so the
 	// Fleet Manager can verify possession of the node identity (challenge-
 	// response). ek_pub/ek_cert are reserved for future TPM EK attestation.
@@ -511,6 +534,9 @@ func (UnimplementedNodeServiceServer) CompleteKeyRotation(context.Context, *Comp
 }
 func (UnimplementedNodeServiceServer) Reset(context.Context, *ResetRequest) (*ResetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Reset not implemented")
+}
+func (UnimplementedNodeServiceServer) RemoteReset(context.Context, *RemoteResetRequest) (*RemoteResetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoteReset not implemented")
 }
 func (UnimplementedNodeServiceServer) Attest(context.Context, *AttestRequest) (*AttestResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Attest not implemented")
@@ -840,6 +866,24 @@ func _NodeService_Reset_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NodeService_RemoteReset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoteResetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).RemoteReset(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_RemoteReset_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).RemoteReset(ctx, req.(*RemoteResetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _NodeService_Attest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AttestRequest)
 	if err := dec(in); err != nil {
@@ -964,6 +1008,10 @@ var NodeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Reset",
 			Handler:    _NodeService_Reset_Handler,
+		},
+		{
+			MethodName: "RemoteReset",
+			Handler:    _NodeService_RemoteReset_Handler,
 		},
 		{
 			MethodName: "Attest",

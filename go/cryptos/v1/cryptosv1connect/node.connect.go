@@ -75,6 +75,8 @@ const (
 	NodeServiceCompleteKeyRotationProcedure = "/cryptos.v1.NodeService/CompleteKeyRotation"
 	// NodeServiceResetProcedure is the fully-qualified name of the NodeService's Reset RPC.
 	NodeServiceResetProcedure = "/cryptos.v1.NodeService/Reset"
+	// NodeServiceRemoteResetProcedure is the fully-qualified name of the NodeService's RemoteReset RPC.
+	NodeServiceRemoteResetProcedure = "/cryptos.v1.NodeService/RemoteReset"
 	// NodeServiceAttestProcedure is the fully-qualified name of the NodeService's Attest RPC.
 	NodeServiceAttestProcedure = "/cryptos.v1.NodeService/Attest"
 	// NodeServiceSetManagementProcedure is the fully-qualified name of the NodeService's SetManagement
@@ -159,6 +161,12 @@ type NodeServiceClient interface {
 	// maintenance mode. The caller must echo the current Root CA CN as
 	// confirmation.
 	Reset(context.Context, *connect.Request[v1.ResetRequest]) (*connect.Response[v1.ResetResponse], error)
+	// RemoteReset performs the same destructive wipe as Reset but is served over
+	// mTLS, admin-authorized, for manager-mediated decommission. It is the remote
+	// counterpart of the local-only Reset: same destructive path (Resetter +
+	// reboot into maintenance), reachable by an authenticated admin instead of
+	// only the physical console. The caller must echo the current Root CA CN.
+	RemoteReset(context.Context, *connect.Request[v1.RemoteResetRequest]) (*connect.Response[v1.RemoteResetResponse], error)
 	// Attest signs the caller's nonce with the node's CA identity key so the
 	// Fleet Manager can verify possession of the node identity (challenge-
 	// response). ek_pub/ek_cert are reserved for future TPM EK attestation.
@@ -286,6 +294,12 @@ func NewNodeServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(nodeServiceMethods.ByName("Reset")),
 			connect.WithClientOptions(opts...),
 		),
+		remoteReset: connect.NewClient[v1.RemoteResetRequest, v1.RemoteResetResponse](
+			httpClient,
+			baseURL+NodeServiceRemoteResetProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("RemoteReset")),
+			connect.WithClientOptions(opts...),
+		),
 		attest: connect.NewClient[v1.AttestRequest, v1.AttestResponse](
 			httpClient,
 			baseURL+NodeServiceAttestProcedure,
@@ -326,6 +340,7 @@ type nodeServiceClient struct {
 	beginKeyRotation             *connect.Client[v1.BeginKeyRotationRequest, v1.BeginKeyRotationResponse]
 	completeKeyRotation          *connect.Client[v1.CompleteKeyRotationRequest, v1.CompleteKeyRotationResponse]
 	reset                        *connect.Client[v1.ResetRequest, v1.ResetResponse]
+	remoteReset                  *connect.Client[v1.RemoteResetRequest, v1.RemoteResetResponse]
 	attest                       *connect.Client[v1.AttestRequest, v1.AttestResponse]
 	setManagement                *connect.Client[v1.SetManagementRequest, v1.SetManagementResponse]
 	getConfig                    *connect.Client[v1.GetConfigRequest, v1.GetConfigResponse]
@@ -414,6 +429,11 @@ func (c *nodeServiceClient) CompleteKeyRotation(ctx context.Context, req *connec
 // Reset calls cryptos.v1.NodeService.Reset.
 func (c *nodeServiceClient) Reset(ctx context.Context, req *connect.Request[v1.ResetRequest]) (*connect.Response[v1.ResetResponse], error) {
 	return c.reset.CallUnary(ctx, req)
+}
+
+// RemoteReset calls cryptos.v1.NodeService.RemoteReset.
+func (c *nodeServiceClient) RemoteReset(ctx context.Context, req *connect.Request[v1.RemoteResetRequest]) (*connect.Response[v1.RemoteResetResponse], error) {
+	return c.remoteReset.CallUnary(ctx, req)
 }
 
 // Attest calls cryptos.v1.NodeService.Attest.
@@ -506,6 +526,12 @@ type NodeServiceHandler interface {
 	// maintenance mode. The caller must echo the current Root CA CN as
 	// confirmation.
 	Reset(context.Context, *connect.Request[v1.ResetRequest]) (*connect.Response[v1.ResetResponse], error)
+	// RemoteReset performs the same destructive wipe as Reset but is served over
+	// mTLS, admin-authorized, for manager-mediated decommission. It is the remote
+	// counterpart of the local-only Reset: same destructive path (Resetter +
+	// reboot into maintenance), reachable by an authenticated admin instead of
+	// only the physical console. The caller must echo the current Root CA CN.
+	RemoteReset(context.Context, *connect.Request[v1.RemoteResetRequest]) (*connect.Response[v1.RemoteResetResponse], error)
 	// Attest signs the caller's nonce with the node's CA identity key so the
 	// Fleet Manager can verify possession of the node identity (challenge-
 	// response). ek_pub/ek_cert are reserved for future TPM EK attestation.
@@ -629,6 +655,12 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(nodeServiceMethods.ByName("Reset")),
 		connect.WithHandlerOptions(opts...),
 	)
+	nodeServiceRemoteResetHandler := connect.NewUnaryHandler(
+		NodeServiceRemoteResetProcedure,
+		svc.RemoteReset,
+		connect.WithSchema(nodeServiceMethods.ByName("RemoteReset")),
+		connect.WithHandlerOptions(opts...),
+	)
 	nodeServiceAttestHandler := connect.NewUnaryHandler(
 		NodeServiceAttestProcedure,
 		svc.Attest,
@@ -683,6 +715,8 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 			nodeServiceCompleteKeyRotationHandler.ServeHTTP(w, r)
 		case NodeServiceResetProcedure:
 			nodeServiceResetHandler.ServeHTTP(w, r)
+		case NodeServiceRemoteResetProcedure:
+			nodeServiceRemoteResetHandler.ServeHTTP(w, r)
 		case NodeServiceAttestProcedure:
 			nodeServiceAttestHandler.ServeHTTP(w, r)
 		case NodeServiceSetManagementProcedure:
@@ -764,6 +798,10 @@ func (UnimplementedNodeServiceHandler) CompleteKeyRotation(context.Context, *con
 
 func (UnimplementedNodeServiceHandler) Reset(context.Context, *connect.Request[v1.ResetRequest]) (*connect.Response[v1.ResetResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.Reset is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) RemoteReset(context.Context, *connect.Request[v1.RemoteResetRequest]) (*connect.Response[v1.RemoteResetResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.RemoteReset is not implemented"))
 }
 
 func (UnimplementedNodeServiceHandler) Attest(context.Context, *connect.Request[v1.AttestRequest]) (*connect.Response[v1.AttestResponse], error) {

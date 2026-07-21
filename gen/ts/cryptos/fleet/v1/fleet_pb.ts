@@ -12,7 +12,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file cryptos/fleet/v1/fleet.proto.
  */
 export const file_cryptos_fleet_v1_fleet: GenFile = /*@__PURE__*/
-  fileDesc("ChxjcnlwdG9zL2ZsZWV0L3YxL2ZsZWV0LnByb3RvEhBjcnlwdG9zLmZsZWV0LnYxIhIKEExpc3ROb2Rlc1JlcXVlc3QiQQoRTGlzdE5vZGVzUmVzcG9uc2USLAoFbm9kZXMYASADKAsyHS5jcnlwdG9zLmZsZWV0LnYxLk5vZGVTdW1tYXJ5Ih4KDkdldE5vZGVSZXF1ZXN0EgwKBG5hbWUYASABKAkiPQoPR2V0Tm9kZVJlc3BvbnNlEioKBG5vZGUYASABKAsyHC5jcnlwdG9zLmZsZWV0LnYxLk5vZGVEZXRhaWwiJwoXTGlzdENlcnRpZmljYXRlc1JlcXVlc3QSDAoEbm9kZRgBIAEoCSJPChhMaXN0Q2VydGlmaWNhdGVzUmVzcG9uc2USMwoMY2VydGlmaWNhdGVzGAEgAygLMh0uY3J5cHRvcy5mbGVldC52MS5DZXJ0aWZpY2F0ZSIVChNMaXN0UHJvZmlsZXNSZXF1ZXN0IkUKFExpc3RQcm9maWxlc1Jlc3BvbnNlEi0KBWl0ZW1zGAEgAygLMh4uY3J5cHRvcy52MS5DZXJ0aWZpY2F0ZVByb2ZpbGUiRwoUQ3JlYXRlUHJvZmlsZVJlcXVlc3QSLwoHcHJvZmlsZRgBIAEoCzIeLmNyeXB0b3MudjEuQ2VydGlmaWNhdGVQcm9maWxlIhcKFUNyZWF0ZVByb2ZpbGVSZXNwb25zZSJHChRVcGRhdGVQcm9maWxlUmVxdWVzdBIvCgdwcm9maWxlGAEgASgLMh4uY3J5cHRvcy52MS5DZXJ0aWZpY2F0ZVByb2ZpbGUiFwoVVXBkYXRlUHJvZmlsZVJlc3BvbnNlIiQKFERlbGV0ZVByb2ZpbGVSZXF1ZXN0EgwKBG5hbWUYASABKAkiFwoVRGVsZXRlUHJvZmlsZVJlc3BvbnNlIkQKGUFwcGx5UHJvZmlsZVRvTm9kZVJlcXVlc3QSEQoJbm9kZV9uYW1lGAEgASgJEhQKDHByb2ZpbGVfbmFtZRgCIAEoCSJJChpBcHBseVByb2ZpbGVUb05vZGVSZXNwb25zZRISCgpnZW5lcmF0aW9uGAEgASgEEhcKD3JlcXVpcmVzX3JlYm9vdBgCIAEoCCIVChNMaXN0QWRhcHRlcnNSZXF1ZXN0IkoKFExpc3RBZGFwdGVyc1Jlc3BvbnNlEjIKBWl0ZW1zGAEgAygLMiMuY3J5cHRvcy5mbGVldC52MS5FbnJvbGxtZW50QWRhcHRlciI5ChhTZXRBZGFwdGVyRW5hYmxlZFJlcXVlc3QSDAoEbmFtZRgBIAEoCRIPCgdlbmFibGVkGAIgASgIIlEKGVNldEFkYXB0ZXJFbmFibGVkUmVzcG9uc2USNAoHYWRhcHRlchgBIAEoCzIjLmNyeXB0b3MuZmxlZXQudjEuRW5yb2xsbWVudEFkYXB0ZXIiEgoQTGlzdEF1ZGl0UmVxdWVzdCJAChFMaXN0QXVkaXRSZXNwb25zZRIrCgVpdGVtcxgBIAMoCzIcLmNyeXB0b3MuZmxlZXQudjEuQXVkaXRFdmVudCIYChZMaXN0RW5yb2xsbWVudHNSZXF1ZXN0Ik0KF0xpc3RFbnJvbGxtZW50c1Jlc3BvbnNlEjIKBWl0ZW1zGAEgAygLMiMuY3J5cHRvcy5mbGVldC52MS5FbnJvbGxtZW50UmVxdWVzdCKvAQoLTm9kZVN1bW1hcnkSDAoEbmFtZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJEgwKBHJvbGUYAyABKAkSFgoOaWRlbnRpdHlfc3RhdGUYBCABKAkSCgoCY24YBSABKAkSDgoGaXNzdWVyGAYgASgJEigKBmhlYWx0aBgHIAEoDjIYLmNyeXB0b3MuZmxlZXQudjEuSGVhbHRoEhUKDWhlYWx0aF9kZXRhaWwYCCABKAkiSQoMTm9kZUlkZW50aXR5EhEKCWNoYWluX3BlbRgBIAEoCRIRCgljaGFpbl9kZXIYAiADKAwSEwoLbGVhZl9zaGEyNTYYAyABKAkiqQEKCk5vZGVEZXRhaWwSLgoHc3VtbWFyeRgBIAEoCzIdLmNyeXB0b3MuZmxlZXQudjEuTm9kZVN1bW1hcnkSMAoIaWRlbnRpdHkYAiABKAsyHi5jcnlwdG9zLmZsZWV0LnYxLk5vZGVJZGVudGl0eRIVCg10cG1fYXZhaWxhYmxlGAMgASgIEhIKCmJvb3RfY291bnQYBCABKAQSDgoGdXB0aW1lGAUgASgJIsABCgtDZXJ0aWZpY2F0ZRIOCgZzZXJpYWwYASABKAkSEgoKc3ViamVjdF9jbhgCIAEoCRITCgtpc3N1ZXJfbm9kZRgDIAEoCRIMCgRraW5kGAQgASgJEg4KBnN0YXR1cxgFIAEoCRISCgpub3RfYmVmb3JlGAYgASgJEhEKCW5vdF9hZnRlchgHIAEoCRIPCgdwcm9maWxlGAggASgJEhIKCnJldm9rZWRfYXQYCSABKAkSDgoGcmVhc29uGAogASgJIo0BChFFbnJvbGxtZW50QWRhcHRlchIMCgRraW5kGAEgASgJEgwKBG5hbWUYAiABKAkSEAoIZW5kcG9pbnQYAyABKAkSDwoHcHJvZmlsZRgEIAEoCRIPCgdlbmFibGVkGAUgASgIEhIKCmNoYWxsZW5nZXMYBiADKAkSFAoMZ3BvX3RlbXBsYXRlGAcgASgJIm0KCkF1ZGl0RXZlbnQSCgoCaWQYASABKAkSCgoCYXQYAiABKAkSDAoEa2luZBgDIAEoCRIPCgdzdW1tYXJ5GAQgASgJEhMKC3RhcmdldF9raW5kGAUgASgJEhMKC3RhcmdldF9wYXRoGAYgASgJItUCChFFbnJvbGxtZW50UmVxdWVzdBIKCgJpZBgBIAEoCRIVCg1wcm9wb3NlZF9uYW1lGAIgASgJEgwKBHJvbGUYAyABKAkSEQoJcGFyZW50X2NuGAQgASgJEg8KB2FkZHJlc3MYBSABKAkSDgoGc3RhdHVzGAYgASgJEhsKE2F0dGVzdGF0aW9uX3N1bW1hcnkYByABKAkSGwoTYXR0ZXN0YXRpb25fbm9kZV9pZBgIIAEoCRIUCgxjc3Jfa2V5X3R5cGUYCSABKAkSFgoOY3NyX3N1YmplY3RfY24YCiABKAkSFAoMcmVxdWVzdGVkX2F0GAsgASgJEhgKEHJlamVjdGlvbl9yZWFzb24YDCABKAkSGgoSYWRtaXR0ZWRfbm9kZV9uYW1lGA0gASgJEgwKBGtpbmQYDiABKAkSGQoRcGlubmVkX2tleV9zaGEyNTYYDyABKAkitQEKF0NyZWF0ZUVucm9sbG1lbnRSZXF1ZXN0EgwKBGtpbmQYASABKAkSFQoNbm9kZV9lbmRwb2ludBgCIAEoCRIWCg5hZG1pbl9jZXJ0X3BlbRgDIAEoCRIVCg1hZG1pbl9rZXlfcGVtGAQgASgJEg4KBmNhX3BlbRgFIAEoCRISCgpjaGlsZF9ub2RlGAYgASgJEhEKCXBhcmVudF9jbhgHIAEoCRIPCgdwcm9maWxlGAggASgJIlMKGENyZWF0ZUVucm9sbG1lbnRSZXNwb25zZRI3CgplbnJvbGxtZW50GAEgASgLMiMuY3J5cHRvcy5mbGVldC52MS5FbnJvbGxtZW50UmVxdWVzdCJ8ChhBcHByb3ZlRW5yb2xsbWVudFJlcXVlc3QSCgoCaWQYASABKAkSFQoNbm9kZV9lbmRwb2ludBgCIAEoCRIWCg5hZG1pbl9jZXJ0X3BlbRgDIAEoCRIVCg1hZG1pbl9rZXlfcGVtGAQgASgJEg4KBmNhX3BlbRgFIAEoCSJUChlBcHByb3ZlRW5yb2xsbWVudFJlc3BvbnNlEjcKCmVucm9sbG1lbnQYASABKAsyIy5jcnlwdG9zLmZsZWV0LnYxLkVucm9sbG1lbnRSZXF1ZXN0IjUKF1JlamVjdEVucm9sbG1lbnRSZXF1ZXN0EgoKAmlkGAEgASgJEg4KBnJlYXNvbhgCIAEoCSJTChhSZWplY3RFbnJvbGxtZW50UmVzcG9uc2USNwoKZW5yb2xsbWVudBgBIAEoCzIjLmNyeXB0b3MuZmxlZXQudjEuRW5yb2xsbWVudFJlcXVlc3QiDwoNV2hvQW1JUmVxdWVzdCI9ChBPcGVyYXRvcklkZW50aXR5EgoKAmNuGAEgASgJEg4KBnNlcmlhbBgCIAEoCRINCgVsZXZlbBgDIAEoCSJGCg5XaG9BbUlSZXNwb25zZRI0CghvcGVyYXRvchgBIAEoCzIiLmNyeXB0b3MuZmxlZXQudjEuT3BlcmF0b3JJZGVudGl0eSJWChhSZXZva2VDZXJ0aWZpY2F0ZVJlcXVlc3QSEQoJbm9kZV9uYW1lGAEgASgJEhIKCnNlcmlhbF9oZXgYAiABKAkSEwoLcmVhc29uX2NvZGUYAyABKAUiWAoZUmV2b2tlQ2VydGlmaWNhdGVSZXNwb25zZRISCgpzZXJpYWxfaGV4GAEgASgJEhIKCnJldm9rZWRfYXQYAiABKAkSEwoLcmVhc29uX2NvZGUYAyABKAUiTAoQSXNzdWVMZWFmUmVxdWVzdBIRCglub2RlX25hbWUYASABKAkSDwoHY3NyX2RlchgCIAEoDBIUCgxwcm9maWxlX25hbWUYAyABKAkiJQoRSXNzdWVMZWFmUmVzcG9uc2USEAoIY2VydF9kZXIYASABKAwiOwoQUmVrZXlOb2RlUmVxdWVzdBIRCglub2RlX25hbWUYASABKAkSFAoMcHJvZmlsZV9uYW1lGAIgASgJIk0KEVJla2V5Tm9kZVJlc3BvbnNlEhIKCnN1YmplY3RfY24YASABKAkSEQoJaXNzdWVyX2NuGAIgASgJEhEKCWNoYWluX2xlbhgDIAEoBSIpChRHZXROb2RlQ29uZmlnUmVxdWVzdBIRCglub2RlX25hbWUYASABKAkiQgoVR2V0Tm9kZUNvbmZpZ1Jlc3BvbnNlEikKBmNvbmZpZxgBIAEoCzIZLmNyeXB0b3MudjEuTWFjaGluZUNvbmZpZyJWChZBcHBseU5vZGVDb25maWdSZXF1ZXN0EhEKCW5vZGVfbmFtZRgBIAEoCRIpCgZjb25maWcYAiABKAsyGS5jcnlwdG9zLnYxLk1hY2hpbmVDb25maWciRgoXQXBwbHlOb2RlQ29uZmlnUmVzcG9uc2USEgoKZ2VuZXJhdGlvbhgBIAEoBBIXCg9yZXF1aXJlc19yZWJvb3QYAiABKAgiOwoSRXhwb3J0Q0FLZXlSZXF1ZXN0EhEKCW5vZGVfbmFtZRgBIAEoCRISCgpwYXNzcGhyYXNlGAIgASgMIicKE0V4cG9ydENBS2V5UmVzcG9uc2USEAoIZW52ZWxvcGUYASABKAwiTQoSSW1wb3J0Q0FLZXlSZXF1ZXN0EhEKCW5vZGVfbmFtZRgBIAEoCRIQCghlbnZlbG9wZRgCIAEoDBISCgpwYXNzcGhyYXNlGAMgASgMIjwKE0ltcG9ydENBS2V5UmVzcG9uc2USEgoKc3ViamVjdF9jbhgBIAEoCRIRCglpc3N1ZXJfY24YAiABKAkqUgoGSGVhbHRoEhYKEkhFQUxUSF9VTlNQRUNJRklFRBAAEg0KCUhFQUxUSF9VUBABEg8KC0hFQUxUSF9ET1dOEAISEAoMSEVBTFRIX0VSUk9SEAMyzREKDEZsZWV0U2VydmljZRJUCglMaXN0Tm9kZXMSIi5jcnlwdG9zLmZsZWV0LnYxLkxpc3ROb2Rlc1JlcXVlc3QaIy5jcnlwdG9zLmZsZWV0LnYxLkxpc3ROb2Rlc1Jlc3BvbnNlEk4KB0dldE5vZGUSIC5jcnlwdG9zLmZsZWV0LnYxLkdldE5vZGVSZXF1ZXN0GiEuY3J5cHRvcy5mbGVldC52MS5HZXROb2RlUmVzcG9uc2USaQoQTGlzdENlcnRpZmljYXRlcxIpLmNyeXB0b3MuZmxlZXQudjEuTGlzdENlcnRpZmljYXRlc1JlcXVlc3QaKi5jcnlwdG9zLmZsZWV0LnYxLkxpc3RDZXJ0aWZpY2F0ZXNSZXNwb25zZRJdCgxMaXN0UHJvZmlsZXMSJS5jcnlwdG9zLmZsZWV0LnYxLkxpc3RQcm9maWxlc1JlcXVlc3QaJi5jcnlwdG9zLmZsZWV0LnYxLkxpc3RQcm9maWxlc1Jlc3BvbnNlEmAKDUNyZWF0ZVByb2ZpbGUSJi5jcnlwdG9zLmZsZWV0LnYxLkNyZWF0ZVByb2ZpbGVSZXF1ZXN0GicuY3J5cHRvcy5mbGVldC52MS5DcmVhdGVQcm9maWxlUmVzcG9uc2USYAoNVXBkYXRlUHJvZmlsZRImLmNyeXB0b3MuZmxlZXQudjEuVXBkYXRlUHJvZmlsZVJlcXVlc3QaJy5jcnlwdG9zLmZsZWV0LnYxLlVwZGF0ZVByb2ZpbGVSZXNwb25zZRJgCg1EZWxldGVQcm9maWxlEiYuY3J5cHRvcy5mbGVldC52MS5EZWxldGVQcm9maWxlUmVxdWVzdBonLmNyeXB0b3MuZmxlZXQudjEuRGVsZXRlUHJvZmlsZVJlc3BvbnNlEm8KEkFwcGx5UHJvZmlsZVRvTm9kZRIrLmNyeXB0b3MuZmxlZXQudjEuQXBwbHlQcm9maWxlVG9Ob2RlUmVxdWVzdBosLmNyeXB0b3MuZmxlZXQudjEuQXBwbHlQcm9maWxlVG9Ob2RlUmVzcG9uc2USXQoMTGlzdEFkYXB0ZXJzEiUuY3J5cHRvcy5mbGVldC52MS5MaXN0QWRhcHRlcnNSZXF1ZXN0GiYuY3J5cHRvcy5mbGVldC52MS5MaXN0QWRhcHRlcnNSZXNwb25zZRJsChFTZXRBZGFwdGVyRW5hYmxlZBIqLmNyeXB0b3MuZmxlZXQudjEuU2V0QWRhcHRlckVuYWJsZWRSZXF1ZXN0GisuY3J5cHRvcy5mbGVldC52MS5TZXRBZGFwdGVyRW5hYmxlZFJlc3BvbnNlElQKCUxpc3RBdWRpdBIiLmNyeXB0b3MuZmxlZXQudjEuTGlzdEF1ZGl0UmVxdWVzdBojLmNyeXB0b3MuZmxlZXQudjEuTGlzdEF1ZGl0UmVzcG9uc2USZgoPTGlzdEVucm9sbG1lbnRzEiguY3J5cHRvcy5mbGVldC52MS5MaXN0RW5yb2xsbWVudHNSZXF1ZXN0GikuY3J5cHRvcy5mbGVldC52MS5MaXN0RW5yb2xsbWVudHNSZXNwb25zZRJpChBDcmVhdGVFbnJvbGxtZW50EikuY3J5cHRvcy5mbGVldC52MS5DcmVhdGVFbnJvbGxtZW50UmVxdWVzdBoqLmNyeXB0b3MuZmxlZXQudjEuQ3JlYXRlRW5yb2xsbWVudFJlc3BvbnNlEmwKEUFwcHJvdmVFbnJvbGxtZW50EiouY3J5cHRvcy5mbGVldC52MS5BcHByb3ZlRW5yb2xsbWVudFJlcXVlc3QaKy5jcnlwdG9zLmZsZWV0LnYxLkFwcHJvdmVFbnJvbGxtZW50UmVzcG9uc2USaQoQUmVqZWN0RW5yb2xsbWVudBIpLmNyeXB0b3MuZmxlZXQudjEuUmVqZWN0RW5yb2xsbWVudFJlcXVlc3QaKi5jcnlwdG9zLmZsZWV0LnYxLlJlamVjdEVucm9sbG1lbnRSZXNwb25zZRJLCgZXaG9BbUkSHy5jcnlwdG9zLmZsZWV0LnYxLldob0FtSVJlcXVlc3QaIC5jcnlwdG9zLmZsZWV0LnYxLldob0FtSVJlc3BvbnNlEmwKEVJldm9rZUNlcnRpZmljYXRlEiouY3J5cHRvcy5mbGVldC52MS5SZXZva2VDZXJ0aWZpY2F0ZVJlcXVlc3QaKy5jcnlwdG9zLmZsZWV0LnYxLlJldm9rZUNlcnRpZmljYXRlUmVzcG9uc2USVAoJSXNzdWVMZWFmEiIuY3J5cHRvcy5mbGVldC52MS5Jc3N1ZUxlYWZSZXF1ZXN0GiMuY3J5cHRvcy5mbGVldC52MS5Jc3N1ZUxlYWZSZXNwb25zZRJUCglSZWtleU5vZGUSIi5jcnlwdG9zLmZsZWV0LnYxLlJla2V5Tm9kZVJlcXVlc3QaIy5jcnlwdG9zLmZsZWV0LnYxLlJla2V5Tm9kZVJlc3BvbnNlEmAKDUdldE5vZGVDb25maWcSJi5jcnlwdG9zLmZsZWV0LnYxLkdldE5vZGVDb25maWdSZXF1ZXN0GicuY3J5cHRvcy5mbGVldC52MS5HZXROb2RlQ29uZmlnUmVzcG9uc2USZgoPQXBwbHlOb2RlQ29uZmlnEiguY3J5cHRvcy5mbGVldC52MS5BcHBseU5vZGVDb25maWdSZXF1ZXN0GikuY3J5cHRvcy5mbGVldC52MS5BcHBseU5vZGVDb25maWdSZXNwb25zZRJaCgtFeHBvcnRDQUtleRIkLmNyeXB0b3MuZmxlZXQudjEuRXhwb3J0Q0FLZXlSZXF1ZXN0GiUuY3J5cHRvcy5mbGVldC52MS5FeHBvcnRDQUtleVJlc3BvbnNlEloKC0ltcG9ydENBS2V5EiQuY3J5cHRvcy5mbGVldC52MS5JbXBvcnRDQUtleVJlcXVlc3QaJS5jcnlwdG9zLmZsZWV0LnYxLkltcG9ydENBS2V5UmVzcG9uc2VCOFo2Z2l0aHViLmNvbS9DcnlwdE9TLVBLSS9hcGkvZ28vY3J5cHRvcy9mbGVldC92MTtmbGVldHYxYgZwcm90bzM", [file_cryptos_v1_config]);
+  fileDesc("ChxjcnlwdG9zL2ZsZWV0L3YxL2ZsZWV0LnByb3RvEhBjcnlwdG9zLmZsZWV0LnYxIhIKEExpc3ROb2Rlc1JlcXVlc3QiQQoRTGlzdE5vZGVzUmVzcG9uc2USLAoFbm9kZXMYASADKAsyHS5jcnlwdG9zLmZsZWV0LnYxLk5vZGVTdW1tYXJ5Ih4KDkdldE5vZGVSZXF1ZXN0EgwKBG5hbWUYASABKAkiPQoPR2V0Tm9kZVJlc3BvbnNlEioKBG5vZGUYASABKAsyHC5jcnlwdG9zLmZsZWV0LnYxLk5vZGVEZXRhaWwiJwoXTGlzdENlcnRpZmljYXRlc1JlcXVlc3QSDAoEbm9kZRgBIAEoCSJPChhMaXN0Q2VydGlmaWNhdGVzUmVzcG9uc2USMwoMY2VydGlmaWNhdGVzGAEgAygLMh0uY3J5cHRvcy5mbGVldC52MS5DZXJ0aWZpY2F0ZSIVChNMaXN0UHJvZmlsZXNSZXF1ZXN0IkUKFExpc3RQcm9maWxlc1Jlc3BvbnNlEi0KBWl0ZW1zGAEgAygLMh4uY3J5cHRvcy52MS5DZXJ0aWZpY2F0ZVByb2ZpbGUiRwoUQ3JlYXRlUHJvZmlsZVJlcXVlc3QSLwoHcHJvZmlsZRgBIAEoCzIeLmNyeXB0b3MudjEuQ2VydGlmaWNhdGVQcm9maWxlIhcKFUNyZWF0ZVByb2ZpbGVSZXNwb25zZSJHChRVcGRhdGVQcm9maWxlUmVxdWVzdBIvCgdwcm9maWxlGAEgASgLMh4uY3J5cHRvcy52MS5DZXJ0aWZpY2F0ZVByb2ZpbGUiFwoVVXBkYXRlUHJvZmlsZVJlc3BvbnNlIiQKFERlbGV0ZVByb2ZpbGVSZXF1ZXN0EgwKBG5hbWUYASABKAkiFwoVRGVsZXRlUHJvZmlsZVJlc3BvbnNlIkQKGUFwcGx5UHJvZmlsZVRvTm9kZVJlcXVlc3QSEQoJbm9kZV9uYW1lGAEgASgJEhQKDHByb2ZpbGVfbmFtZRgCIAEoCSJJChpBcHBseVByb2ZpbGVUb05vZGVSZXNwb25zZRISCgpnZW5lcmF0aW9uGAEgASgEEhcKD3JlcXVpcmVzX3JlYm9vdBgCIAEoCCIVChNMaXN0QWRhcHRlcnNSZXF1ZXN0IkoKFExpc3RBZGFwdGVyc1Jlc3BvbnNlEjIKBWl0ZW1zGAEgAygLMiMuY3J5cHRvcy5mbGVldC52MS5FbnJvbGxtZW50QWRhcHRlciI5ChhTZXRBZGFwdGVyRW5hYmxlZFJlcXVlc3QSDAoEbmFtZRgBIAEoCRIPCgdlbmFibGVkGAIgASgIIlEKGVNldEFkYXB0ZXJFbmFibGVkUmVzcG9uc2USNAoHYWRhcHRlchgBIAEoCzIjLmNyeXB0b3MuZmxlZXQudjEuRW5yb2xsbWVudEFkYXB0ZXIiEgoQTGlzdEF1ZGl0UmVxdWVzdCJAChFMaXN0QXVkaXRSZXNwb25zZRIrCgVpdGVtcxgBIAMoCzIcLmNyeXB0b3MuZmxlZXQudjEuQXVkaXRFdmVudCIYChZMaXN0RW5yb2xsbWVudHNSZXF1ZXN0Ik0KF0xpc3RFbnJvbGxtZW50c1Jlc3BvbnNlEjIKBWl0ZW1zGAEgAygLMiMuY3J5cHRvcy5mbGVldC52MS5FbnJvbGxtZW50UmVxdWVzdCKvAQoLTm9kZVN1bW1hcnkSDAoEbmFtZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJEgwKBHJvbGUYAyABKAkSFgoOaWRlbnRpdHlfc3RhdGUYBCABKAkSCgoCY24YBSABKAkSDgoGaXNzdWVyGAYgASgJEigKBmhlYWx0aBgHIAEoDjIYLmNyeXB0b3MuZmxlZXQudjEuSGVhbHRoEhUKDWhlYWx0aF9kZXRhaWwYCCABKAkiSQoMTm9kZUlkZW50aXR5EhEKCWNoYWluX3BlbRgBIAEoCRIRCgljaGFpbl9kZXIYAiADKAwSEwoLbGVhZl9zaGEyNTYYAyABKAkiqQEKCk5vZGVEZXRhaWwSLgoHc3VtbWFyeRgBIAEoCzIdLmNyeXB0b3MuZmxlZXQudjEuTm9kZVN1bW1hcnkSMAoIaWRlbnRpdHkYAiABKAsyHi5jcnlwdG9zLmZsZWV0LnYxLk5vZGVJZGVudGl0eRIVCg10cG1fYXZhaWxhYmxlGAMgASgIEhIKCmJvb3RfY291bnQYBCABKAQSDgoGdXB0aW1lGAUgASgJIsABCgtDZXJ0aWZpY2F0ZRIOCgZzZXJpYWwYASABKAkSEgoKc3ViamVjdF9jbhgCIAEoCRITCgtpc3N1ZXJfbm9kZRgDIAEoCRIMCgRraW5kGAQgASgJEg4KBnN0YXR1cxgFIAEoCRISCgpub3RfYmVmb3JlGAYgASgJEhEKCW5vdF9hZnRlchgHIAEoCRIPCgdwcm9maWxlGAggASgJEhIKCnJldm9rZWRfYXQYCSABKAkSDgoGcmVhc29uGAogASgJIo0BChFFbnJvbGxtZW50QWRhcHRlchIMCgRraW5kGAEgASgJEgwKBG5hbWUYAiABKAkSEAoIZW5kcG9pbnQYAyABKAkSDwoHcHJvZmlsZRgEIAEoCRIPCgdlbmFibGVkGAUgASgIEhIKCmNoYWxsZW5nZXMYBiADKAkSFAoMZ3BvX3RlbXBsYXRlGAcgASgJIm0KCkF1ZGl0RXZlbnQSCgoCaWQYASABKAkSCgoCYXQYAiABKAkSDAoEa2luZBgDIAEoCRIPCgdzdW1tYXJ5GAQgASgJEhMKC3RhcmdldF9raW5kGAUgASgJEhMKC3RhcmdldF9wYXRoGAYgASgJItUCChFFbnJvbGxtZW50UmVxdWVzdBIKCgJpZBgBIAEoCRIVCg1wcm9wb3NlZF9uYW1lGAIgASgJEgwKBHJvbGUYAyABKAkSEQoJcGFyZW50X2NuGAQgASgJEg8KB2FkZHJlc3MYBSABKAkSDgoGc3RhdHVzGAYgASgJEhsKE2F0dGVzdGF0aW9uX3N1bW1hcnkYByABKAkSGwoTYXR0ZXN0YXRpb25fbm9kZV9pZBgIIAEoCRIUCgxjc3Jfa2V5X3R5cGUYCSABKAkSFgoOY3NyX3N1YmplY3RfY24YCiABKAkSFAoMcmVxdWVzdGVkX2F0GAsgASgJEhgKEHJlamVjdGlvbl9yZWFzb24YDCABKAkSGgoSYWRtaXR0ZWRfbm9kZV9uYW1lGA0gASgJEgwKBGtpbmQYDiABKAkSGQoRcGlubmVkX2tleV9zaGEyNTYYDyABKAkitQEKF0NyZWF0ZUVucm9sbG1lbnRSZXF1ZXN0EgwKBGtpbmQYASABKAkSFQoNbm9kZV9lbmRwb2ludBgCIAEoCRIWCg5hZG1pbl9jZXJ0X3BlbRgDIAEoCRIVCg1hZG1pbl9rZXlfcGVtGAQgASgJEg4KBmNhX3BlbRgFIAEoCRISCgpjaGlsZF9ub2RlGAYgASgJEhEKCXBhcmVudF9jbhgHIAEoCRIPCgdwcm9maWxlGAggASgJIlMKGENyZWF0ZUVucm9sbG1lbnRSZXNwb25zZRI3CgplbnJvbGxtZW50GAEgASgLMiMuY3J5cHRvcy5mbGVldC52MS5FbnJvbGxtZW50UmVxdWVzdCJ8ChhBcHByb3ZlRW5yb2xsbWVudFJlcXVlc3QSCgoCaWQYASABKAkSFQoNbm9kZV9lbmRwb2ludBgCIAEoCRIWCg5hZG1pbl9jZXJ0X3BlbRgDIAEoCRIVCg1hZG1pbl9rZXlfcGVtGAQgASgJEg4KBmNhX3BlbRgFIAEoCSJUChlBcHByb3ZlRW5yb2xsbWVudFJlc3BvbnNlEjcKCmVucm9sbG1lbnQYASABKAsyIy5jcnlwdG9zLmZsZWV0LnYxLkVucm9sbG1lbnRSZXF1ZXN0IjUKF1JlamVjdEVucm9sbG1lbnRSZXF1ZXN0EgoKAmlkGAEgASgJEg4KBnJlYXNvbhgCIAEoCSJTChhSZWplY3RFbnJvbGxtZW50UmVzcG9uc2USNwoKZW5yb2xsbWVudBgBIAEoCzIjLmNyeXB0b3MuZmxlZXQudjEuRW5yb2xsbWVudFJlcXVlc3QiDwoNV2hvQW1JUmVxdWVzdCI9ChBPcGVyYXRvcklkZW50aXR5EgoKAmNuGAEgASgJEg4KBnNlcmlhbBgCIAEoCRINCgVsZXZlbBgDIAEoCSJGCg5XaG9BbUlSZXNwb25zZRI0CghvcGVyYXRvchgBIAEoCzIiLmNyeXB0b3MuZmxlZXQudjEuT3BlcmF0b3JJZGVudGl0eSJWChhSZXZva2VDZXJ0aWZpY2F0ZVJlcXVlc3QSEQoJbm9kZV9uYW1lGAEgASgJEhIKCnNlcmlhbF9oZXgYAiABKAkSEwoLcmVhc29uX2NvZGUYAyABKAUiWAoZUmV2b2tlQ2VydGlmaWNhdGVSZXNwb25zZRISCgpzZXJpYWxfaGV4GAEgASgJEhIKCnJldm9rZWRfYXQYAiABKAkSEwoLcmVhc29uX2NvZGUYAyABKAUiTAoQSXNzdWVMZWFmUmVxdWVzdBIRCglub2RlX25hbWUYASABKAkSDwoHY3NyX2RlchgCIAEoDBIUCgxwcm9maWxlX25hbWUYAyABKAkiJQoRSXNzdWVMZWFmUmVzcG9uc2USEAoIY2VydF9kZXIYASABKAwiOwoQUmVrZXlOb2RlUmVxdWVzdBIRCglub2RlX25hbWUYASABKAkSFAoMcHJvZmlsZV9uYW1lGAIgASgJIk0KEVJla2V5Tm9kZVJlc3BvbnNlEhIKCnN1YmplY3RfY24YASABKAkSEQoJaXNzdWVyX2NuGAIgASgJEhEKCWNoYWluX2xlbhgDIAEoBSIpChRHZXROb2RlQ29uZmlnUmVxdWVzdBIRCglub2RlX25hbWUYASABKAkiQgoVR2V0Tm9kZUNvbmZpZ1Jlc3BvbnNlEikKBmNvbmZpZxgBIAEoCzIZLmNyeXB0b3MudjEuTWFjaGluZUNvbmZpZyJWChZBcHBseU5vZGVDb25maWdSZXF1ZXN0EhEKCW5vZGVfbmFtZRgBIAEoCRIpCgZjb25maWcYAiABKAsyGS5jcnlwdG9zLnYxLk1hY2hpbmVDb25maWciRgoXQXBwbHlOb2RlQ29uZmlnUmVzcG9uc2USEgoKZ2VuZXJhdGlvbhgBIAEoBBIXCg9yZXF1aXJlc19yZWJvb3QYAiABKAgiOwoSRXhwb3J0Q0FLZXlSZXF1ZXN0EhEKCW5vZGVfbmFtZRgBIAEoCRISCgpwYXNzcGhyYXNlGAIgASgMIicKE0V4cG9ydENBS2V5UmVzcG9uc2USEAoIZW52ZWxvcGUYASABKAwiTQoSSW1wb3J0Q0FLZXlSZXF1ZXN0EhEKCW5vZGVfbmFtZRgBIAEoCRIQCghlbnZlbG9wZRgCIAEoDBISCgpwYXNzcGhyYXNlGAMgASgMIjwKE0ltcG9ydENBS2V5UmVzcG9uc2USEgoKc3ViamVjdF9jbhgBIAEoCRIRCglpc3N1ZXJfY24YAiABKAkiVQoeSXNzdWVPcGVyYXRvckNyZWRlbnRpYWxSZXF1ZXN0EhMKC2NvbW1vbl9uYW1lGAEgASgJEg0KBWxldmVsGAIgASgJEg8KB2Nzcl9kZXIYAyABKAwiRwofSXNzdWVPcGVyYXRvckNyZWRlbnRpYWxSZXNwb25zZRIQCghjZXJ0X2RlchgBIAEoDBISCgpzZXJpYWxfaGV4GAIgASgJIkoKH1Jldm9rZU9wZXJhdG9yQ3JlZGVudGlhbFJlcXVlc3QSEgoKc2VyaWFsX2hleBgBIAEoCRITCgtyZWFzb25fY29kZRgCIAEoBSJKCiBSZXZva2VPcGVyYXRvckNyZWRlbnRpYWxSZXNwb25zZRISCgpzZXJpYWxfaGV4GAEgASgJEhIKCnJldm9rZWRfYXQYAiABKAkiIAoeTGlzdE9wZXJhdG9yQ3JlZGVudGlhbHNSZXF1ZXN0InAKEk9wZXJhdG9yQ3JlZGVudGlhbBITCgtjb21tb25fbmFtZRgBIAEoCRISCgpzZXJpYWxfaGV4GAIgASgJEg0KBWxldmVsGAMgASgJEhEKCW5vdF9hZnRlchgEIAEoCRIPCgdyZXZva2VkGAUgASgIIlYKH0xpc3RPcGVyYXRvckNyZWRlbnRpYWxzUmVzcG9uc2USMwoFaXRlbXMYASADKAsyJC5jcnlwdG9zLmZsZWV0LnYxLk9wZXJhdG9yQ3JlZGVudGlhbCIqChZQcmV2aWV3QWRvcHRpb25SZXF1ZXN0EhAKCGVuZHBvaW50GAEgASgJIj8KF1ByZXZpZXdBZG9wdGlvblJlc3BvbnNlEhMKC2NlcnRfc2hhMjU2GAEgASgJEg8KB3N1YmplY3QYAiABKAkiawoQQWRvcHROb2RlUmVxdWVzdBIQCghlbmRwb2ludBgBIAEoCRIaChJwaW5uZWRfY2VydF9zaGEyNTYYAiABKAkSKQoGY29uZmlnGAMgASgLMhkuY3J5cHRvcy52MS5NYWNoaW5lQ29uZmlnIkAKEUFkb3B0Tm9kZVJlc3BvbnNlEg0KBXBoYXNlGAEgASgJEg4KBmRldGFpbBgCIAEoCRIMCgRkb25lGAMgASgIIkkKF0RlY29tbWlzc2lvbk5vZGVSZXF1ZXN0EhEKCW5vZGVfbmFtZRgBIAEoCRIbChNjb25maXJtX2NvbW1vbl9uYW1lGAIgASgJIi0KGERlY29tbWlzc2lvbk5vZGVSZXNwb25zZRIRCglyZWJvb3RpbmcYASABKAgqUgoGSGVhbHRoEhYKEkhFQUxUSF9VTlNQRUNJRklFRBAAEg0KCUhFQUxUSF9VUBABEg8KC0hFQUxUSF9ET1dOEAISEAoMSEVBTFRIX0VSUk9SEAMy/BYKDEZsZWV0U2VydmljZRJUCglMaXN0Tm9kZXMSIi5jcnlwdG9zLmZsZWV0LnYxLkxpc3ROb2Rlc1JlcXVlc3QaIy5jcnlwdG9zLmZsZWV0LnYxLkxpc3ROb2Rlc1Jlc3BvbnNlEk4KB0dldE5vZGUSIC5jcnlwdG9zLmZsZWV0LnYxLkdldE5vZGVSZXF1ZXN0GiEuY3J5cHRvcy5mbGVldC52MS5HZXROb2RlUmVzcG9uc2USaQoQTGlzdENlcnRpZmljYXRlcxIpLmNyeXB0b3MuZmxlZXQudjEuTGlzdENlcnRpZmljYXRlc1JlcXVlc3QaKi5jcnlwdG9zLmZsZWV0LnYxLkxpc3RDZXJ0aWZpY2F0ZXNSZXNwb25zZRJdCgxMaXN0UHJvZmlsZXMSJS5jcnlwdG9zLmZsZWV0LnYxLkxpc3RQcm9maWxlc1JlcXVlc3QaJi5jcnlwdG9zLmZsZWV0LnYxLkxpc3RQcm9maWxlc1Jlc3BvbnNlEmAKDUNyZWF0ZVByb2ZpbGUSJi5jcnlwdG9zLmZsZWV0LnYxLkNyZWF0ZVByb2ZpbGVSZXF1ZXN0GicuY3J5cHRvcy5mbGVldC52MS5DcmVhdGVQcm9maWxlUmVzcG9uc2USYAoNVXBkYXRlUHJvZmlsZRImLmNyeXB0b3MuZmxlZXQudjEuVXBkYXRlUHJvZmlsZVJlcXVlc3QaJy5jcnlwdG9zLmZsZWV0LnYxLlVwZGF0ZVByb2ZpbGVSZXNwb25zZRJgCg1EZWxldGVQcm9maWxlEiYuY3J5cHRvcy5mbGVldC52MS5EZWxldGVQcm9maWxlUmVxdWVzdBonLmNyeXB0b3MuZmxlZXQudjEuRGVsZXRlUHJvZmlsZVJlc3BvbnNlEm8KEkFwcGx5UHJvZmlsZVRvTm9kZRIrLmNyeXB0b3MuZmxlZXQudjEuQXBwbHlQcm9maWxlVG9Ob2RlUmVxdWVzdBosLmNyeXB0b3MuZmxlZXQudjEuQXBwbHlQcm9maWxlVG9Ob2RlUmVzcG9uc2USXQoMTGlzdEFkYXB0ZXJzEiUuY3J5cHRvcy5mbGVldC52MS5MaXN0QWRhcHRlcnNSZXF1ZXN0GiYuY3J5cHRvcy5mbGVldC52MS5MaXN0QWRhcHRlcnNSZXNwb25zZRJsChFTZXRBZGFwdGVyRW5hYmxlZBIqLmNyeXB0b3MuZmxlZXQudjEuU2V0QWRhcHRlckVuYWJsZWRSZXF1ZXN0GisuY3J5cHRvcy5mbGVldC52MS5TZXRBZGFwdGVyRW5hYmxlZFJlc3BvbnNlElQKCUxpc3RBdWRpdBIiLmNyeXB0b3MuZmxlZXQudjEuTGlzdEF1ZGl0UmVxdWVzdBojLmNyeXB0b3MuZmxlZXQudjEuTGlzdEF1ZGl0UmVzcG9uc2USZgoPTGlzdEVucm9sbG1lbnRzEiguY3J5cHRvcy5mbGVldC52MS5MaXN0RW5yb2xsbWVudHNSZXF1ZXN0GikuY3J5cHRvcy5mbGVldC52MS5MaXN0RW5yb2xsbWVudHNSZXNwb25zZRJpChBDcmVhdGVFbnJvbGxtZW50EikuY3J5cHRvcy5mbGVldC52MS5DcmVhdGVFbnJvbGxtZW50UmVxdWVzdBoqLmNyeXB0b3MuZmxlZXQudjEuQ3JlYXRlRW5yb2xsbWVudFJlc3BvbnNlEmwKEUFwcHJvdmVFbnJvbGxtZW50EiouY3J5cHRvcy5mbGVldC52MS5BcHByb3ZlRW5yb2xsbWVudFJlcXVlc3QaKy5jcnlwdG9zLmZsZWV0LnYxLkFwcHJvdmVFbnJvbGxtZW50UmVzcG9uc2USaQoQUmVqZWN0RW5yb2xsbWVudBIpLmNyeXB0b3MuZmxlZXQudjEuUmVqZWN0RW5yb2xsbWVudFJlcXVlc3QaKi5jcnlwdG9zLmZsZWV0LnYxLlJlamVjdEVucm9sbG1lbnRSZXNwb25zZRJLCgZXaG9BbUkSHy5jcnlwdG9zLmZsZWV0LnYxLldob0FtSVJlcXVlc3QaIC5jcnlwdG9zLmZsZWV0LnYxLldob0FtSVJlc3BvbnNlEmwKEVJldm9rZUNlcnRpZmljYXRlEiouY3J5cHRvcy5mbGVldC52MS5SZXZva2VDZXJ0aWZpY2F0ZVJlcXVlc3QaKy5jcnlwdG9zLmZsZWV0LnYxLlJldm9rZUNlcnRpZmljYXRlUmVzcG9uc2USVAoJSXNzdWVMZWFmEiIuY3J5cHRvcy5mbGVldC52MS5Jc3N1ZUxlYWZSZXF1ZXN0GiMuY3J5cHRvcy5mbGVldC52MS5Jc3N1ZUxlYWZSZXNwb25zZRJUCglSZWtleU5vZGUSIi5jcnlwdG9zLmZsZWV0LnYxLlJla2V5Tm9kZVJlcXVlc3QaIy5jcnlwdG9zLmZsZWV0LnYxLlJla2V5Tm9kZVJlc3BvbnNlEmAKDUdldE5vZGVDb25maWcSJi5jcnlwdG9zLmZsZWV0LnYxLkdldE5vZGVDb25maWdSZXF1ZXN0GicuY3J5cHRvcy5mbGVldC52MS5HZXROb2RlQ29uZmlnUmVzcG9uc2USZgoPQXBwbHlOb2RlQ29uZmlnEiguY3J5cHRvcy5mbGVldC52MS5BcHBseU5vZGVDb25maWdSZXF1ZXN0GikuY3J5cHRvcy5mbGVldC52MS5BcHBseU5vZGVDb25maWdSZXNwb25zZRJaCgtFeHBvcnRDQUtleRIkLmNyeXB0b3MuZmxlZXQudjEuRXhwb3J0Q0FLZXlSZXF1ZXN0GiUuY3J5cHRvcy5mbGVldC52MS5FeHBvcnRDQUtleVJlc3BvbnNlEloKC0ltcG9ydENBS2V5EiQuY3J5cHRvcy5mbGVldC52MS5JbXBvcnRDQUtleVJlcXVlc3QaJS5jcnlwdG9zLmZsZWV0LnYxLkltcG9ydENBS2V5UmVzcG9uc2USfgoXSXNzdWVPcGVyYXRvckNyZWRlbnRpYWwSMC5jcnlwdG9zLmZsZWV0LnYxLklzc3VlT3BlcmF0b3JDcmVkZW50aWFsUmVxdWVzdBoxLmNyeXB0b3MuZmxlZXQudjEuSXNzdWVPcGVyYXRvckNyZWRlbnRpYWxSZXNwb25zZRKBAQoYUmV2b2tlT3BlcmF0b3JDcmVkZW50aWFsEjEuY3J5cHRvcy5mbGVldC52MS5SZXZva2VPcGVyYXRvckNyZWRlbnRpYWxSZXF1ZXN0GjIuY3J5cHRvcy5mbGVldC52MS5SZXZva2VPcGVyYXRvckNyZWRlbnRpYWxSZXNwb25zZRJ+ChdMaXN0T3BlcmF0b3JDcmVkZW50aWFscxIwLmNyeXB0b3MuZmxlZXQudjEuTGlzdE9wZXJhdG9yQ3JlZGVudGlhbHNSZXF1ZXN0GjEuY3J5cHRvcy5mbGVldC52MS5MaXN0T3BlcmF0b3JDcmVkZW50aWFsc1Jlc3BvbnNlEmYKD1ByZXZpZXdBZG9wdGlvbhIoLmNyeXB0b3MuZmxlZXQudjEuUHJldmlld0Fkb3B0aW9uUmVxdWVzdBopLmNyeXB0b3MuZmxlZXQudjEuUHJldmlld0Fkb3B0aW9uUmVzcG9uc2USVgoJQWRvcHROb2RlEiIuY3J5cHRvcy5mbGVldC52MS5BZG9wdE5vZGVSZXF1ZXN0GiMuY3J5cHRvcy5mbGVldC52MS5BZG9wdE5vZGVSZXNwb25zZTABEmkKEERlY29tbWlzc2lvbk5vZGUSKS5jcnlwdG9zLmZsZWV0LnYxLkRlY29tbWlzc2lvbk5vZGVSZXF1ZXN0GiouY3J5cHRvcy5mbGVldC52MS5EZWNvbW1pc3Npb25Ob2RlUmVzcG9uc2VCOFo2Z2l0aHViLmNvbS9DcnlwdE9TLVBLSS9hcGkvZ28vY3J5cHRvcy9mbGVldC92MTtmbGVldHYxYgZwcm90bzM", [file_cryptos_v1_config]);
 
 /**
  * @generated from message cryptos.fleet.v1.ListNodesRequest
@@ -1459,6 +1459,339 @@ export const ImportCAKeyResponseSchema: GenMessage<ImportCAKeyResponse> = /*@__P
   messageDesc(file_cryptos_fleet_v1_fleet, 53);
 
 /**
+ * IssueOperatorCredentialRequest carries the operator subject CN, the access
+ * level to grant, and the browser-generated CSR to sign under the matching
+ * operator-<level> profile.
+ *
+ * @generated from message cryptos.fleet.v1.IssueOperatorCredentialRequest
+ */
+export type IssueOperatorCredentialRequest = Message<"cryptos.fleet.v1.IssueOperatorCredentialRequest"> & {
+  /**
+   * @generated from field: string common_name = 1;
+   */
+  commonName: string;
+
+  /**
+   * "viewer"|"operator"|"admin"
+   *
+   * @generated from field: string level = 2;
+   */
+  level: string;
+
+  /**
+   * browser-generated
+   *
+   * @generated from field: bytes csr_der = 3;
+   */
+  csrDer: Uint8Array;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.IssueOperatorCredentialRequest.
+ * Use `create(IssueOperatorCredentialRequestSchema)` to create a new message.
+ */
+export const IssueOperatorCredentialRequestSchema: GenMessage<IssueOperatorCredentialRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 54);
+
+/**
+ * IssueOperatorCredentialResponse carries the signed operator certificate and
+ * its hex serial. The browser assembles the PKCS#12 with its own key.
+ *
+ * @generated from message cryptos.fleet.v1.IssueOperatorCredentialResponse
+ */
+export type IssueOperatorCredentialResponse = Message<"cryptos.fleet.v1.IssueOperatorCredentialResponse"> & {
+  /**
+   * @generated from field: bytes cert_der = 1;
+   */
+  certDer: Uint8Array;
+
+  /**
+   * @generated from field: string serial_hex = 2;
+   */
+  serialHex: string;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.IssueOperatorCredentialResponse.
+ * Use `create(IssueOperatorCredentialResponseSchema)` to create a new message.
+ */
+export const IssueOperatorCredentialResponseSchema: GenMessage<IssueOperatorCredentialResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 55);
+
+/**
+ * RevokeOperatorCredentialRequest names the operator credential to revoke by
+ * hex serial, with the RFC 5280 reason code.
+ *
+ * @generated from message cryptos.fleet.v1.RevokeOperatorCredentialRequest
+ */
+export type RevokeOperatorCredentialRequest = Message<"cryptos.fleet.v1.RevokeOperatorCredentialRequest"> & {
+  /**
+   * @generated from field: string serial_hex = 1;
+   */
+  serialHex: string;
+
+  /**
+   * @generated from field: int32 reason_code = 2;
+   */
+  reasonCode: number;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.RevokeOperatorCredentialRequest.
+ * Use `create(RevokeOperatorCredentialRequestSchema)` to create a new message.
+ */
+export const RevokeOperatorCredentialRequestSchema: GenMessage<RevokeOperatorCredentialRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 56);
+
+/**
+ * RevokeOperatorCredentialResponse echoes the revoked serial and the time it
+ * was revoked (RFC3339).
+ *
+ * @generated from message cryptos.fleet.v1.RevokeOperatorCredentialResponse
+ */
+export type RevokeOperatorCredentialResponse = Message<"cryptos.fleet.v1.RevokeOperatorCredentialResponse"> & {
+  /**
+   * @generated from field: string serial_hex = 1;
+   */
+  serialHex: string;
+
+  /**
+   * @generated from field: string revoked_at = 2;
+   */
+  revokedAt: string;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.RevokeOperatorCredentialResponse.
+ * Use `create(RevokeOperatorCredentialResponseSchema)` to create a new message.
+ */
+export const RevokeOperatorCredentialResponseSchema: GenMessage<RevokeOperatorCredentialResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 57);
+
+/**
+ * @generated from message cryptos.fleet.v1.ListOperatorCredentialsRequest
+ */
+export type ListOperatorCredentialsRequest = Message<"cryptos.fleet.v1.ListOperatorCredentialsRequest"> & {
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.ListOperatorCredentialsRequest.
+ * Use `create(ListOperatorCredentialsRequestSchema)` to create a new message.
+ */
+export const ListOperatorCredentialsRequestSchema: GenMessage<ListOperatorCredentialsRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 58);
+
+/**
+ * OperatorCredential is one issued operator credential row.
+ *
+ * @generated from message cryptos.fleet.v1.OperatorCredential
+ */
+export type OperatorCredential = Message<"cryptos.fleet.v1.OperatorCredential"> & {
+  /**
+   * @generated from field: string common_name = 1;
+   */
+  commonName: string;
+
+  /**
+   * @generated from field: string serial_hex = 2;
+   */
+  serialHex: string;
+
+  /**
+   * @generated from field: string level = 3;
+   */
+  level: string;
+
+  /**
+   * @generated from field: string not_after = 4;
+   */
+  notAfter: string;
+
+  /**
+   * @generated from field: bool revoked = 5;
+   */
+  revoked: boolean;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.OperatorCredential.
+ * Use `create(OperatorCredentialSchema)` to create a new message.
+ */
+export const OperatorCredentialSchema: GenMessage<OperatorCredential> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 59);
+
+/**
+ * @generated from message cryptos.fleet.v1.ListOperatorCredentialsResponse
+ */
+export type ListOperatorCredentialsResponse = Message<"cryptos.fleet.v1.ListOperatorCredentialsResponse"> & {
+  /**
+   * @generated from field: repeated cryptos.fleet.v1.OperatorCredential items = 1;
+   */
+  items: OperatorCredential[];
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.ListOperatorCredentialsResponse.
+ * Use `create(ListOperatorCredentialsResponseSchema)` to create a new message.
+ */
+export const ListOperatorCredentialsResponseSchema: GenMessage<ListOperatorCredentialsResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 60);
+
+/**
+ * PreviewAdoptionRequest names the maintenance endpoint to inspect.
+ *
+ * @generated from message cryptos.fleet.v1.PreviewAdoptionRequest
+ */
+export type PreviewAdoptionRequest = Message<"cryptos.fleet.v1.PreviewAdoptionRequest"> & {
+  /**
+   * @generated from field: string endpoint = 1;
+   */
+  endpoint: string;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.PreviewAdoptionRequest.
+ * Use `create(PreviewAdoptionRequestSchema)` to create a new message.
+ */
+export const PreviewAdoptionRequestSchema: GenMessage<PreviewAdoptionRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 61);
+
+/**
+ * PreviewAdoptionResponse returns the maintenance node's certificate
+ * fingerprint and subject for the operator to confirm (trust on first use).
+ *
+ * @generated from message cryptos.fleet.v1.PreviewAdoptionResponse
+ */
+export type PreviewAdoptionResponse = Message<"cryptos.fleet.v1.PreviewAdoptionResponse"> & {
+  /**
+   * @generated from field: string cert_sha256 = 1;
+   */
+  certSha256: string;
+
+  /**
+   * @generated from field: string subject = 2;
+   */
+  subject: string;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.PreviewAdoptionResponse.
+ * Use `create(PreviewAdoptionResponseSchema)` to create a new message.
+ */
+export const PreviewAdoptionResponseSchema: GenMessage<PreviewAdoptionResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 62);
+
+/**
+ * AdoptNodeRequest carries the maintenance endpoint, the fingerprint the
+ * operator confirmed via PreviewAdoption, and the initial config to apply.
+ *
+ * @generated from message cryptos.fleet.v1.AdoptNodeRequest
+ */
+export type AdoptNodeRequest = Message<"cryptos.fleet.v1.AdoptNodeRequest"> & {
+  /**
+   * @generated from field: string endpoint = 1;
+   */
+  endpoint: string;
+
+  /**
+   * operator-confirmed fingerprint from PreviewAdoption
+   *
+   * @generated from field: string pinned_cert_sha256 = 2;
+   */
+  pinnedCertSha256: string;
+
+  /**
+   * initial config to apply
+   *
+   * @generated from field: cryptos.v1.MachineConfig config = 3;
+   */
+  config?: MachineConfig | undefined;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.AdoptNodeRequest.
+ * Use `create(AdoptNodeRequestSchema)` to create a new message.
+ */
+export const AdoptNodeRequestSchema: GenMessage<AdoptNodeRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 63);
+
+/**
+ * AdoptNodeResponse is streamed during adoption. phase is one of
+ * applying-config, installing, awaiting-reboot, ceremony, established; done is
+ * set on the final message.
+ *
+ * @generated from message cryptos.fleet.v1.AdoptNodeResponse
+ */
+export type AdoptNodeResponse = Message<"cryptos.fleet.v1.AdoptNodeResponse"> & {
+  /**
+   * @generated from field: string phase = 1;
+   */
+  phase: string;
+
+  /**
+   * @generated from field: string detail = 2;
+   */
+  detail: string;
+
+  /**
+   * @generated from field: bool done = 3;
+   */
+  done: boolean;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.AdoptNodeResponse.
+ * Use `create(AdoptNodeResponseSchema)` to create a new message.
+ */
+export const AdoptNodeResponseSchema: GenMessage<AdoptNodeResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 64);
+
+/**
+ * DecommissionNodeRequest names the managed node to wipe and echoes its current
+ * Root CA CN as destructive confirmation.
+ *
+ * @generated from message cryptos.fleet.v1.DecommissionNodeRequest
+ */
+export type DecommissionNodeRequest = Message<"cryptos.fleet.v1.DecommissionNodeRequest"> & {
+  /**
+   * @generated from field: string node_name = 1;
+   */
+  nodeName: string;
+
+  /**
+   * @generated from field: string confirm_common_name = 2;
+   */
+  confirmCommonName: string;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.DecommissionNodeRequest.
+ * Use `create(DecommissionNodeRequestSchema)` to create a new message.
+ */
+export const DecommissionNodeRequestSchema: GenMessage<DecommissionNodeRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 65);
+
+/**
+ * DecommissionNodeResponse reports that the node accepted the wipe and is
+ * rebooting into maintenance.
+ *
+ * @generated from message cryptos.fleet.v1.DecommissionNodeResponse
+ */
+export type DecommissionNodeResponse = Message<"cryptos.fleet.v1.DecommissionNodeResponse"> & {
+  /**
+   * @generated from field: bool rebooting = 1;
+   */
+  rebooting: boolean;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.DecommissionNodeResponse.
+ * Use `create(DecommissionNodeResponseSchema)` to create a new message.
+ */
+export const DecommissionNodeResponseSchema: GenMessage<DecommissionNodeResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 66);
+
+/**
  * Health reports the manager's view of node reachability, independent of
  * the node's own reported identity state.
  *
@@ -1770,6 +2103,87 @@ export const FleetService: GenService<{
     methodKind: "unary";
     input: typeof ImportCAKeyRequestSchema;
     output: typeof ImportCAKeyResponseSchema;
+  },
+  /**
+   * IssueOperatorCredential issues an operator client certificate. The browser
+   * generates the key and CSR; the manager routes signing to the node acting as
+   * the operator CA under an operator-<level> profile that carries the
+   * access-level extension. Only the CSR crosses the wire; the operator key
+   * stays in the browser. Admin-gated and audited (the audit names the subject
+   * and serial only, never the CSR or certificate bytes).
+   *
+   * @generated from rpc cryptos.fleet.v1.FleetService.IssueOperatorCredential
+   */
+  issueOperatorCredential: {
+    methodKind: "unary";
+    input: typeof IssueOperatorCredentialRequestSchema;
+    output: typeof IssueOperatorCredentialResponseSchema;
+  },
+  /**
+   * RevokeOperatorCredential revokes an operator credential on the operator-CA
+   * node by hex serial, with an RFC 5280 reason code. The manager enforces the
+   * revocation in the authz middleware, so a revoked operator can no longer
+   * authenticate. Admin-gated and audited.
+   *
+   * @generated from rpc cryptos.fleet.v1.FleetService.RevokeOperatorCredential
+   */
+  revokeOperatorCredential: {
+    methodKind: "unary";
+    input: typeof RevokeOperatorCredentialRequestSchema;
+    output: typeof RevokeOperatorCredentialResponseSchema;
+  },
+  /**
+   * ListOperatorCredentials returns the operator credentials the manager has
+   * issued, with their level, expiry, and revocation state. Operator-readable.
+   *
+   * @generated from rpc cryptos.fleet.v1.FleetService.ListOperatorCredentials
+   */
+  listOperatorCredentials: {
+    methodKind: "unary";
+    input: typeof ListOperatorCredentialsRequestSchema;
+    output: typeof ListOperatorCredentialsResponseSchema;
+  },
+  /**
+   * PreviewAdoption performs the trust-on-first-use step of adopting a new
+   * node: it dials the maintenance endpoint (no pin yet), captures the
+   * self-signed certificate the node presents, and returns its SHA-256
+   * fingerprint and subject so the operator can confirm it before adoption.
+   * Admin-gated; a read, so it is not audited.
+   *
+   * @generated from rpc cryptos.fleet.v1.FleetService.PreviewAdoption
+   */
+  previewAdoption: {
+    methodKind: "unary";
+    input: typeof PreviewAdoptionRequestSchema;
+    output: typeof PreviewAdoptionResponseSchema;
+  },
+  /**
+   * AdoptNode provisions a new maintenance node end to end and streams progress.
+   * Pinned to the fingerprint the operator confirmed via PreviewAdoption, the
+   * manager applies the initial config, awaits the reboot, drives the first-boot
+   * ceremony, and registers the node. Each streamed message carries a phase
+   * (applying-config, installing, awaiting-reboot, ceremony, established) with
+   * human-readable detail; the final message sets done. Admin-gated and audited.
+   *
+   * @generated from rpc cryptos.fleet.v1.FleetService.AdoptNode
+   */
+  adoptNode: {
+    methodKind: "server_streaming";
+    input: typeof AdoptNodeRequestSchema;
+    output: typeof AdoptNodeResponseSchema;
+  },
+  /**
+   * DecommissionNode remotely wipes a managed node's identity and data via the
+   * node's mTLS-served RemoteReset, then reboots it into maintenance. The caller
+   * must echo the node's current Root CA CN as confirmation. Admin-gated and
+   * audited (the audit names the node and that it was wiped, never any secret).
+   *
+   * @generated from rpc cryptos.fleet.v1.FleetService.DecommissionNode
+   */
+  decommissionNode: {
+    methodKind: "unary";
+    input: typeof DecommissionNodeRequestSchema;
+    output: typeof DecommissionNodeResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_cryptos_fleet_v1_fleet, 0);

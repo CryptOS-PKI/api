@@ -37,6 +37,9 @@ const (
 	NodeServiceApplyConfigProcedure = "/cryptos.v1.NodeService/ApplyConfig"
 	// NodeServiceGetStatusProcedure is the fully-qualified name of the NodeService's GetStatus RPC.
 	NodeServiceGetStatusProcedure = "/cryptos.v1.NodeService/GetStatus"
+	// NodeServiceListInstallDisksProcedure is the fully-qualified name of the NodeService's
+	// ListInstallDisks RPC.
+	NodeServiceListInstallDisksProcedure = "/cryptos.v1.NodeService/ListInstallDisks"
 	// NodeServiceGetIdentityProcedure is the fully-qualified name of the NodeService's GetIdentity RPC.
 	NodeServiceGetIdentityProcedure = "/cryptos.v1.NodeService/GetIdentity"
 	// NodeServiceStartCeremonyProcedure is the fully-qualified name of the NodeService's StartCeremony
@@ -93,6 +96,10 @@ type NodeServiceClient interface {
 	ApplyConfig(context.Context, *connect.Request[v1.ApplyConfigRequest]) (*connect.Response[v1.ApplyConfigResponse], error)
 	// GetStatus returns node role, identity state, and subsystem health.
 	GetStatus(context.Context, *connect.Request[v1.GetStatusRequest]) (*connect.Response[v1.GetStatusResponse], error)
+	// ListInstallDisks enumerates the node's candidate install block devices
+	// (whole disks, not partitions), so an operator adopting the node can pick a
+	// real target device instead of guessing a path. Served in maintenance mode.
+	ListInstallDisks(context.Context, *connect.Request[v1.ListInstallDisksRequest]) (*connect.Response[v1.ListInstallDisksResponse], error)
 	// GetIdentity returns the node's CA certificate chain in DER and PEM.
 	GetIdentity(context.Context, *connect.Request[v1.GetIdentityRequest]) (*connect.Response[v1.GetIdentityResponse], error)
 	// StartCeremony drives the first-boot ceremony. Operator-initiated;
@@ -202,6 +209,12 @@ func NewNodeServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			httpClient,
 			baseURL+NodeServiceGetStatusProcedure,
 			connect.WithSchema(nodeServiceMethods.ByName("GetStatus")),
+			connect.WithClientOptions(opts...),
+		),
+		listInstallDisks: connect.NewClient[v1.ListInstallDisksRequest, v1.ListInstallDisksResponse](
+			httpClient,
+			baseURL+NodeServiceListInstallDisksProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("ListInstallDisks")),
 			connect.WithClientOptions(opts...),
 		),
 		getIdentity: connect.NewClient[v1.GetIdentityRequest, v1.GetIdentityResponse](
@@ -325,6 +338,7 @@ func NewNodeServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 type nodeServiceClient struct {
 	applyConfig                  *connect.Client[v1.ApplyConfigRequest, v1.ApplyConfigResponse]
 	getStatus                    *connect.Client[v1.GetStatusRequest, v1.GetStatusResponse]
+	listInstallDisks             *connect.Client[v1.ListInstallDisksRequest, v1.ListInstallDisksResponse]
 	getIdentity                  *connect.Client[v1.GetIdentityRequest, v1.GetIdentityResponse]
 	startCeremony                *connect.Client[v1.StartCeremonyRequest, v1.StartCeremonyResponse]
 	signCSR                      *connect.Client[v1.SignCSRRequest, v1.SignCSRResponse]
@@ -354,6 +368,11 @@ func (c *nodeServiceClient) ApplyConfig(ctx context.Context, req *connect.Reques
 // GetStatus calls cryptos.v1.NodeService.GetStatus.
 func (c *nodeServiceClient) GetStatus(ctx context.Context, req *connect.Request[v1.GetStatusRequest]) (*connect.Response[v1.GetStatusResponse], error) {
 	return c.getStatus.CallUnary(ctx, req)
+}
+
+// ListInstallDisks calls cryptos.v1.NodeService.ListInstallDisks.
+func (c *nodeServiceClient) ListInstallDisks(ctx context.Context, req *connect.Request[v1.ListInstallDisksRequest]) (*connect.Response[v1.ListInstallDisksResponse], error) {
+	return c.listInstallDisks.CallUnary(ctx, req)
 }
 
 // GetIdentity calls cryptos.v1.NodeService.GetIdentity.
@@ -458,6 +477,10 @@ type NodeServiceHandler interface {
 	ApplyConfig(context.Context, *connect.Request[v1.ApplyConfigRequest]) (*connect.Response[v1.ApplyConfigResponse], error)
 	// GetStatus returns node role, identity state, and subsystem health.
 	GetStatus(context.Context, *connect.Request[v1.GetStatusRequest]) (*connect.Response[v1.GetStatusResponse], error)
+	// ListInstallDisks enumerates the node's candidate install block devices
+	// (whole disks, not partitions), so an operator adopting the node can pick a
+	// real target device instead of guessing a path. Served in maintenance mode.
+	ListInstallDisks(context.Context, *connect.Request[v1.ListInstallDisksRequest]) (*connect.Response[v1.ListInstallDisksResponse], error)
 	// GetIdentity returns the node's CA certificate chain in DER and PEM.
 	GetIdentity(context.Context, *connect.Request[v1.GetIdentityRequest]) (*connect.Response[v1.GetIdentityResponse], error)
 	// StartCeremony drives the first-boot ceremony. Operator-initiated;
@@ -563,6 +586,12 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 		NodeServiceGetStatusProcedure,
 		svc.GetStatus,
 		connect.WithSchema(nodeServiceMethods.ByName("GetStatus")),
+		connect.WithHandlerOptions(opts...),
+	)
+	nodeServiceListInstallDisksHandler := connect.NewUnaryHandler(
+		NodeServiceListInstallDisksProcedure,
+		svc.ListInstallDisks,
+		connect.WithSchema(nodeServiceMethods.ByName("ListInstallDisks")),
 		connect.WithHandlerOptions(opts...),
 	)
 	nodeServiceGetIdentityHandler := connect.NewUnaryHandler(
@@ -685,6 +714,8 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 			nodeServiceApplyConfigHandler.ServeHTTP(w, r)
 		case NodeServiceGetStatusProcedure:
 			nodeServiceGetStatusHandler.ServeHTTP(w, r)
+		case NodeServiceListInstallDisksProcedure:
+			nodeServiceListInstallDisksHandler.ServeHTTP(w, r)
 		case NodeServiceGetIdentityProcedure:
 			nodeServiceGetIdentityHandler.ServeHTTP(w, r)
 		case NodeServiceStartCeremonyProcedure:
@@ -738,6 +769,10 @@ func (UnimplementedNodeServiceHandler) ApplyConfig(context.Context, *connect.Req
 
 func (UnimplementedNodeServiceHandler) GetStatus(context.Context, *connect.Request[v1.GetStatusRequest]) (*connect.Response[v1.GetStatusResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.GetStatus is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) ListInstallDisks(context.Context, *connect.Request[v1.ListInstallDisksRequest]) (*connect.Response[v1.ListInstallDisksResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.ListInstallDisks is not implemented"))
 }
 
 func (UnimplementedNodeServiceHandler) GetIdentity(context.Context, *connect.Request[v1.GetIdentityRequest]) (*connect.Response[v1.GetIdentityResponse], error) {

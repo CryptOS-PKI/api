@@ -41,6 +41,11 @@ service NodeService {
   // GetStatus returns node role, identity state, and subsystem health.
   rpc GetStatus(GetStatusRequest) returns (GetStatusResponse);
 
+  // ListInstallDisks enumerates the node's candidate install block devices
+  // (whole disks, not partitions), so an operator adopting the node can pick a
+  // real target device instead of guessing a path. Served in maintenance mode.
+  rpc ListInstallDisks(ListInstallDisksRequest) returns (ListInstallDisksResponse);
+
   // GetIdentity returns the node's CA certificate chain in DER and PEM.
   rpc GetIdentity(GetIdentityRequest) returns (GetIdentityResponse);
 
@@ -374,4 +379,24 @@ message ListRevocationsRequest {}
 
 message ListRevocationsResponse {
   repeated Revocation revocations = 1;
+}
+
+message ListInstallDisksRequest {}
+
+message ListInstallDisksResponse {
+  repeated InstallDisk disks = 1;
+}
+
+// InstallDisk is one candidate whole-disk block device the node can install to.
+message InstallDisk {
+  // path is the device node, e.g. "/dev/nvme0n1" or "/dev/sda".
+  string path = 1;
+  // size_bytes is the device capacity.
+  uint64 size_bytes = 2;
+  // model is the device model string, when the kernel exposes one.
+  string model = 3;
+  // rotational is true for spinning disks, false for SSD/NVMe.
+  bool rotational = 4;
+  // removable is true for removable media (USB, etc.).
+  bool removable = 5;
 }

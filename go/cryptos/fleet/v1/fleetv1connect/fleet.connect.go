@@ -108,6 +108,9 @@ const (
 	// FleetServicePreviewAdoptionProcedure is the fully-qualified name of the FleetService's
 	// PreviewAdoption RPC.
 	FleetServicePreviewAdoptionProcedure = "/cryptos.fleet.v1.FleetService/PreviewAdoption"
+	// FleetServiceListInstallDisksProcedure is the fully-qualified name of the FleetService's
+	// ListInstallDisks RPC.
+	FleetServiceListInstallDisksProcedure = "/cryptos.fleet.v1.FleetService/ListInstallDisks"
 	// FleetServiceAdoptNodeProcedure is the fully-qualified name of the FleetService's AdoptNode RPC.
 	FleetServiceAdoptNodeProcedure = "/cryptos.fleet.v1.FleetService/AdoptNode"
 	// FleetServiceDecommissionNodeProcedure is the fully-qualified name of the FleetService's
@@ -224,6 +227,11 @@ type FleetServiceClient interface {
 	// fingerprint and subject so the operator can confirm it before adoption.
 	// Admin-gated; a read, so it is not audited.
 	PreviewAdoption(context.Context, *connect.Request[v1.PreviewAdoptionRequest]) (*connect.Response[v1.PreviewAdoptionResponse], error)
+	// ListInstallDisks returns the candidate install disks a maintenance node
+	// reports, so the adopt wizard can offer a real device to install to instead
+	// of a free-text guess. Pinned to the fingerprint confirmed via
+	// PreviewAdoption. Admin-gated; a read, so it is not audited.
+	ListInstallDisks(context.Context, *connect.Request[v1.ListInstallDisksRequest]) (*connect.Response[v1.ListInstallDisksResponse], error)
 	// AdoptNode provisions a new maintenance node end to end and streams progress.
 	// Pinned to the fingerprint the operator confirmed via PreviewAdoption, the
 	// manager applies the initial config, awaits the reboot, drives the first-boot
@@ -411,6 +419,12 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(fleetServiceMethods.ByName("PreviewAdoption")),
 			connect.WithClientOptions(opts...),
 		),
+		listInstallDisks: connect.NewClient[v1.ListInstallDisksRequest, v1.ListInstallDisksResponse](
+			httpClient,
+			baseURL+FleetServiceListInstallDisksProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("ListInstallDisks")),
+			connect.WithClientOptions(opts...),
+		),
 		adoptNode: connect.NewClient[v1.AdoptNodeRequest, v1.AdoptNodeResponse](
 			httpClient,
 			baseURL+FleetServiceAdoptNodeProcedure,
@@ -455,6 +469,7 @@ type fleetServiceClient struct {
 	revokeOperatorCredential *connect.Client[v1.RevokeOperatorCredentialRequest, v1.RevokeOperatorCredentialResponse]
 	listOperatorCredentials  *connect.Client[v1.ListOperatorCredentialsRequest, v1.ListOperatorCredentialsResponse]
 	previewAdoption          *connect.Client[v1.PreviewAdoptionRequest, v1.PreviewAdoptionResponse]
+	listInstallDisks         *connect.Client[v1.ListInstallDisksRequest, v1.ListInstallDisksResponse]
 	adoptNode                *connect.Client[v1.AdoptNodeRequest, v1.AdoptNodeResponse]
 	decommissionNode         *connect.Client[v1.DecommissionNodeRequest, v1.DecommissionNodeResponse]
 }
@@ -594,6 +609,11 @@ func (c *fleetServiceClient) PreviewAdoption(ctx context.Context, req *connect.R
 	return c.previewAdoption.CallUnary(ctx, req)
 }
 
+// ListInstallDisks calls cryptos.fleet.v1.FleetService.ListInstallDisks.
+func (c *fleetServiceClient) ListInstallDisks(ctx context.Context, req *connect.Request[v1.ListInstallDisksRequest]) (*connect.Response[v1.ListInstallDisksResponse], error) {
+	return c.listInstallDisks.CallUnary(ctx, req)
+}
+
 // AdoptNode calls cryptos.fleet.v1.FleetService.AdoptNode.
 func (c *fleetServiceClient) AdoptNode(ctx context.Context, req *connect.Request[v1.AdoptNodeRequest]) (*connect.ServerStreamForClient[v1.AdoptNodeResponse], error) {
 	return c.adoptNode.CallServerStream(ctx, req)
@@ -713,6 +733,11 @@ type FleetServiceHandler interface {
 	// fingerprint and subject so the operator can confirm it before adoption.
 	// Admin-gated; a read, so it is not audited.
 	PreviewAdoption(context.Context, *connect.Request[v1.PreviewAdoptionRequest]) (*connect.Response[v1.PreviewAdoptionResponse], error)
+	// ListInstallDisks returns the candidate install disks a maintenance node
+	// reports, so the adopt wizard can offer a real device to install to instead
+	// of a free-text guess. Pinned to the fingerprint confirmed via
+	// PreviewAdoption. Admin-gated; a read, so it is not audited.
+	ListInstallDisks(context.Context, *connect.Request[v1.ListInstallDisksRequest]) (*connect.Response[v1.ListInstallDisksResponse], error)
 	// AdoptNode provisions a new maintenance node end to end and streams progress.
 	// Pinned to the fingerprint the operator confirmed via PreviewAdoption, the
 	// manager applies the initial config, awaits the reboot, drives the first-boot
@@ -896,6 +921,12 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(fleetServiceMethods.ByName("PreviewAdoption")),
 		connect.WithHandlerOptions(opts...),
 	)
+	fleetServiceListInstallDisksHandler := connect.NewUnaryHandler(
+		FleetServiceListInstallDisksProcedure,
+		svc.ListInstallDisks,
+		connect.WithSchema(fleetServiceMethods.ByName("ListInstallDisks")),
+		connect.WithHandlerOptions(opts...),
+	)
 	fleetServiceAdoptNodeHandler := connect.NewServerStreamHandler(
 		FleetServiceAdoptNodeProcedure,
 		svc.AdoptNode,
@@ -964,6 +995,8 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 			fleetServiceListOperatorCredentialsHandler.ServeHTTP(w, r)
 		case FleetServicePreviewAdoptionProcedure:
 			fleetServicePreviewAdoptionHandler.ServeHTTP(w, r)
+		case FleetServiceListInstallDisksProcedure:
+			fleetServiceListInstallDisksHandler.ServeHTTP(w, r)
 		case FleetServiceAdoptNodeProcedure:
 			fleetServiceAdoptNodeHandler.ServeHTTP(w, r)
 		case FleetServiceDecommissionNodeProcedure:
@@ -1083,6 +1116,10 @@ func (UnimplementedFleetServiceHandler) ListOperatorCredentials(context.Context,
 
 func (UnimplementedFleetServiceHandler) PreviewAdoption(context.Context, *connect.Request[v1.PreviewAdoptionRequest]) (*connect.Response[v1.PreviewAdoptionResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.PreviewAdoption is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) ListInstallDisks(context.Context, *connect.Request[v1.ListInstallDisksRequest]) (*connect.Response[v1.ListInstallDisksResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ListInstallDisks is not implemented"))
 }
 
 func (UnimplementedFleetServiceHandler) AdoptNode(context.Context, *connect.Request[v1.AdoptNodeRequest], *connect.ServerStream[v1.AdoptNodeResponse]) error {

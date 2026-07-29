@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	NodeService_ApplyConfig_FullMethodName                  = "/cryptos.v1.NodeService/ApplyConfig"
 	NodeService_GetStatus_FullMethodName                    = "/cryptos.v1.NodeService/GetStatus"
+	NodeService_ListInstallDisks_FullMethodName             = "/cryptos.v1.NodeService/ListInstallDisks"
 	NodeService_GetIdentity_FullMethodName                  = "/cryptos.v1.NodeService/GetIdentity"
 	NodeService_StartCeremony_FullMethodName                = "/cryptos.v1.NodeService/StartCeremony"
 	NodeService_SignCSR_FullMethodName                      = "/cryptos.v1.NodeService/SignCSR"
@@ -58,6 +59,10 @@ type NodeServiceClient interface {
 	ApplyConfig(ctx context.Context, in *ApplyConfigRequest, opts ...grpc.CallOption) (*ApplyConfigResponse, error)
 	// GetStatus returns node role, identity state, and subsystem health.
 	GetStatus(ctx context.Context, in *GetStatusRequest, opts ...grpc.CallOption) (*GetStatusResponse, error)
+	// ListInstallDisks enumerates the node's candidate install block devices
+	// (whole disks, not partitions), so an operator adopting the node can pick a
+	// real target device instead of guessing a path. Served in maintenance mode.
+	ListInstallDisks(ctx context.Context, in *ListInstallDisksRequest, opts ...grpc.CallOption) (*ListInstallDisksResponse, error)
 	// GetIdentity returns the node's CA certificate chain in DER and PEM.
 	GetIdentity(ctx context.Context, in *GetIdentityRequest, opts ...grpc.CallOption) (*GetIdentityResponse, error)
 	// StartCeremony drives the first-boot ceremony. Operator-initiated;
@@ -168,6 +173,16 @@ func (c *nodeServiceClient) GetStatus(ctx context.Context, in *GetStatusRequest,
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetStatusResponse)
 	err := c.cc.Invoke(ctx, NodeService_GetStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nodeServiceClient) ListInstallDisks(ctx context.Context, in *ListInstallDisksRequest, opts ...grpc.CallOption) (*ListInstallDisksResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListInstallDisksResponse)
+	err := c.cc.Invoke(ctx, NodeService_ListInstallDisks_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -389,6 +404,10 @@ type NodeServiceServer interface {
 	ApplyConfig(context.Context, *ApplyConfigRequest) (*ApplyConfigResponse, error)
 	// GetStatus returns node role, identity state, and subsystem health.
 	GetStatus(context.Context, *GetStatusRequest) (*GetStatusResponse, error)
+	// ListInstallDisks enumerates the node's candidate install block devices
+	// (whole disks, not partitions), so an operator adopting the node can pick a
+	// real target device instead of guessing a path. Served in maintenance mode.
+	ListInstallDisks(context.Context, *ListInstallDisksRequest) (*ListInstallDisksResponse, error)
 	// GetIdentity returns the node's CA certificate chain in DER and PEM.
 	GetIdentity(context.Context, *GetIdentityRequest) (*GetIdentityResponse, error)
 	// StartCeremony drives the first-boot ceremony. Operator-initiated;
@@ -489,6 +508,9 @@ func (UnimplementedNodeServiceServer) ApplyConfig(context.Context, *ApplyConfigR
 }
 func (UnimplementedNodeServiceServer) GetStatus(context.Context, *GetStatusRequest) (*GetStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetStatus not implemented")
+}
+func (UnimplementedNodeServiceServer) ListInstallDisks(context.Context, *ListInstallDisksRequest) (*ListInstallDisksResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListInstallDisks not implemented")
 }
 func (UnimplementedNodeServiceServer) GetIdentity(context.Context, *GetIdentityRequest) (*GetIdentityResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetIdentity not implemented")
@@ -599,6 +621,24 @@ func _NodeService_GetStatus_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(NodeServiceServer).GetStatus(ctx, req.(*GetStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NodeService_ListInstallDisks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListInstallDisksRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).ListInstallDisks(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_ListInstallDisks_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).ListInstallDisks(ctx, req.(*ListInstallDisksRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -952,6 +992,10 @@ var NodeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetStatus",
 			Handler:    _NodeService_GetStatus_Handler,
+		},
+		{
+			MethodName: "ListInstallDisks",
+			Handler:    _NodeService_ListInstallDisks_Handler,
 		},
 		{
 			MethodName: "GetIdentity",

@@ -20,6 +20,7 @@ syntax = "proto3";
 package cryptos.fleet.v1;
 
 import "cryptos/v1/config.proto";
+import "cryptos/v1/node.proto";
 
 option go_package = "github.com/CryptOS-PKI/api/go/cryptos/fleet/v1;fleetv1";
 
@@ -161,6 +162,12 @@ service FleetService {
   // fingerprint and subject so the operator can confirm it before adoption.
   // Admin-gated; a read, so it is not audited.
   rpc PreviewAdoption(PreviewAdoptionRequest) returns (PreviewAdoptionResponse);
+
+  // ListInstallDisks returns the candidate install disks a maintenance node
+  // reports, so the adopt wizard can offer a real device to install to instead
+  // of a free-text guess. Pinned to the fingerprint confirmed via
+  // PreviewAdoption. Admin-gated; a read, so it is not audited.
+  rpc ListInstallDisks(ListInstallDisksRequest) returns (ListInstallDisksResponse);
 
   // AdoptNode provisions a new maintenance node end to end and streams progress.
   // Pinned to the fingerprint the operator confirmed via PreviewAdoption, the
@@ -615,6 +622,15 @@ message PreviewAdoptionRequest {
 message PreviewAdoptionResponse {
   string cert_sha256 = 1;
   string subject = 2;
+}
+
+message ListInstallDisksRequest {
+  string endpoint = 1;
+  string pinned_cert_sha256 = 2;
+}
+
+message ListInstallDisksResponse {
+  repeated cryptos.v1.InstallDisk disks = 1;
 }
 
 // AdoptNodeRequest carries the maintenance endpoint, the fingerprint the

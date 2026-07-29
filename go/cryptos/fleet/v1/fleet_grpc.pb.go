@@ -46,6 +46,7 @@ const (
 	FleetService_RevokeOperatorCredential_FullMethodName = "/cryptos.fleet.v1.FleetService/RevokeOperatorCredential"
 	FleetService_ListOperatorCredentials_FullMethodName  = "/cryptos.fleet.v1.FleetService/ListOperatorCredentials"
 	FleetService_PreviewAdoption_FullMethodName          = "/cryptos.fleet.v1.FleetService/PreviewAdoption"
+	FleetService_ListInstallDisks_FullMethodName         = "/cryptos.fleet.v1.FleetService/ListInstallDisks"
 	FleetService_AdoptNode_FullMethodName                = "/cryptos.fleet.v1.FleetService/AdoptNode"
 	FleetService_DecommissionNode_FullMethodName         = "/cryptos.fleet.v1.FleetService/DecommissionNode"
 )
@@ -166,6 +167,11 @@ type FleetServiceClient interface {
 	// fingerprint and subject so the operator can confirm it before adoption.
 	// Admin-gated; a read, so it is not audited.
 	PreviewAdoption(ctx context.Context, in *PreviewAdoptionRequest, opts ...grpc.CallOption) (*PreviewAdoptionResponse, error)
+	// ListInstallDisks returns the candidate install disks a maintenance node
+	// reports, so the adopt wizard can offer a real device to install to instead
+	// of a free-text guess. Pinned to the fingerprint confirmed via
+	// PreviewAdoption. Admin-gated; a read, so it is not audited.
+	ListInstallDisks(ctx context.Context, in *ListInstallDisksRequest, opts ...grpc.CallOption) (*ListInstallDisksResponse, error)
 	// AdoptNode provisions a new maintenance node end to end and streams progress.
 	// Pinned to the fingerprint the operator confirmed via PreviewAdoption, the
 	// manager applies the initial config, awaits the reboot, drives the first-boot
@@ -458,6 +464,16 @@ func (c *fleetServiceClient) PreviewAdoption(ctx context.Context, in *PreviewAdo
 	return out, nil
 }
 
+func (c *fleetServiceClient) ListInstallDisks(ctx context.Context, in *ListInstallDisksRequest, opts ...grpc.CallOption) (*ListInstallDisksResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListInstallDisksResponse)
+	err := c.cc.Invoke(ctx, FleetService_ListInstallDisks_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *fleetServiceClient) AdoptNode(ctx context.Context, in *AdoptNodeRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[AdoptNodeResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	stream, err := c.cc.NewStream(ctx, &FleetService_ServiceDesc.Streams[0], FleetService_AdoptNode_FullMethodName, cOpts...)
@@ -603,6 +619,11 @@ type FleetServiceServer interface {
 	// fingerprint and subject so the operator can confirm it before adoption.
 	// Admin-gated; a read, so it is not audited.
 	PreviewAdoption(context.Context, *PreviewAdoptionRequest) (*PreviewAdoptionResponse, error)
+	// ListInstallDisks returns the candidate install disks a maintenance node
+	// reports, so the adopt wizard can offer a real device to install to instead
+	// of a free-text guess. Pinned to the fingerprint confirmed via
+	// PreviewAdoption. Admin-gated; a read, so it is not audited.
+	ListInstallDisks(context.Context, *ListInstallDisksRequest) (*ListInstallDisksResponse, error)
 	// AdoptNode provisions a new maintenance node end to end and streams progress.
 	// Pinned to the fingerprint the operator confirmed via PreviewAdoption, the
 	// manager applies the initial config, awaits the reboot, drives the first-boot
@@ -704,6 +725,9 @@ func (UnimplementedFleetServiceServer) ListOperatorCredentials(context.Context, 
 }
 func (UnimplementedFleetServiceServer) PreviewAdoption(context.Context, *PreviewAdoptionRequest) (*PreviewAdoptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PreviewAdoption not implemented")
+}
+func (UnimplementedFleetServiceServer) ListInstallDisks(context.Context, *ListInstallDisksRequest) (*ListInstallDisksResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListInstallDisks not implemented")
 }
 func (UnimplementedFleetServiceServer) AdoptNode(*AdoptNodeRequest, grpc.ServerStreamingServer[AdoptNodeResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method AdoptNode not implemented")
@@ -1217,6 +1241,24 @@ func _FleetService_PreviewAdoption_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FleetService_ListInstallDisks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListInstallDisksRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).ListInstallDisks(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_ListInstallDisks_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).ListInstallDisks(ctx, req.(*ListInstallDisksRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _FleetService_AdoptNode_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(AdoptNodeRequest)
 	if err := stream.RecvMsg(m); err != nil {
@@ -1360,6 +1402,10 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PreviewAdoption",
 			Handler:    _FleetService_PreviewAdoption_Handler,
+		},
+		{
+			MethodName: "ListInstallDisks",
+			Handler:    _FleetService_ListInstallDisks_Handler,
 		},
 		{
 			MethodName: "DecommissionNode",

@@ -198,4 +198,8 @@ message Subject {
   string common_name = 1;
   string organization = 2;
   string country = 3;
+  // province is the X.509 ST relative distinguished name (state or province).
+  string province = 4;
+  // locality is the X.509 L relative distinguished name (city or locality).
+  string locality = 5;
 }

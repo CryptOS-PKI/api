@@ -32,12 +32,21 @@ tasks:
 
   generate:verify:
     desc: Generate and assert the working tree is clean
+    # Covers every directory buf.gen.yaml writes to, not just go/. Asserting on
+    # go/ alone let the TypeScript output drift out of sync with the proto for
+    # a whole release cycle (#70).
+    #
+    # git status rather than git diff, so a generated file that is new (a fresh
+    # proto, a plugin that starts emitting another file) counts as stale too
+    # instead of passing as untracked.
     cmds:
       - task: generate
       - |
-        if ! git diff --quiet go/; then
-          echo "Generated stubs are out of date. Run 'task generate' and commit the result." >&2
-          git --no-pager diff go/ >&2
+        stale="$(git status --porcelain go/ gen/)"
+        if [ -n "$stale" ]; then
+          echo "Generated output is out of date. Run 'task generate' and commit the result." >&2
+          echo "$stale" >&2
+          git --no-pager diff go/ gen/ >&2
           exit 1
         fi
 

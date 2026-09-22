@@ -87,6 +87,17 @@ const (
 	NodeServiceSetManagementProcedure = "/cryptos.v1.NodeService/SetManagement"
 	// NodeServiceGetConfigProcedure is the fully-qualified name of the NodeService's GetConfig RPC.
 	NodeServiceGetConfigProcedure = "/cryptos.v1.NodeService/GetConfig"
+	// NodeServiceStageImageProcedure is the fully-qualified name of the NodeService's StageImage RPC.
+	NodeServiceStageImageProcedure = "/cryptos.v1.NodeService/StageImage"
+	// NodeServiceRollbackImageProcedure is the fully-qualified name of the NodeService's RollbackImage
+	// RPC.
+	NodeServiceRollbackImageProcedure = "/cryptos.v1.NodeService/RollbackImage"
+	// NodeServiceActivateImageProcedure is the fully-qualified name of the NodeService's ActivateImage
+	// RPC.
+	NodeServiceActivateImageProcedure = "/cryptos.v1.NodeService/ActivateImage"
+	// NodeServiceGetImageStatusProcedure is the fully-qualified name of the NodeService's
+	// GetImageStatus RPC.
+	NodeServiceGetImageStatusProcedure = "/cryptos.v1.NodeService/GetImageStatus"
 )
 
 // NodeServiceClient is a client for the cryptos.v1.NodeService service.
@@ -186,6 +197,36 @@ type NodeServiceClient interface {
 	// the full config here, edits a subset, and applies the whole config back via
 	// ApplyConfig (a whole-config replace), so untouched fields survive.
 	GetConfig(context.Context, *connect.Request[v1.GetConfigRequest]) (*connect.Response[v1.GetConfigResponse], error)
+	// StageImage installs a new CryptOS image on the node without re-provisioning
+	// it. Until now the only way to change the OS was a reinstall, which reformats
+	// the state partition and destroys the CA key with it; the image lives on the
+	// ESP and identity lives on a separate LUKS partition, so replacing one need
+	// not touch the other. This RPC never opens the state partition.
+	//
+	// Client-streaming because a UKI carries a whole SquashFS root filesystem and
+	// does not belong in a single message. The first message must be the begin
+	// header; every later message carries a chunk. The node verifies the detached
+	// release signature over the assembled bytes before anything reaches the disk,
+	// so an image it cannot attribute is never written.
+	//
+	// Staging does not reboot. The image becomes the one the firmware boots on the
+	// next boot, and the node keeps the image it is running so the change can be
+	// undone; call ActivateImage when the outage is acceptable.
+	StageImage(context.Context) *connect.ClientStreamForClient[v1.StageImageRequest, v1.StageImageResponse]
+	// RollbackImage puts the retained previous image back on the boot path, for an
+	// upgrade that turned out badly. Like staging it does not reboot, and like
+	// staging it takes effect on the next boot.
+	RollbackImage(context.Context, *connect.Request[v1.RollbackImageRequest]) (*connect.Response[v1.RollbackImageResponse], error)
+	// ActivateImage reboots the node so a staged image starts running. It is a
+	// separate call because rebooting an issuing CA is an outage of the thing
+	// every other system depends on, and that is the operator's decision to time,
+	// not a side effect of an upload. The caller must echo the node's CA CN, the
+	// same confirmation Reset and RemoteReset require.
+	ActivateImage(context.Context, *connect.Request[v1.ActivateImageRequest]) (*connect.Response[v1.ActivateImageResponse], error)
+	// GetImageStatus reports what is installed on the ESP and what is running, so
+	// an operator can tell whether an upgrade took and whether a reboot is still
+	// pending.
+	GetImageStatus(context.Context, *connect.Request[v1.GetImageStatusRequest]) (*connect.Response[v1.GetImageStatusResponse], error)
 }
 
 // NewNodeServiceClient constructs a client for the cryptos.v1.NodeService service. By default, it
@@ -331,6 +372,30 @@ func NewNodeServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(nodeServiceMethods.ByName("GetConfig")),
 			connect.WithClientOptions(opts...),
 		),
+		stageImage: connect.NewClient[v1.StageImageRequest, v1.StageImageResponse](
+			httpClient,
+			baseURL+NodeServiceStageImageProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("StageImage")),
+			connect.WithClientOptions(opts...),
+		),
+		rollbackImage: connect.NewClient[v1.RollbackImageRequest, v1.RollbackImageResponse](
+			httpClient,
+			baseURL+NodeServiceRollbackImageProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("RollbackImage")),
+			connect.WithClientOptions(opts...),
+		),
+		activateImage: connect.NewClient[v1.ActivateImageRequest, v1.ActivateImageResponse](
+			httpClient,
+			baseURL+NodeServiceActivateImageProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("ActivateImage")),
+			connect.WithClientOptions(opts...),
+		),
+		getImageStatus: connect.NewClient[v1.GetImageStatusRequest, v1.GetImageStatusResponse](
+			httpClient,
+			baseURL+NodeServiceGetImageStatusProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("GetImageStatus")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -358,6 +423,10 @@ type nodeServiceClient struct {
 	attest                       *connect.Client[v1.AttestRequest, v1.AttestResponse]
 	setManagement                *connect.Client[v1.SetManagementRequest, v1.SetManagementResponse]
 	getConfig                    *connect.Client[v1.GetConfigRequest, v1.GetConfigResponse]
+	stageImage                   *connect.Client[v1.StageImageRequest, v1.StageImageResponse]
+	rollbackImage                *connect.Client[v1.RollbackImageRequest, v1.RollbackImageResponse]
+	activateImage                *connect.Client[v1.ActivateImageRequest, v1.ActivateImageResponse]
+	getImageStatus               *connect.Client[v1.GetImageStatusRequest, v1.GetImageStatusResponse]
 }
 
 // ApplyConfig calls cryptos.v1.NodeService.ApplyConfig.
@@ -470,6 +539,26 @@ func (c *nodeServiceClient) GetConfig(ctx context.Context, req *connect.Request[
 	return c.getConfig.CallUnary(ctx, req)
 }
 
+// StageImage calls cryptos.v1.NodeService.StageImage.
+func (c *nodeServiceClient) StageImage(ctx context.Context) *connect.ClientStreamForClient[v1.StageImageRequest, v1.StageImageResponse] {
+	return c.stageImage.CallClientStream(ctx)
+}
+
+// RollbackImage calls cryptos.v1.NodeService.RollbackImage.
+func (c *nodeServiceClient) RollbackImage(ctx context.Context, req *connect.Request[v1.RollbackImageRequest]) (*connect.Response[v1.RollbackImageResponse], error) {
+	return c.rollbackImage.CallUnary(ctx, req)
+}
+
+// ActivateImage calls cryptos.v1.NodeService.ActivateImage.
+func (c *nodeServiceClient) ActivateImage(ctx context.Context, req *connect.Request[v1.ActivateImageRequest]) (*connect.Response[v1.ActivateImageResponse], error) {
+	return c.activateImage.CallUnary(ctx, req)
+}
+
+// GetImageStatus calls cryptos.v1.NodeService.GetImageStatus.
+func (c *nodeServiceClient) GetImageStatus(ctx context.Context, req *connect.Request[v1.GetImageStatusRequest]) (*connect.Response[v1.GetImageStatusResponse], error) {
+	return c.getImageStatus.CallUnary(ctx, req)
+}
+
 // NodeServiceHandler is an implementation of the cryptos.v1.NodeService service.
 type NodeServiceHandler interface {
 	// ApplyConfig sets the node's declarative machine configuration.
@@ -567,6 +656,36 @@ type NodeServiceHandler interface {
 	// the full config here, edits a subset, and applies the whole config back via
 	// ApplyConfig (a whole-config replace), so untouched fields survive.
 	GetConfig(context.Context, *connect.Request[v1.GetConfigRequest]) (*connect.Response[v1.GetConfigResponse], error)
+	// StageImage installs a new CryptOS image on the node without re-provisioning
+	// it. Until now the only way to change the OS was a reinstall, which reformats
+	// the state partition and destroys the CA key with it; the image lives on the
+	// ESP and identity lives on a separate LUKS partition, so replacing one need
+	// not touch the other. This RPC never opens the state partition.
+	//
+	// Client-streaming because a UKI carries a whole SquashFS root filesystem and
+	// does not belong in a single message. The first message must be the begin
+	// header; every later message carries a chunk. The node verifies the detached
+	// release signature over the assembled bytes before anything reaches the disk,
+	// so an image it cannot attribute is never written.
+	//
+	// Staging does not reboot. The image becomes the one the firmware boots on the
+	// next boot, and the node keeps the image it is running so the change can be
+	// undone; call ActivateImage when the outage is acceptable.
+	StageImage(context.Context, *connect.ClientStream[v1.StageImageRequest]) (*connect.Response[v1.StageImageResponse], error)
+	// RollbackImage puts the retained previous image back on the boot path, for an
+	// upgrade that turned out badly. Like staging it does not reboot, and like
+	// staging it takes effect on the next boot.
+	RollbackImage(context.Context, *connect.Request[v1.RollbackImageRequest]) (*connect.Response[v1.RollbackImageResponse], error)
+	// ActivateImage reboots the node so a staged image starts running. It is a
+	// separate call because rebooting an issuing CA is an outage of the thing
+	// every other system depends on, and that is the operator's decision to time,
+	// not a side effect of an upload. The caller must echo the node's CA CN, the
+	// same confirmation Reset and RemoteReset require.
+	ActivateImage(context.Context, *connect.Request[v1.ActivateImageRequest]) (*connect.Response[v1.ActivateImageResponse], error)
+	// GetImageStatus reports what is installed on the ESP and what is running, so
+	// an operator can tell whether an upgrade took and whether a reboot is still
+	// pending.
+	GetImageStatus(context.Context, *connect.Request[v1.GetImageStatusRequest]) (*connect.Response[v1.GetImageStatusResponse], error)
 }
 
 // NewNodeServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -708,6 +827,30 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(nodeServiceMethods.ByName("GetConfig")),
 		connect.WithHandlerOptions(opts...),
 	)
+	nodeServiceStageImageHandler := connect.NewClientStreamHandler(
+		NodeServiceStageImageProcedure,
+		svc.StageImage,
+		connect.WithSchema(nodeServiceMethods.ByName("StageImage")),
+		connect.WithHandlerOptions(opts...),
+	)
+	nodeServiceRollbackImageHandler := connect.NewUnaryHandler(
+		NodeServiceRollbackImageProcedure,
+		svc.RollbackImage,
+		connect.WithSchema(nodeServiceMethods.ByName("RollbackImage")),
+		connect.WithHandlerOptions(opts...),
+	)
+	nodeServiceActivateImageHandler := connect.NewUnaryHandler(
+		NodeServiceActivateImageProcedure,
+		svc.ActivateImage,
+		connect.WithSchema(nodeServiceMethods.ByName("ActivateImage")),
+		connect.WithHandlerOptions(opts...),
+	)
+	nodeServiceGetImageStatusHandler := connect.NewUnaryHandler(
+		NodeServiceGetImageStatusProcedure,
+		svc.GetImageStatus,
+		connect.WithSchema(nodeServiceMethods.ByName("GetImageStatus")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/cryptos.v1.NodeService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case NodeServiceApplyConfigProcedure:
@@ -754,6 +897,14 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 			nodeServiceSetManagementHandler.ServeHTTP(w, r)
 		case NodeServiceGetConfigProcedure:
 			nodeServiceGetConfigHandler.ServeHTTP(w, r)
+		case NodeServiceStageImageProcedure:
+			nodeServiceStageImageHandler.ServeHTTP(w, r)
+		case NodeServiceRollbackImageProcedure:
+			nodeServiceRollbackImageHandler.ServeHTTP(w, r)
+		case NodeServiceActivateImageProcedure:
+			nodeServiceActivateImageHandler.ServeHTTP(w, r)
+		case NodeServiceGetImageStatusProcedure:
+			nodeServiceGetImageStatusHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -849,4 +1000,20 @@ func (UnimplementedNodeServiceHandler) SetManagement(context.Context, *connect.R
 
 func (UnimplementedNodeServiceHandler) GetConfig(context.Context, *connect.Request[v1.GetConfigRequest]) (*connect.Response[v1.GetConfigResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.GetConfig is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) StageImage(context.Context, *connect.ClientStream[v1.StageImageRequest]) (*connect.Response[v1.StageImageResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.StageImage is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) RollbackImage(context.Context, *connect.Request[v1.RollbackImageRequest]) (*connect.Response[v1.RollbackImageResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.RollbackImage is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) ActivateImage(context.Context, *connect.Request[v1.ActivateImageRequest]) (*connect.Response[v1.ActivateImageResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.ActivateImage is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) GetImageStatus(context.Context, *connect.Request[v1.GetImageStatusRequest]) (*connect.Response[v1.GetImageStatusResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.GetImageStatus is not implemented"))
 }

@@ -41,6 +41,10 @@ const (
 	NodeService_Attest_FullMethodName                       = "/cryptos.v1.NodeService/Attest"
 	NodeService_SetManagement_FullMethodName                = "/cryptos.v1.NodeService/SetManagement"
 	NodeService_GetConfig_FullMethodName                    = "/cryptos.v1.NodeService/GetConfig"
+	NodeService_StageImage_FullMethodName                   = "/cryptos.v1.NodeService/StageImage"
+	NodeService_RollbackImage_FullMethodName                = "/cryptos.v1.NodeService/RollbackImage"
+	NodeService_ActivateImage_FullMethodName                = "/cryptos.v1.NodeService/ActivateImage"
+	NodeService_GetImageStatus_FullMethodName               = "/cryptos.v1.NodeService/GetImageStatus"
 )
 
 // NodeServiceClient is the client API for NodeService service.
@@ -149,6 +153,36 @@ type NodeServiceClient interface {
 	// the full config here, edits a subset, and applies the whole config back via
 	// ApplyConfig (a whole-config replace), so untouched fields survive.
 	GetConfig(ctx context.Context, in *GetConfigRequest, opts ...grpc.CallOption) (*GetConfigResponse, error)
+	// StageImage installs a new CryptOS image on the node without re-provisioning
+	// it. Until now the only way to change the OS was a reinstall, which reformats
+	// the state partition and destroys the CA key with it; the image lives on the
+	// ESP and identity lives on a separate LUKS partition, so replacing one need
+	// not touch the other. This RPC never opens the state partition.
+	//
+	// Client-streaming because a UKI carries a whole SquashFS root filesystem and
+	// does not belong in a single message. The first message must be the begin
+	// header; every later message carries a chunk. The node verifies the detached
+	// release signature over the assembled bytes before anything reaches the disk,
+	// so an image it cannot attribute is never written.
+	//
+	// Staging does not reboot. The image becomes the one the firmware boots on the
+	// next boot, and the node keeps the image it is running so the change can be
+	// undone; call ActivateImage when the outage is acceptable.
+	StageImage(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[StageImageRequest, StageImageResponse], error)
+	// RollbackImage puts the retained previous image back on the boot path, for an
+	// upgrade that turned out badly. Like staging it does not reboot, and like
+	// staging it takes effect on the next boot.
+	RollbackImage(ctx context.Context, in *RollbackImageRequest, opts ...grpc.CallOption) (*RollbackImageResponse, error)
+	// ActivateImage reboots the node so a staged image starts running. It is a
+	// separate call because rebooting an issuing CA is an outage of the thing
+	// every other system depends on, and that is the operator's decision to time,
+	// not a side effect of an upload. The caller must echo the node's CA CN, the
+	// same confirmation Reset and RemoteReset require.
+	ActivateImage(ctx context.Context, in *ActivateImageRequest, opts ...grpc.CallOption) (*ActivateImageResponse, error)
+	// GetImageStatus reports what is installed on the ESP and what is running, so
+	// an operator can tell whether an upgrade took and whether a reboot is still
+	// pending.
+	GetImageStatus(ctx context.Context, in *GetImageStatusRequest, opts ...grpc.CallOption) (*GetImageStatusResponse, error)
 }
 
 type nodeServiceClient struct {
@@ -388,6 +422,49 @@ func (c *nodeServiceClient) GetConfig(ctx context.Context, in *GetConfigRequest,
 	return out, nil
 }
 
+func (c *nodeServiceClient) StageImage(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[StageImageRequest, StageImageResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &NodeService_ServiceDesc.Streams[1], NodeService_StageImage_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[StageImageRequest, StageImageResponse]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type NodeService_StageImageClient = grpc.ClientStreamingClient[StageImageRequest, StageImageResponse]
+
+func (c *nodeServiceClient) RollbackImage(ctx context.Context, in *RollbackImageRequest, opts ...grpc.CallOption) (*RollbackImageResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RollbackImageResponse)
+	err := c.cc.Invoke(ctx, NodeService_RollbackImage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nodeServiceClient) ActivateImage(ctx context.Context, in *ActivateImageRequest, opts ...grpc.CallOption) (*ActivateImageResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ActivateImageResponse)
+	err := c.cc.Invoke(ctx, NodeService_ActivateImage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nodeServiceClient) GetImageStatus(ctx context.Context, in *GetImageStatusRequest, opts ...grpc.CallOption) (*GetImageStatusResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetImageStatusResponse)
+	err := c.cc.Invoke(ctx, NodeService_GetImageStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NodeServiceServer is the server API for NodeService service.
 // All implementations should embed UnimplementedNodeServiceServer
 // for forward compatibility.
@@ -494,6 +571,36 @@ type NodeServiceServer interface {
 	// the full config here, edits a subset, and applies the whole config back via
 	// ApplyConfig (a whole-config replace), so untouched fields survive.
 	GetConfig(context.Context, *GetConfigRequest) (*GetConfigResponse, error)
+	// StageImage installs a new CryptOS image on the node without re-provisioning
+	// it. Until now the only way to change the OS was a reinstall, which reformats
+	// the state partition and destroys the CA key with it; the image lives on the
+	// ESP and identity lives on a separate LUKS partition, so replacing one need
+	// not touch the other. This RPC never opens the state partition.
+	//
+	// Client-streaming because a UKI carries a whole SquashFS root filesystem and
+	// does not belong in a single message. The first message must be the begin
+	// header; every later message carries a chunk. The node verifies the detached
+	// release signature over the assembled bytes before anything reaches the disk,
+	// so an image it cannot attribute is never written.
+	//
+	// Staging does not reboot. The image becomes the one the firmware boots on the
+	// next boot, and the node keeps the image it is running so the change can be
+	// undone; call ActivateImage when the outage is acceptable.
+	StageImage(grpc.ClientStreamingServer[StageImageRequest, StageImageResponse]) error
+	// RollbackImage puts the retained previous image back on the boot path, for an
+	// upgrade that turned out badly. Like staging it does not reboot, and like
+	// staging it takes effect on the next boot.
+	RollbackImage(context.Context, *RollbackImageRequest) (*RollbackImageResponse, error)
+	// ActivateImage reboots the node so a staged image starts running. It is a
+	// separate call because rebooting an issuing CA is an outage of the thing
+	// every other system depends on, and that is the operator's decision to time,
+	// not a side effect of an upload. The caller must echo the node's CA CN, the
+	// same confirmation Reset and RemoteReset require.
+	ActivateImage(context.Context, *ActivateImageRequest) (*ActivateImageResponse, error)
+	// GetImageStatus reports what is installed on the ESP and what is running, so
+	// an operator can tell whether an upgrade took and whether a reboot is still
+	// pending.
+	GetImageStatus(context.Context, *GetImageStatusRequest) (*GetImageStatusResponse, error)
 }
 
 // UnimplementedNodeServiceServer should be embedded to have
@@ -568,6 +675,18 @@ func (UnimplementedNodeServiceServer) SetManagement(context.Context, *SetManagem
 }
 func (UnimplementedNodeServiceServer) GetConfig(context.Context, *GetConfigRequest) (*GetConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetConfig not implemented")
+}
+func (UnimplementedNodeServiceServer) StageImage(grpc.ClientStreamingServer[StageImageRequest, StageImageResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method StageImage not implemented")
+}
+func (UnimplementedNodeServiceServer) RollbackImage(context.Context, *RollbackImageRequest) (*RollbackImageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RollbackImage not implemented")
+}
+func (UnimplementedNodeServiceServer) ActivateImage(context.Context, *ActivateImageRequest) (*ActivateImageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ActivateImage not implemented")
+}
+func (UnimplementedNodeServiceServer) GetImageStatus(context.Context, *GetImageStatusRequest) (*GetImageStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetImageStatus not implemented")
 }
 func (UnimplementedNodeServiceServer) testEmbeddedByValue() {}
 
@@ -978,6 +1097,67 @@ func _NodeService_GetConfig_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NodeService_StageImage_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(NodeServiceServer).StageImage(&grpc.GenericServerStream[StageImageRequest, StageImageResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type NodeService_StageImageServer = grpc.ClientStreamingServer[StageImageRequest, StageImageResponse]
+
+func _NodeService_RollbackImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RollbackImageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).RollbackImage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_RollbackImage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).RollbackImage(ctx, req.(*RollbackImageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NodeService_ActivateImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ActivateImageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).ActivateImage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_ActivateImage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).ActivateImage(ctx, req.(*ActivateImageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NodeService_GetImageStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetImageStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).GetImageStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_GetImageStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).GetImageStatus(ctx, req.(*GetImageStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NodeService_ServiceDesc is the grpc.ServiceDesc for NodeService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1069,12 +1249,29 @@ var NodeService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "GetConfig",
 			Handler:    _NodeService_GetConfig_Handler,
 		},
+		{
+			MethodName: "RollbackImage",
+			Handler:    _NodeService_RollbackImage_Handler,
+		},
+		{
+			MethodName: "ActivateImage",
+			Handler:    _NodeService_ActivateImage_Handler,
+		},
+		{
+			MethodName: "GetImageStatus",
+			Handler:    _NodeService_GetImageStatus_Handler,
+		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "StartCeremony",
 			Handler:       _NodeService_StartCeremony_Handler,
 			ServerStreams: true,
+		},
+		{
+			StreamName:    "StageImage",
+			Handler:       _NodeService_StageImage_Handler,
+			ClientStreams: true,
 		},
 	},
 	Metadata: "cryptos/v1/node.proto",

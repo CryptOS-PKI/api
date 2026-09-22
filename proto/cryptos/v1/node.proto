@@ -150,6 +150,40 @@ service NodeService {
   // the full config here, edits a subset, and applies the whole config back via
   // ApplyConfig (a whole-config replace), so untouched fields survive.
   rpc GetConfig(GetConfigRequest) returns (GetConfigResponse);
+
+  // StageImage installs a new CryptOS image on the node without re-provisioning
+  // it. Until now the only way to change the OS was a reinstall, which reformats
+  // the state partition and destroys the CA key with it; the image lives on the
+  // ESP and identity lives on a separate LUKS partition, so replacing one need
+  // not touch the other. This RPC never opens the state partition.
+  //
+  // Client-streaming because a UKI carries a whole SquashFS root filesystem and
+  // does not belong in a single message. The first message must be the begin
+  // header; every later message carries a chunk. The node verifies the detached
+  // release signature over the assembled bytes before anything reaches the disk,
+  // so an image it cannot attribute is never written.
+  //
+  // Staging does not reboot. The image becomes the one the firmware boots on the
+  // next boot, and the node keeps the image it is running so the change can be
+  // undone; call ActivateImage when the outage is acceptable.
+  rpc StageImage(stream StageImageRequest) returns (StageImageResponse);
+
+  // RollbackImage puts the retained previous image back on the boot path, for an
+  // upgrade that turned out badly. Like staging it does not reboot, and like
+  // staging it takes effect on the next boot.
+  rpc RollbackImage(RollbackImageRequest) returns (RollbackImageResponse);
+
+  // ActivateImage reboots the node so a staged image starts running. It is a
+  // separate call because rebooting an issuing CA is an outage of the thing
+  // every other system depends on, and that is the operator's decision to time,
+  // not a side effect of an upload. The caller must echo the node's CA CN, the
+  // same confirmation Reset and RemoteReset require.
+  rpc ActivateImage(ActivateImageRequest) returns (ActivateImageResponse);
+
+  // GetImageStatus reports what is installed on the ESP and what is running, so
+  // an operator can tell whether an upgrade took and whether a reboot is still
+  // pending.
+  rpc GetImageStatus(GetImageStatusRequest) returns (GetImageStatusResponse);
 }
 
 message ApplyConfigRequest {
@@ -399,4 +433,89 @@ message InstallDisk {
   bool rotational = 4;
   // removable is true for removable media (USB, etc.).
   bool removable = 5;
+}
+
+// StageImageRequest is a header followed by chunks: exactly one begin message
+// first, then a chunk message per piece of the image.
+message StageImageRequest {
+  oneof payload {
+    StageImageBegin begin = 1;
+    bytes chunk = 2;
+  }
+}
+
+// StageImageBegin describes the transfer before any image bytes are sent.
+message StageImageBegin {
+  // signature is the detached release signature over the whole image: PKCS#1
+  // v1.5 over a SHA-256 digest, made by the CryptOS release key.
+  //
+  // It is sent up front so the node knows before the first byte that the
+  // transfer is meant to be verifiable. It cannot be checked until the last
+  // chunk arrives, because it covers the assembled image.
+  //
+  // This is not a substitute for Secure Boot. The firmware remains the
+  // authority on whether an image may boot and verifies the UKI's Authenticode
+  // signature against the enrolled db certificate. This signature answers an
+  // earlier question -- may these bytes be written at all -- so a caller cannot
+  // park an unbootable image on the ESP and strand the node.
+  bytes signature = 1;
+  // size_bytes is the expected image size, so the node can reject a transfer
+  // that will not fit on the ESP before spending the upload.
+  uint64 size_bytes = 2;
+  // sha256 is the expected digest of the image, hex encoded. Optional; when set
+  // the node checks it against what it received and refuses a mismatch, which
+  // distinguishes a truncated upload from a bad signature.
+  string sha256 = 3;
+}
+
+message StageImageResponse {
+  // status after staging.
+  ImageStatus status = 1;
+  // requires_reboot is always true on success: the staged image is what the
+  // firmware will boot, but the node is still running the old one.
+  bool requires_reboot = 2;
+}
+
+message RollbackImageRequest {}
+
+message RollbackImageResponse {
+  ImageStatus status = 1;
+  bool requires_reboot = 2;
+}
+
+message ActivateImageRequest {
+  // confirm_ca_cn must equal the node's current CA common name. Rebooting an
+  // issuing CA takes every dependent system's certificate operations down with
+  // it, so it is confirmed the same way the destructive RPCs are.
+  string confirm_ca_cn = 1;
+}
+
+message ActivateImageResponse {
+  // The node reboots shortly after replying; the reply exists so the caller
+  // learns the reboot was accepted before the connection drops.
+  bool rebooting = 1;
+}
+
+message GetImageStatusRequest {}
+
+message GetImageStatusResponse {
+  ImageStatus status = 1;
+}
+
+// ImageStatus describes the images on the ESP and the one currently running.
+message ImageStatus {
+  // running_sha256 is the digest of the image the node booted, hex encoded.
+  string running_sha256 = 1;
+  // active_sha256 is the digest of the image the firmware will boot next. It
+  // differs from running_sha256 exactly when a staged image is waiting for a
+  // reboot.
+  string active_sha256 = 2;
+  // previous_sha256 is the retained image RollbackImage would restore, hex
+  // encoded, empty on a node that has never been upgraded.
+  string previous_sha256 = 3;
+  // reboot_pending is true when active_sha256 differs from running_sha256.
+  bool reboot_pending = 4;
+  // running_version is the CryptOS version string baked into the running image,
+  // which is what an operator actually recognises.
+  string running_version = 5;
 }

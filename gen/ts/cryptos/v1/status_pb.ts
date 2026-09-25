@@ -4,13 +4,15 @@
 
 import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
 import { enumDesc, fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
+import type { Timestamp } from "@bufbuild/protobuf/wkt";
+import { file_google_protobuf_timestamp } from "@bufbuild/protobuf/wkt";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file cryptos/v1/status.proto.
  */
 export const file_cryptos_v1_status: GenFile = /*@__PURE__*/
-  fileDesc("ChdjcnlwdG9zL3YxL3N0YXR1cy5wcm90bxIKY3J5cHRvcy52MSKbAgoKTm9kZVN0YXR1cxIiCgRyb2xlGAEgASgOMhQuY3J5cHRvcy52MS5Ob2RlUm9sZRIxCg5pZGVudGl0eV9zdGF0ZRgCIAEoDjIZLmNyeXB0b3MudjEuSWRlbnRpdHlTdGF0ZRInCgl0cG1fc3RhdGUYAyABKA4yFC5jcnlwdG9zLnYxLlRwbVN0YXRlEikKCmV0Y2Rfc3RhdGUYBCABKA4yFS5jcnlwdG9zLnYxLkV0Y2RTdGF0ZRISCgpib290X2NvdW50GAUgASgEEhgKEHNvZnR3YXJlX3ZlcnNpb24YBiABKAkSNAoNZmxlZXRfbWFuYWdlchgHIAEoDjIdLmNyeXB0b3MudjEuRmxlZXRNYW5hZ2VyU3RhdGUqbAoITm9kZVJvbGUSGQoVTk9ERV9ST0xFX1VOU1BFQ0lGSUVEEAASEgoOTk9ERV9ST0xFX1JPT1QQARIaChZOT0RFX1JPTEVfSU5URVJNRURJQVRFEAISFQoRTk9ERV9ST0xFX0lTU1VJTkcQAyqzAQoNSWRlbnRpdHlTdGF0ZRIeChpJREVOVElUWV9TVEFURV9VTlNQRUNJRklFRBAAEhcKE0lERU5USVRZX1NUQVRFX05PTkUQARInCiNJREVOVElUWV9TVEFURV9DRVJFTU9OWV9JTl9QUk9HUkVTUxACEh4KGklERU5USVRZX1NUQVRFX0VTVEFCTElTSEVEEAMSIAocSURFTlRJVFlfU1RBVEVfQVdBSVRJTkdfQ0VSVBAEKnkKCFRwbVN0YXRlEhkKFVRQTV9TVEFURV9VTlNQRUNJRklFRBAAEhAKDFRQTV9TVEFURV9PSxABEhkKFVRQTV9TVEFURV9VTkFWQUlMQUJMRRACEiUKIVRQTV9TVEFURV9JTlNVRkZJQ0lFTlRfQ0FQQUJJTElUWRADKlMKCUV0Y2RTdGF0ZRIaChZFVENEX1NUQVRFX1VOU1BFQ0lGSUVEEAASEQoNRVRDRF9TVEFURV9PSxABEhcKE0VUQ0RfU1RBVEVfREVHUkFERUQQAiqnAQoRRmxlZXRNYW5hZ2VyU3RhdGUSIwofRkxFRVRfTUFOQUdFUl9TVEFURV9VTlNQRUNJRklFRBAAEiQKIEZMRUVUX01BTkFHRVJfU1RBVEVfTk9UX0VOUk9MTEVEEAESIQodRkxFRVRfTUFOQUdFUl9TVEFURV9DT05ORUNURUQQAhIkCiBGTEVFVF9NQU5BR0VSX1NUQVRFX0RJU0NPTk5FQ1RFRBADQjRaMmdpdGh1Yi5jb20vQ3J5cHRPUy1QS0kvYXBpL2dvL2NyeXB0b3MvdjE7Y3J5cHRvc3YxYgZwcm90bzM");
+  fileDesc("ChdjcnlwdG9zL3YxL3N0YXR1cy5wcm90bxIKY3J5cHRvcy52MSKIAwoKTm9kZVN0YXR1cxIiCgRyb2xlGAEgASgOMhQuY3J5cHRvcy52MS5Ob2RlUm9sZRIxCg5pZGVudGl0eV9zdGF0ZRgCIAEoDjIZLmNyeXB0b3MudjEuSWRlbnRpdHlTdGF0ZRInCgl0cG1fc3RhdGUYAyABKA4yFC5jcnlwdG9zLnYxLlRwbVN0YXRlEikKCmV0Y2Rfc3RhdGUYBCABKA4yFS5jcnlwdG9zLnYxLkV0Y2RTdGF0ZRISCgpib290X2NvdW50GAUgASgEEhgKEHNvZnR3YXJlX3ZlcnNpb24YBiABKAkSNAoNZmxlZXRfbWFuYWdlchgHIAEoDjIdLmNyeXB0b3MudjEuRmxlZXRNYW5hZ2VyU3RhdGUSPQoUcmV2b2NhdGlvbl9wcmVmbGlnaHQYCCABKAsyHy5jcnlwdG9zLnYxLlJldm9jYXRpb25QcmVmbGlnaHQSLAoIcmVzb2x2ZXIYCSABKAsyGi5jcnlwdG9zLnYxLlJlc29sdmVyU3RhdHVzIqABChNSZXZvY2F0aW9uUHJlZmxpZ2h0EjMKBXN0YXRlGAEgASgOMiQuY3J5cHRvcy52MS5SZXZvY2F0aW9uUHJlZmxpZ2h0U3RhdGUSEAoIYmFzZV91cmwYAiABKAkSEgoKbGFzdF9lcnJvchgDIAEoCRIuCgpjaGVja2VkX2F0GAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCJhCg5SZXNvbHZlclN0YXR1cxIqCgZzb3VyY2UYASABKA4yGi5jcnlwdG9zLnYxLlJlc29sdmVyU291cmNlEhMKC25hbWVzZXJ2ZXJzGAIgAygJEg4KBnNlYXJjaBgDIAMoCSroAQoYUmV2b2NhdGlvblByZWZsaWdodFN0YXRlEioKJlJFVk9DQVRJT05fUFJFRkxJR0hUX1NUQVRFX1VOU1BFQ0lGSUVEEAASLQopUkVWT0NBVElPTl9QUkVGTElHSFRfU1RBVEVfTk9UX0NPTkZJR1VSRUQQARImCiJSRVZPQ0FUSU9OX1BSRUZMSUdIVF9TVEFURV9QRU5ESU5HEAISIQodUkVWT0NBVElPTl9QUkVGTElHSFRfU1RBVEVfT0sQAxImCiJSRVZPQ0FUSU9OX1BSRUZMSUdIVF9TVEFURV9GQUlMSU5HEAQqjwEKDlJlc29sdmVyU291cmNlEh8KG1JFU09MVkVSX1NPVVJDRV9VTlNQRUNJRklFRBAAEhgKFFJFU09MVkVSX1NPVVJDRV9OT05FEAESIgoeUkVTT0xWRVJfU09VUkNFX01BQ0hJTkVfQ09ORklHEAISHgoaUkVTT0xWRVJfU09VUkNFX0RIQ1BfTEVBU0UQAypsCghOb2RlUm9sZRIZChVOT0RFX1JPTEVfVU5TUEVDSUZJRUQQABISCg5OT0RFX1JPTEVfUk9PVBABEhoKFk5PREVfUk9MRV9JTlRFUk1FRElBVEUQAhIVChFOT0RFX1JPTEVfSVNTVUlORxADKrMBCg1JZGVudGl0eVN0YXRlEh4KGklERU5USVRZX1NUQVRFX1VOU1BFQ0lGSUVEEAASFwoTSURFTlRJVFlfU1RBVEVfTk9ORRABEicKI0lERU5USVRZX1NUQVRFX0NFUkVNT05ZX0lOX1BST0dSRVNTEAISHgoaSURFTlRJVFlfU1RBVEVfRVNUQUJMSVNIRUQQAxIgChxJREVOVElUWV9TVEFURV9BV0FJVElOR19DRVJUEAQqeQoIVHBtU3RhdGUSGQoVVFBNX1NUQVRFX1VOU1BFQ0lGSUVEEAASEAoMVFBNX1NUQVRFX09LEAESGQoVVFBNX1NUQVRFX1VOQVZBSUxBQkxFEAISJQohVFBNX1NUQVRFX0lOU1VGRklDSUVOVF9DQVBBQklMSVRZEAMqUwoJRXRjZFN0YXRlEhoKFkVUQ0RfU1RBVEVfVU5TUEVDSUZJRUQQABIRCg1FVENEX1NUQVRFX09LEAESFwoTRVRDRF9TVEFURV9ERUdSQURFRBACKqcBChFGbGVldE1hbmFnZXJTdGF0ZRIjCh9GTEVFVF9NQU5BR0VSX1NUQVRFX1VOU1BFQ0lGSUVEEAASJAogRkxFRVRfTUFOQUdFUl9TVEFURV9OT1RfRU5ST0xMRUQQARIhCh1GTEVFVF9NQU5BR0VSX1NUQVRFX0NPTk5FQ1RFRBACEiQKIEZMRUVUX01BTkFHRVJfU1RBVEVfRElTQ09OTkVDVEVEEANCNFoyZ2l0aHViLmNvbS9DcnlwdE9TLVBLSS9hcGkvZ28vY3J5cHRvcy92MTtjcnlwdG9zdjFiBnByb3RvMw", [file_google_protobuf_timestamp]);
 
 /**
  * NodeStatus is the response from GetStatus.
@@ -52,6 +54,23 @@ export type NodeStatus = Message<"cryptos.v1.NodeStatus"> & {
    * @generated from field: cryptos.v1.FleetManagerState fleet_manager = 7;
    */
   fleetManager: FleetManagerState;
+
+  /**
+   * revocation_preflight is the latest check of pki.revocation_base_url, which
+   * gates stamping CDP/AIA pointers into issued certificates. Unset in
+   * maintenance mode.
+   *
+   * @generated from field: cryptos.v1.RevocationPreflight revocation_preflight = 8;
+   */
+  revocationPreflight?: RevocationPreflight | undefined;
+
+  /**
+   * resolver is the DNS resolver configuration the node wrote at boot. Unset in
+   * maintenance mode.
+   *
+   * @generated from field: cryptos.v1.ResolverStatus resolver = 9;
+   */
+  resolver?: ResolverStatus | undefined;
 };
 
 /**
@@ -60,6 +79,168 @@ export type NodeStatus = Message<"cryptos.v1.NodeStatus"> & {
  */
 export const NodeStatusSchema: GenMessage<NodeStatus> = /*@__PURE__*/
   messageDesc(file_cryptos_v1_status, 0);
+
+/**
+ * RevocationPreflight reports whether the configured revocation base URL is
+ * usable: its host resolves and its /crl and /ocsp endpoints answer. While it
+ * is failing, issuance that would stamp CDP/AIA pointers is refused unless the
+ * machine config sets allow_unverified_revocation_url.
+ *
+ * @generated from message cryptos.v1.RevocationPreflight
+ */
+export type RevocationPreflight = Message<"cryptos.v1.RevocationPreflight"> & {
+  /**
+   * @generated from field: cryptos.v1.RevocationPreflightState state = 1;
+   */
+  state: RevocationPreflightState;
+
+  /**
+   * base_url is the pki.revocation_base_url being checked. Empty when state is
+   * NOT_CONFIGURED.
+   *
+   * @generated from field: string base_url = 2;
+   */
+  baseUrl: string;
+
+  /**
+   * last_error is the failure from the latest check. Empty unless state is
+   * FAILING.
+   *
+   * @generated from field: string last_error = 3;
+   */
+  lastError: string;
+
+  /**
+   * checked_at is when the latest check finished. Unset until the first check
+   * has run.
+   *
+   * @generated from field: google.protobuf.Timestamp checked_at = 4;
+   */
+  checkedAt?: Timestamp | undefined;
+};
+
+/**
+ * Describes the message cryptos.v1.RevocationPreflight.
+ * Use `create(RevocationPreflightSchema)` to create a new message.
+ */
+export const RevocationPreflightSchema: GenMessage<RevocationPreflight> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_status, 1);
+
+/**
+ * ResolverStatus reports where the node's DNS resolver configuration came from
+ * and what it contains.
+ *
+ * @generated from message cryptos.v1.ResolverStatus
+ */
+export type ResolverStatus = Message<"cryptos.v1.ResolverStatus"> & {
+  /**
+   * @generated from field: cryptos.v1.ResolverSource source = 1;
+   */
+  source: ResolverSource;
+
+  /**
+   * nameservers are the DNS servers in use, in order.
+   *
+   * @generated from field: repeated string nameservers = 2;
+   */
+  nameservers: string[];
+
+  /**
+   * search is the DNS search list in use.
+   *
+   * @generated from field: repeated string search = 3;
+   */
+  search: string[];
+};
+
+/**
+ * Describes the message cryptos.v1.ResolverStatus.
+ * Use `create(ResolverStatusSchema)` to create a new message.
+ */
+export const ResolverStatusSchema: GenMessage<ResolverStatus> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_status, 2);
+
+/**
+ * RevocationPreflightState is the outcome of the latest revocation preflight.
+ *
+ * @generated from enum cryptos.v1.RevocationPreflightState
+ */
+export enum RevocationPreflightState {
+  /**
+   * @generated from enum value: REVOCATION_PREFLIGHT_STATE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * No pki.revocation_base_url is configured, so there is nothing to check.
+   *
+   * @generated from enum value: REVOCATION_PREFLIGHT_STATE_NOT_CONFIGURED = 1;
+   */
+  NOT_CONFIGURED = 1,
+
+  /**
+   * A base URL is configured but the first check has not finished yet.
+   *
+   * @generated from enum value: REVOCATION_PREFLIGHT_STATE_PENDING = 2;
+   */
+  PENDING = 2,
+
+  /**
+   * @generated from enum value: REVOCATION_PREFLIGHT_STATE_OK = 3;
+   */
+  OK = 3,
+
+  /**
+   * @generated from enum value: REVOCATION_PREFLIGHT_STATE_FAILING = 4;
+   */
+  FAILING = 4,
+}
+
+/**
+ * Describes the enum cryptos.v1.RevocationPreflightState.
+ */
+export const RevocationPreflightStateSchema: GenEnum<RevocationPreflightState> = /*@__PURE__*/
+  enumDesc(file_cryptos_v1_status, 0);
+
+/**
+ * ResolverSource names where the node's nameservers came from.
+ *
+ * @generated from enum cryptos.v1.ResolverSource
+ */
+export enum ResolverSource {
+  /**
+   * @generated from enum value: RESOLVER_SOURCE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * Neither the machine config nor the DHCP lease named a nameserver, so the
+   * node has no resolver and no hostname resolves.
+   *
+   * @generated from enum value: RESOLVER_SOURCE_NONE = 1;
+   */
+  NONE = 1,
+
+  /**
+   * network.nameservers in the machine config.
+   *
+   * @generated from enum value: RESOLVER_SOURCE_MACHINE_CONFIG = 2;
+   */
+  MACHINE_CONFIG = 2,
+
+  /**
+   * The kernel DHCP lease, used when network.nameservers is empty.
+   *
+   * @generated from enum value: RESOLVER_SOURCE_DHCP_LEASE = 3;
+   */
+  DHCP_LEASE = 3,
+}
+
+/**
+ * Describes the enum cryptos.v1.ResolverSource.
+ */
+export const ResolverSourceSchema: GenEnum<ResolverSource> = /*@__PURE__*/
+  enumDesc(file_cryptos_v1_status, 1);
 
 /**
  * NodeRole is the role this node booted into, from machine config.
@@ -92,7 +273,7 @@ export enum NodeRole {
  * Describes the enum cryptos.v1.NodeRole.
  */
 export const NodeRoleSchema: GenEnum<NodeRole> = /*@__PURE__*/
-  enumDesc(file_cryptos_v1_status, 0);
+  enumDesc(file_cryptos_v1_status, 2);
 
 /**
  * IdentityState reflects whether the node has a CA identity yet.
@@ -133,7 +314,7 @@ export enum IdentityState {
  * Describes the enum cryptos.v1.IdentityState.
  */
 export const IdentityStateSchema: GenEnum<IdentityState> = /*@__PURE__*/
-  enumDesc(file_cryptos_v1_status, 1);
+  enumDesc(file_cryptos_v1_status, 3);
 
 /**
  * TpmState reports TPM availability and capabilities.
@@ -166,7 +347,7 @@ export enum TpmState {
  * Describes the enum cryptos.v1.TpmState.
  */
 export const TpmStateSchema: GenEnum<TpmState> = /*@__PURE__*/
-  enumDesc(file_cryptos_v1_status, 2);
+  enumDesc(file_cryptos_v1_status, 4);
 
 /**
  * EtcdState reports the embedded datastore's health.
@@ -194,7 +375,7 @@ export enum EtcdState {
  * Describes the enum cryptos.v1.EtcdState.
  */
 export const EtcdStateSchema: GenEnum<EtcdState> = /*@__PURE__*/
-  enumDesc(file_cryptos_v1_status, 3);
+  enumDesc(file_cryptos_v1_status, 5);
 
 /**
  * FleetManagerState reports whether the node is connected to a Fleet Manager.
@@ -229,5 +410,5 @@ export enum FleetManagerState {
  * Describes the enum cryptos.v1.FleetManagerState.
  */
 export const FleetManagerStateSchema: GenEnum<FleetManagerState> = /*@__PURE__*/
-  enumDesc(file_cryptos_v1_status, 4);
+  enumDesc(file_cryptos_v1_status, 6);
 

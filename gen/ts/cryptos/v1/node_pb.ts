@@ -20,7 +20,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file cryptos/v1/node.proto.
  */
 export const file_cryptos_v1_node: GenFile = /*@__PURE__*/
-  fileDesc("ChVjcnlwdG9zL3YxL25vZGUucHJvdG8SCmNyeXB0b3MudjEiPwoSQXBwbHlDb25maWdSZXF1ZXN0EikKBmNvbmZpZxgBIAEoCzIZLmNyeXB0b3MudjEuTWFjaGluZUNvbmZpZyISChBHZXRDb25maWdSZXF1ZXN0Ij4KEUdldENvbmZpZ1Jlc3BvbnNlEikKBmNvbmZpZxgBIAEoCzIZLmNyeXB0b3MudjEuTWFjaGluZUNvbmZpZyJCChRTZXRNYW5hZ2VtZW50UmVxdWVzdBIqCgptYW5hZ2VtZW50GAEgASgLMhYuY3J5cHRvcy52MS5NYW5hZ2VtZW50IkQKFVNldE1hbmFnZW1lbnRSZXNwb25zZRISCgpnZW5lcmF0aW9uGAEgASgEEhcKD3JlcXVpcmVzX3JlYm9vdBgCIAEoCCJZChNBcHBseUNvbmZpZ1Jlc3BvbnNlEhIKCmdlbmVyYXRpb24YASABKAQSFwoPcmVxdWlyZXNfcmVib290GAIgASgIEhUKDWNvbmZpZ19kaWdlc3QYAyABKAwiEgoQR2V0U3RhdHVzUmVxdWVzdCI7ChFHZXRTdGF0dXNSZXNwb25zZRImCgZzdGF0dXMYASABKAsyFi5jcnlwdG9zLnYxLk5vZGVTdGF0dXMiFAoSR2V0SWRlbnRpdHlSZXF1ZXN0Ij0KE0dldElkZW50aXR5UmVzcG9uc2USJgoIaWRlbnRpdHkYASABKAsyFC5jcnlwdG9zLnYxLklkZW50aXR5IlsKFFN0YXJ0Q2VyZW1vbnlSZXF1ZXN0EiYKBGtpbmQYASABKA4yGC5jcnlwdG9zLnYxLkNlcmVtb255S2luZBIbChNtYWNoaW5lX2NvbmZpZ195YW1sGAIgASgMIkEKFVN0YXJ0Q2VyZW1vbnlSZXNwb25zZRIoCgVldmVudBgBIAEoCzIZLmNyeXB0b3MudjEuQ2VyZW1vbnlFdmVudCIyCg5TaWduQ1NSUmVxdWVzdBIPCgdjc3JfZGVyGAEgASgMEg8KB3Byb2ZpbGUYAiABKAkiIwoPU2lnbkNTUlJlc3BvbnNlEhAKCGNlcnRfZGVyGAEgASgMIisKDFJlc2V0UmVxdWVzdBIbChNjb25maXJtX2NvbW1vbl9uYW1lGAEgASgJIg8KDVJlc2V0UmVzcG9uc2UiMQoSUmVtb3RlUmVzZXRSZXF1ZXN0EhsKE2NvbmZpcm1fY29tbW9uX25hbWUYASABKAkiKAoTUmVtb3RlUmVzZXRSZXNwb25zZRIRCglyZWJvb3RpbmcYASABKAgiHgoNQXR0ZXN0UmVxdWVzdBINCgVub25jZRgBIAEoDCJeCg5BdHRlc3RSZXNwb25zZRIRCglzaWduYXR1cmUYASABKAwSGAoQaWRlbnRpdHlfcHViX2RlchgCIAEoDBIOCgZla19wdWIYAyABKAwSDwoHZWtfY2VydBgEIAEoDCJCChlTaWduU3Vib3JkaW5hdGVDU1JSZXF1ZXN0Eg8KB2Nzcl9kZXIYASABKAwSFAoMcHJvZmlsZV9uYW1lGAIgASgJIkIKGlNpZ25TdWJvcmRpbmF0ZUNTUlJlc3BvbnNlEhEKCWNoYWluX2RlchgBIAMoDBIRCgljaGFpbl9wZW0YAiABKAkiTAoQSXNzdWVMZWFmUmVxdWVzdBIPCgdjc3JfZGVyGAEgASgMEhQKDHByb2ZpbGVfbmFtZRgCIAEoCRIRCglkbnNfbmFtZXMYAyADKAkiJQoRSXNzdWVMZWFmUmVzcG9uc2USEAoIY2VydF9kZXIYASABKAwiGgoYR2V0U3Vib3JkaW5hdGVDU1JSZXF1ZXN0IiwKGUdldFN1Ym9yZGluYXRlQ1NSUmVzcG9uc2USDwoHY3NyX2RlchgBIAEoDCJLCiNTdWJtaXRTdWJvcmRpbmF0ZUNlcnRpZmljYXRlUmVxdWVzdBIRCgljaGFpbl9kZXIYASADKAwSEQoJY2hhaW5fcGVtGAIgASgJIk4KJFN1Ym1pdFN1Ym9yZGluYXRlQ2VydGlmaWNhdGVSZXNwb25zZRImCghpZGVudGl0eRgBIAEoCzIULmNyeXB0b3MudjEuSWRlbnRpdHkiKAoSRXhwb3J0Q0FLZXlSZXF1ZXN0EhIKCnBhc3NwaHJhc2UYASABKAwiJwoTRXhwb3J0Q0FLZXlSZXNwb25zZRIQCghlbnZlbG9wZRgBIAEoDCI6ChJJbXBvcnRDQUtleVJlcXVlc3QSEAoIZW52ZWxvcGUYASABKAwSEgoKcGFzc3BocmFzZRgCIAEoDCI9ChNJbXBvcnRDQUtleVJlc3BvbnNlEiYKCGlkZW50aXR5GAEgASgLMhQuY3J5cHRvcy52MS5JZGVudGl0eSIZChdCZWdpbktleVJvdGF0aW9uUmVxdWVzdCIrChhCZWdpbktleVJvdGF0aW9uUmVzcG9uc2USDwoHY3NyX2RlchgBIAEoDCJCChpDb21wbGV0ZUtleVJvdGF0aW9uUmVxdWVzdBIRCgljaGFpbl9kZXIYASADKAwSEQoJY2hhaW5fcGVtGAIgASgJIkUKG0NvbXBsZXRlS2V5Um90YXRpb25SZXNwb25zZRImCghpZGVudGl0eRgBIAEoCzIULmNyeXB0b3MudjEuSWRlbnRpdHki6QEKCklzc3VlZENlcnQSEgoKc2VyaWFsX2hleBgBIAEoCRISCgpzdWJqZWN0X2RuGAIgASgJEi4KCm5vdF9iZWZvcmUYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi0KCW5vdF9hZnRlchgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASDwoHc2tpX2hleBgFIAEoCRIUCgxwcm9maWxlX25hbWUYBiABKAkSLQoJaXNzdWVkX2F0GAcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCJlCgpSZXZvY2F0aW9uEhIKCnNlcmlhbF9oZXgYASABKAkSLgoKcmV2b2tlZF9hdBgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASEwoLcmVhc29uX2NvZGUYAyABKAUiQwoYUmV2b2tlQ2VydGlmaWNhdGVSZXF1ZXN0EhIKCnNlcmlhbF9oZXgYASABKAkSEwoLcmVhc29uX2NvZGUYAiABKAUiRwoZUmV2b2tlQ2VydGlmaWNhdGVSZXNwb25zZRIqCgpyZXZvY2F0aW9uGAEgASgLMhYuY3J5cHRvcy52MS5SZXZvY2F0aW9uIhMKEUxpc3RJc3N1ZWRSZXF1ZXN0IjwKEkxpc3RJc3N1ZWRSZXNwb25zZRImCgZpc3N1ZWQYASADKAsyFi5jcnlwdG9zLnYxLklzc3VlZENlcnQiGAoWTGlzdFJldm9jYXRpb25zUmVxdWVzdCJGChdMaXN0UmV2b2NhdGlvbnNSZXNwb25zZRIrCgtyZXZvY2F0aW9ucxgBIAMoCzIWLmNyeXB0b3MudjEuUmV2b2NhdGlvbiIZChdMaXN0SW5zdGFsbERpc2tzUmVxdWVzdCJCChhMaXN0SW5zdGFsbERpc2tzUmVzcG9uc2USJgoFZGlza3MYASADKAsyFy5jcnlwdG9zLnYxLkluc3RhbGxEaXNrImUKC0luc3RhbGxEaXNrEgwKBHBhdGgYASABKAkSEgoKc2l6ZV9ieXRlcxgCIAEoBBINCgVtb2RlbBgDIAEoCRISCgpyb3RhdGlvbmFsGAQgASgIEhEKCXJlbW92YWJsZRgFIAEoCCJdChFTdGFnZUltYWdlUmVxdWVzdBIsCgViZWdpbhgBIAEoCzIbLmNyeXB0b3MudjEuU3RhZ2VJbWFnZUJlZ2luSAASDwoFY2h1bmsYAiABKAxIAEIJCgdwYXlsb2FkIkgKD1N0YWdlSW1hZ2VCZWdpbhIRCglzaWduYXR1cmUYASABKAwSEgoKc2l6ZV9ieXRlcxgCIAEoBBIOCgZzaGEyNTYYAyABKAkiVgoSU3RhZ2VJbWFnZVJlc3BvbnNlEicKBnN0YXR1cxgBIAEoCzIXLmNyeXB0b3MudjEuSW1hZ2VTdGF0dXMSFwoPcmVxdWlyZXNfcmVib290GAIgASgIIhYKFFJvbGxiYWNrSW1hZ2VSZXF1ZXN0IlkKFVJvbGxiYWNrSW1hZ2VSZXNwb25zZRInCgZzdGF0dXMYASABKAsyFy5jcnlwdG9zLnYxLkltYWdlU3RhdHVzEhcKD3JlcXVpcmVzX3JlYm9vdBgCIAEoCCItChRBY3RpdmF0ZUltYWdlUmVxdWVzdBIVCg1jb25maXJtX2NhX2NuGAEgASgJIioKFUFjdGl2YXRlSW1hZ2VSZXNwb25zZRIRCglyZWJvb3RpbmcYASABKAgiOQoNUmVib290UmVxdWVzdBIVCg1jb25maXJtX2NhX2NuGAEgASgJEhEKCXBvd2VyX29mZhgCIAEoCCIjCg5SZWJvb3RSZXNwb25zZRIRCglyZWJvb3RpbmcYASABKAgiFwoVR2V0SW1hZ2VTdGF0dXNSZXF1ZXN0IkEKFkdldEltYWdlU3RhdHVzUmVzcG9uc2USJwoGc3RhdHVzGAEgASgLMhcuY3J5cHRvcy52MS5JbWFnZVN0YXR1cyKGAQoLSW1hZ2VTdGF0dXMSFgoOcnVubmluZ19zaGEyNTYYASABKAkSFQoNYWN0aXZlX3NoYTI1NhgCIAEoCRIXCg9wcmV2aW91c19zaGEyNTYYAyABKAkSFgoOcmVib290X3BlbmRpbmcYBCABKAgSFwoPcnVubmluZ192ZXJzaW9uGAUgASgJMv0RCgtOb2RlU2VydmljZRJOCgtBcHBseUNvbmZpZxIeLmNyeXB0b3MudjEuQXBwbHlDb25maWdSZXF1ZXN0Gh8uY3J5cHRvcy52MS5BcHBseUNvbmZpZ1Jlc3BvbnNlEkgKCUdldFN0YXR1cxIcLmNyeXB0b3MudjEuR2V0U3RhdHVzUmVxdWVzdBodLmNyeXB0b3MudjEuR2V0U3RhdHVzUmVzcG9uc2USXQoQTGlzdEluc3RhbGxEaXNrcxIjLmNyeXB0b3MudjEuTGlzdEluc3RhbGxEaXNrc1JlcXVlc3QaJC5jcnlwdG9zLnYxLkxpc3RJbnN0YWxsRGlza3NSZXNwb25zZRJOCgtHZXRJZGVudGl0eRIeLmNyeXB0b3MudjEuR2V0SWRlbnRpdHlSZXF1ZXN0Gh8uY3J5cHRvcy52MS5HZXRJZGVudGl0eVJlc3BvbnNlElYKDVN0YXJ0Q2VyZW1vbnkSIC5jcnlwdG9zLnYxLlN0YXJ0Q2VyZW1vbnlSZXF1ZXN0GiEuY3J5cHRvcy52MS5TdGFydENlcmVtb255UmVzcG9uc2UwARJCCgdTaWduQ1NSEhouY3J5cHRvcy52MS5TaWduQ1NSUmVxdWVzdBobLmNyeXB0b3MudjEuU2lnbkNTUlJlc3BvbnNlEmMKElNpZ25TdWJvcmRpbmF0ZUNTUhIlLmNyeXB0b3MudjEuU2lnblN1Ym9yZGluYXRlQ1NSUmVxdWVzdBomLmNyeXB0b3MudjEuU2lnblN1Ym9yZGluYXRlQ1NSUmVzcG9uc2USSAoJSXNzdWVMZWFmEhwuY3J5cHRvcy52MS5Jc3N1ZUxlYWZSZXF1ZXN0Gh0uY3J5cHRvcy52MS5Jc3N1ZUxlYWZSZXNwb25zZRJgChFHZXRTdWJvcmRpbmF0ZUNTUhIkLmNyeXB0b3MudjEuR2V0U3Vib3JkaW5hdGVDU1JSZXF1ZXN0GiUuY3J5cHRvcy52MS5HZXRTdWJvcmRpbmF0ZUNTUlJlc3BvbnNlEoEBChxTdWJtaXRTdWJvcmRpbmF0ZUNlcnRpZmljYXRlEi8uY3J5cHRvcy52MS5TdWJtaXRTdWJvcmRpbmF0ZUNlcnRpZmljYXRlUmVxdWVzdBowLmNyeXB0b3MudjEuU3VibWl0U3Vib3JkaW5hdGVDZXJ0aWZpY2F0ZVJlc3BvbnNlEmAKEVJldm9rZUNlcnRpZmljYXRlEiQuY3J5cHRvcy52MS5SZXZva2VDZXJ0aWZpY2F0ZVJlcXVlc3QaJS5jcnlwdG9zLnYxLlJldm9rZUNlcnRpZmljYXRlUmVzcG9uc2USSwoKTGlzdElzc3VlZBIdLmNyeXB0b3MudjEuTGlzdElzc3VlZFJlcXVlc3QaHi5jcnlwdG9zLnYxLkxpc3RJc3N1ZWRSZXNwb25zZRJaCg9MaXN0UmV2b2NhdGlvbnMSIi5jcnlwdG9zLnYxLkxpc3RSZXZvY2F0aW9uc1JlcXVlc3QaIy5jcnlwdG9zLnYxLkxpc3RSZXZvY2F0aW9uc1Jlc3BvbnNlEk4KC0V4cG9ydENBS2V5Eh4uY3J5cHRvcy52MS5FeHBvcnRDQUtleVJlcXVlc3QaHy5jcnlwdG9zLnYxLkV4cG9ydENBS2V5UmVzcG9uc2USTgoLSW1wb3J0Q0FLZXkSHi5jcnlwdG9zLnYxLkltcG9ydENBS2V5UmVxdWVzdBofLmNyeXB0b3MudjEuSW1wb3J0Q0FLZXlSZXNwb25zZRJdChBCZWdpbktleVJvdGF0aW9uEiMuY3J5cHRvcy52MS5CZWdpbktleVJvdGF0aW9uUmVxdWVzdBokLmNyeXB0b3MudjEuQmVnaW5LZXlSb3RhdGlvblJlc3BvbnNlEmYKE0NvbXBsZXRlS2V5Um90YXRpb24SJi5jcnlwdG9zLnYxLkNvbXBsZXRlS2V5Um90YXRpb25SZXF1ZXN0GicuY3J5cHRvcy52MS5Db21wbGV0ZUtleVJvdGF0aW9uUmVzcG9uc2USPAoFUmVzZXQSGC5jcnlwdG9zLnYxLlJlc2V0UmVxdWVzdBoZLmNyeXB0b3MudjEuUmVzZXRSZXNwb25zZRJOCgtSZW1vdGVSZXNldBIeLmNyeXB0b3MudjEuUmVtb3RlUmVzZXRSZXF1ZXN0Gh8uY3J5cHRvcy52MS5SZW1vdGVSZXNldFJlc3BvbnNlEj8KBkF0dGVzdBIZLmNyeXB0b3MudjEuQXR0ZXN0UmVxdWVzdBoaLmNyeXB0b3MudjEuQXR0ZXN0UmVzcG9uc2USVAoNU2V0TWFuYWdlbWVudBIgLmNyeXB0b3MudjEuU2V0TWFuYWdlbWVudFJlcXVlc3QaIS5jcnlwdG9zLnYxLlNldE1hbmFnZW1lbnRSZXNwb25zZRJICglHZXRDb25maWcSHC5jcnlwdG9zLnYxLkdldENvbmZpZ1JlcXVlc3QaHS5jcnlwdG9zLnYxLkdldENvbmZpZ1Jlc3BvbnNlEk0KClN0YWdlSW1hZ2USHS5jcnlwdG9zLnYxLlN0YWdlSW1hZ2VSZXF1ZXN0Gh4uY3J5cHRvcy52MS5TdGFnZUltYWdlUmVzcG9uc2UoARJUCg1Sb2xsYmFja0ltYWdlEiAuY3J5cHRvcy52MS5Sb2xsYmFja0ltYWdlUmVxdWVzdBohLmNyeXB0b3MudjEuUm9sbGJhY2tJbWFnZVJlc3BvbnNlElQKDUFjdGl2YXRlSW1hZ2USIC5jcnlwdG9zLnYxLkFjdGl2YXRlSW1hZ2VSZXF1ZXN0GiEuY3J5cHRvcy52MS5BY3RpdmF0ZUltYWdlUmVzcG9uc2USVwoOR2V0SW1hZ2VTdGF0dXMSIS5jcnlwdG9zLnYxLkdldEltYWdlU3RhdHVzUmVxdWVzdBoiLmNyeXB0b3MudjEuR2V0SW1hZ2VTdGF0dXNSZXNwb25zZRI/CgZSZWJvb3QSGS5jcnlwdG9zLnYxLlJlYm9vdFJlcXVlc3QaGi5jcnlwdG9zLnYxLlJlYm9vdFJlc3BvbnNlQjRaMmdpdGh1Yi5jb20vQ3J5cHRPUy1QS0kvYXBpL2dvL2NyeXB0b3MvdjE7Y3J5cHRvc3YxYgZwcm90bzM", [file_cryptos_v1_ceremony, file_cryptos_v1_config, file_cryptos_v1_identity, file_cryptos_v1_status, file_google_protobuf_timestamp]);
+  fileDesc("ChVjcnlwdG9zL3YxL25vZGUucHJvdG8SCmNyeXB0b3MudjEiPwoSQXBwbHlDb25maWdSZXF1ZXN0EikKBmNvbmZpZxgBIAEoCzIZLmNyeXB0b3MudjEuTWFjaGluZUNvbmZpZyISChBHZXRDb25maWdSZXF1ZXN0Ij4KEUdldENvbmZpZ1Jlc3BvbnNlEikKBmNvbmZpZxgBIAEoCzIZLmNyeXB0b3MudjEuTWFjaGluZUNvbmZpZyJCChRTZXRNYW5hZ2VtZW50UmVxdWVzdBIqCgptYW5hZ2VtZW50GAEgASgLMhYuY3J5cHRvcy52MS5NYW5hZ2VtZW50IkQKFVNldE1hbmFnZW1lbnRSZXNwb25zZRISCgpnZW5lcmF0aW9uGAEgASgEEhcKD3JlcXVpcmVzX3JlYm9vdBgCIAEoCCJZChNBcHBseUNvbmZpZ1Jlc3BvbnNlEhIKCmdlbmVyYXRpb24YASABKAQSFwoPcmVxdWlyZXNfcmVib290GAIgASgIEhUKDWNvbmZpZ19kaWdlc3QYAyABKAwiEgoQR2V0U3RhdHVzUmVxdWVzdCI7ChFHZXRTdGF0dXNSZXNwb25zZRImCgZzdGF0dXMYASABKAsyFi5jcnlwdG9zLnYxLk5vZGVTdGF0dXMiFAoSR2V0SWRlbnRpdHlSZXF1ZXN0Ij0KE0dldElkZW50aXR5UmVzcG9uc2USJgoIaWRlbnRpdHkYASABKAsyFC5jcnlwdG9zLnYxLklkZW50aXR5IlsKFFN0YXJ0Q2VyZW1vbnlSZXF1ZXN0EiYKBGtpbmQYASABKA4yGC5jcnlwdG9zLnYxLkNlcmVtb255S2luZBIbChNtYWNoaW5lX2NvbmZpZ195YW1sGAIgASgMIkEKFVN0YXJ0Q2VyZW1vbnlSZXNwb25zZRIoCgVldmVudBgBIAEoCzIZLmNyeXB0b3MudjEuQ2VyZW1vbnlFdmVudCIyCg5TaWduQ1NSUmVxdWVzdBIPCgdjc3JfZGVyGAEgASgMEg8KB3Byb2ZpbGUYAiABKAkiIwoPU2lnbkNTUlJlc3BvbnNlEhAKCGNlcnRfZGVyGAEgASgMIisKDFJlc2V0UmVxdWVzdBIbChNjb25maXJtX2NvbW1vbl9uYW1lGAEgASgJIg8KDVJlc2V0UmVzcG9uc2UiMQoSUmVtb3RlUmVzZXRSZXF1ZXN0EhsKE2NvbmZpcm1fY29tbW9uX25hbWUYASABKAkiKAoTUmVtb3RlUmVzZXRSZXNwb25zZRIRCglyZWJvb3RpbmcYASABKAgiHgoNQXR0ZXN0UmVxdWVzdBINCgVub25jZRgBIAEoDCJeCg5BdHRlc3RSZXNwb25zZRIRCglzaWduYXR1cmUYASABKAwSGAoQaWRlbnRpdHlfcHViX2RlchgCIAEoDBIOCgZla19wdWIYAyABKAwSDwoHZWtfY2VydBgEIAEoDCJCChlTaWduU3Vib3JkaW5hdGVDU1JSZXF1ZXN0Eg8KB2Nzcl9kZXIYASABKAwSFAoMcHJvZmlsZV9uYW1lGAIgASgJIkIKGlNpZ25TdWJvcmRpbmF0ZUNTUlJlc3BvbnNlEhEKCWNoYWluX2RlchgBIAMoDBIRCgljaGFpbl9wZW0YAiABKAkiTAoQSXNzdWVMZWFmUmVxdWVzdBIPCgdjc3JfZGVyGAEgASgMEhQKDHByb2ZpbGVfbmFtZRgCIAEoCRIRCglkbnNfbmFtZXMYAyADKAkiJQoRSXNzdWVMZWFmUmVzcG9uc2USEAoIY2VydF9kZXIYASABKAwiGgoYR2V0U3Vib3JkaW5hdGVDU1JSZXF1ZXN0IiwKGUdldFN1Ym9yZGluYXRlQ1NSUmVzcG9uc2USDwoHY3NyX2RlchgBIAEoDCJLCiNTdWJtaXRTdWJvcmRpbmF0ZUNlcnRpZmljYXRlUmVxdWVzdBIRCgljaGFpbl9kZXIYASADKAwSEQoJY2hhaW5fcGVtGAIgASgJIk4KJFN1Ym1pdFN1Ym9yZGluYXRlQ2VydGlmaWNhdGVSZXNwb25zZRImCghpZGVudGl0eRgBIAEoCzIULmNyeXB0b3MudjEuSWRlbnRpdHkiKAoSRXhwb3J0Q0FLZXlSZXF1ZXN0EhIKCnBhc3NwaHJhc2UYASABKAwiJwoTRXhwb3J0Q0FLZXlSZXNwb25zZRIQCghlbnZlbG9wZRgBIAEoDCI6ChJJbXBvcnRDQUtleVJlcXVlc3QSEAoIZW52ZWxvcGUYASABKAwSEgoKcGFzc3BocmFzZRgCIAEoDCI9ChNJbXBvcnRDQUtleVJlc3BvbnNlEiYKCGlkZW50aXR5GAEgASgLMhQuY3J5cHRvcy52MS5JZGVudGl0eSIZChdCZWdpbktleVJvdGF0aW9uUmVxdWVzdCIrChhCZWdpbktleVJvdGF0aW9uUmVzcG9uc2USDwoHY3NyX2RlchgBIAEoDCJCChpDb21wbGV0ZUtleVJvdGF0aW9uUmVxdWVzdBIRCgljaGFpbl9kZXIYASADKAwSEQoJY2hhaW5fcGVtGAIgASgJIkUKG0NvbXBsZXRlS2V5Um90YXRpb25SZXNwb25zZRImCghpZGVudGl0eRgBIAEoCzIULmNyeXB0b3MudjEuSWRlbnRpdHkiFgoUR2V0UmVuZXdhbENTUlJlcXVlc3QiKAoVR2V0UmVuZXdhbENTUlJlc3BvbnNlEg8KB2Nzcl9kZXIYASABKAwiRwofU3VibWl0UmVuZXdlZENlcnRpZmljYXRlUmVxdWVzdBIRCgljaGFpbl9kZXIYASADKAwSEQoJY2hhaW5fcGVtGAIgASgJIkoKIFN1Ym1pdFJlbmV3ZWRDZXJ0aWZpY2F0ZVJlc3BvbnNlEiYKCGlkZW50aXR5GAEgASgLMhQuY3J5cHRvcy52MS5JZGVudGl0eSLpAQoKSXNzdWVkQ2VydBISCgpzZXJpYWxfaGV4GAEgASgJEhIKCnN1YmplY3RfZG4YAiABKAkSLgoKbm90X2JlZm9yZRgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLQoJbm90X2FmdGVyGAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIPCgdza2lfaGV4GAUgASgJEhQKDHByb2ZpbGVfbmFtZRgGIAEoCRItCglpc3N1ZWRfYXQYByABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wImUKClJldm9jYXRpb24SEgoKc2VyaWFsX2hleBgBIAEoCRIuCgpyZXZva2VkX2F0GAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBITCgtyZWFzb25fY29kZRgDIAEoBSJDChhSZXZva2VDZXJ0aWZpY2F0ZVJlcXVlc3QSEgoKc2VyaWFsX2hleBgBIAEoCRITCgtyZWFzb25fY29kZRgCIAEoBSJHChlSZXZva2VDZXJ0aWZpY2F0ZVJlc3BvbnNlEioKCnJldm9jYXRpb24YASABKAsyFi5jcnlwdG9zLnYxLlJldm9jYXRpb24iEwoRTGlzdElzc3VlZFJlcXVlc3QiPAoSTGlzdElzc3VlZFJlc3BvbnNlEiYKBmlzc3VlZBgBIAMoCzIWLmNyeXB0b3MudjEuSXNzdWVkQ2VydCIYChZMaXN0UmV2b2NhdGlvbnNSZXF1ZXN0IkYKF0xpc3RSZXZvY2F0aW9uc1Jlc3BvbnNlEisKC3Jldm9jYXRpb25zGAEgAygLMhYuY3J5cHRvcy52MS5SZXZvY2F0aW9uIhkKF0xpc3RJbnN0YWxsRGlza3NSZXF1ZXN0IkIKGExpc3RJbnN0YWxsRGlza3NSZXNwb25zZRImCgVkaXNrcxgBIAMoCzIXLmNyeXB0b3MudjEuSW5zdGFsbERpc2siZQoLSW5zdGFsbERpc2sSDAoEcGF0aBgBIAEoCRISCgpzaXplX2J5dGVzGAIgASgEEg0KBW1vZGVsGAMgASgJEhIKCnJvdGF0aW9uYWwYBCABKAgSEQoJcmVtb3ZhYmxlGAUgASgIIl0KEVN0YWdlSW1hZ2VSZXF1ZXN0EiwKBWJlZ2luGAEgASgLMhsuY3J5cHRvcy52MS5TdGFnZUltYWdlQmVnaW5IABIPCgVjaHVuaxgCIAEoDEgAQgkKB3BheWxvYWQiSAoPU3RhZ2VJbWFnZUJlZ2luEhEKCXNpZ25hdHVyZRgBIAEoDBISCgpzaXplX2J5dGVzGAIgASgEEg4KBnNoYTI1NhgDIAEoCSJWChJTdGFnZUltYWdlUmVzcG9uc2USJwoGc3RhdHVzGAEgASgLMhcuY3J5cHRvcy52MS5JbWFnZVN0YXR1cxIXCg9yZXF1aXJlc19yZWJvb3QYAiABKAgiFgoUUm9sbGJhY2tJbWFnZVJlcXVlc3QiWQoVUm9sbGJhY2tJbWFnZVJlc3BvbnNlEicKBnN0YXR1cxgBIAEoCzIXLmNyeXB0b3MudjEuSW1hZ2VTdGF0dXMSFwoPcmVxdWlyZXNfcmVib290GAIgASgIIi0KFEFjdGl2YXRlSW1hZ2VSZXF1ZXN0EhUKDWNvbmZpcm1fY2FfY24YASABKAkiKgoVQWN0aXZhdGVJbWFnZVJlc3BvbnNlEhEKCXJlYm9vdGluZxgBIAEoCCI5Cg1SZWJvb3RSZXF1ZXN0EhUKDWNvbmZpcm1fY2FfY24YASABKAkSEQoJcG93ZXJfb2ZmGAIgASgIIiMKDlJlYm9vdFJlc3BvbnNlEhEKCXJlYm9vdGluZxgBIAEoCCIXChVHZXRJbWFnZVN0YXR1c1JlcXVlc3QiQQoWR2V0SW1hZ2VTdGF0dXNSZXNwb25zZRInCgZzdGF0dXMYASABKAsyFy5jcnlwdG9zLnYxLkltYWdlU3RhdHVzIoYBCgtJbWFnZVN0YXR1cxIWCg5ydW5uaW5nX3NoYTI1NhgBIAEoCRIVCg1hY3RpdmVfc2hhMjU2GAIgASgJEhcKD3ByZXZpb3VzX3NoYTI1NhgDIAEoCRIWCg5yZWJvb3RfcGVuZGluZxgEIAEoCBIXCg9ydW5uaW5nX3ZlcnNpb24YBSABKAkyyhMKC05vZGVTZXJ2aWNlEk4KC0FwcGx5Q29uZmlnEh4uY3J5cHRvcy52MS5BcHBseUNvbmZpZ1JlcXVlc3QaHy5jcnlwdG9zLnYxLkFwcGx5Q29uZmlnUmVzcG9uc2USSAoJR2V0U3RhdHVzEhwuY3J5cHRvcy52MS5HZXRTdGF0dXNSZXF1ZXN0Gh0uY3J5cHRvcy52MS5HZXRTdGF0dXNSZXNwb25zZRJdChBMaXN0SW5zdGFsbERpc2tzEiMuY3J5cHRvcy52MS5MaXN0SW5zdGFsbERpc2tzUmVxdWVzdBokLmNyeXB0b3MudjEuTGlzdEluc3RhbGxEaXNrc1Jlc3BvbnNlEk4KC0dldElkZW50aXR5Eh4uY3J5cHRvcy52MS5HZXRJZGVudGl0eVJlcXVlc3QaHy5jcnlwdG9zLnYxLkdldElkZW50aXR5UmVzcG9uc2USVgoNU3RhcnRDZXJlbW9ueRIgLmNyeXB0b3MudjEuU3RhcnRDZXJlbW9ueVJlcXVlc3QaIS5jcnlwdG9zLnYxLlN0YXJ0Q2VyZW1vbnlSZXNwb25zZTABEkIKB1NpZ25DU1ISGi5jcnlwdG9zLnYxLlNpZ25DU1JSZXF1ZXN0GhsuY3J5cHRvcy52MS5TaWduQ1NSUmVzcG9uc2USYwoSU2lnblN1Ym9yZGluYXRlQ1NSEiUuY3J5cHRvcy52MS5TaWduU3Vib3JkaW5hdGVDU1JSZXF1ZXN0GiYuY3J5cHRvcy52MS5TaWduU3Vib3JkaW5hdGVDU1JSZXNwb25zZRJICglJc3N1ZUxlYWYSHC5jcnlwdG9zLnYxLklzc3VlTGVhZlJlcXVlc3QaHS5jcnlwdG9zLnYxLklzc3VlTGVhZlJlc3BvbnNlEmAKEUdldFN1Ym9yZGluYXRlQ1NSEiQuY3J5cHRvcy52MS5HZXRTdWJvcmRpbmF0ZUNTUlJlcXVlc3QaJS5jcnlwdG9zLnYxLkdldFN1Ym9yZGluYXRlQ1NSUmVzcG9uc2USgQEKHFN1Ym1pdFN1Ym9yZGluYXRlQ2VydGlmaWNhdGUSLy5jcnlwdG9zLnYxLlN1Ym1pdFN1Ym9yZGluYXRlQ2VydGlmaWNhdGVSZXF1ZXN0GjAuY3J5cHRvcy52MS5TdWJtaXRTdWJvcmRpbmF0ZUNlcnRpZmljYXRlUmVzcG9uc2USYAoRUmV2b2tlQ2VydGlmaWNhdGUSJC5jcnlwdG9zLnYxLlJldm9rZUNlcnRpZmljYXRlUmVxdWVzdBolLmNyeXB0b3MudjEuUmV2b2tlQ2VydGlmaWNhdGVSZXNwb25zZRJLCgpMaXN0SXNzdWVkEh0uY3J5cHRvcy52MS5MaXN0SXNzdWVkUmVxdWVzdBoeLmNyeXB0b3MudjEuTGlzdElzc3VlZFJlc3BvbnNlEloKD0xpc3RSZXZvY2F0aW9ucxIiLmNyeXB0b3MudjEuTGlzdFJldm9jYXRpb25zUmVxdWVzdBojLmNyeXB0b3MudjEuTGlzdFJldm9jYXRpb25zUmVzcG9uc2USTgoLRXhwb3J0Q0FLZXkSHi5jcnlwdG9zLnYxLkV4cG9ydENBS2V5UmVxdWVzdBofLmNyeXB0b3MudjEuRXhwb3J0Q0FLZXlSZXNwb25zZRJOCgtJbXBvcnRDQUtleRIeLmNyeXB0b3MudjEuSW1wb3J0Q0FLZXlSZXF1ZXN0Gh8uY3J5cHRvcy52MS5JbXBvcnRDQUtleVJlc3BvbnNlEl0KEEJlZ2luS2V5Um90YXRpb24SIy5jcnlwdG9zLnYxLkJlZ2luS2V5Um90YXRpb25SZXF1ZXN0GiQuY3J5cHRvcy52MS5CZWdpbktleVJvdGF0aW9uUmVzcG9uc2USZgoTQ29tcGxldGVLZXlSb3RhdGlvbhImLmNyeXB0b3MudjEuQ29tcGxldGVLZXlSb3RhdGlvblJlcXVlc3QaJy5jcnlwdG9zLnYxLkNvbXBsZXRlS2V5Um90YXRpb25SZXNwb25zZRJUCg1HZXRSZW5ld2FsQ1NSEiAuY3J5cHRvcy52MS5HZXRSZW5ld2FsQ1NSUmVxdWVzdBohLmNyeXB0b3MudjEuR2V0UmVuZXdhbENTUlJlc3BvbnNlEnUKGFN1Ym1pdFJlbmV3ZWRDZXJ0aWZpY2F0ZRIrLmNyeXB0b3MudjEuU3VibWl0UmVuZXdlZENlcnRpZmljYXRlUmVxdWVzdBosLmNyeXB0b3MudjEuU3VibWl0UmVuZXdlZENlcnRpZmljYXRlUmVzcG9uc2USPAoFUmVzZXQSGC5jcnlwdG9zLnYxLlJlc2V0UmVxdWVzdBoZLmNyeXB0b3MudjEuUmVzZXRSZXNwb25zZRJOCgtSZW1vdGVSZXNldBIeLmNyeXB0b3MudjEuUmVtb3RlUmVzZXRSZXF1ZXN0Gh8uY3J5cHRvcy52MS5SZW1vdGVSZXNldFJlc3BvbnNlEj8KBkF0dGVzdBIZLmNyeXB0b3MudjEuQXR0ZXN0UmVxdWVzdBoaLmNyeXB0b3MudjEuQXR0ZXN0UmVzcG9uc2USVAoNU2V0TWFuYWdlbWVudBIgLmNyeXB0b3MudjEuU2V0TWFuYWdlbWVudFJlcXVlc3QaIS5jcnlwdG9zLnYxLlNldE1hbmFnZW1lbnRSZXNwb25zZRJICglHZXRDb25maWcSHC5jcnlwdG9zLnYxLkdldENvbmZpZ1JlcXVlc3QaHS5jcnlwdG9zLnYxLkdldENvbmZpZ1Jlc3BvbnNlEk0KClN0YWdlSW1hZ2USHS5jcnlwdG9zLnYxLlN0YWdlSW1hZ2VSZXF1ZXN0Gh4uY3J5cHRvcy52MS5TdGFnZUltYWdlUmVzcG9uc2UoARJUCg1Sb2xsYmFja0ltYWdlEiAuY3J5cHRvcy52MS5Sb2xsYmFja0ltYWdlUmVxdWVzdBohLmNyeXB0b3MudjEuUm9sbGJhY2tJbWFnZVJlc3BvbnNlElQKDUFjdGl2YXRlSW1hZ2USIC5jcnlwdG9zLnYxLkFjdGl2YXRlSW1hZ2VSZXF1ZXN0GiEuY3J5cHRvcy52MS5BY3RpdmF0ZUltYWdlUmVzcG9uc2USVwoOR2V0SW1hZ2VTdGF0dXMSIS5jcnlwdG9zLnYxLkdldEltYWdlU3RhdHVzUmVxdWVzdBoiLmNyeXB0b3MudjEuR2V0SW1hZ2VTdGF0dXNSZXNwb25zZRI/CgZSZWJvb3QSGS5jcnlwdG9zLnYxLlJlYm9vdFJlcXVlc3QaGi5jcnlwdG9zLnYxLlJlYm9vdFJlc3BvbnNlQjRaMmdpdGh1Yi5jb20vQ3J5cHRPUy1QS0kvYXBpL2dvL2NyeXB0b3MvdjE7Y3J5cHRvc3YxYgZwcm90bzM", [file_cryptos_v1_ceremony, file_cryptos_v1_config, file_cryptos_v1_identity, file_cryptos_v1_status, file_google_protobuf_timestamp]);
 
 /**
  * @generated from message cryptos.v1.ApplyConfigRequest
@@ -754,6 +754,81 @@ export const CompleteKeyRotationResponseSchema: GenMessage<CompleteKeyRotationRe
   messageDesc(file_cryptos_v1_node, 35);
 
 /**
+ * @generated from message cryptos.v1.GetRenewalCSRRequest
+ */
+export type GetRenewalCSRRequest = Message<"cryptos.v1.GetRenewalCSRRequest"> & {
+};
+
+/**
+ * Describes the message cryptos.v1.GetRenewalCSRRequest.
+ * Use `create(GetRenewalCSRRequestSchema)` to create a new message.
+ */
+export const GetRenewalCSRRequestSchema: GenMessage<GetRenewalCSRRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_node, 36);
+
+/**
+ * GetRenewalCSRResponse returns the DER CSR for the node's current CA key, to be
+ * ferried to the parent's SignSubordinateCSR.
+ *
+ * @generated from message cryptos.v1.GetRenewalCSRResponse
+ */
+export type GetRenewalCSRResponse = Message<"cryptos.v1.GetRenewalCSRResponse"> & {
+  /**
+   * @generated from field: bytes csr_der = 1;
+   */
+  csrDer: Uint8Array;
+};
+
+/**
+ * Describes the message cryptos.v1.GetRenewalCSRResponse.
+ * Use `create(GetRenewalCSRResponseSchema)` to create a new message.
+ */
+export const GetRenewalCSRResponseSchema: GenMessage<GetRenewalCSRResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_node, 37);
+
+/**
+ * SubmitRenewedCertificateRequest carries the parent-signed chain for the
+ * node's current key, leaf-first (this node's renewed cert, parent, ..., root).
+ *
+ * @generated from message cryptos.v1.SubmitRenewedCertificateRequest
+ */
+export type SubmitRenewedCertificateRequest = Message<"cryptos.v1.SubmitRenewedCertificateRequest"> & {
+  /**
+   * @generated from field: repeated bytes chain_der = 1;
+   */
+  chainDer: Uint8Array[];
+
+  /**
+   * @generated from field: string chain_pem = 2;
+   */
+  chainPem: string;
+};
+
+/**
+ * Describes the message cryptos.v1.SubmitRenewedCertificateRequest.
+ * Use `create(SubmitRenewedCertificateRequestSchema)` to create a new message.
+ */
+export const SubmitRenewedCertificateRequestSchema: GenMessage<SubmitRenewedCertificateRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_node, 38);
+
+/**
+ * @generated from message cryptos.v1.SubmitRenewedCertificateResponse
+ */
+export type SubmitRenewedCertificateResponse = Message<"cryptos.v1.SubmitRenewedCertificateResponse"> & {
+  /**
+   * @generated from field: cryptos.v1.Identity identity = 1;
+   */
+  identity?: Identity | undefined;
+};
+
+/**
+ * Describes the message cryptos.v1.SubmitRenewedCertificateResponse.
+ * Use `create(SubmitRenewedCertificateResponseSchema)` to create a new message.
+ */
+export const SubmitRenewedCertificateResponseSchema: GenMessage<SubmitRenewedCertificateResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_node, 39);
+
+/**
  * IssuedCert is one entry in a node's issued-certificate inventory.
  *
  * @generated from message cryptos.v1.IssuedCert
@@ -804,7 +879,7 @@ export type IssuedCert = Message<"cryptos.v1.IssuedCert"> & {
  * Use `create(IssuedCertSchema)` to create a new message.
  */
 export const IssuedCertSchema: GenMessage<IssuedCert> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 36);
+  messageDesc(file_cryptos_v1_node, 40);
 
 /**
  * Revocation records a revoked certificate.
@@ -835,7 +910,7 @@ export type Revocation = Message<"cryptos.v1.Revocation"> & {
  * Use `create(RevocationSchema)` to create a new message.
  */
 export const RevocationSchema: GenMessage<Revocation> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 37);
+  messageDesc(file_cryptos_v1_node, 41);
 
 /**
  * RevokeCertificateRequest identifies the certificate to revoke by hex serial
@@ -860,7 +935,7 @@ export type RevokeCertificateRequest = Message<"cryptos.v1.RevokeCertificateRequ
  * Use `create(RevokeCertificateRequestSchema)` to create a new message.
  */
 export const RevokeCertificateRequestSchema: GenMessage<RevokeCertificateRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 38);
+  messageDesc(file_cryptos_v1_node, 42);
 
 /**
  * @generated from message cryptos.v1.RevokeCertificateResponse
@@ -877,7 +952,7 @@ export type RevokeCertificateResponse = Message<"cryptos.v1.RevokeCertificateRes
  * Use `create(RevokeCertificateResponseSchema)` to create a new message.
  */
 export const RevokeCertificateResponseSchema: GenMessage<RevokeCertificateResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 39);
+  messageDesc(file_cryptos_v1_node, 43);
 
 /**
  * @generated from message cryptos.v1.ListIssuedRequest
@@ -890,7 +965,7 @@ export type ListIssuedRequest = Message<"cryptos.v1.ListIssuedRequest"> & {
  * Use `create(ListIssuedRequestSchema)` to create a new message.
  */
 export const ListIssuedRequestSchema: GenMessage<ListIssuedRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 40);
+  messageDesc(file_cryptos_v1_node, 44);
 
 /**
  * @generated from message cryptos.v1.ListIssuedResponse
@@ -907,7 +982,7 @@ export type ListIssuedResponse = Message<"cryptos.v1.ListIssuedResponse"> & {
  * Use `create(ListIssuedResponseSchema)` to create a new message.
  */
 export const ListIssuedResponseSchema: GenMessage<ListIssuedResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 41);
+  messageDesc(file_cryptos_v1_node, 45);
 
 /**
  * @generated from message cryptos.v1.ListRevocationsRequest
@@ -920,7 +995,7 @@ export type ListRevocationsRequest = Message<"cryptos.v1.ListRevocationsRequest"
  * Use `create(ListRevocationsRequestSchema)` to create a new message.
  */
 export const ListRevocationsRequestSchema: GenMessage<ListRevocationsRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 42);
+  messageDesc(file_cryptos_v1_node, 46);
 
 /**
  * @generated from message cryptos.v1.ListRevocationsResponse
@@ -937,7 +1012,7 @@ export type ListRevocationsResponse = Message<"cryptos.v1.ListRevocationsRespons
  * Use `create(ListRevocationsResponseSchema)` to create a new message.
  */
 export const ListRevocationsResponseSchema: GenMessage<ListRevocationsResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 43);
+  messageDesc(file_cryptos_v1_node, 47);
 
 /**
  * @generated from message cryptos.v1.ListInstallDisksRequest
@@ -950,7 +1025,7 @@ export type ListInstallDisksRequest = Message<"cryptos.v1.ListInstallDisksReques
  * Use `create(ListInstallDisksRequestSchema)` to create a new message.
  */
 export const ListInstallDisksRequestSchema: GenMessage<ListInstallDisksRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 44);
+  messageDesc(file_cryptos_v1_node, 48);
 
 /**
  * @generated from message cryptos.v1.ListInstallDisksResponse
@@ -967,7 +1042,7 @@ export type ListInstallDisksResponse = Message<"cryptos.v1.ListInstallDisksRespo
  * Use `create(ListInstallDisksResponseSchema)` to create a new message.
  */
 export const ListInstallDisksResponseSchema: GenMessage<ListInstallDisksResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 45);
+  messageDesc(file_cryptos_v1_node, 49);
 
 /**
  * InstallDisk is one candidate whole-disk block device the node can install to.
@@ -1016,7 +1091,7 @@ export type InstallDisk = Message<"cryptos.v1.InstallDisk"> & {
  * Use `create(InstallDiskSchema)` to create a new message.
  */
 export const InstallDiskSchema: GenMessage<InstallDisk> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 46);
+  messageDesc(file_cryptos_v1_node, 50);
 
 /**
  * StageImageRequest is a header followed by chunks: exactly one begin message
@@ -1048,7 +1123,7 @@ export type StageImageRequest = Message<"cryptos.v1.StageImageRequest"> & {
  * Use `create(StageImageRequestSchema)` to create a new message.
  */
 export const StageImageRequestSchema: GenMessage<StageImageRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 47);
+  messageDesc(file_cryptos_v1_node, 51);
 
 /**
  * StageImageBegin describes the transfer before any image bytes are sent.
@@ -1097,7 +1172,7 @@ export type StageImageBegin = Message<"cryptos.v1.StageImageBegin"> & {
  * Use `create(StageImageBeginSchema)` to create a new message.
  */
 export const StageImageBeginSchema: GenMessage<StageImageBegin> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 48);
+  messageDesc(file_cryptos_v1_node, 52);
 
 /**
  * @generated from message cryptos.v1.StageImageResponse
@@ -1124,7 +1199,7 @@ export type StageImageResponse = Message<"cryptos.v1.StageImageResponse"> & {
  * Use `create(StageImageResponseSchema)` to create a new message.
  */
 export const StageImageResponseSchema: GenMessage<StageImageResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 49);
+  messageDesc(file_cryptos_v1_node, 53);
 
 /**
  * @generated from message cryptos.v1.RollbackImageRequest
@@ -1137,7 +1212,7 @@ export type RollbackImageRequest = Message<"cryptos.v1.RollbackImageRequest"> & 
  * Use `create(RollbackImageRequestSchema)` to create a new message.
  */
 export const RollbackImageRequestSchema: GenMessage<RollbackImageRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 50);
+  messageDesc(file_cryptos_v1_node, 54);
 
 /**
  * @generated from message cryptos.v1.RollbackImageResponse
@@ -1159,7 +1234,7 @@ export type RollbackImageResponse = Message<"cryptos.v1.RollbackImageResponse"> 
  * Use `create(RollbackImageResponseSchema)` to create a new message.
  */
 export const RollbackImageResponseSchema: GenMessage<RollbackImageResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 51);
+  messageDesc(file_cryptos_v1_node, 55);
 
 /**
  * @generated from message cryptos.v1.ActivateImageRequest
@@ -1180,7 +1255,7 @@ export type ActivateImageRequest = Message<"cryptos.v1.ActivateImageRequest"> & 
  * Use `create(ActivateImageRequestSchema)` to create a new message.
  */
 export const ActivateImageRequestSchema: GenMessage<ActivateImageRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 52);
+  messageDesc(file_cryptos_v1_node, 56);
 
 /**
  * @generated from message cryptos.v1.ActivateImageResponse
@@ -1200,7 +1275,7 @@ export type ActivateImageResponse = Message<"cryptos.v1.ActivateImageResponse"> 
  * Use `create(ActivateImageResponseSchema)` to create a new message.
  */
 export const ActivateImageResponseSchema: GenMessage<ActivateImageResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 53);
+  messageDesc(file_cryptos_v1_node, 57);
 
 /**
  * RebootRequest confirms an operator-initiated reboot or power-off.
@@ -1231,7 +1306,7 @@ export type RebootRequest = Message<"cryptos.v1.RebootRequest"> & {
  * Use `create(RebootRequestSchema)` to create a new message.
  */
 export const RebootRequestSchema: GenMessage<RebootRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 54);
+  messageDesc(file_cryptos_v1_node, 58);
 
 /**
  * @generated from message cryptos.v1.RebootResponse
@@ -1251,7 +1326,7 @@ export type RebootResponse = Message<"cryptos.v1.RebootResponse"> & {
  * Use `create(RebootResponseSchema)` to create a new message.
  */
 export const RebootResponseSchema: GenMessage<RebootResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 55);
+  messageDesc(file_cryptos_v1_node, 59);
 
 /**
  * @generated from message cryptos.v1.GetImageStatusRequest
@@ -1264,7 +1339,7 @@ export type GetImageStatusRequest = Message<"cryptos.v1.GetImageStatusRequest"> 
  * Use `create(GetImageStatusRequestSchema)` to create a new message.
  */
 export const GetImageStatusRequestSchema: GenMessage<GetImageStatusRequest> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 56);
+  messageDesc(file_cryptos_v1_node, 60);
 
 /**
  * @generated from message cryptos.v1.GetImageStatusResponse
@@ -1281,7 +1356,7 @@ export type GetImageStatusResponse = Message<"cryptos.v1.GetImageStatusResponse"
  * Use `create(GetImageStatusResponseSchema)` to create a new message.
  */
 export const GetImageStatusResponseSchema: GenMessage<GetImageStatusResponse> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 57);
+  messageDesc(file_cryptos_v1_node, 61);
 
 /**
  * ImageStatus describes the images on the ESP and the one currently running.
@@ -1334,7 +1409,7 @@ export type ImageStatus = Message<"cryptos.v1.ImageStatus"> & {
  * Use `create(ImageStatusSchema)` to create a new message.
  */
 export const ImageStatusSchema: GenMessage<ImageStatus> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_node, 58);
+  messageDesc(file_cryptos_v1_node, 62);
 
 /**
  * NodeService is the Phase 1 management surface for a single CryptOS node.
@@ -1552,6 +1627,36 @@ export const NodeService: GenService<{
     methodKind: "unary";
     input: typeof CompleteKeyRotationRequestSchema;
     output: typeof CompleteKeyRotationResponseSchema;
+  },
+  /**
+   * GetRenewalCSR returns a CSR signed by the established subordinate's CURRENT
+   * CA key, with the subject copied from its current CA certificate, so the
+   * parent can issue a fresh certificate for the same key (for example one that
+   * now carries CRL and OCSP pointers). Nothing is staged. Admin-authorized;
+   * refused on a root or a node with no identity.
+   *
+   * @generated from rpc cryptos.v1.NodeService.GetRenewalCSR
+   */
+  getRenewalCSR: {
+    methodKind: "unary";
+    input: typeof GetRenewalCSRRequestSchema;
+    output: typeof GetRenewalCSRResponseSchema;
+  },
+  /**
+   * SubmitRenewedCertificate submits the parent-signed chain for the node's
+   * current key. The node verifies it roots to the pinned parent, carries the
+   * same public key, subject and subject key identifier as the current CA
+   * certificate, and is a CA certificate whose path length is not wider, then
+   * atomically replaces its CA certificate and keeps the previous one for
+   * audit. Takes effect without a reboot; certificates the node already issued
+   * keep verifying.
+   *
+   * @generated from rpc cryptos.v1.NodeService.SubmitRenewedCertificate
+   */
+  submitRenewedCertificate: {
+    methodKind: "unary";
+    input: typeof SubmitRenewedCertificateRequestSchema;
+    output: typeof SubmitRenewedCertificateResponseSchema;
   },
   /**
    * Reset destroys the node's identity: it erases the state-partition key

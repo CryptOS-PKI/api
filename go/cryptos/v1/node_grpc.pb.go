@@ -36,6 +36,8 @@ const (
 	NodeService_ImportCAKey_FullMethodName                  = "/cryptos.v1.NodeService/ImportCAKey"
 	NodeService_BeginKeyRotation_FullMethodName             = "/cryptos.v1.NodeService/BeginKeyRotation"
 	NodeService_CompleteKeyRotation_FullMethodName          = "/cryptos.v1.NodeService/CompleteKeyRotation"
+	NodeService_GetRenewalCSR_FullMethodName                = "/cryptos.v1.NodeService/GetRenewalCSR"
+	NodeService_SubmitRenewedCertificate_FullMethodName     = "/cryptos.v1.NodeService/SubmitRenewedCertificate"
 	NodeService_Reset_FullMethodName                        = "/cryptos.v1.NodeService/Reset"
 	NodeService_RemoteReset_FullMethodName                  = "/cryptos.v1.NodeService/RemoteReset"
 	NodeService_Attest_FullMethodName                       = "/cryptos.v1.NodeService/Attest"
@@ -129,6 +131,20 @@ type NodeServiceClient interface {
 	// then atomically swaps to the new key + cert. Certificates the old key signed
 	// remain valid until they expire.
 	CompleteKeyRotation(ctx context.Context, in *CompleteKeyRotationRequest, opts ...grpc.CallOption) (*CompleteKeyRotationResponse, error)
+	// GetRenewalCSR returns a CSR signed by the established subordinate's CURRENT
+	// CA key, with the subject copied from its current CA certificate, so the
+	// parent can issue a fresh certificate for the same key (for example one that
+	// now carries CRL and OCSP pointers). Nothing is staged. Admin-authorized;
+	// refused on a root or a node with no identity.
+	GetRenewalCSR(ctx context.Context, in *GetRenewalCSRRequest, opts ...grpc.CallOption) (*GetRenewalCSRResponse, error)
+	// SubmitRenewedCertificate submits the parent-signed chain for the node's
+	// current key. The node verifies it roots to the pinned parent, carries the
+	// same public key, subject and subject key identifier as the current CA
+	// certificate, and is a CA certificate whose path length is not wider, then
+	// atomically replaces its CA certificate and keeps the previous one for
+	// audit. Takes effect without a reboot; certificates the node already issued
+	// keep verifying.
+	SubmitRenewedCertificate(ctx context.Context, in *SubmitRenewedCertificateRequest, opts ...grpc.CallOption) (*SubmitRenewedCertificateResponse, error)
 	// Reset destroys the node's identity: it erases the state-partition key
 	// material (rendering all encrypted data unrecoverable), clears any staged
 	// config, and reboots into maintenance. Served ONLY on the local UNIX
@@ -381,6 +397,26 @@ func (c *nodeServiceClient) CompleteKeyRotation(ctx context.Context, in *Complet
 	return out, nil
 }
 
+func (c *nodeServiceClient) GetRenewalCSR(ctx context.Context, in *GetRenewalCSRRequest, opts ...grpc.CallOption) (*GetRenewalCSRResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetRenewalCSRResponse)
+	err := c.cc.Invoke(ctx, NodeService_GetRenewalCSR_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nodeServiceClient) SubmitRenewedCertificate(ctx context.Context, in *SubmitRenewedCertificateRequest, opts ...grpc.CallOption) (*SubmitRenewedCertificateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SubmitRenewedCertificateResponse)
+	err := c.cc.Invoke(ctx, NodeService_SubmitRenewedCertificate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *nodeServiceClient) Reset(ctx context.Context, in *ResetRequest, opts ...grpc.CallOption) (*ResetResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ResetResponse)
@@ -565,6 +601,20 @@ type NodeServiceServer interface {
 	// then atomically swaps to the new key + cert. Certificates the old key signed
 	// remain valid until they expire.
 	CompleteKeyRotation(context.Context, *CompleteKeyRotationRequest) (*CompleteKeyRotationResponse, error)
+	// GetRenewalCSR returns a CSR signed by the established subordinate's CURRENT
+	// CA key, with the subject copied from its current CA certificate, so the
+	// parent can issue a fresh certificate for the same key (for example one that
+	// now carries CRL and OCSP pointers). Nothing is staged. Admin-authorized;
+	// refused on a root or a node with no identity.
+	GetRenewalCSR(context.Context, *GetRenewalCSRRequest) (*GetRenewalCSRResponse, error)
+	// SubmitRenewedCertificate submits the parent-signed chain for the node's
+	// current key. The node verifies it roots to the pinned parent, carries the
+	// same public key, subject and subject key identifier as the current CA
+	// certificate, and is a CA certificate whose path length is not wider, then
+	// atomically replaces its CA certificate and keeps the previous one for
+	// audit. Takes effect without a reboot; certificates the node already issued
+	// keep verifying.
+	SubmitRenewedCertificate(context.Context, *SubmitRenewedCertificateRequest) (*SubmitRenewedCertificateResponse, error)
 	// Reset destroys the node's identity: it erases the state-partition key
 	// material (rendering all encrypted data unrecoverable), clears any staged
 	// config, and reboots into maintenance. Served ONLY on the local UNIX
@@ -687,6 +737,12 @@ func (UnimplementedNodeServiceServer) BeginKeyRotation(context.Context, *BeginKe
 }
 func (UnimplementedNodeServiceServer) CompleteKeyRotation(context.Context, *CompleteKeyRotationRequest) (*CompleteKeyRotationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CompleteKeyRotation not implemented")
+}
+func (UnimplementedNodeServiceServer) GetRenewalCSR(context.Context, *GetRenewalCSRRequest) (*GetRenewalCSRResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRenewalCSR not implemented")
+}
+func (UnimplementedNodeServiceServer) SubmitRenewedCertificate(context.Context, *SubmitRenewedCertificateRequest) (*SubmitRenewedCertificateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitRenewedCertificate not implemented")
 }
 func (UnimplementedNodeServiceServer) Reset(context.Context, *ResetRequest) (*ResetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Reset not implemented")
@@ -1037,6 +1093,42 @@ func _NodeService_CompleteKeyRotation_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NodeService_GetRenewalCSR_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRenewalCSRRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).GetRenewalCSR(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_GetRenewalCSR_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).GetRenewalCSR(ctx, req.(*GetRenewalCSRRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NodeService_SubmitRenewedCertificate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SubmitRenewedCertificateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).SubmitRenewedCertificate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_SubmitRenewedCertificate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).SubmitRenewedCertificate(ctx, req.(*SubmitRenewedCertificateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _NodeService_Reset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ResetRequest)
 	if err := dec(in); err != nil {
@@ -1276,6 +1368,14 @@ var NodeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CompleteKeyRotation",
 			Handler:    _NodeService_CompleteKeyRotation_Handler,
+		},
+		{
+			MethodName: "GetRenewalCSR",
+			Handler:    _NodeService_GetRenewalCSR_Handler,
+		},
+		{
+			MethodName: "SubmitRenewedCertificate",
+			Handler:    _NodeService_SubmitRenewedCertificate_Handler,
 		},
 		{
 			MethodName: "Reset",

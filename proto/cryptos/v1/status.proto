@@ -19,6 +19,8 @@ syntax = "proto3";
 
 package cryptos.v1;
 
+import "google/protobuf/timestamp.proto";
+
 option go_package = "github.com/CryptOS-PKI/api/go/cryptos/v1;cryptosv1";
 
 // NodeStatus is the response from GetStatus.
@@ -30,6 +32,63 @@ message NodeStatus {
   uint64 boot_count = 5;
   string software_version = 6;
   FleetManagerState fleet_manager = 7;
+  // revocation_preflight is the latest check of pki.revocation_base_url, which
+  // gates stamping CDP/AIA pointers into issued certificates. Unset in
+  // maintenance mode.
+  RevocationPreflight revocation_preflight = 8;
+  // resolver is the DNS resolver configuration the node wrote at boot. Unset in
+  // maintenance mode.
+  ResolverStatus resolver = 9;
+}
+
+// RevocationPreflight reports whether the configured revocation base URL is
+// usable: its host resolves and its /crl and /ocsp endpoints answer. While it
+// is failing, issuance that would stamp CDP/AIA pointers is refused unless the
+// machine config sets allow_unverified_revocation_url.
+message RevocationPreflight {
+  RevocationPreflightState state = 1;
+  // base_url is the pki.revocation_base_url being checked. Empty when state is
+  // NOT_CONFIGURED.
+  string base_url = 2;
+  // last_error is the failure from the latest check. Empty unless state is
+  // FAILING.
+  string last_error = 3;
+  // checked_at is when the latest check finished. Unset until the first check
+  // has run.
+  google.protobuf.Timestamp checked_at = 4;
+}
+
+// RevocationPreflightState is the outcome of the latest revocation preflight.
+enum RevocationPreflightState {
+  REVOCATION_PREFLIGHT_STATE_UNSPECIFIED = 0;
+  // No pki.revocation_base_url is configured, so there is nothing to check.
+  REVOCATION_PREFLIGHT_STATE_NOT_CONFIGURED = 1;
+  // A base URL is configured but the first check has not finished yet.
+  REVOCATION_PREFLIGHT_STATE_PENDING = 2;
+  REVOCATION_PREFLIGHT_STATE_OK = 3;
+  REVOCATION_PREFLIGHT_STATE_FAILING = 4;
+}
+
+// ResolverStatus reports where the node's DNS resolver configuration came from
+// and what it contains.
+message ResolverStatus {
+  ResolverSource source = 1;
+  // nameservers are the DNS servers in use, in order.
+  repeated string nameservers = 2;
+  // search is the DNS search list in use.
+  repeated string search = 3;
+}
+
+// ResolverSource names where the node's nameservers came from.
+enum ResolverSource {
+  RESOLVER_SOURCE_UNSPECIFIED = 0;
+  // Neither the machine config nor the DHCP lease named a nameserver, so the
+  // node has no resolver and no hostname resolves.
+  RESOLVER_SOURCE_NONE = 1;
+  // network.nameservers in the machine config.
+  RESOLVER_SOURCE_MACHINE_CONFIG = 2;
+  // The kernel DHCP lease, used when network.nameservers is empty.
+  RESOLVER_SOURCE_DHCP_LEASE = 3;
 }
 
 // NodeRole is the role this node booted into, from machine config.

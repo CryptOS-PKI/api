@@ -12,7 +12,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file cryptos/v1/audit.proto.
  */
 export const file_cryptos_v1_audit: GenFile = /*@__PURE__*/
-  fileDesc("ChZjcnlwdG9zL3YxL2F1ZGl0LnByb3RvEgpjcnlwdG9zLnYxIswBCgpBdWRpdEV2ZW50EgsKA3NlcRgBIAEoBBImCgJ0cxgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASFQoNYWN0b3Jfc3ViamVjdBgDIAEoCRISCgpycGNfbWV0aG9kGAQgASgJEh0KFXJlcXVlc3RfZGlnZXN0X3NoYTI1NhgFIAEoDBIkCgdvdXRjb21lGAYgASgOMhMuY3J5cHRvcy52MS5PdXRjb21lEhkKEXByZXZfZW50cnlfc2hhMjU2GAcgASgMKlkKB091dGNvbWUSFwoTT1VUQ09NRV9VTlNQRUNJRklFRBAAEg4KCk9VVENPTUVfT0sQARISCg5PVVRDT01FX0RFTklFRBACEhEKDU9VVENPTUVfRVJST1IQA0I0WjJnaXRodWIuY29tL0NyeXB0T1MtUEtJL2FwaS9nby9jcnlwdG9zL3YxO2NyeXB0b3N2MWIGcHJvdG8z", [file_google_protobuf_timestamp]);
+  fileDesc("ChZjcnlwdG9zL3YxL2F1ZGl0LnByb3RvEgpjcnlwdG9zLnYxIrICCgpBdWRpdEV2ZW50EgsKA3NlcRgBIAEoBBImCgJ0cxgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASFQoNYWN0b3Jfc3ViamVjdBgDIAEoCRISCgpycGNfbWV0aG9kGAQgASgJEh0KFXJlcXVlc3RfZGlnZXN0X3NoYTI1NhgFIAEoDBIkCgdvdXRjb21lGAYgASgOMhMuY3J5cHRvcy52MS5PdXRjb21lEhkKEXByZXZfZW50cnlfc2hhMjU2GAcgASgMEjQKB2RldGFpbHMYCCADKAsyIy5jcnlwdG9zLnYxLkF1ZGl0RXZlbnQuRGV0YWlsc0VudHJ5Gi4KDERldGFpbHNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAk6AjgBKlkKB091dGNvbWUSFwoTT1VUQ09NRV9VTlNQRUNJRklFRBAAEg4KCk9VVENPTUVfT0sQARISCg5PVVRDT01FX0RFTklFRBACEhEKDU9VVENPTUVfRVJST1IQA0I0WjJnaXRodWIuY29tL0NyeXB0T1MtUEtJL2FwaS9nby9jcnlwdG9zL3YxO2NyeXB0b3N2MWIGcHJvdG8z", [file_google_protobuf_timestamp]);
 
 /**
  * AuditEvent is one entry in the hash-chained audit log. Stored as
@@ -67,6 +67,14 @@ export type AuditEvent = Message<"cryptos.v1.AuditEvent"> & {
    * @generated from field: bytes prev_entry_sha256 = 7;
    */
   prevEntrySha256: Uint8Array;
+
+  /**
+   * RPC-specific facts recorded in the clear alongside the request digest,
+   * e.g. the DNS names an operator asserted on IssueLeaf. Empty for most calls.
+   *
+   * @generated from field: map<string, string> details = 8;
+   */
+  details: { [key: string]: string };
 };
 
 /**

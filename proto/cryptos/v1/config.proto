@@ -163,11 +163,16 @@ message CertificateProfile {
   BasicConstraints basic_constraints = 5;
   // e.g. "cert_sign", "crl_sign", "digital_signature", "key_encipherment".
   repeated string key_usage = 6;
-  // e.g. "server_auth", "client_auth".
+  // Named values ("server_auth", "client_auth") or dotted OIDs such as
+  // "1.3.6.1.5.2.3.5" (Kerberos KDC Authentication).
   repeated string ext_key_usage = 7;
   SubjectAltNames sans = 8;
   // Raw-OID escape hatch for extensions not yet modeled as typed fields.
   repeated X509Extension extra_extensions = 9;
+  // allow_request_sans lets an admin IssueLeaf call replace this profile's
+  // SANs with the DNS names it supplies (IssueLeafRequest.dns_names). Off by
+  // default: the profile's static SANs are then the only names stamped.
+  bool allow_request_sans = 10;
 }
 
 message BasicConstraints {
@@ -182,6 +187,13 @@ message SubjectAltNames {
   repeated string ip = 2;
   repeated string email = 3;
   repeated string uri = 4;
+  // Kerberos principal names, e.g. "krbtgt/AD.EXAMPLE.ORG@AD.EXAMPLE.ORG",
+  // stamped as KRB5PrincipalName otherName entries (id-pkinit-san,
+  // 1.3.6.1.5.2.2, RFC 4556).
+  repeated string krb5_principal = 5;
+  // Microsoft user principal names, e.g. "user@ad.example.org", stamped as
+  // otherName entries of type 1.3.6.1.4.1.311.20.2.3.
+  repeated string upn = 6;
 }
 
 // X509Extension is the raw escape hatch: a dotted OID, criticality flag, and the

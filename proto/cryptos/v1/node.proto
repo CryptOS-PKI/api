@@ -315,6 +315,10 @@ message SignSubordinateCSRResponse {
 message IssueLeafRequest {
   bytes csr_der = 1;
   string profile_name = 2;
+  // dns_names, when set, replaces the profile's subject alternative names
+  // with exactly these DNS names. The node refuses it unless the profile sets
+  // allow_request_sans. Empty keeps the profile's SANs.
+  repeated string dns_names = 3;
 }
 
 message IssueLeafResponse {

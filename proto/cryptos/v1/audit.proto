@@ -40,6 +40,9 @@ message AuditEvent {
   // SHA-256 of the previous entry's canonical encoding; nil for the first
   // entry. Verifiers re-chain this on read.
   bytes prev_entry_sha256 = 7;
+  // RPC-specific facts recorded in the clear alongside the request digest,
+  // e.g. the DNS names an operator asserted on IssueLeaf. Empty for most calls.
+  map<string, string> details = 8;
 }
 
 enum Outcome {

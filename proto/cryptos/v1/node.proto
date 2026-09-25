@@ -121,6 +121,22 @@ service NodeService {
   // remain valid until they expire.
   rpc CompleteKeyRotation(CompleteKeyRotationRequest) returns (CompleteKeyRotationResponse);
 
+  // GetRenewalCSR returns a CSR signed by the established subordinate's CURRENT
+  // CA key, with the subject copied from its current CA certificate, so the
+  // parent can issue a fresh certificate for the same key (for example one that
+  // now carries CRL and OCSP pointers). Nothing is staged. Admin-authorized;
+  // refused on a root or a node with no identity.
+  rpc GetRenewalCSR(GetRenewalCSRRequest) returns (GetRenewalCSRResponse);
+
+  // SubmitRenewedCertificate submits the parent-signed chain for the node's
+  // current key. The node verifies it roots to the pinned parent, carries the
+  // same public key, subject and subject key identifier as the current CA
+  // certificate, and is a CA certificate whose path length is not wider, then
+  // atomically replaces its CA certificate and keeps the previous one for
+  // audit. Takes effect without a reboot; certificates the node already issued
+  // keep verifying.
+  rpc SubmitRenewedCertificate(SubmitRenewedCertificateRequest) returns (SubmitRenewedCertificateResponse);
+
   // Reset destroys the node's identity: it erases the state-partition key
   // material (rendering all encrypted data unrecoverable), clears any staged
   // config, and reboots into maintenance. Served ONLY on the local UNIX
@@ -381,6 +397,25 @@ message CompleteKeyRotationRequest {
 }
 
 message CompleteKeyRotationResponse {
+  Identity identity = 1;
+}
+
+message GetRenewalCSRRequest {}
+
+// GetRenewalCSRResponse returns the DER CSR for the node's current CA key, to be
+// ferried to the parent's SignSubordinateCSR.
+message GetRenewalCSRResponse {
+  bytes csr_der = 1;
+}
+
+// SubmitRenewedCertificateRequest carries the parent-signed chain for the
+// node's current key, leaf-first (this node's renewed cert, parent, ..., root).
+message SubmitRenewedCertificateRequest {
+  repeated bytes chain_der = 1;
+  string chain_pem = 2;
+}
+
+message SubmitRenewedCertificateResponse {
   Identity identity = 1;
 }
 

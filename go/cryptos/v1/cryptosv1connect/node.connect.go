@@ -76,6 +76,12 @@ const (
 	// NodeServiceCompleteKeyRotationProcedure is the fully-qualified name of the NodeService's
 	// CompleteKeyRotation RPC.
 	NodeServiceCompleteKeyRotationProcedure = "/cryptos.v1.NodeService/CompleteKeyRotation"
+	// NodeServiceGetRenewalCSRProcedure is the fully-qualified name of the NodeService's GetRenewalCSR
+	// RPC.
+	NodeServiceGetRenewalCSRProcedure = "/cryptos.v1.NodeService/GetRenewalCSR"
+	// NodeServiceSubmitRenewedCertificateProcedure is the fully-qualified name of the NodeService's
+	// SubmitRenewedCertificate RPC.
+	NodeServiceSubmitRenewedCertificateProcedure = "/cryptos.v1.NodeService/SubmitRenewedCertificate"
 	// NodeServiceResetProcedure is the fully-qualified name of the NodeService's Reset RPC.
 	NodeServiceResetProcedure = "/cryptos.v1.NodeService/Reset"
 	// NodeServiceRemoteResetProcedure is the fully-qualified name of the NodeService's RemoteReset RPC.
@@ -174,6 +180,20 @@ type NodeServiceClient interface {
 	// then atomically swaps to the new key + cert. Certificates the old key signed
 	// remain valid until they expire.
 	CompleteKeyRotation(context.Context, *connect.Request[v1.CompleteKeyRotationRequest]) (*connect.Response[v1.CompleteKeyRotationResponse], error)
+	// GetRenewalCSR returns a CSR signed by the established subordinate's CURRENT
+	// CA key, with the subject copied from its current CA certificate, so the
+	// parent can issue a fresh certificate for the same key (for example one that
+	// now carries CRL and OCSP pointers). Nothing is staged. Admin-authorized;
+	// refused on a root or a node with no identity.
+	GetRenewalCSR(context.Context, *connect.Request[v1.GetRenewalCSRRequest]) (*connect.Response[v1.GetRenewalCSRResponse], error)
+	// SubmitRenewedCertificate submits the parent-signed chain for the node's
+	// current key. The node verifies it roots to the pinned parent, carries the
+	// same public key, subject and subject key identifier as the current CA
+	// certificate, and is a CA certificate whose path length is not wider, then
+	// atomically replaces its CA certificate and keeps the previous one for
+	// audit. Takes effect without a reboot; certificates the node already issued
+	// keep verifying.
+	SubmitRenewedCertificate(context.Context, *connect.Request[v1.SubmitRenewedCertificateRequest]) (*connect.Response[v1.SubmitRenewedCertificateResponse], error)
 	// Reset destroys the node's identity: it erases the state-partition key
 	// material (rendering all encrypted data unrecoverable), clears any staged
 	// config, and reboots into maintenance. Served ONLY on the local UNIX
@@ -352,6 +372,18 @@ func NewNodeServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(nodeServiceMethods.ByName("CompleteKeyRotation")),
 			connect.WithClientOptions(opts...),
 		),
+		getRenewalCSR: connect.NewClient[v1.GetRenewalCSRRequest, v1.GetRenewalCSRResponse](
+			httpClient,
+			baseURL+NodeServiceGetRenewalCSRProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("GetRenewalCSR")),
+			connect.WithClientOptions(opts...),
+		),
+		submitRenewedCertificate: connect.NewClient[v1.SubmitRenewedCertificateRequest, v1.SubmitRenewedCertificateResponse](
+			httpClient,
+			baseURL+NodeServiceSubmitRenewedCertificateProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("SubmitRenewedCertificate")),
+			connect.WithClientOptions(opts...),
+		),
 		reset: connect.NewClient[v1.ResetRequest, v1.ResetResponse](
 			httpClient,
 			baseURL+NodeServiceResetProcedure,
@@ -434,6 +466,8 @@ type nodeServiceClient struct {
 	importCAKey                  *connect.Client[v1.ImportCAKeyRequest, v1.ImportCAKeyResponse]
 	beginKeyRotation             *connect.Client[v1.BeginKeyRotationRequest, v1.BeginKeyRotationResponse]
 	completeKeyRotation          *connect.Client[v1.CompleteKeyRotationRequest, v1.CompleteKeyRotationResponse]
+	getRenewalCSR                *connect.Client[v1.GetRenewalCSRRequest, v1.GetRenewalCSRResponse]
+	submitRenewedCertificate     *connect.Client[v1.SubmitRenewedCertificateRequest, v1.SubmitRenewedCertificateResponse]
 	reset                        *connect.Client[v1.ResetRequest, v1.ResetResponse]
 	remoteReset                  *connect.Client[v1.RemoteResetRequest, v1.RemoteResetResponse]
 	attest                       *connect.Client[v1.AttestRequest, v1.AttestResponse]
@@ -529,6 +563,16 @@ func (c *nodeServiceClient) BeginKeyRotation(ctx context.Context, req *connect.R
 // CompleteKeyRotation calls cryptos.v1.NodeService.CompleteKeyRotation.
 func (c *nodeServiceClient) CompleteKeyRotation(ctx context.Context, req *connect.Request[v1.CompleteKeyRotationRequest]) (*connect.Response[v1.CompleteKeyRotationResponse], error) {
 	return c.completeKeyRotation.CallUnary(ctx, req)
+}
+
+// GetRenewalCSR calls cryptos.v1.NodeService.GetRenewalCSR.
+func (c *nodeServiceClient) GetRenewalCSR(ctx context.Context, req *connect.Request[v1.GetRenewalCSRRequest]) (*connect.Response[v1.GetRenewalCSRResponse], error) {
+	return c.getRenewalCSR.CallUnary(ctx, req)
+}
+
+// SubmitRenewedCertificate calls cryptos.v1.NodeService.SubmitRenewedCertificate.
+func (c *nodeServiceClient) SubmitRenewedCertificate(ctx context.Context, req *connect.Request[v1.SubmitRenewedCertificateRequest]) (*connect.Response[v1.SubmitRenewedCertificateResponse], error) {
+	return c.submitRenewedCertificate.CallUnary(ctx, req)
 }
 
 // Reset calls cryptos.v1.NodeService.Reset.
@@ -653,6 +697,20 @@ type NodeServiceHandler interface {
 	// then atomically swaps to the new key + cert. Certificates the old key signed
 	// remain valid until they expire.
 	CompleteKeyRotation(context.Context, *connect.Request[v1.CompleteKeyRotationRequest]) (*connect.Response[v1.CompleteKeyRotationResponse], error)
+	// GetRenewalCSR returns a CSR signed by the established subordinate's CURRENT
+	// CA key, with the subject copied from its current CA certificate, so the
+	// parent can issue a fresh certificate for the same key (for example one that
+	// now carries CRL and OCSP pointers). Nothing is staged. Admin-authorized;
+	// refused on a root or a node with no identity.
+	GetRenewalCSR(context.Context, *connect.Request[v1.GetRenewalCSRRequest]) (*connect.Response[v1.GetRenewalCSRResponse], error)
+	// SubmitRenewedCertificate submits the parent-signed chain for the node's
+	// current key. The node verifies it roots to the pinned parent, carries the
+	// same public key, subject and subject key identifier as the current CA
+	// certificate, and is a CA certificate whose path length is not wider, then
+	// atomically replaces its CA certificate and keeps the previous one for
+	// audit. Takes effect without a reboot; certificates the node already issued
+	// keep verifying.
+	SubmitRenewedCertificate(context.Context, *connect.Request[v1.SubmitRenewedCertificateRequest]) (*connect.Response[v1.SubmitRenewedCertificateResponse], error)
 	// Reset destroys the node's identity: it erases the state-partition key
 	// material (rendering all encrypted data unrecoverable), clears any staged
 	// config, and reboots into maintenance. Served ONLY on the local UNIX
@@ -827,6 +885,18 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(nodeServiceMethods.ByName("CompleteKeyRotation")),
 		connect.WithHandlerOptions(opts...),
 	)
+	nodeServiceGetRenewalCSRHandler := connect.NewUnaryHandler(
+		NodeServiceGetRenewalCSRProcedure,
+		svc.GetRenewalCSR,
+		connect.WithSchema(nodeServiceMethods.ByName("GetRenewalCSR")),
+		connect.WithHandlerOptions(opts...),
+	)
+	nodeServiceSubmitRenewedCertificateHandler := connect.NewUnaryHandler(
+		NodeServiceSubmitRenewedCertificateProcedure,
+		svc.SubmitRenewedCertificate,
+		connect.WithSchema(nodeServiceMethods.ByName("SubmitRenewedCertificate")),
+		connect.WithHandlerOptions(opts...),
+	)
 	nodeServiceResetHandler := connect.NewUnaryHandler(
 		NodeServiceResetProcedure,
 		svc.Reset,
@@ -923,6 +993,10 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 			nodeServiceBeginKeyRotationHandler.ServeHTTP(w, r)
 		case NodeServiceCompleteKeyRotationProcedure:
 			nodeServiceCompleteKeyRotationHandler.ServeHTTP(w, r)
+		case NodeServiceGetRenewalCSRProcedure:
+			nodeServiceGetRenewalCSRHandler.ServeHTTP(w, r)
+		case NodeServiceSubmitRenewedCertificateProcedure:
+			nodeServiceSubmitRenewedCertificateHandler.ServeHTTP(w, r)
 		case NodeServiceResetProcedure:
 			nodeServiceResetHandler.ServeHTTP(w, r)
 		case NodeServiceRemoteResetProcedure:
@@ -1018,6 +1092,14 @@ func (UnimplementedNodeServiceHandler) BeginKeyRotation(context.Context, *connec
 
 func (UnimplementedNodeServiceHandler) CompleteKeyRotation(context.Context, *connect.Request[v1.CompleteKeyRotationRequest]) (*connect.Response[v1.CompleteKeyRotationResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.CompleteKeyRotation is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) GetRenewalCSR(context.Context, *connect.Request[v1.GetRenewalCSRRequest]) (*connect.Response[v1.GetRenewalCSRResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.GetRenewalCSR is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) SubmitRenewedCertificate(context.Context, *connect.Request[v1.SubmitRenewedCertificateRequest]) (*connect.Response[v1.SubmitRenewedCertificateResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.SubmitRenewedCertificate is not implemented"))
 }
 
 func (UnimplementedNodeServiceHandler) Reset(context.Context, *connect.Request[v1.ResetRequest]) (*connect.Response[v1.ResetResponse], error) {

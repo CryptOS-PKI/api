@@ -82,9 +82,10 @@ export const NodeStatusSchema: GenMessage<NodeStatus> = /*@__PURE__*/
 
 /**
  * RevocationPreflight reports whether the configured revocation base URL is
- * usable: its host resolves and its /crl and /ocsp endpoints answer. While it
- * is failing, issuance that would stamp CDP/AIA pointers is refused unless the
- * machine config sets allow_unverified_revocation_url.
+ * usable: its host resolves and every path stamped into issued certificates
+ * answers (/crl, /ocsp and the /ca.cer caIssuers pointer). While it is failing,
+ * issuance that would stamp CDP/AIA pointers is refused unless the machine
+ * config sets allow_unverified_revocation_url.
  *
  * @generated from message cryptos.v1.RevocationPreflight
  */

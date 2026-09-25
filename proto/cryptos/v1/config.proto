@@ -89,6 +89,12 @@ message Network {
   // CIDR notation, e.g. "10.0.0.10/24".
   string address = 2;
   string gateway = 3;
+  // DNS servers the node resolves names through, as IPv4 literals, in
+  // order. Empty means the node uses the DNS servers its DHCP lease
+  // supplied, if any.
+  repeated string nameservers = 4;
+  // DNS search domains, in order. Only meaningful with a resolver.
+  repeated string search = 5;
 }
 
 message Storage {

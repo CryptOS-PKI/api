@@ -18,7 +18,7 @@ Taskfile.yml         # fmt / lint / generate / test / ci targets
 
 | File | Defines |
 |---|---|
-| `node.proto` | `NodeService` — the 5 Phase 1 RPCs: `ApplyConfig`, `GetStatus`, `GetIdentity`, `StartCeremony` (server-streaming), `SignCSR` (debug-build-only). |
+| `node.proto` | `NodeService` — the per-node management surface: config (`ApplyConfig`, `GetConfig`), status and identity, the first-boot ceremony, CA signing and revocation, key escrow and rotation, reset, in-place image upgrade, and `Reboot` (orderly, CN-confirmed reboot or power-off). |
 | `identity.proto` | `Identity` — DER + PEM + leaf SHA-256 for the CA chain. |
 | `ceremony.proto` | `CeremonyEvent` stream messages + ceremony kind/event enums. |
 | `status.proto` | `NodeStatus` — role, identity state, TPM state, etcd state, boot count. |

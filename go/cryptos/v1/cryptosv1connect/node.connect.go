@@ -98,6 +98,8 @@ const (
 	// NodeServiceGetImageStatusProcedure is the fully-qualified name of the NodeService's
 	// GetImageStatus RPC.
 	NodeServiceGetImageStatusProcedure = "/cryptos.v1.NodeService/GetImageStatus"
+	// NodeServiceRebootProcedure is the fully-qualified name of the NodeService's Reboot RPC.
+	NodeServiceRebootProcedure = "/cryptos.v1.NodeService/Reboot"
 )
 
 // NodeServiceClient is a client for the cryptos.v1.NodeService service.
@@ -227,6 +229,14 @@ type NodeServiceClient interface {
 	// an operator can tell whether an upgrade took and whether a reboot is still
 	// pending.
 	GetImageStatus(context.Context, *connect.Request[v1.GetImageStatusRequest]) (*connect.Response[v1.GetImageStatusResponse], error)
+	// Reboot restarts or powers off the node through an orderly shutdown: the
+	// listeners stop, the stores flush and close, and the state volume is
+	// unmounted and locked before the kernel is asked to restart. It is how a
+	// change that ApplyConfig reported as requires_reboot takes effect without a
+	// hypervisor hard reset, which skips all of that. Admin-authorized over mTLS
+	// and served on the local socket; refused in maintenance mode. The caller
+	// must echo the node's CA CN, the same confirmation ActivateImage requires.
+	Reboot(context.Context, *connect.Request[v1.RebootRequest]) (*connect.Response[v1.RebootResponse], error)
 }
 
 // NewNodeServiceClient constructs a client for the cryptos.v1.NodeService service. By default, it
@@ -396,6 +406,12 @@ func NewNodeServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(nodeServiceMethods.ByName("GetImageStatus")),
 			connect.WithClientOptions(opts...),
 		),
+		reboot: connect.NewClient[v1.RebootRequest, v1.RebootResponse](
+			httpClient,
+			baseURL+NodeServiceRebootProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("Reboot")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -427,6 +443,7 @@ type nodeServiceClient struct {
 	rollbackImage                *connect.Client[v1.RollbackImageRequest, v1.RollbackImageResponse]
 	activateImage                *connect.Client[v1.ActivateImageRequest, v1.ActivateImageResponse]
 	getImageStatus               *connect.Client[v1.GetImageStatusRequest, v1.GetImageStatusResponse]
+	reboot                       *connect.Client[v1.RebootRequest, v1.RebootResponse]
 }
 
 // ApplyConfig calls cryptos.v1.NodeService.ApplyConfig.
@@ -559,6 +576,11 @@ func (c *nodeServiceClient) GetImageStatus(ctx context.Context, req *connect.Req
 	return c.getImageStatus.CallUnary(ctx, req)
 }
 
+// Reboot calls cryptos.v1.NodeService.Reboot.
+func (c *nodeServiceClient) Reboot(ctx context.Context, req *connect.Request[v1.RebootRequest]) (*connect.Response[v1.RebootResponse], error) {
+	return c.reboot.CallUnary(ctx, req)
+}
+
 // NodeServiceHandler is an implementation of the cryptos.v1.NodeService service.
 type NodeServiceHandler interface {
 	// ApplyConfig sets the node's declarative machine configuration.
@@ -686,6 +708,14 @@ type NodeServiceHandler interface {
 	// an operator can tell whether an upgrade took and whether a reboot is still
 	// pending.
 	GetImageStatus(context.Context, *connect.Request[v1.GetImageStatusRequest]) (*connect.Response[v1.GetImageStatusResponse], error)
+	// Reboot restarts or powers off the node through an orderly shutdown: the
+	// listeners stop, the stores flush and close, and the state volume is
+	// unmounted and locked before the kernel is asked to restart. It is how a
+	// change that ApplyConfig reported as requires_reboot takes effect without a
+	// hypervisor hard reset, which skips all of that. Admin-authorized over mTLS
+	// and served on the local socket; refused in maintenance mode. The caller
+	// must echo the node's CA CN, the same confirmation ActivateImage requires.
+	Reboot(context.Context, *connect.Request[v1.RebootRequest]) (*connect.Response[v1.RebootResponse], error)
 }
 
 // NewNodeServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -851,6 +881,12 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(nodeServiceMethods.ByName("GetImageStatus")),
 		connect.WithHandlerOptions(opts...),
 	)
+	nodeServiceRebootHandler := connect.NewUnaryHandler(
+		NodeServiceRebootProcedure,
+		svc.Reboot,
+		connect.WithSchema(nodeServiceMethods.ByName("Reboot")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/cryptos.v1.NodeService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case NodeServiceApplyConfigProcedure:
@@ -905,6 +941,8 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 			nodeServiceActivateImageHandler.ServeHTTP(w, r)
 		case NodeServiceGetImageStatusProcedure:
 			nodeServiceGetImageStatusHandler.ServeHTTP(w, r)
+		case NodeServiceRebootProcedure:
+			nodeServiceRebootHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -1016,4 +1054,8 @@ func (UnimplementedNodeServiceHandler) ActivateImage(context.Context, *connect.R
 
 func (UnimplementedNodeServiceHandler) GetImageStatus(context.Context, *connect.Request[v1.GetImageStatusRequest]) (*connect.Response[v1.GetImageStatusResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.GetImageStatus is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) Reboot(context.Context, *connect.Request[v1.RebootRequest]) (*connect.Response[v1.RebootResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.Reboot is not implemented"))
 }

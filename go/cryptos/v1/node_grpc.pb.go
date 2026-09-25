@@ -45,6 +45,7 @@ const (
 	NodeService_RollbackImage_FullMethodName                = "/cryptos.v1.NodeService/RollbackImage"
 	NodeService_ActivateImage_FullMethodName                = "/cryptos.v1.NodeService/ActivateImage"
 	NodeService_GetImageStatus_FullMethodName               = "/cryptos.v1.NodeService/GetImageStatus"
+	NodeService_Reboot_FullMethodName                       = "/cryptos.v1.NodeService/Reboot"
 )
 
 // NodeServiceClient is the client API for NodeService service.
@@ -183,6 +184,14 @@ type NodeServiceClient interface {
 	// an operator can tell whether an upgrade took and whether a reboot is still
 	// pending.
 	GetImageStatus(ctx context.Context, in *GetImageStatusRequest, opts ...grpc.CallOption) (*GetImageStatusResponse, error)
+	// Reboot restarts or powers off the node through an orderly shutdown: the
+	// listeners stop, the stores flush and close, and the state volume is
+	// unmounted and locked before the kernel is asked to restart. It is how a
+	// change that ApplyConfig reported as requires_reboot takes effect without a
+	// hypervisor hard reset, which skips all of that. Admin-authorized over mTLS
+	// and served on the local socket; refused in maintenance mode. The caller
+	// must echo the node's CA CN, the same confirmation ActivateImage requires.
+	Reboot(ctx context.Context, in *RebootRequest, opts ...grpc.CallOption) (*RebootResponse, error)
 }
 
 type nodeServiceClient struct {
@@ -465,6 +474,16 @@ func (c *nodeServiceClient) GetImageStatus(ctx context.Context, in *GetImageStat
 	return out, nil
 }
 
+func (c *nodeServiceClient) Reboot(ctx context.Context, in *RebootRequest, opts ...grpc.CallOption) (*RebootResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RebootResponse)
+	err := c.cc.Invoke(ctx, NodeService_Reboot_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NodeServiceServer is the server API for NodeService service.
 // All implementations should embed UnimplementedNodeServiceServer
 // for forward compatibility.
@@ -601,6 +620,14 @@ type NodeServiceServer interface {
 	// an operator can tell whether an upgrade took and whether a reboot is still
 	// pending.
 	GetImageStatus(context.Context, *GetImageStatusRequest) (*GetImageStatusResponse, error)
+	// Reboot restarts or powers off the node through an orderly shutdown: the
+	// listeners stop, the stores flush and close, and the state volume is
+	// unmounted and locked before the kernel is asked to restart. It is how a
+	// change that ApplyConfig reported as requires_reboot takes effect without a
+	// hypervisor hard reset, which skips all of that. Admin-authorized over mTLS
+	// and served on the local socket; refused in maintenance mode. The caller
+	// must echo the node's CA CN, the same confirmation ActivateImage requires.
+	Reboot(context.Context, *RebootRequest) (*RebootResponse, error)
 }
 
 // UnimplementedNodeServiceServer should be embedded to have
@@ -687,6 +714,9 @@ func (UnimplementedNodeServiceServer) ActivateImage(context.Context, *ActivateIm
 }
 func (UnimplementedNodeServiceServer) GetImageStatus(context.Context, *GetImageStatusRequest) (*GetImageStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetImageStatus not implemented")
+}
+func (UnimplementedNodeServiceServer) Reboot(context.Context, *RebootRequest) (*RebootResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Reboot not implemented")
 }
 func (UnimplementedNodeServiceServer) testEmbeddedByValue() {}
 
@@ -1158,6 +1188,24 @@ func _NodeService_GetImageStatus_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NodeService_Reboot_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RebootRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).Reboot(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_Reboot_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).Reboot(ctx, req.(*RebootRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NodeService_ServiceDesc is the grpc.ServiceDesc for NodeService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1260,6 +1308,10 @@ var NodeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetImageStatus",
 			Handler:    _NodeService_GetImageStatus_Handler,
+		},
+		{
+			MethodName: "Reboot",
+			Handler:    _NodeService_Reboot_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

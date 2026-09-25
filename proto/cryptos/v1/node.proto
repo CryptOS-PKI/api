@@ -184,6 +184,15 @@ service NodeService {
   // an operator can tell whether an upgrade took and whether a reboot is still
   // pending.
   rpc GetImageStatus(GetImageStatusRequest) returns (GetImageStatusResponse);
+
+  // Reboot restarts or powers off the node through an orderly shutdown: the
+  // listeners stop, the stores flush and close, and the state volume is
+  // unmounted and locked before the kernel is asked to restart. It is how a
+  // change that ApplyConfig reported as requires_reboot takes effect without a
+  // hypervisor hard reset, which skips all of that. Admin-authorized over mTLS
+  // and served on the local socket; refused in maintenance mode. The caller
+  // must echo the node's CA CN, the same confirmation ActivateImage requires.
+  rpc Reboot(RebootRequest) returns (RebootResponse);
 }
 
 message ApplyConfigRequest {
@@ -493,6 +502,23 @@ message ActivateImageRequest {
 message ActivateImageResponse {
   // The node reboots shortly after replying; the reply exists so the caller
   // learns the reboot was accepted before the connection drops.
+  bool rebooting = 1;
+}
+
+// RebootRequest confirms an operator-initiated reboot or power-off.
+message RebootRequest {
+  // confirm_ca_cn must equal the node's current CA common name. Rebooting an
+  // issuing CA takes every dependent system's certificate operations down with
+  // it, so it is confirmed the same way ActivateImage is.
+  string confirm_ca_cn = 1;
+  // power_off halts the node and powers it off instead of restarting it. It
+  // stays off until the hypervisor or a person powers it back on.
+  bool power_off = 2;
+}
+
+message RebootResponse {
+  // The node shuts down shortly after replying; the reply exists so the
+  // caller learns the request was accepted before the connection drops.
   bool rebooting = 1;
 }
 

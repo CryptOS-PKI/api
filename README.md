@@ -52,7 +52,7 @@ task generate    # regenerate Go stubs after a .proto change
 task license     # re-inject Apache 2.0 headers via golic
 ```
 
-The generated stubs under `go/cryptos/v1/` are committed; CI fails if they drift from the protos.
+The generated stubs under `go/cryptos/v1/` are committed; `task ci` fails if they drift from the protos. No GitHub workflow runs that check yet (#73), so run `task ci` before you push.
 
 ## 🚦 Status
 

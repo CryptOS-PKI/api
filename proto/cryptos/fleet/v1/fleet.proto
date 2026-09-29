@@ -204,6 +204,18 @@ service FleetService {
   // the caller's own level. Operator-certificate only and audited (the audit
   // names the key id, label and ceiling, never the key).
   rpc CreateMcpKey(CreateMcpKeyRequest) returns (CreateMcpKeyResponse);
+
+  // ListApprovals returns step-up approval requests, newest first, optionally
+  // filtered by status. An approval is raised when an MCP tool call needs a
+  // human decision before it runs. Operator-certificate only: an MCP key can
+  // never list approvals.
+  rpc ListApprovals(ListApprovalsRequest) returns (ListApprovalsResponse);
+
+  // DecideApproval approves or denies a pending approval by id and returns the
+  // updated approval. Operator-certificate only: an MCP key can never decide
+  // approvals. The deciding operator's level must be at least the approval's
+  // required_level. Audited.
+  rpc DecideApproval(DecideApprovalRequest) returns (DecideApprovalResponse);
 }
 
 message ListNodesRequest {}
@@ -788,4 +800,73 @@ message McpKey {
   string last_used_at = 8;
   // revoked_at is when the key was revoked; empty while it is active.
   string revoked_at = 9;
+}
+
+// ListApprovalsRequest filters the approval listing.
+message ListApprovalsRequest {
+  // status keeps only approvals in that state: "pending" | "approved" |
+  // "denied" | "expired" | "used". Empty means all.
+  string status = 1;
+}
+
+// ListApprovalsResponse carries the listed approvals.
+message ListApprovalsResponse {
+  // items are the listed approvals, newest first.
+  repeated Approval items = 1;
+}
+
+// DecideApprovalRequest names the approval to decide and the decision.
+message DecideApprovalRequest {
+  // id is the Approval id to decide.
+  string id = 1;
+  // approve approves the request when true and denies it when false.
+  bool approve = 2;
+}
+
+// DecideApprovalResponse returns the approval after the decision.
+message DecideApprovalResponse {
+  // approval is the decided approval, with status and the decided_by fields
+  // set.
+  Approval approval = 1;
+}
+
+// Approval is one step-up approval request for an MCP tool call. Listing and
+// deciding approvals take an operator certificate; an MCP key can never list
+// or decide them, and the decider's level must be at least required_level.
+// Timestamps are RFC3339 strings; an unset timestamp is empty.
+message Approval {
+  // id is the approval's stable identifier, used by DecideApproval and audit
+  // approval_id.
+  string id = 1;
+  // tool is the MCP tool the request would run.
+  string tool = 2;
+  // summary is a human-readable description of the action.
+  string summary = 3;
+  // request_digest is the lowercase hex SHA-256 of the canonical request, so
+  // an approval covers exactly the request that raised it.
+  string request_digest = 4;
+  // requested_by_cn is the subject CN of the operator certificate behind the
+  // requesting MCP key.
+  string requested_by_cn = 5;
+  // requested_by_serial is the hex serial of that operator certificate.
+  string requested_by_serial = 6;
+  // key_id is the McpKey id that made the request.
+  string key_id = 7;
+  // required_level is the lowest level that may decide the approval:
+  // "viewer" | "operator" | "admin".
+  string required_level = 8;
+  // created_at is when the approval was raised.
+  string created_at = 9;
+  // expires_at is when a pending approval lapses to expired.
+  string expires_at = 10;
+  // status is "pending" | "approved" | "denied" | "expired" | "used".
+  string status = 11;
+  // decided_by_cn is the subject CN of the deciding operator certificate;
+  // empty until decided.
+  string decided_by_cn = 12;
+  // decided_by_serial is the hex serial of that certificate; empty until
+  // decided.
+  string decided_by_serial = 13;
+  // decided_at is when the approval was decided; empty until decided.
+  string decided_at = 14;
 }

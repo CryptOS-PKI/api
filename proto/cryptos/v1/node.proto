@@ -240,6 +240,10 @@ message ApplyConfigResponse {
   bool requires_reboot = 2;
   // SHA-256 digest of the canonical-encoded applied configuration.
   bytes config_digest = 3;
+  // Non-fatal findings about the applied configuration, such as a profile
+  // whose validity_days already runs past this CA's own notAfter. The config
+  // was applied; these are for the operator to read.
+  repeated string warnings = 4;
 }
 
 message GetStatusRequest {}
@@ -325,6 +329,9 @@ message SignSubordinateCSRRequest {
 message SignSubordinateCSRResponse {
   repeated bytes chain_der = 1;
   string chain_pem = 2;
+  // Non-fatal notices about the issued certificate, such as its notAfter
+  // being capped to the issuing CA's notAfter.
+  repeated string warnings = 3;
 }
 
 // IssueLeafRequest carries a DER PKCS#10 CSR and the leaf profile name.
@@ -339,6 +346,9 @@ message IssueLeafRequest {
 
 message IssueLeafResponse {
   bytes cert_der = 1;
+  // Non-fatal notices about the issued certificate, such as its notAfter
+  // being capped to the issuing CA's notAfter.
+  repeated string warnings = 2;
 }
 
 message GetSubordinateCSRRequest {}

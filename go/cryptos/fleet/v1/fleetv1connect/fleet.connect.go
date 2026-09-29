@@ -116,6 +116,15 @@ const (
 	// FleetServiceDecommissionNodeProcedure is the fully-qualified name of the FleetService's
 	// DecommissionNode RPC.
 	FleetServiceDecommissionNodeProcedure = "/cryptos.fleet.v1.FleetService/DecommissionNode"
+	// FleetServiceListMcpKeysProcedure is the fully-qualified name of the FleetService's ListMcpKeys
+	// RPC.
+	FleetServiceListMcpKeysProcedure = "/cryptos.fleet.v1.FleetService/ListMcpKeys"
+	// FleetServiceRevokeMcpKeyProcedure is the fully-qualified name of the FleetService's RevokeMcpKey
+	// RPC.
+	FleetServiceRevokeMcpKeyProcedure = "/cryptos.fleet.v1.FleetService/RevokeMcpKey"
+	// FleetServiceCreateMcpKeyProcedure is the fully-qualified name of the FleetService's CreateMcpKey
+	// RPC.
+	FleetServiceCreateMcpKeyProcedure = "/cryptos.fleet.v1.FleetService/CreateMcpKey"
 )
 
 // FleetServiceClient is a client for the cryptos.fleet.v1.FleetService service.
@@ -244,6 +253,25 @@ type FleetServiceClient interface {
 	// must echo the node's current Root CA CN as confirmation. Admin-gated and
 	// audited (the audit names the node and that it was wiped, never any secret).
 	DecommissionNode(context.Context, *connect.Request[v1.DecommissionNodeRequest]) (*connect.Response[v1.DecommissionNodeResponse], error)
+	// ListMcpKeys returns the MCP agent keys bound to the calling operator's
+	// certificate. An admin may set all to list every operator's keys; a
+	// non-admin that sets all is refused. The listing never carries a key or its
+	// hash. Operator-certificate only: an MCP key can never list keys.
+	ListMcpKeys(context.Context, *connect.Request[v1.ListMcpKeysRequest]) (*connect.Response[v1.ListMcpKeysResponse], error)
+	// RevokeMcpKey revokes an MCP agent key by id. An operator may revoke the
+	// keys bound to their own certificate; an admin may revoke any key. The
+	// revocation takes effect on the key's next request. Idempotent: revoking an
+	// already revoked key returns it unchanged. Operator-certificate only and
+	// audited.
+	RevokeMcpKey(context.Context, *connect.Request[v1.RevokeMcpKeyRequest]) (*connect.Response[v1.RevokeMcpKeyResponse], error)
+	// CreateMcpKey mints an MCP agent key bound to the calling operator's
+	// certificate serial, for MCP clients that cannot run the OAuth login. It is
+	// the same mint and binding as the login flow. The response carries the
+	// plaintext key exactly once; the manager stores only its hash, so a lost key
+	// is revoked and re-minted, never recovered. The level ceiling may not exceed
+	// the caller's own level. Operator-certificate only and audited (the audit
+	// names the key id, label and ceiling, never the key).
+	CreateMcpKey(context.Context, *connect.Request[v1.CreateMcpKeyRequest]) (*connect.Response[v1.CreateMcpKeyResponse], error)
 }
 
 // NewFleetServiceClient constructs a client for the cryptos.fleet.v1.FleetService service. By
@@ -437,6 +465,24 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(fleetServiceMethods.ByName("DecommissionNode")),
 			connect.WithClientOptions(opts...),
 		),
+		listMcpKeys: connect.NewClient[v1.ListMcpKeysRequest, v1.ListMcpKeysResponse](
+			httpClient,
+			baseURL+FleetServiceListMcpKeysProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("ListMcpKeys")),
+			connect.WithClientOptions(opts...),
+		),
+		revokeMcpKey: connect.NewClient[v1.RevokeMcpKeyRequest, v1.RevokeMcpKeyResponse](
+			httpClient,
+			baseURL+FleetServiceRevokeMcpKeyProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("RevokeMcpKey")),
+			connect.WithClientOptions(opts...),
+		),
+		createMcpKey: connect.NewClient[v1.CreateMcpKeyRequest, v1.CreateMcpKeyResponse](
+			httpClient,
+			baseURL+FleetServiceCreateMcpKeyProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("CreateMcpKey")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -472,6 +518,9 @@ type fleetServiceClient struct {
 	listInstallDisks         *connect.Client[v1.ListInstallDisksRequest, v1.ListInstallDisksResponse]
 	adoptNode                *connect.Client[v1.AdoptNodeRequest, v1.AdoptNodeResponse]
 	decommissionNode         *connect.Client[v1.DecommissionNodeRequest, v1.DecommissionNodeResponse]
+	listMcpKeys              *connect.Client[v1.ListMcpKeysRequest, v1.ListMcpKeysResponse]
+	revokeMcpKey             *connect.Client[v1.RevokeMcpKeyRequest, v1.RevokeMcpKeyResponse]
+	createMcpKey             *connect.Client[v1.CreateMcpKeyRequest, v1.CreateMcpKeyResponse]
 }
 
 // ListNodes calls cryptos.fleet.v1.FleetService.ListNodes.
@@ -624,6 +673,21 @@ func (c *fleetServiceClient) DecommissionNode(ctx context.Context, req *connect.
 	return c.decommissionNode.CallUnary(ctx, req)
 }
 
+// ListMcpKeys calls cryptos.fleet.v1.FleetService.ListMcpKeys.
+func (c *fleetServiceClient) ListMcpKeys(ctx context.Context, req *connect.Request[v1.ListMcpKeysRequest]) (*connect.Response[v1.ListMcpKeysResponse], error) {
+	return c.listMcpKeys.CallUnary(ctx, req)
+}
+
+// RevokeMcpKey calls cryptos.fleet.v1.FleetService.RevokeMcpKey.
+func (c *fleetServiceClient) RevokeMcpKey(ctx context.Context, req *connect.Request[v1.RevokeMcpKeyRequest]) (*connect.Response[v1.RevokeMcpKeyResponse], error) {
+	return c.revokeMcpKey.CallUnary(ctx, req)
+}
+
+// CreateMcpKey calls cryptos.fleet.v1.FleetService.CreateMcpKey.
+func (c *fleetServiceClient) CreateMcpKey(ctx context.Context, req *connect.Request[v1.CreateMcpKeyRequest]) (*connect.Response[v1.CreateMcpKeyResponse], error) {
+	return c.createMcpKey.CallUnary(ctx, req)
+}
+
 // FleetServiceHandler is an implementation of the cryptos.fleet.v1.FleetService service.
 type FleetServiceHandler interface {
 	// ListNodes returns a summary for every node the manager knows about.
@@ -750,6 +814,25 @@ type FleetServiceHandler interface {
 	// must echo the node's current Root CA CN as confirmation. Admin-gated and
 	// audited (the audit names the node and that it was wiped, never any secret).
 	DecommissionNode(context.Context, *connect.Request[v1.DecommissionNodeRequest]) (*connect.Response[v1.DecommissionNodeResponse], error)
+	// ListMcpKeys returns the MCP agent keys bound to the calling operator's
+	// certificate. An admin may set all to list every operator's keys; a
+	// non-admin that sets all is refused. The listing never carries a key or its
+	// hash. Operator-certificate only: an MCP key can never list keys.
+	ListMcpKeys(context.Context, *connect.Request[v1.ListMcpKeysRequest]) (*connect.Response[v1.ListMcpKeysResponse], error)
+	// RevokeMcpKey revokes an MCP agent key by id. An operator may revoke the
+	// keys bound to their own certificate; an admin may revoke any key. The
+	// revocation takes effect on the key's next request. Idempotent: revoking an
+	// already revoked key returns it unchanged. Operator-certificate only and
+	// audited.
+	RevokeMcpKey(context.Context, *connect.Request[v1.RevokeMcpKeyRequest]) (*connect.Response[v1.RevokeMcpKeyResponse], error)
+	// CreateMcpKey mints an MCP agent key bound to the calling operator's
+	// certificate serial, for MCP clients that cannot run the OAuth login. It is
+	// the same mint and binding as the login flow. The response carries the
+	// plaintext key exactly once; the manager stores only its hash, so a lost key
+	// is revoked and re-minted, never recovered. The level ceiling may not exceed
+	// the caller's own level. Operator-certificate only and audited (the audit
+	// names the key id, label and ceiling, never the key).
+	CreateMcpKey(context.Context, *connect.Request[v1.CreateMcpKeyRequest]) (*connect.Response[v1.CreateMcpKeyResponse], error)
 }
 
 // NewFleetServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -939,6 +1022,24 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(fleetServiceMethods.ByName("DecommissionNode")),
 		connect.WithHandlerOptions(opts...),
 	)
+	fleetServiceListMcpKeysHandler := connect.NewUnaryHandler(
+		FleetServiceListMcpKeysProcedure,
+		svc.ListMcpKeys,
+		connect.WithSchema(fleetServiceMethods.ByName("ListMcpKeys")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceRevokeMcpKeyHandler := connect.NewUnaryHandler(
+		FleetServiceRevokeMcpKeyProcedure,
+		svc.RevokeMcpKey,
+		connect.WithSchema(fleetServiceMethods.ByName("RevokeMcpKey")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceCreateMcpKeyHandler := connect.NewUnaryHandler(
+		FleetServiceCreateMcpKeyProcedure,
+		svc.CreateMcpKey,
+		connect.WithSchema(fleetServiceMethods.ByName("CreateMcpKey")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/cryptos.fleet.v1.FleetService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case FleetServiceListNodesProcedure:
@@ -1001,6 +1102,12 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 			fleetServiceAdoptNodeHandler.ServeHTTP(w, r)
 		case FleetServiceDecommissionNodeProcedure:
 			fleetServiceDecommissionNodeHandler.ServeHTTP(w, r)
+		case FleetServiceListMcpKeysProcedure:
+			fleetServiceListMcpKeysHandler.ServeHTTP(w, r)
+		case FleetServiceRevokeMcpKeyProcedure:
+			fleetServiceRevokeMcpKeyHandler.ServeHTTP(w, r)
+		case FleetServiceCreateMcpKeyProcedure:
+			fleetServiceCreateMcpKeyHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -1128,4 +1235,16 @@ func (UnimplementedFleetServiceHandler) AdoptNode(context.Context, *connect.Requ
 
 func (UnimplementedFleetServiceHandler) DecommissionNode(context.Context, *connect.Request[v1.DecommissionNodeRequest]) (*connect.Response[v1.DecommissionNodeResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.DecommissionNode is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) ListMcpKeys(context.Context, *connect.Request[v1.ListMcpKeysRequest]) (*connect.Response[v1.ListMcpKeysResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ListMcpKeys is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) RevokeMcpKey(context.Context, *connect.Request[v1.RevokeMcpKeyRequest]) (*connect.Response[v1.RevokeMcpKeyResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.RevokeMcpKey is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) CreateMcpKey(context.Context, *connect.Request[v1.CreateMcpKeyRequest]) (*connect.Response[v1.CreateMcpKeyResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.CreateMcpKey is not implemented"))
 }

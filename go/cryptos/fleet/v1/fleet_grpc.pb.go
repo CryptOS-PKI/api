@@ -49,6 +49,9 @@ const (
 	FleetService_ListInstallDisks_FullMethodName         = "/cryptos.fleet.v1.FleetService/ListInstallDisks"
 	FleetService_AdoptNode_FullMethodName                = "/cryptos.fleet.v1.FleetService/AdoptNode"
 	FleetService_DecommissionNode_FullMethodName         = "/cryptos.fleet.v1.FleetService/DecommissionNode"
+	FleetService_ListMcpKeys_FullMethodName              = "/cryptos.fleet.v1.FleetService/ListMcpKeys"
+	FleetService_RevokeMcpKey_FullMethodName             = "/cryptos.fleet.v1.FleetService/RevokeMcpKey"
+	FleetService_CreateMcpKey_FullMethodName             = "/cryptos.fleet.v1.FleetService/CreateMcpKey"
 )
 
 // FleetServiceClient is the client API for FleetService service.
@@ -184,6 +187,25 @@ type FleetServiceClient interface {
 	// must echo the node's current Root CA CN as confirmation. Admin-gated and
 	// audited (the audit names the node and that it was wiped, never any secret).
 	DecommissionNode(ctx context.Context, in *DecommissionNodeRequest, opts ...grpc.CallOption) (*DecommissionNodeResponse, error)
+	// ListMcpKeys returns the MCP agent keys bound to the calling operator's
+	// certificate. An admin may set all to list every operator's keys; a
+	// non-admin that sets all is refused. The listing never carries a key or its
+	// hash. Operator-certificate only: an MCP key can never list keys.
+	ListMcpKeys(ctx context.Context, in *ListMcpKeysRequest, opts ...grpc.CallOption) (*ListMcpKeysResponse, error)
+	// RevokeMcpKey revokes an MCP agent key by id. An operator may revoke the
+	// keys bound to their own certificate; an admin may revoke any key. The
+	// revocation takes effect on the key's next request. Idempotent: revoking an
+	// already revoked key returns it unchanged. Operator-certificate only and
+	// audited.
+	RevokeMcpKey(ctx context.Context, in *RevokeMcpKeyRequest, opts ...grpc.CallOption) (*RevokeMcpKeyResponse, error)
+	// CreateMcpKey mints an MCP agent key bound to the calling operator's
+	// certificate serial, for MCP clients that cannot run the OAuth login. It is
+	// the same mint and binding as the login flow. The response carries the
+	// plaintext key exactly once; the manager stores only its hash, so a lost key
+	// is revoked and re-minted, never recovered. The level ceiling may not exceed
+	// the caller's own level. Operator-certificate only and audited (the audit
+	// names the key id, label and ceiling, never the key).
+	CreateMcpKey(ctx context.Context, in *CreateMcpKeyRequest, opts ...grpc.CallOption) (*CreateMcpKeyResponse, error)
 }
 
 type fleetServiceClient struct {
@@ -503,6 +525,36 @@ func (c *fleetServiceClient) DecommissionNode(ctx context.Context, in *Decommiss
 	return out, nil
 }
 
+func (c *fleetServiceClient) ListMcpKeys(ctx context.Context, in *ListMcpKeysRequest, opts ...grpc.CallOption) (*ListMcpKeysResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListMcpKeysResponse)
+	err := c.cc.Invoke(ctx, FleetService_ListMcpKeys_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) RevokeMcpKey(ctx context.Context, in *RevokeMcpKeyRequest, opts ...grpc.CallOption) (*RevokeMcpKeyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RevokeMcpKeyResponse)
+	err := c.cc.Invoke(ctx, FleetService_RevokeMcpKey_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) CreateMcpKey(ctx context.Context, in *CreateMcpKeyRequest, opts ...grpc.CallOption) (*CreateMcpKeyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateMcpKeyResponse)
+	err := c.cc.Invoke(ctx, FleetService_CreateMcpKey_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FleetServiceServer is the server API for FleetService service.
 // All implementations should embed UnimplementedFleetServiceServer
 // for forward compatibility.
@@ -636,6 +688,25 @@ type FleetServiceServer interface {
 	// must echo the node's current Root CA CN as confirmation. Admin-gated and
 	// audited (the audit names the node and that it was wiped, never any secret).
 	DecommissionNode(context.Context, *DecommissionNodeRequest) (*DecommissionNodeResponse, error)
+	// ListMcpKeys returns the MCP agent keys bound to the calling operator's
+	// certificate. An admin may set all to list every operator's keys; a
+	// non-admin that sets all is refused. The listing never carries a key or its
+	// hash. Operator-certificate only: an MCP key can never list keys.
+	ListMcpKeys(context.Context, *ListMcpKeysRequest) (*ListMcpKeysResponse, error)
+	// RevokeMcpKey revokes an MCP agent key by id. An operator may revoke the
+	// keys bound to their own certificate; an admin may revoke any key. The
+	// revocation takes effect on the key's next request. Idempotent: revoking an
+	// already revoked key returns it unchanged. Operator-certificate only and
+	// audited.
+	RevokeMcpKey(context.Context, *RevokeMcpKeyRequest) (*RevokeMcpKeyResponse, error)
+	// CreateMcpKey mints an MCP agent key bound to the calling operator's
+	// certificate serial, for MCP clients that cannot run the OAuth login. It is
+	// the same mint and binding as the login flow. The response carries the
+	// plaintext key exactly once; the manager stores only its hash, so a lost key
+	// is revoked and re-minted, never recovered. The level ceiling may not exceed
+	// the caller's own level. Operator-certificate only and audited (the audit
+	// names the key id, label and ceiling, never the key).
+	CreateMcpKey(context.Context, *CreateMcpKeyRequest) (*CreateMcpKeyResponse, error)
 }
 
 // UnimplementedFleetServiceServer should be embedded to have
@@ -734,6 +805,15 @@ func (UnimplementedFleetServiceServer) AdoptNode(*AdoptNodeRequest, grpc.ServerS
 }
 func (UnimplementedFleetServiceServer) DecommissionNode(context.Context, *DecommissionNodeRequest) (*DecommissionNodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DecommissionNode not implemented")
+}
+func (UnimplementedFleetServiceServer) ListMcpKeys(context.Context, *ListMcpKeysRequest) (*ListMcpKeysResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListMcpKeys not implemented")
+}
+func (UnimplementedFleetServiceServer) RevokeMcpKey(context.Context, *RevokeMcpKeyRequest) (*RevokeMcpKeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RevokeMcpKey not implemented")
+}
+func (UnimplementedFleetServiceServer) CreateMcpKey(context.Context, *CreateMcpKeyRequest) (*CreateMcpKeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateMcpKey not implemented")
 }
 func (UnimplementedFleetServiceServer) testEmbeddedByValue() {}
 
@@ -1288,6 +1368,60 @@ func _FleetService_DecommissionNode_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FleetService_ListMcpKeys_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListMcpKeysRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).ListMcpKeys(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_ListMcpKeys_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).ListMcpKeys(ctx, req.(*ListMcpKeysRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_RevokeMcpKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevokeMcpKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).RevokeMcpKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_RevokeMcpKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).RevokeMcpKey(ctx, req.(*RevokeMcpKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_CreateMcpKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateMcpKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).CreateMcpKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_CreateMcpKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).CreateMcpKey(ctx, req.(*CreateMcpKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FleetService_ServiceDesc is the grpc.ServiceDesc for FleetService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1410,6 +1544,18 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DecommissionNode",
 			Handler:    _FleetService_DecommissionNode_Handler,
+		},
+		{
+			MethodName: "ListMcpKeys",
+			Handler:    _FleetService_ListMcpKeys_Handler,
+		},
+		{
+			MethodName: "RevokeMcpKey",
+			Handler:    _FleetService_RevokeMcpKey_Handler,
+		},
+		{
+			MethodName: "CreateMcpKey",
+			Handler:    _FleetService_CreateMcpKey_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

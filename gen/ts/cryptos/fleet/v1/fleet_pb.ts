@@ -14,7 +14,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file cryptos/fleet/v1/fleet.proto.
  */
 export const file_cryptos_fleet_v1_fleet: GenFile = /*@__PURE__*/
-  fileDesc("ChxjcnlwdG9zL2ZsZWV0L3YxL2ZsZWV0LnByb3RvEhBjcnlwdG9zLmZsZWV0LnYxIhIKEExpc3ROb2Rlc1JlcXVlc3QiQQoRTGlzdE5vZGVzUmVzcG9uc2USLAoFbm9kZXMYASADKAsyHS5jcnlwdG9zLmZsZWV0LnYxLk5vZGVTdW1tYXJ5Ih4KDkdldE5vZGVSZXF1ZXN0EgwKBG5hbWUYASABKAkiPQoPR2V0Tm9kZVJlc3BvbnNlEioKBG5vZGUYASABKAsyHC5jcnlwdG9zLmZsZWV0LnYxLk5vZGVEZXRhaWwiJwoXTGlzdENlcnRpZmljYXRlc1JlcXVlc3QSDAoEbm9kZRgBIAEoCSJPChhMaXN0Q2VydGlmaWNhdGVzUmVzcG9uc2USMwoMY2VydGlmaWNhdGVzGAEgAygLMh0uY3J5cHRvcy5mbGVldC52MS5DZXJ0aWZpY2F0ZSIVChNMaXN0UHJvZmlsZXNSZXF1ZXN0IkUKFExpc3RQcm9maWxlc1Jlc3BvbnNlEi0KBWl0ZW1zGAEgAygLMh4uY3J5cHRvcy52MS5DZXJ0aWZpY2F0ZVByb2ZpbGUiRwoUQ3JlYXRlUHJvZmlsZVJlcXVlc3QSLwoHcHJvZmlsZRgBIAEoCzIeLmNyeXB0b3MudjEuQ2VydGlmaWNhdGVQcm9maWxlIhcKFUNyZWF0ZVByb2ZpbGVSZXNwb25zZSJHChRVcGRhdGVQcm9maWxlUmVxdWVzdBIvCgdwcm9maWxlGAEgASgLMh4uY3J5cHRvcy52MS5DZXJ0aWZpY2F0ZVByb2ZpbGUiFwoVVXBkYXRlUHJvZmlsZVJlc3BvbnNlIiQKFERlbGV0ZVByb2ZpbGVSZXF1ZXN0EgwKBG5hbWUYASABKAkiFwoVRGVsZXRlUHJvZmlsZVJlc3BvbnNlIkQKGUFwcGx5UHJvZmlsZVRvTm9kZVJlcXVlc3QSEQoJbm9kZV9uYW1lGAEgASgJEhQKDHByb2ZpbGVfbmFtZRgCIAEoCSJJChpBcHBseVByb2ZpbGVUb05vZGVSZXNwb25zZRISCgpnZW5lcmF0aW9uGAEgASgEEhcKD3JlcXVpcmVzX3JlYm9vdBgCIAEoCCIVChNMaXN0QWRhcHRlcnNSZXF1ZXN0IkoKFExpc3RBZGFwdGVyc1Jlc3BvbnNlEjIKBWl0ZW1zGAEgAygLMiMuY3J5cHRvcy5mbGVldC52MS5FbnJvbGxtZW50QWRhcHRlciI5ChhTZXRBZGFwdGVyRW5hYmxlZFJlcXVlc3QSDAoEbmFtZRgBIAEoCRIPCgdlbmFibGVkGAIgASgIIlEKGVNldEFkYXB0ZXJFbmFibGVkUmVzcG9uc2USNAoHYWRhcHRlchgBIAEoCzIjLmNyeXB0b3MuZmxlZXQudjEuRW5yb2xsbWVudEFkYXB0ZXIiEgoQTGlzdEF1ZGl0UmVxdWVzdCJAChFMaXN0QXVkaXRSZXNwb25zZRIrCgVpdGVtcxgBIAMoCzIcLmNyeXB0b3MuZmxlZXQudjEuQXVkaXRFdmVudCIYChZMaXN0RW5yb2xsbWVudHNSZXF1ZXN0Ik0KF0xpc3RFbnJvbGxtZW50c1Jlc3BvbnNlEjIKBWl0ZW1zGAEgAygLMiMuY3J5cHRvcy5mbGVldC52MS5FbnJvbGxtZW50UmVxdWVzdCKvAQoLTm9kZVN1bW1hcnkSDAoEbmFtZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJEgwKBHJvbGUYAyABKAkSFgoOaWRlbnRpdHlfc3RhdGUYBCABKAkSCgoCY24YBSABKAkSDgoGaXNzdWVyGAYgASgJEigKBmhlYWx0aBgHIAEoDjIYLmNyeXB0b3MuZmxlZXQudjEuSGVhbHRoEhUKDWhlYWx0aF9kZXRhaWwYCCABKAkiSQoMTm9kZUlkZW50aXR5EhEKCWNoYWluX3BlbRgBIAEoCRIRCgljaGFpbl9kZXIYAiADKAwSEwoLbGVhZl9zaGEyNTYYAyABKAkiqQEKCk5vZGVEZXRhaWwSLgoHc3VtbWFyeRgBIAEoCzIdLmNyeXB0b3MuZmxlZXQudjEuTm9kZVN1bW1hcnkSMAoIaWRlbnRpdHkYAiABKAsyHi5jcnlwdG9zLmZsZWV0LnYxLk5vZGVJZGVudGl0eRIVCg10cG1fYXZhaWxhYmxlGAMgASgIEhIKCmJvb3RfY291bnQYBCABKAQSDgoGdXB0aW1lGAUgASgJIsABCgtDZXJ0aWZpY2F0ZRIOCgZzZXJpYWwYASABKAkSEgoKc3ViamVjdF9jbhgCIAEoCRITCgtpc3N1ZXJfbm9kZRgDIAEoCRIMCgRraW5kGAQgASgJEg4KBnN0YXR1cxgFIAEoCRISCgpub3RfYmVmb3JlGAYgASgJEhEKCW5vdF9hZnRlchgHIAEoCRIPCgdwcm9maWxlGAggASgJEhIKCnJldm9rZWRfYXQYCSABKAkSDgoGcmVhc29uGAogASgJIo0BChFFbnJvbGxtZW50QWRhcHRlchIMCgRraW5kGAEgASgJEgwKBG5hbWUYAiABKAkSEAoIZW5kcG9pbnQYAyABKAkSDwoHcHJvZmlsZRgEIAEoCRIPCgdlbmFibGVkGAUgASgIEhIKCmNoYWxsZW5nZXMYBiADKAkSFAoMZ3BvX3RlbXBsYXRlGAcgASgJIm0KCkF1ZGl0RXZlbnQSCgoCaWQYASABKAkSCgoCYXQYAiABKAkSDAoEa2luZBgDIAEoCRIPCgdzdW1tYXJ5GAQgASgJEhMKC3RhcmdldF9raW5kGAUgASgJEhMKC3RhcmdldF9wYXRoGAYgASgJItUCChFFbnJvbGxtZW50UmVxdWVzdBIKCgJpZBgBIAEoCRIVCg1wcm9wb3NlZF9uYW1lGAIgASgJEgwKBHJvbGUYAyABKAkSEQoJcGFyZW50X2NuGAQgASgJEg8KB2FkZHJlc3MYBSABKAkSDgoGc3RhdHVzGAYgASgJEhsKE2F0dGVzdGF0aW9uX3N1bW1hcnkYByABKAkSGwoTYXR0ZXN0YXRpb25fbm9kZV9pZBgIIAEoCRIUCgxjc3Jfa2V5X3R5cGUYCSABKAkSFgoOY3NyX3N1YmplY3RfY24YCiABKAkSFAoMcmVxdWVzdGVkX2F0GAsgASgJEhgKEHJlamVjdGlvbl9yZWFzb24YDCABKAkSGgoSYWRtaXR0ZWRfbm9kZV9uYW1lGA0gASgJEgwKBGtpbmQYDiABKAkSGQoRcGlubmVkX2tleV9zaGEyNTYYDyABKAkitQEKF0NyZWF0ZUVucm9sbG1lbnRSZXF1ZXN0EgwKBGtpbmQYASABKAkSFQoNbm9kZV9lbmRwb2ludBgCIAEoCRIWCg5hZG1pbl9jZXJ0X3BlbRgDIAEoCRIVCg1hZG1pbl9rZXlfcGVtGAQgASgJEg4KBmNhX3BlbRgFIAEoCRISCgpjaGlsZF9ub2RlGAYgASgJEhEKCXBhcmVudF9jbhgHIAEoCRIPCgdwcm9maWxlGAggASgJIlMKGENyZWF0ZUVucm9sbG1lbnRSZXNwb25zZRI3CgplbnJvbGxtZW50GAEgASgLMiMuY3J5cHRvcy5mbGVldC52MS5FbnJvbGxtZW50UmVxdWVzdCJ8ChhBcHByb3ZlRW5yb2xsbWVudFJlcXVlc3QSCgoCaWQYASABKAkSFQoNbm9kZV9lbmRwb2ludBgCIAEoCRIWCg5hZG1pbl9jZXJ0X3BlbRgDIAEoCRIVCg1hZG1pbl9rZXlfcGVtGAQgASgJEg4KBmNhX3BlbRgFIAEoCSJUChlBcHByb3ZlRW5yb2xsbWVudFJlc3BvbnNlEjcKCmVucm9sbG1lbnQYASABKAsyIy5jcnlwdG9zLmZsZWV0LnYxLkVucm9sbG1lbnRSZXF1ZXN0IjUKF1JlamVjdEVucm9sbG1lbnRSZXF1ZXN0EgoKAmlkGAEgASgJEg4KBnJlYXNvbhgCIAEoCSJTChhSZWplY3RFbnJvbGxtZW50UmVzcG9uc2USNwoKZW5yb2xsbWVudBgBIAEoCzIjLmNyeXB0b3MuZmxlZXQudjEuRW5yb2xsbWVudFJlcXVlc3QiDwoNV2hvQW1JUmVxdWVzdCI9ChBPcGVyYXRvcklkZW50aXR5EgoKAmNuGAEgASgJEg4KBnNlcmlhbBgCIAEoCRINCgVsZXZlbBgDIAEoCSJGCg5XaG9BbUlSZXNwb25zZRI0CghvcGVyYXRvchgBIAEoCzIiLmNyeXB0b3MuZmxlZXQudjEuT3BlcmF0b3JJZGVudGl0eSJWChhSZXZva2VDZXJ0aWZpY2F0ZVJlcXVlc3QSEQoJbm9kZV9uYW1lGAEgASgJEhIKCnNlcmlhbF9oZXgYAiABKAkSEwoLcmVhc29uX2NvZGUYAyABKAUiWAoZUmV2b2tlQ2VydGlmaWNhdGVSZXNwb25zZRISCgpzZXJpYWxfaGV4GAEgASgJEhIKCnJldm9rZWRfYXQYAiABKAkSEwoLcmVhc29uX2NvZGUYAyABKAUiTAoQSXNzdWVMZWFmUmVxdWVzdBIRCglub2RlX25hbWUYASABKAkSDwoHY3NyX2RlchgCIAEoDBIUCgxwcm9maWxlX25hbWUYAyABKAkiJQoRSXNzdWVMZWFmUmVzcG9uc2USEAoIY2VydF9kZXIYASABKAwiOwoQUmVrZXlOb2RlUmVxdWVzdBIRCglub2RlX25hbWUYASABKAkSFAoMcHJvZmlsZV9uYW1lGAIgASgJIk0KEVJla2V5Tm9kZVJlc3BvbnNlEhIKCnN1YmplY3RfY24YASABKAkSEQoJaXNzdWVyX2NuGAIgASgJEhEKCWNoYWluX2xlbhgDIAEoBSIpChRHZXROb2RlQ29uZmlnUmVxdWVzdBIRCglub2RlX25hbWUYASABKAkiQgoVR2V0Tm9kZUNvbmZpZ1Jlc3BvbnNlEikKBmNvbmZpZxgBIAEoCzIZLmNyeXB0b3MudjEuTWFjaGluZUNvbmZpZyJWChZBcHBseU5vZGVDb25maWdSZXF1ZXN0EhEKCW5vZGVfbmFtZRgBIAEoCRIpCgZjb25maWcYAiABKAsyGS5jcnlwdG9zLnYxLk1hY2hpbmVDb25maWciRgoXQXBwbHlOb2RlQ29uZmlnUmVzcG9uc2USEgoKZ2VuZXJhdGlvbhgBIAEoBBIXCg9yZXF1aXJlc19yZWJvb3QYAiABKAgiOwoSRXhwb3J0Q0FLZXlSZXF1ZXN0EhEKCW5vZGVfbmFtZRgBIAEoCRISCgpwYXNzcGhyYXNlGAIgASgMIicKE0V4cG9ydENBS2V5UmVzcG9uc2USEAoIZW52ZWxvcGUYASABKAwiTQoSSW1wb3J0Q0FLZXlSZXF1ZXN0EhEKCW5vZGVfbmFtZRgBIAEoCRIQCghlbnZlbG9wZRgCIAEoDBISCgpwYXNzcGhyYXNlGAMgASgMIjwKE0ltcG9ydENBS2V5UmVzcG9uc2USEgoKc3ViamVjdF9jbhgBIAEoCRIRCglpc3N1ZXJfY24YAiABKAkiVQoeSXNzdWVPcGVyYXRvckNyZWRlbnRpYWxSZXF1ZXN0EhMKC2NvbW1vbl9uYW1lGAEgASgJEg0KBWxldmVsGAIgASgJEg8KB2Nzcl9kZXIYAyABKAwiRwofSXNzdWVPcGVyYXRvckNyZWRlbnRpYWxSZXNwb25zZRIQCghjZXJ0X2RlchgBIAEoDBISCgpzZXJpYWxfaGV4GAIgASgJIkoKH1Jldm9rZU9wZXJhdG9yQ3JlZGVudGlhbFJlcXVlc3QSEgoKc2VyaWFsX2hleBgBIAEoCRITCgtyZWFzb25fY29kZRgCIAEoBSJKCiBSZXZva2VPcGVyYXRvckNyZWRlbnRpYWxSZXNwb25zZRISCgpzZXJpYWxfaGV4GAEgASgJEhIKCnJldm9rZWRfYXQYAiABKAkiIAoeTGlzdE9wZXJhdG9yQ3JlZGVudGlhbHNSZXF1ZXN0InAKEk9wZXJhdG9yQ3JlZGVudGlhbBITCgtjb21tb25fbmFtZRgBIAEoCRISCgpzZXJpYWxfaGV4GAIgASgJEg0KBWxldmVsGAMgASgJEhEKCW5vdF9hZnRlchgEIAEoCRIPCgdyZXZva2VkGAUgASgIIlYKH0xpc3RPcGVyYXRvckNyZWRlbnRpYWxzUmVzcG9uc2USMwoFaXRlbXMYASADKAsyJC5jcnlwdG9zLmZsZWV0LnYxLk9wZXJhdG9yQ3JlZGVudGlhbCIqChZQcmV2aWV3QWRvcHRpb25SZXF1ZXN0EhAKCGVuZHBvaW50GAEgASgJIj8KF1ByZXZpZXdBZG9wdGlvblJlc3BvbnNlEhMKC2NlcnRfc2hhMjU2GAEgASgJEg8KB3N1YmplY3QYAiABKAkiRwoXTGlzdEluc3RhbGxEaXNrc1JlcXVlc3QSEAoIZW5kcG9pbnQYASABKAkSGgoScGlubmVkX2NlcnRfc2hhMjU2GAIgASgJIkIKGExpc3RJbnN0YWxsRGlza3NSZXNwb25zZRImCgVkaXNrcxgBIAMoCzIXLmNyeXB0b3MudjEuSW5zdGFsbERpc2siawoQQWRvcHROb2RlUmVxdWVzdBIQCghlbmRwb2ludBgBIAEoCRIaChJwaW5uZWRfY2VydF9zaGEyNTYYAiABKAkSKQoGY29uZmlnGAMgASgLMhkuY3J5cHRvcy52MS5NYWNoaW5lQ29uZmlnIkAKEUFkb3B0Tm9kZVJlc3BvbnNlEg0KBXBoYXNlGAEgASgJEg4KBmRldGFpbBgCIAEoCRIMCgRkb25lGAMgASgIIkkKF0RlY29tbWlzc2lvbk5vZGVSZXF1ZXN0EhEKCW5vZGVfbmFtZRgBIAEoCRIbChNjb25maXJtX2NvbW1vbl9uYW1lGAIgASgJIi0KGERlY29tbWlzc2lvbk5vZGVSZXNwb25zZRIRCglyZWJvb3RpbmcYASABKAgqUgoGSGVhbHRoEhYKEkhFQUxUSF9VTlNQRUNJRklFRBAAEg0KCUhFQUxUSF9VUBABEg8KC0hFQUxUSF9ET1dOEAISEAoMSEVBTFRIX0VSUk9SEAMy5xcKDEZsZWV0U2VydmljZRJUCglMaXN0Tm9kZXMSIi5jcnlwdG9zLmZsZWV0LnYxLkxpc3ROb2Rlc1JlcXVlc3QaIy5jcnlwdG9zLmZsZWV0LnYxLkxpc3ROb2Rlc1Jlc3BvbnNlEk4KB0dldE5vZGUSIC5jcnlwdG9zLmZsZWV0LnYxLkdldE5vZGVSZXF1ZXN0GiEuY3J5cHRvcy5mbGVldC52MS5HZXROb2RlUmVzcG9uc2USaQoQTGlzdENlcnRpZmljYXRlcxIpLmNyeXB0b3MuZmxlZXQudjEuTGlzdENlcnRpZmljYXRlc1JlcXVlc3QaKi5jcnlwdG9zLmZsZWV0LnYxLkxpc3RDZXJ0aWZpY2F0ZXNSZXNwb25zZRJdCgxMaXN0UHJvZmlsZXMSJS5jcnlwdG9zLmZsZWV0LnYxLkxpc3RQcm9maWxlc1JlcXVlc3QaJi5jcnlwdG9zLmZsZWV0LnYxLkxpc3RQcm9maWxlc1Jlc3BvbnNlEmAKDUNyZWF0ZVByb2ZpbGUSJi5jcnlwdG9zLmZsZWV0LnYxLkNyZWF0ZVByb2ZpbGVSZXF1ZXN0GicuY3J5cHRvcy5mbGVldC52MS5DcmVhdGVQcm9maWxlUmVzcG9uc2USYAoNVXBkYXRlUHJvZmlsZRImLmNyeXB0b3MuZmxlZXQudjEuVXBkYXRlUHJvZmlsZVJlcXVlc3QaJy5jcnlwdG9zLmZsZWV0LnYxLlVwZGF0ZVByb2ZpbGVSZXNwb25zZRJgCg1EZWxldGVQcm9maWxlEiYuY3J5cHRvcy5mbGVldC52MS5EZWxldGVQcm9maWxlUmVxdWVzdBonLmNyeXB0b3MuZmxlZXQudjEuRGVsZXRlUHJvZmlsZVJlc3BvbnNlEm8KEkFwcGx5UHJvZmlsZVRvTm9kZRIrLmNyeXB0b3MuZmxlZXQudjEuQXBwbHlQcm9maWxlVG9Ob2RlUmVxdWVzdBosLmNyeXB0b3MuZmxlZXQudjEuQXBwbHlQcm9maWxlVG9Ob2RlUmVzcG9uc2USXQoMTGlzdEFkYXB0ZXJzEiUuY3J5cHRvcy5mbGVldC52MS5MaXN0QWRhcHRlcnNSZXF1ZXN0GiYuY3J5cHRvcy5mbGVldC52MS5MaXN0QWRhcHRlcnNSZXNwb25zZRJsChFTZXRBZGFwdGVyRW5hYmxlZBIqLmNyeXB0b3MuZmxlZXQudjEuU2V0QWRhcHRlckVuYWJsZWRSZXF1ZXN0GisuY3J5cHRvcy5mbGVldC52MS5TZXRBZGFwdGVyRW5hYmxlZFJlc3BvbnNlElQKCUxpc3RBdWRpdBIiLmNyeXB0b3MuZmxlZXQudjEuTGlzdEF1ZGl0UmVxdWVzdBojLmNyeXB0b3MuZmxlZXQudjEuTGlzdEF1ZGl0UmVzcG9uc2USZgoPTGlzdEVucm9sbG1lbnRzEiguY3J5cHRvcy5mbGVldC52MS5MaXN0RW5yb2xsbWVudHNSZXF1ZXN0GikuY3J5cHRvcy5mbGVldC52MS5MaXN0RW5yb2xsbWVudHNSZXNwb25zZRJpChBDcmVhdGVFbnJvbGxtZW50EikuY3J5cHRvcy5mbGVldC52MS5DcmVhdGVFbnJvbGxtZW50UmVxdWVzdBoqLmNyeXB0b3MuZmxlZXQudjEuQ3JlYXRlRW5yb2xsbWVudFJlc3BvbnNlEmwKEUFwcHJvdmVFbnJvbGxtZW50EiouY3J5cHRvcy5mbGVldC52MS5BcHByb3ZlRW5yb2xsbWVudFJlcXVlc3QaKy5jcnlwdG9zLmZsZWV0LnYxLkFwcHJvdmVFbnJvbGxtZW50UmVzcG9uc2USaQoQUmVqZWN0RW5yb2xsbWVudBIpLmNyeXB0b3MuZmxlZXQudjEuUmVqZWN0RW5yb2xsbWVudFJlcXVlc3QaKi5jcnlwdG9zLmZsZWV0LnYxLlJlamVjdEVucm9sbG1lbnRSZXNwb25zZRJLCgZXaG9BbUkSHy5jcnlwdG9zLmZsZWV0LnYxLldob0FtSVJlcXVlc3QaIC5jcnlwdG9zLmZsZWV0LnYxLldob0FtSVJlc3BvbnNlEmwKEVJldm9rZUNlcnRpZmljYXRlEiouY3J5cHRvcy5mbGVldC52MS5SZXZva2VDZXJ0aWZpY2F0ZVJlcXVlc3QaKy5jcnlwdG9zLmZsZWV0LnYxLlJldm9rZUNlcnRpZmljYXRlUmVzcG9uc2USVAoJSXNzdWVMZWFmEiIuY3J5cHRvcy5mbGVldC52MS5Jc3N1ZUxlYWZSZXF1ZXN0GiMuY3J5cHRvcy5mbGVldC52MS5Jc3N1ZUxlYWZSZXNwb25zZRJUCglSZWtleU5vZGUSIi5jcnlwdG9zLmZsZWV0LnYxLlJla2V5Tm9kZVJlcXVlc3QaIy5jcnlwdG9zLmZsZWV0LnYxLlJla2V5Tm9kZVJlc3BvbnNlEmAKDUdldE5vZGVDb25maWcSJi5jcnlwdG9zLmZsZWV0LnYxLkdldE5vZGVDb25maWdSZXF1ZXN0GicuY3J5cHRvcy5mbGVldC52MS5HZXROb2RlQ29uZmlnUmVzcG9uc2USZgoPQXBwbHlOb2RlQ29uZmlnEiguY3J5cHRvcy5mbGVldC52MS5BcHBseU5vZGVDb25maWdSZXF1ZXN0GikuY3J5cHRvcy5mbGVldC52MS5BcHBseU5vZGVDb25maWdSZXNwb25zZRJaCgtFeHBvcnRDQUtleRIkLmNyeXB0b3MuZmxlZXQudjEuRXhwb3J0Q0FLZXlSZXF1ZXN0GiUuY3J5cHRvcy5mbGVldC52MS5FeHBvcnRDQUtleVJlc3BvbnNlEloKC0ltcG9ydENBS2V5EiQuY3J5cHRvcy5mbGVldC52MS5JbXBvcnRDQUtleVJlcXVlc3QaJS5jcnlwdG9zLmZsZWV0LnYxLkltcG9ydENBS2V5UmVzcG9uc2USfgoXSXNzdWVPcGVyYXRvckNyZWRlbnRpYWwSMC5jcnlwdG9zLmZsZWV0LnYxLklzc3VlT3BlcmF0b3JDcmVkZW50aWFsUmVxdWVzdBoxLmNyeXB0b3MuZmxlZXQudjEuSXNzdWVPcGVyYXRvckNyZWRlbnRpYWxSZXNwb25zZRKBAQoYUmV2b2tlT3BlcmF0b3JDcmVkZW50aWFsEjEuY3J5cHRvcy5mbGVldC52MS5SZXZva2VPcGVyYXRvckNyZWRlbnRpYWxSZXF1ZXN0GjIuY3J5cHRvcy5mbGVldC52MS5SZXZva2VPcGVyYXRvckNyZWRlbnRpYWxSZXNwb25zZRJ+ChdMaXN0T3BlcmF0b3JDcmVkZW50aWFscxIwLmNyeXB0b3MuZmxlZXQudjEuTGlzdE9wZXJhdG9yQ3JlZGVudGlhbHNSZXF1ZXN0GjEuY3J5cHRvcy5mbGVldC52MS5MaXN0T3BlcmF0b3JDcmVkZW50aWFsc1Jlc3BvbnNlEmYKD1ByZXZpZXdBZG9wdGlvbhIoLmNyeXB0b3MuZmxlZXQudjEuUHJldmlld0Fkb3B0aW9uUmVxdWVzdBopLmNyeXB0b3MuZmxlZXQudjEuUHJldmlld0Fkb3B0aW9uUmVzcG9uc2USaQoQTGlzdEluc3RhbGxEaXNrcxIpLmNyeXB0b3MuZmxlZXQudjEuTGlzdEluc3RhbGxEaXNrc1JlcXVlc3QaKi5jcnlwdG9zLmZsZWV0LnYxLkxpc3RJbnN0YWxsRGlza3NSZXNwb25zZRJWCglBZG9wdE5vZGUSIi5jcnlwdG9zLmZsZWV0LnYxLkFkb3B0Tm9kZVJlcXVlc3QaIy5jcnlwdG9zLmZsZWV0LnYxLkFkb3B0Tm9kZVJlc3BvbnNlMAESaQoQRGVjb21taXNzaW9uTm9kZRIpLmNyeXB0b3MuZmxlZXQudjEuRGVjb21taXNzaW9uTm9kZVJlcXVlc3QaKi5jcnlwdG9zLmZsZWV0LnYxLkRlY29tbWlzc2lvbk5vZGVSZXNwb25zZUI4WjZnaXRodWIuY29tL0NyeXB0T1MtUEtJL2FwaS9nby9jcnlwdG9zL2ZsZWV0L3YxO2ZsZWV0djFiBnByb3RvMw", [file_cryptos_v1_config, file_cryptos_v1_node]);
+  fileDesc("ChxjcnlwdG9zL2ZsZWV0L3YxL2ZsZWV0LnByb3RvEhBjcnlwdG9zLmZsZWV0LnYxIhIKEExpc3ROb2Rlc1JlcXVlc3QiQQoRTGlzdE5vZGVzUmVzcG9uc2USLAoFbm9kZXMYASADKAsyHS5jcnlwdG9zLmZsZWV0LnYxLk5vZGVTdW1tYXJ5Ih4KDkdldE5vZGVSZXF1ZXN0EgwKBG5hbWUYASABKAkiPQoPR2V0Tm9kZVJlc3BvbnNlEioKBG5vZGUYASABKAsyHC5jcnlwdG9zLmZsZWV0LnYxLk5vZGVEZXRhaWwiJwoXTGlzdENlcnRpZmljYXRlc1JlcXVlc3QSDAoEbm9kZRgBIAEoCSJPChhMaXN0Q2VydGlmaWNhdGVzUmVzcG9uc2USMwoMY2VydGlmaWNhdGVzGAEgAygLMh0uY3J5cHRvcy5mbGVldC52MS5DZXJ0aWZpY2F0ZSIVChNMaXN0UHJvZmlsZXNSZXF1ZXN0IkUKFExpc3RQcm9maWxlc1Jlc3BvbnNlEi0KBWl0ZW1zGAEgAygLMh4uY3J5cHRvcy52MS5DZXJ0aWZpY2F0ZVByb2ZpbGUiRwoUQ3JlYXRlUHJvZmlsZVJlcXVlc3QSLwoHcHJvZmlsZRgBIAEoCzIeLmNyeXB0b3MudjEuQ2VydGlmaWNhdGVQcm9maWxlIhcKFUNyZWF0ZVByb2ZpbGVSZXNwb25zZSJHChRVcGRhdGVQcm9maWxlUmVxdWVzdBIvCgdwcm9maWxlGAEgASgLMh4uY3J5cHRvcy52MS5DZXJ0aWZpY2F0ZVByb2ZpbGUiFwoVVXBkYXRlUHJvZmlsZVJlc3BvbnNlIiQKFERlbGV0ZVByb2ZpbGVSZXF1ZXN0EgwKBG5hbWUYASABKAkiFwoVRGVsZXRlUHJvZmlsZVJlc3BvbnNlIkQKGUFwcGx5UHJvZmlsZVRvTm9kZVJlcXVlc3QSEQoJbm9kZV9uYW1lGAEgASgJEhQKDHByb2ZpbGVfbmFtZRgCIAEoCSJJChpBcHBseVByb2ZpbGVUb05vZGVSZXNwb25zZRISCgpnZW5lcmF0aW9uGAEgASgEEhcKD3JlcXVpcmVzX3JlYm9vdBgCIAEoCCIVChNMaXN0QWRhcHRlcnNSZXF1ZXN0IkoKFExpc3RBZGFwdGVyc1Jlc3BvbnNlEjIKBWl0ZW1zGAEgAygLMiMuY3J5cHRvcy5mbGVldC52MS5FbnJvbGxtZW50QWRhcHRlciI5ChhTZXRBZGFwdGVyRW5hYmxlZFJlcXVlc3QSDAoEbmFtZRgBIAEoCRIPCgdlbmFibGVkGAIgASgIIlEKGVNldEFkYXB0ZXJFbmFibGVkUmVzcG9uc2USNAoHYWRhcHRlchgBIAEoCzIjLmNyeXB0b3MuZmxlZXQudjEuRW5yb2xsbWVudEFkYXB0ZXIiEgoQTGlzdEF1ZGl0UmVxdWVzdCJAChFMaXN0QXVkaXRSZXNwb25zZRIrCgVpdGVtcxgBIAMoCzIcLmNyeXB0b3MuZmxlZXQudjEuQXVkaXRFdmVudCIYChZMaXN0RW5yb2xsbWVudHNSZXF1ZXN0Ik0KF0xpc3RFbnJvbGxtZW50c1Jlc3BvbnNlEjIKBWl0ZW1zGAEgAygLMiMuY3J5cHRvcy5mbGVldC52MS5FbnJvbGxtZW50UmVxdWVzdCKvAQoLTm9kZVN1bW1hcnkSDAoEbmFtZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJEgwKBHJvbGUYAyABKAkSFgoOaWRlbnRpdHlfc3RhdGUYBCABKAkSCgoCY24YBSABKAkSDgoGaXNzdWVyGAYgASgJEigKBmhlYWx0aBgHIAEoDjIYLmNyeXB0b3MuZmxlZXQudjEuSGVhbHRoEhUKDWhlYWx0aF9kZXRhaWwYCCABKAkiSQoMTm9kZUlkZW50aXR5EhEKCWNoYWluX3BlbRgBIAEoCRIRCgljaGFpbl9kZXIYAiADKAwSEwoLbGVhZl9zaGEyNTYYAyABKAkiqQEKCk5vZGVEZXRhaWwSLgoHc3VtbWFyeRgBIAEoCzIdLmNyeXB0b3MuZmxlZXQudjEuTm9kZVN1bW1hcnkSMAoIaWRlbnRpdHkYAiABKAsyHi5jcnlwdG9zLmZsZWV0LnYxLk5vZGVJZGVudGl0eRIVCg10cG1fYXZhaWxhYmxlGAMgASgIEhIKCmJvb3RfY291bnQYBCABKAQSDgoGdXB0aW1lGAUgASgJIsABCgtDZXJ0aWZpY2F0ZRIOCgZzZXJpYWwYASABKAkSEgoKc3ViamVjdF9jbhgCIAEoCRITCgtpc3N1ZXJfbm9kZRgDIAEoCRIMCgRraW5kGAQgASgJEg4KBnN0YXR1cxgFIAEoCRISCgpub3RfYmVmb3JlGAYgASgJEhEKCW5vdF9hZnRlchgHIAEoCRIPCgdwcm9maWxlGAggASgJEhIKCnJldm9rZWRfYXQYCSABKAkSDgoGcmVhc29uGAogASgJIo0BChFFbnJvbGxtZW50QWRhcHRlchIMCgRraW5kGAEgASgJEgwKBG5hbWUYAiABKAkSEAoIZW5kcG9pbnQYAyABKAkSDwoHcHJvZmlsZRgEIAEoCRIPCgdlbmFibGVkGAUgASgIEhIKCmNoYWxsZW5nZXMYBiADKAkSFAoMZ3BvX3RlbXBsYXRlGAcgASgJIqsCCgpBdWRpdEV2ZW50EgoKAmlkGAEgASgJEgoKAmF0GAIgASgJEgwKBGtpbmQYAyABKAkSDwoHc3VtbWFyeRgEIAEoCRITCgt0YXJnZXRfa2luZBgFIAEoCRITCgt0YXJnZXRfcGF0aBgGIAEoCRISCgphY3Rvcl9raW5kGAcgASgJEhAKCGFjdG9yX2NuGAggASgJEhQKDGFjdG9yX3NlcmlhbBgJIAEoCRIOCgZrZXlfaWQYCiABKAkSCwoDdmlhGAsgASgJEgwKBHRvb2wYDCABKAkSFgoOcmVxdWVzdF9kaWdlc3QYDSABKAkSDwoHb3V0Y29tZRgOIAEoCRITCgthcHByb3ZhbF9pZBgPIAEoCRIXCg9hcHByb3Zlcl9zZXJpYWwYECABKAki1QIKEUVucm9sbG1lbnRSZXF1ZXN0EgoKAmlkGAEgASgJEhUKDXByb3Bvc2VkX25hbWUYAiABKAkSDAoEcm9sZRgDIAEoCRIRCglwYXJlbnRfY24YBCABKAkSDwoHYWRkcmVzcxgFIAEoCRIOCgZzdGF0dXMYBiABKAkSGwoTYXR0ZXN0YXRpb25fc3VtbWFyeRgHIAEoCRIbChNhdHRlc3RhdGlvbl9ub2RlX2lkGAggASgJEhQKDGNzcl9rZXlfdHlwZRgJIAEoCRIWCg5jc3Jfc3ViamVjdF9jbhgKIAEoCRIUCgxyZXF1ZXN0ZWRfYXQYCyABKAkSGAoQcmVqZWN0aW9uX3JlYXNvbhgMIAEoCRIaChJhZG1pdHRlZF9ub2RlX25hbWUYDSABKAkSDAoEa2luZBgOIAEoCRIZChFwaW5uZWRfa2V5X3NoYTI1NhgPIAEoCSK1AQoXQ3JlYXRlRW5yb2xsbWVudFJlcXVlc3QSDAoEa2luZBgBIAEoCRIVCg1ub2RlX2VuZHBvaW50GAIgASgJEhYKDmFkbWluX2NlcnRfcGVtGAMgASgJEhUKDWFkbWluX2tleV9wZW0YBCABKAkSDgoGY2FfcGVtGAUgASgJEhIKCmNoaWxkX25vZGUYBiABKAkSEQoJcGFyZW50X2NuGAcgASgJEg8KB3Byb2ZpbGUYCCABKAkiUwoYQ3JlYXRlRW5yb2xsbWVudFJlc3BvbnNlEjcKCmVucm9sbG1lbnQYASABKAsyIy5jcnlwdG9zLmZsZWV0LnYxLkVucm9sbG1lbnRSZXF1ZXN0InwKGEFwcHJvdmVFbnJvbGxtZW50UmVxdWVzdBIKCgJpZBgBIAEoCRIVCg1ub2RlX2VuZHBvaW50GAIgASgJEhYKDmFkbWluX2NlcnRfcGVtGAMgASgJEhUKDWFkbWluX2tleV9wZW0YBCABKAkSDgoGY2FfcGVtGAUgASgJIlQKGUFwcHJvdmVFbnJvbGxtZW50UmVzcG9uc2USNwoKZW5yb2xsbWVudBgBIAEoCzIjLmNyeXB0b3MuZmxlZXQudjEuRW5yb2xsbWVudFJlcXVlc3QiNQoXUmVqZWN0RW5yb2xsbWVudFJlcXVlc3QSCgoCaWQYASABKAkSDgoGcmVhc29uGAIgASgJIlMKGFJlamVjdEVucm9sbG1lbnRSZXNwb25zZRI3CgplbnJvbGxtZW50GAEgASgLMiMuY3J5cHRvcy5mbGVldC52MS5FbnJvbGxtZW50UmVxdWVzdCIPCg1XaG9BbUlSZXF1ZXN0Ij0KEE9wZXJhdG9ySWRlbnRpdHkSCgoCY24YASABKAkSDgoGc2VyaWFsGAIgASgJEg0KBWxldmVsGAMgASgJIkYKDldob0FtSVJlc3BvbnNlEjQKCG9wZXJhdG9yGAEgASgLMiIuY3J5cHRvcy5mbGVldC52MS5PcGVyYXRvcklkZW50aXR5IlYKGFJldm9rZUNlcnRpZmljYXRlUmVxdWVzdBIRCglub2RlX25hbWUYASABKAkSEgoKc2VyaWFsX2hleBgCIAEoCRITCgtyZWFzb25fY29kZRgDIAEoBSJYChlSZXZva2VDZXJ0aWZpY2F0ZVJlc3BvbnNlEhIKCnNlcmlhbF9oZXgYASABKAkSEgoKcmV2b2tlZF9hdBgCIAEoCRITCgtyZWFzb25fY29kZRgDIAEoBSJMChBJc3N1ZUxlYWZSZXF1ZXN0EhEKCW5vZGVfbmFtZRgBIAEoCRIPCgdjc3JfZGVyGAIgASgMEhQKDHByb2ZpbGVfbmFtZRgDIAEoCSIlChFJc3N1ZUxlYWZSZXNwb25zZRIQCghjZXJ0X2RlchgBIAEoDCI7ChBSZWtleU5vZGVSZXF1ZXN0EhEKCW5vZGVfbmFtZRgBIAEoCRIUCgxwcm9maWxlX25hbWUYAiABKAkiTQoRUmVrZXlOb2RlUmVzcG9uc2USEgoKc3ViamVjdF9jbhgBIAEoCRIRCglpc3N1ZXJfY24YAiABKAkSEQoJY2hhaW5fbGVuGAMgASgFIikKFEdldE5vZGVDb25maWdSZXF1ZXN0EhEKCW5vZGVfbmFtZRgBIAEoCSJCChVHZXROb2RlQ29uZmlnUmVzcG9uc2USKQoGY29uZmlnGAEgASgLMhkuY3J5cHRvcy52MS5NYWNoaW5lQ29uZmlnIlYKFkFwcGx5Tm9kZUNvbmZpZ1JlcXVlc3QSEQoJbm9kZV9uYW1lGAEgASgJEikKBmNvbmZpZxgCIAEoCzIZLmNyeXB0b3MudjEuTWFjaGluZUNvbmZpZyJGChdBcHBseU5vZGVDb25maWdSZXNwb25zZRISCgpnZW5lcmF0aW9uGAEgASgEEhcKD3JlcXVpcmVzX3JlYm9vdBgCIAEoCCI7ChJFeHBvcnRDQUtleVJlcXVlc3QSEQoJbm9kZV9uYW1lGAEgASgJEhIKCnBhc3NwaHJhc2UYAiABKAwiJwoTRXhwb3J0Q0FLZXlSZXNwb25zZRIQCghlbnZlbG9wZRgBIAEoDCJNChJJbXBvcnRDQUtleVJlcXVlc3QSEQoJbm9kZV9uYW1lGAEgASgJEhAKCGVudmVsb3BlGAIgASgMEhIKCnBhc3NwaHJhc2UYAyABKAwiPAoTSW1wb3J0Q0FLZXlSZXNwb25zZRISCgpzdWJqZWN0X2NuGAEgASgJEhEKCWlzc3Vlcl9jbhgCIAEoCSJVCh5Jc3N1ZU9wZXJhdG9yQ3JlZGVudGlhbFJlcXVlc3QSEwoLY29tbW9uX25hbWUYASABKAkSDQoFbGV2ZWwYAiABKAkSDwoHY3NyX2RlchgDIAEoDCJHCh9Jc3N1ZU9wZXJhdG9yQ3JlZGVudGlhbFJlc3BvbnNlEhAKCGNlcnRfZGVyGAEgASgMEhIKCnNlcmlhbF9oZXgYAiABKAkiSgofUmV2b2tlT3BlcmF0b3JDcmVkZW50aWFsUmVxdWVzdBISCgpzZXJpYWxfaGV4GAEgASgJEhMKC3JlYXNvbl9jb2RlGAIgASgFIkoKIFJldm9rZU9wZXJhdG9yQ3JlZGVudGlhbFJlc3BvbnNlEhIKCnNlcmlhbF9oZXgYASABKAkSEgoKcmV2b2tlZF9hdBgCIAEoCSIgCh5MaXN0T3BlcmF0b3JDcmVkZW50aWFsc1JlcXVlc3QicAoST3BlcmF0b3JDcmVkZW50aWFsEhMKC2NvbW1vbl9uYW1lGAEgASgJEhIKCnNlcmlhbF9oZXgYAiABKAkSDQoFbGV2ZWwYAyABKAkSEQoJbm90X2FmdGVyGAQgASgJEg8KB3Jldm9rZWQYBSABKAgiVgofTGlzdE9wZXJhdG9yQ3JlZGVudGlhbHNSZXNwb25zZRIzCgVpdGVtcxgBIAMoCzIkLmNyeXB0b3MuZmxlZXQudjEuT3BlcmF0b3JDcmVkZW50aWFsIioKFlByZXZpZXdBZG9wdGlvblJlcXVlc3QSEAoIZW5kcG9pbnQYASABKAkiPwoXUHJldmlld0Fkb3B0aW9uUmVzcG9uc2USEwoLY2VydF9zaGEyNTYYASABKAkSDwoHc3ViamVjdBgCIAEoCSJHChdMaXN0SW5zdGFsbERpc2tzUmVxdWVzdBIQCghlbmRwb2ludBgBIAEoCRIaChJwaW5uZWRfY2VydF9zaGEyNTYYAiABKAkiQgoYTGlzdEluc3RhbGxEaXNrc1Jlc3BvbnNlEiYKBWRpc2tzGAEgAygLMhcuY3J5cHRvcy52MS5JbnN0YWxsRGlzayJrChBBZG9wdE5vZGVSZXF1ZXN0EhAKCGVuZHBvaW50GAEgASgJEhoKEnBpbm5lZF9jZXJ0X3NoYTI1NhgCIAEoCRIpCgZjb25maWcYAyABKAsyGS5jcnlwdG9zLnYxLk1hY2hpbmVDb25maWciQAoRQWRvcHROb2RlUmVzcG9uc2USDQoFcGhhc2UYASABKAkSDgoGZGV0YWlsGAIgASgJEgwKBGRvbmUYAyABKAgiSQoXRGVjb21taXNzaW9uTm9kZVJlcXVlc3QSEQoJbm9kZV9uYW1lGAEgASgJEhsKE2NvbmZpcm1fY29tbW9uX25hbWUYAiABKAkiLQoYRGVjb21taXNzaW9uTm9kZVJlc3BvbnNlEhEKCXJlYm9vdGluZxgBIAEoCCIhChJMaXN0TWNwS2V5c1JlcXVlc3QSCwoDYWxsGAEgASgIIj4KE0xpc3RNY3BLZXlzUmVzcG9uc2USJwoFaXRlbXMYASADKAsyGC5jcnlwdG9zLmZsZWV0LnYxLk1jcEtleSIhChNSZXZva2VNY3BLZXlSZXF1ZXN0EgoKAmlkGAEgASgJIkEKFFJldm9rZU1jcEtleVJlc3BvbnNlEikKB21jcF9rZXkYASABKAsyGC5jcnlwdG9zLmZsZWV0LnYxLk1jcEtleSI7ChNDcmVhdGVNY3BLZXlSZXF1ZXN0Eg0KBWxhYmVsGAEgASgJEhUKDWxldmVsX2NlaWxpbmcYAiABKAkiWAoUQ3JlYXRlTWNwS2V5UmVzcG9uc2USFQoNcGxhaW50ZXh0X2tleRgBIAEoCRIpCgdtY3Bfa2V5GAIgASgLMhguY3J5cHRvcy5mbGVldC52MS5NY3BLZXkiuwEKBk1jcEtleRIKCgJpZBgBIAEoCRINCgVsYWJlbBgCIAEoCRITCgtjbGllbnRfbmFtZRgDIAEoCRITCgtvcGVyYXRvcl9jbhgEIAEoCRIXCg9vcGVyYXRvcl9zZXJpYWwYBSABKAkSFQoNbGV2ZWxfY2VpbGluZxgGIAEoCRISCgpjcmVhdGVkX2F0GAcgASgJEhQKDGxhc3RfdXNlZF9hdBgIIAEoCRISCgpyZXZva2VkX2F0GAkgASgJKlIKBkhlYWx0aBIWChJIRUFMVEhfVU5TUEVDSUZJRUQQABINCglIRUFMVEhfVVAQARIPCgtIRUFMVEhfRE9XThACEhAKDEhFQUxUSF9FUlJPUhADMoEaCgxGbGVldFNlcnZpY2USVAoJTGlzdE5vZGVzEiIuY3J5cHRvcy5mbGVldC52MS5MaXN0Tm9kZXNSZXF1ZXN0GiMuY3J5cHRvcy5mbGVldC52MS5MaXN0Tm9kZXNSZXNwb25zZRJOCgdHZXROb2RlEiAuY3J5cHRvcy5mbGVldC52MS5HZXROb2RlUmVxdWVzdBohLmNyeXB0b3MuZmxlZXQudjEuR2V0Tm9kZVJlc3BvbnNlEmkKEExpc3RDZXJ0aWZpY2F0ZXMSKS5jcnlwdG9zLmZsZWV0LnYxLkxpc3RDZXJ0aWZpY2F0ZXNSZXF1ZXN0GiouY3J5cHRvcy5mbGVldC52MS5MaXN0Q2VydGlmaWNhdGVzUmVzcG9uc2USXQoMTGlzdFByb2ZpbGVzEiUuY3J5cHRvcy5mbGVldC52MS5MaXN0UHJvZmlsZXNSZXF1ZXN0GiYuY3J5cHRvcy5mbGVldC52MS5MaXN0UHJvZmlsZXNSZXNwb25zZRJgCg1DcmVhdGVQcm9maWxlEiYuY3J5cHRvcy5mbGVldC52MS5DcmVhdGVQcm9maWxlUmVxdWVzdBonLmNyeXB0b3MuZmxlZXQudjEuQ3JlYXRlUHJvZmlsZVJlc3BvbnNlEmAKDVVwZGF0ZVByb2ZpbGUSJi5jcnlwdG9zLmZsZWV0LnYxLlVwZGF0ZVByb2ZpbGVSZXF1ZXN0GicuY3J5cHRvcy5mbGVldC52MS5VcGRhdGVQcm9maWxlUmVzcG9uc2USYAoNRGVsZXRlUHJvZmlsZRImLmNyeXB0b3MuZmxlZXQudjEuRGVsZXRlUHJvZmlsZVJlcXVlc3QaJy5jcnlwdG9zLmZsZWV0LnYxLkRlbGV0ZVByb2ZpbGVSZXNwb25zZRJvChJBcHBseVByb2ZpbGVUb05vZGUSKy5jcnlwdG9zLmZsZWV0LnYxLkFwcGx5UHJvZmlsZVRvTm9kZVJlcXVlc3QaLC5jcnlwdG9zLmZsZWV0LnYxLkFwcGx5UHJvZmlsZVRvTm9kZVJlc3BvbnNlEl0KDExpc3RBZGFwdGVycxIlLmNyeXB0b3MuZmxlZXQudjEuTGlzdEFkYXB0ZXJzUmVxdWVzdBomLmNyeXB0b3MuZmxlZXQudjEuTGlzdEFkYXB0ZXJzUmVzcG9uc2USbAoRU2V0QWRhcHRlckVuYWJsZWQSKi5jcnlwdG9zLmZsZWV0LnYxLlNldEFkYXB0ZXJFbmFibGVkUmVxdWVzdBorLmNyeXB0b3MuZmxlZXQudjEuU2V0QWRhcHRlckVuYWJsZWRSZXNwb25zZRJUCglMaXN0QXVkaXQSIi5jcnlwdG9zLmZsZWV0LnYxLkxpc3RBdWRpdFJlcXVlc3QaIy5jcnlwdG9zLmZsZWV0LnYxLkxpc3RBdWRpdFJlc3BvbnNlEmYKD0xpc3RFbnJvbGxtZW50cxIoLmNyeXB0b3MuZmxlZXQudjEuTGlzdEVucm9sbG1lbnRzUmVxdWVzdBopLmNyeXB0b3MuZmxlZXQudjEuTGlzdEVucm9sbG1lbnRzUmVzcG9uc2USaQoQQ3JlYXRlRW5yb2xsbWVudBIpLmNyeXB0b3MuZmxlZXQudjEuQ3JlYXRlRW5yb2xsbWVudFJlcXVlc3QaKi5jcnlwdG9zLmZsZWV0LnYxLkNyZWF0ZUVucm9sbG1lbnRSZXNwb25zZRJsChFBcHByb3ZlRW5yb2xsbWVudBIqLmNyeXB0b3MuZmxlZXQudjEuQXBwcm92ZUVucm9sbG1lbnRSZXF1ZXN0GisuY3J5cHRvcy5mbGVldC52MS5BcHByb3ZlRW5yb2xsbWVudFJlc3BvbnNlEmkKEFJlamVjdEVucm9sbG1lbnQSKS5jcnlwdG9zLmZsZWV0LnYxLlJlamVjdEVucm9sbG1lbnRSZXF1ZXN0GiouY3J5cHRvcy5mbGVldC52MS5SZWplY3RFbnJvbGxtZW50UmVzcG9uc2USSwoGV2hvQW1JEh8uY3J5cHRvcy5mbGVldC52MS5XaG9BbUlSZXF1ZXN0GiAuY3J5cHRvcy5mbGVldC52MS5XaG9BbUlSZXNwb25zZRJsChFSZXZva2VDZXJ0aWZpY2F0ZRIqLmNyeXB0b3MuZmxlZXQudjEuUmV2b2tlQ2VydGlmaWNhdGVSZXF1ZXN0GisuY3J5cHRvcy5mbGVldC52MS5SZXZva2VDZXJ0aWZpY2F0ZVJlc3BvbnNlElQKCUlzc3VlTGVhZhIiLmNyeXB0b3MuZmxlZXQudjEuSXNzdWVMZWFmUmVxdWVzdBojLmNyeXB0b3MuZmxlZXQudjEuSXNzdWVMZWFmUmVzcG9uc2USVAoJUmVrZXlOb2RlEiIuY3J5cHRvcy5mbGVldC52MS5SZWtleU5vZGVSZXF1ZXN0GiMuY3J5cHRvcy5mbGVldC52MS5SZWtleU5vZGVSZXNwb25zZRJgCg1HZXROb2RlQ29uZmlnEiYuY3J5cHRvcy5mbGVldC52MS5HZXROb2RlQ29uZmlnUmVxdWVzdBonLmNyeXB0b3MuZmxlZXQudjEuR2V0Tm9kZUNvbmZpZ1Jlc3BvbnNlEmYKD0FwcGx5Tm9kZUNvbmZpZxIoLmNyeXB0b3MuZmxlZXQudjEuQXBwbHlOb2RlQ29uZmlnUmVxdWVzdBopLmNyeXB0b3MuZmxlZXQudjEuQXBwbHlOb2RlQ29uZmlnUmVzcG9uc2USWgoLRXhwb3J0Q0FLZXkSJC5jcnlwdG9zLmZsZWV0LnYxLkV4cG9ydENBS2V5UmVxdWVzdBolLmNyeXB0b3MuZmxlZXQudjEuRXhwb3J0Q0FLZXlSZXNwb25zZRJaCgtJbXBvcnRDQUtleRIkLmNyeXB0b3MuZmxlZXQudjEuSW1wb3J0Q0FLZXlSZXF1ZXN0GiUuY3J5cHRvcy5mbGVldC52MS5JbXBvcnRDQUtleVJlc3BvbnNlEn4KF0lzc3VlT3BlcmF0b3JDcmVkZW50aWFsEjAuY3J5cHRvcy5mbGVldC52MS5Jc3N1ZU9wZXJhdG9yQ3JlZGVudGlhbFJlcXVlc3QaMS5jcnlwdG9zLmZsZWV0LnYxLklzc3VlT3BlcmF0b3JDcmVkZW50aWFsUmVzcG9uc2USgQEKGFJldm9rZU9wZXJhdG9yQ3JlZGVudGlhbBIxLmNyeXB0b3MuZmxlZXQudjEuUmV2b2tlT3BlcmF0b3JDcmVkZW50aWFsUmVxdWVzdBoyLmNyeXB0b3MuZmxlZXQudjEuUmV2b2tlT3BlcmF0b3JDcmVkZW50aWFsUmVzcG9uc2USfgoXTGlzdE9wZXJhdG9yQ3JlZGVudGlhbHMSMC5jcnlwdG9zLmZsZWV0LnYxLkxpc3RPcGVyYXRvckNyZWRlbnRpYWxzUmVxdWVzdBoxLmNyeXB0b3MuZmxlZXQudjEuTGlzdE9wZXJhdG9yQ3JlZGVudGlhbHNSZXNwb25zZRJmCg9QcmV2aWV3QWRvcHRpb24SKC5jcnlwdG9zLmZsZWV0LnYxLlByZXZpZXdBZG9wdGlvblJlcXVlc3QaKS5jcnlwdG9zLmZsZWV0LnYxLlByZXZpZXdBZG9wdGlvblJlc3BvbnNlEmkKEExpc3RJbnN0YWxsRGlza3MSKS5jcnlwdG9zLmZsZWV0LnYxLkxpc3RJbnN0YWxsRGlza3NSZXF1ZXN0GiouY3J5cHRvcy5mbGVldC52MS5MaXN0SW5zdGFsbERpc2tzUmVzcG9uc2USVgoJQWRvcHROb2RlEiIuY3J5cHRvcy5mbGVldC52MS5BZG9wdE5vZGVSZXF1ZXN0GiMuY3J5cHRvcy5mbGVldC52MS5BZG9wdE5vZGVSZXNwb25zZTABEmkKEERlY29tbWlzc2lvbk5vZGUSKS5jcnlwdG9zLmZsZWV0LnYxLkRlY29tbWlzc2lvbk5vZGVSZXF1ZXN0GiouY3J5cHRvcy5mbGVldC52MS5EZWNvbW1pc3Npb25Ob2RlUmVzcG9uc2USWgoLTGlzdE1jcEtleXMSJC5jcnlwdG9zLmZsZWV0LnYxLkxpc3RNY3BLZXlzUmVxdWVzdBolLmNyeXB0b3MuZmxlZXQudjEuTGlzdE1jcEtleXNSZXNwb25zZRJdCgxSZXZva2VNY3BLZXkSJS5jcnlwdG9zLmZsZWV0LnYxLlJldm9rZU1jcEtleVJlcXVlc3QaJi5jcnlwdG9zLmZsZWV0LnYxLlJldm9rZU1jcEtleVJlc3BvbnNlEl0KDENyZWF0ZU1jcEtleRIlLmNyeXB0b3MuZmxlZXQudjEuQ3JlYXRlTWNwS2V5UmVxdWVzdBomLmNyeXB0b3MuZmxlZXQudjEuQ3JlYXRlTWNwS2V5UmVzcG9uc2VCOFo2Z2l0aHViLmNvbS9DcnlwdE9TLVBLSS9hcGkvZ28vY3J5cHRvcy9mbGVldC92MTtmbGVldHYxYgZwcm90bzM", [file_cryptos_v1_config, file_cryptos_v1_node]);
 
 /**
  * @generated from message cryptos.fleet.v1.ListNodesRequest
@@ -669,7 +669,9 @@ export const EnrollmentAdapterSchema: GenMessage<EnrollmentAdapter> = /*@__PURE_
   messageDesc(file_cryptos_fleet_v1_fleet, 28);
 
 /**
- * AuditEvent is a single manager audit log entry.
+ * AuditEvent is a single manager audit log entry. The actor fields (7 onward)
+ * name who acted and through which surface; they are empty on entries
+ * recorded before the manager captured an actor.
  *
  * @generated from message cryptos.fleet.v1.AuditEvent
  */
@@ -685,7 +687,8 @@ export type AuditEvent = Message<"cryptos.fleet.v1.AuditEvent"> & {
   at: string;
 
   /**
-   * config-applied|enroll-approved|enroll-rejected|issued|profile-applied|
+   * config-applied|enroll-approved|enroll-rejected|issued|mcp-key-created|
+   * mcp-key-first-used|mcp-key-rejected|mcp-key-revoked|profile-applied|
    * profile-created|profile-deleted|profile-updated|protocol-toggled|rekeyed|
    * renewed|revoked
    *
@@ -699,7 +702,7 @@ export type AuditEvent = Message<"cryptos.fleet.v1.AuditEvent"> & {
   summary: string;
 
   /**
-   * cert|enrollment|node|profile|protocol
+   * cert|enrollment|mcp-key|node|profile|protocol
    *
    * @generated from field: string target_kind = 5;
    */
@@ -709,6 +712,84 @@ export type AuditEvent = Message<"cryptos.fleet.v1.AuditEvent"> & {
    * @generated from field: string target_path = 6;
    */
   targetPath: string;
+
+  /**
+   * actor_kind is how the actor authenticated: "cert" for an operator client
+   * certificate, "mcp_key" for an MCP agent key.
+   *
+   * @generated from field: string actor_kind = 7;
+   */
+  actorKind: string;
+
+  /**
+   * actor_cn is the subject CN of the operator certificate that acted, or that
+   * the MCP key is bound to.
+   *
+   * @generated from field: string actor_cn = 8;
+   */
+  actorCn: string;
+
+  /**
+   * actor_serial is the hex serial of that operator certificate.
+   *
+   * @generated from field: string actor_serial = 9;
+   */
+  actorSerial: string;
+
+  /**
+   * key_id is the McpKey id when actor_kind is "mcp_key"; empty otherwise.
+   *
+   * @generated from field: string key_id = 10;
+   */
+  keyId: string;
+
+  /**
+   * via is the surface the action arrived through: "web" | "mcp" | "api".
+   *
+   * @generated from field: string via = 11;
+   */
+  via: string;
+
+  /**
+   * tool is the MCP tool name when via is "mcp"; empty otherwise.
+   *
+   * @generated from field: string tool = 12;
+   */
+  tool: string;
+
+  /**
+   * request_digest is the lowercase hex SHA-256 of the canonical request, so
+   * an entry can be matched to the exact request without storing its body.
+   *
+   * @generated from field: string request_digest = 13;
+   */
+  requestDigest: string;
+
+  /**
+   * outcome is the result of the action: "ok" | "denied" | "pending" |
+   * "error".
+   *
+   * @generated from field: string outcome = 14;
+   */
+  outcome: string;
+
+  /**
+   * approval_id is reserved for step-up approval and is always empty until the
+   * manager ships approvals. It will name the approval that authorized the
+   * action.
+   *
+   * @generated from field: string approval_id = 15;
+   */
+  approvalId: string;
+
+  /**
+   * approver_serial is reserved for step-up approval and is always empty until
+   * the manager ships approvals. It will carry the hex serial of the approving
+   * operator's certificate.
+   *
+   * @generated from field: string approver_serial = 16;
+   */
+  approverSerial: string;
 };
 
 /**
@@ -1833,6 +1914,235 @@ export const DecommissionNodeResponseSchema: GenMessage<DecommissionNodeResponse
   messageDesc(file_cryptos_fleet_v1_fleet, 68);
 
 /**
+ * ListMcpKeysRequest scopes the MCP key listing.
+ *
+ * @generated from message cryptos.fleet.v1.ListMcpKeysRequest
+ */
+export type ListMcpKeysRequest = Message<"cryptos.fleet.v1.ListMcpKeysRequest"> & {
+  /**
+   * all lists every operator's keys instead of only the caller's. Admin only.
+   *
+   * @generated from field: bool all = 1;
+   */
+  all: boolean;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.ListMcpKeysRequest.
+ * Use `create(ListMcpKeysRequestSchema)` to create a new message.
+ */
+export const ListMcpKeysRequestSchema: GenMessage<ListMcpKeysRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 69);
+
+/**
+ * ListMcpKeysResponse carries the listed MCP keys, revoked ones included.
+ *
+ * @generated from message cryptos.fleet.v1.ListMcpKeysResponse
+ */
+export type ListMcpKeysResponse = Message<"cryptos.fleet.v1.ListMcpKeysResponse"> & {
+  /**
+   * items are the listed keys, newest first.
+   *
+   * @generated from field: repeated cryptos.fleet.v1.McpKey items = 1;
+   */
+  items: McpKey[];
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.ListMcpKeysResponse.
+ * Use `create(ListMcpKeysResponseSchema)` to create a new message.
+ */
+export const ListMcpKeysResponseSchema: GenMessage<ListMcpKeysResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 70);
+
+/**
+ * RevokeMcpKeyRequest names the MCP key to revoke.
+ *
+ * @generated from message cryptos.fleet.v1.RevokeMcpKeyRequest
+ */
+export type RevokeMcpKeyRequest = Message<"cryptos.fleet.v1.RevokeMcpKeyRequest"> & {
+  /**
+   * id is the McpKey id to revoke.
+   *
+   * @generated from field: string id = 1;
+   */
+  id: string;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.RevokeMcpKeyRequest.
+ * Use `create(RevokeMcpKeyRequestSchema)` to create a new message.
+ */
+export const RevokeMcpKeyRequestSchema: GenMessage<RevokeMcpKeyRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 71);
+
+/**
+ * RevokeMcpKeyResponse returns the key after revocation.
+ *
+ * @generated from message cryptos.fleet.v1.RevokeMcpKeyResponse
+ */
+export type RevokeMcpKeyResponse = Message<"cryptos.fleet.v1.RevokeMcpKeyResponse"> & {
+  /**
+   * mcp_key is the revoked key, with revoked_at set.
+   *
+   * @generated from field: cryptos.fleet.v1.McpKey mcp_key = 1;
+   */
+  mcpKey?: McpKey | undefined;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.RevokeMcpKeyResponse.
+ * Use `create(RevokeMcpKeyResponseSchema)` to create a new message.
+ */
+export const RevokeMcpKeyResponseSchema: GenMessage<RevokeMcpKeyResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 72);
+
+/**
+ * CreateMcpKeyRequest carries the operator's label for the new key and an
+ * optional level ceiling.
+ *
+ * @generated from message cryptos.fleet.v1.CreateMcpKeyRequest
+ */
+export type CreateMcpKeyRequest = Message<"cryptos.fleet.v1.CreateMcpKeyRequest"> & {
+  /**
+   * label is the operator's free-text name for the key, shown in listings.
+   *
+   * @generated from field: string label = 1;
+   */
+  label: string;
+
+  /**
+   * level_ceiling caps what the key may do: "viewer" | "operator" | "admin".
+   * Empty means no ceiling below the operator's own level. It may not exceed
+   * the caller's level.
+   *
+   * @generated from field: string level_ceiling = 2;
+   */
+  levelCeiling: string;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.CreateMcpKeyRequest.
+ * Use `create(CreateMcpKeyRequestSchema)` to create a new message.
+ */
+export const CreateMcpKeyRequestSchema: GenMessage<CreateMcpKeyRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 73);
+
+/**
+ * CreateMcpKeyResponse carries the new key. plaintext_key is returned only
+ * here and only once; the manager cannot show it again.
+ *
+ * @generated from message cryptos.fleet.v1.CreateMcpKeyResponse
+ */
+export type CreateMcpKeyResponse = Message<"cryptos.fleet.v1.CreateMcpKeyResponse"> & {
+  /**
+   * plaintext_key is the bearer key the MCP client presents, "fos_mcp_"
+   * followed by base64url of 32 random bytes. Show it once and never log it.
+   *
+   * @generated from field: string plaintext_key = 1;
+   */
+  plaintextKey: string;
+
+  /**
+   * mcp_key is the stored metadata for the new key.
+   *
+   * @generated from field: cryptos.fleet.v1.McpKey mcp_key = 2;
+   */
+  mcpKey?: McpKey | undefined;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.CreateMcpKeyResponse.
+ * Use `create(CreateMcpKeyResponseSchema)` to create a new message.
+ */
+export const CreateMcpKeyResponseSchema: GenMessage<CreateMcpKeyResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 74);
+
+/**
+ * McpKey is the metadata of one MCP agent key. It never carries the key or
+ * its hash. A key is identity only: on every request its effective level is
+ * the lower of the bound operator certificate's live level and level_ceiling,
+ * and it stops working when that certificate is revoked or expires.
+ * Timestamps are RFC3339 strings; an unset timestamp is empty.
+ *
+ * @generated from message cryptos.fleet.v1.McpKey
+ */
+export type McpKey = Message<"cryptos.fleet.v1.McpKey"> & {
+  /**
+   * id is the key's stable identifier, used by RevokeMcpKey and audit key_id.
+   *
+   * @generated from field: string id = 1;
+   */
+  id: string;
+
+  /**
+   * label is the operator's free-text name for the key.
+   *
+   * @generated from field: string label = 2;
+   */
+  label: string;
+
+  /**
+   * client_name is the name the MCP client registered with during the OAuth
+   * login; empty for a key minted with CreateMcpKey.
+   *
+   * @generated from field: string client_name = 3;
+   */
+  clientName: string;
+
+  /**
+   * operator_cn is the subject CN of the operator certificate the key is
+   * bound to.
+   *
+   * @generated from field: string operator_cn = 4;
+   */
+  operatorCn: string;
+
+  /**
+   * operator_serial is the hex serial of that operator certificate.
+   *
+   * @generated from field: string operator_serial = 5;
+   */
+  operatorSerial: string;
+
+  /**
+   * level_ceiling caps the key's level: "viewer" | "operator" | "admin".
+   * Empty means no ceiling below the operator's own level.
+   *
+   * @generated from field: string level_ceiling = 6;
+   */
+  levelCeiling: string;
+
+  /**
+   * created_at is when the key was minted.
+   *
+   * @generated from field: string created_at = 7;
+   */
+  createdAt: string;
+
+  /**
+   * last_used_at is when the key last authenticated a request; empty if never.
+   *
+   * @generated from field: string last_used_at = 8;
+   */
+  lastUsedAt: string;
+
+  /**
+   * revoked_at is when the key was revoked; empty while it is active.
+   *
+   * @generated from field: string revoked_at = 9;
+   */
+  revokedAt: string;
+};
+
+/**
+ * Describes the message cryptos.fleet.v1.McpKey.
+ * Use `create(McpKeySchema)` to create a new message.
+ */
+export const McpKeySchema: GenMessage<McpKey> = /*@__PURE__*/
+  messageDesc(file_cryptos_fleet_v1_fleet, 75);
+
+/**
  * Health reports the manager's view of node reachability, independent of
  * the node's own reported identity state.
  *
@@ -2238,6 +2548,49 @@ export const FleetService: GenService<{
     methodKind: "unary";
     input: typeof DecommissionNodeRequestSchema;
     output: typeof DecommissionNodeResponseSchema;
+  },
+  /**
+   * ListMcpKeys returns the MCP agent keys bound to the calling operator's
+   * certificate. An admin may set all to list every operator's keys; a
+   * non-admin that sets all is refused. The listing never carries a key or its
+   * hash. Operator-certificate only: an MCP key can never list keys.
+   *
+   * @generated from rpc cryptos.fleet.v1.FleetService.ListMcpKeys
+   */
+  listMcpKeys: {
+    methodKind: "unary";
+    input: typeof ListMcpKeysRequestSchema;
+    output: typeof ListMcpKeysResponseSchema;
+  },
+  /**
+   * RevokeMcpKey revokes an MCP agent key by id. An operator may revoke the
+   * keys bound to their own certificate; an admin may revoke any key. The
+   * revocation takes effect on the key's next request. Idempotent: revoking an
+   * already revoked key returns it unchanged. Operator-certificate only and
+   * audited.
+   *
+   * @generated from rpc cryptos.fleet.v1.FleetService.RevokeMcpKey
+   */
+  revokeMcpKey: {
+    methodKind: "unary";
+    input: typeof RevokeMcpKeyRequestSchema;
+    output: typeof RevokeMcpKeyResponseSchema;
+  },
+  /**
+   * CreateMcpKey mints an MCP agent key bound to the calling operator's
+   * certificate serial, for MCP clients that cannot run the OAuth login. It is
+   * the same mint and binding as the login flow. The response carries the
+   * plaintext key exactly once; the manager stores only its hash, so a lost key
+   * is revoked and re-minted, never recovered. The level ceiling may not exceed
+   * the caller's own level. Operator-certificate only and audited (the audit
+   * names the key id, label and ceiling, never the key).
+   *
+   * @generated from rpc cryptos.fleet.v1.FleetService.CreateMcpKey
+   */
+  createMcpKey: {
+    methodKind: "unary";
+    input: typeof CreateMcpKeyRequestSchema;
+    output: typeof CreateMcpKeyResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_cryptos_fleet_v1_fleet, 0);

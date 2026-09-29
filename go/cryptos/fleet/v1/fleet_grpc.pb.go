@@ -53,6 +53,8 @@ const (
 	FleetService_ListMcpKeys_FullMethodName              = "/cryptos.fleet.v1.FleetService/ListMcpKeys"
 	FleetService_RevokeMcpKey_FullMethodName             = "/cryptos.fleet.v1.FleetService/RevokeMcpKey"
 	FleetService_CreateMcpKey_FullMethodName             = "/cryptos.fleet.v1.FleetService/CreateMcpKey"
+	FleetService_ListApprovals_FullMethodName            = "/cryptos.fleet.v1.FleetService/ListApprovals"
+	FleetService_DecideApproval_FullMethodName           = "/cryptos.fleet.v1.FleetService/DecideApproval"
 )
 
 // FleetServiceClient is the client API for FleetService service.
@@ -212,6 +214,16 @@ type FleetServiceClient interface {
 	// the caller's own level. Operator-certificate only and audited (the audit
 	// names the key id, label and ceiling, never the key).
 	CreateMcpKey(ctx context.Context, in *CreateMcpKeyRequest, opts ...grpc.CallOption) (*CreateMcpKeyResponse, error)
+	// ListApprovals returns step-up approval requests, newest first, optionally
+	// filtered by status. An approval is raised when an MCP tool call needs a
+	// human decision before it runs. Operator-certificate only: an MCP key can
+	// never list approvals.
+	ListApprovals(ctx context.Context, in *ListApprovalsRequest, opts ...grpc.CallOption) (*ListApprovalsResponse, error)
+	// DecideApproval approves or denies a pending approval by id and returns the
+	// updated approval. Operator-certificate only: an MCP key can never decide
+	// approvals. The deciding operator's level must be at least the approval's
+	// required_level. Audited.
+	DecideApproval(ctx context.Context, in *DecideApprovalRequest, opts ...grpc.CallOption) (*DecideApprovalResponse, error)
 }
 
 type fleetServiceClient struct {
@@ -571,6 +583,26 @@ func (c *fleetServiceClient) CreateMcpKey(ctx context.Context, in *CreateMcpKeyR
 	return out, nil
 }
 
+func (c *fleetServiceClient) ListApprovals(ctx context.Context, in *ListApprovalsRequest, opts ...grpc.CallOption) (*ListApprovalsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListApprovalsResponse)
+	err := c.cc.Invoke(ctx, FleetService_ListApprovals_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) DecideApproval(ctx context.Context, in *DecideApprovalRequest, opts ...grpc.CallOption) (*DecideApprovalResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DecideApprovalResponse)
+	err := c.cc.Invoke(ctx, FleetService_DecideApproval_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FleetServiceServer is the server API for FleetService service.
 // All implementations should embed UnimplementedFleetServiceServer
 // for forward compatibility.
@@ -728,6 +760,16 @@ type FleetServiceServer interface {
 	// the caller's own level. Operator-certificate only and audited (the audit
 	// names the key id, label and ceiling, never the key).
 	CreateMcpKey(context.Context, *CreateMcpKeyRequest) (*CreateMcpKeyResponse, error)
+	// ListApprovals returns step-up approval requests, newest first, optionally
+	// filtered by status. An approval is raised when an MCP tool call needs a
+	// human decision before it runs. Operator-certificate only: an MCP key can
+	// never list approvals.
+	ListApprovals(context.Context, *ListApprovalsRequest) (*ListApprovalsResponse, error)
+	// DecideApproval approves or denies a pending approval by id and returns the
+	// updated approval. Operator-certificate only: an MCP key can never decide
+	// approvals. The deciding operator's level must be at least the approval's
+	// required_level. Audited.
+	DecideApproval(context.Context, *DecideApprovalRequest) (*DecideApprovalResponse, error)
 }
 
 // UnimplementedFleetServiceServer should be embedded to have
@@ -838,6 +880,12 @@ func (UnimplementedFleetServiceServer) RevokeMcpKey(context.Context, *RevokeMcpK
 }
 func (UnimplementedFleetServiceServer) CreateMcpKey(context.Context, *CreateMcpKeyRequest) (*CreateMcpKeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateMcpKey not implemented")
+}
+func (UnimplementedFleetServiceServer) ListApprovals(context.Context, *ListApprovalsRequest) (*ListApprovalsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListApprovals not implemented")
+}
+func (UnimplementedFleetServiceServer) DecideApproval(context.Context, *DecideApprovalRequest) (*DecideApprovalResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DecideApproval not implemented")
 }
 func (UnimplementedFleetServiceServer) testEmbeddedByValue() {}
 
@@ -1464,6 +1512,42 @@ func _FleetService_CreateMcpKey_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FleetService_ListApprovals_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListApprovalsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).ListApprovals(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_ListApprovals_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).ListApprovals(ctx, req.(*ListApprovalsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_DecideApproval_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DecideApprovalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).DecideApproval(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_DecideApproval_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).DecideApproval(ctx, req.(*DecideApprovalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FleetService_ServiceDesc is the grpc.ServiceDesc for FleetService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1602,6 +1686,14 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateMcpKey",
 			Handler:    _FleetService_CreateMcpKey_Handler,
+		},
+		{
+			MethodName: "ListApprovals",
+			Handler:    _FleetService_ListApprovals_Handler,
+		},
+		{
+			MethodName: "DecideApproval",
+			Handler:    _FleetService_DecideApproval_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

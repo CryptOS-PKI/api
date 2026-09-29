@@ -128,6 +128,12 @@ const (
 	// FleetServiceCreateMcpKeyProcedure is the fully-qualified name of the FleetService's CreateMcpKey
 	// RPC.
 	FleetServiceCreateMcpKeyProcedure = "/cryptos.fleet.v1.FleetService/CreateMcpKey"
+	// FleetServiceListApprovalsProcedure is the fully-qualified name of the FleetService's
+	// ListApprovals RPC.
+	FleetServiceListApprovalsProcedure = "/cryptos.fleet.v1.FleetService/ListApprovals"
+	// FleetServiceDecideApprovalProcedure is the fully-qualified name of the FleetService's
+	// DecideApproval RPC.
+	FleetServiceDecideApprovalProcedure = "/cryptos.fleet.v1.FleetService/DecideApproval"
 )
 
 // FleetServiceClient is a client for the cryptos.fleet.v1.FleetService service.
@@ -280,6 +286,16 @@ type FleetServiceClient interface {
 	// the caller's own level. Operator-certificate only and audited (the audit
 	// names the key id, label and ceiling, never the key).
 	CreateMcpKey(context.Context, *connect.Request[v1.CreateMcpKeyRequest]) (*connect.Response[v1.CreateMcpKeyResponse], error)
+	// ListApprovals returns step-up approval requests, newest first, optionally
+	// filtered by status. An approval is raised when an MCP tool call needs a
+	// human decision before it runs. Operator-certificate only: an MCP key can
+	// never list approvals.
+	ListApprovals(context.Context, *connect.Request[v1.ListApprovalsRequest]) (*connect.Response[v1.ListApprovalsResponse], error)
+	// DecideApproval approves or denies a pending approval by id and returns the
+	// updated approval. Operator-certificate only: an MCP key can never decide
+	// approvals. The deciding operator's level must be at least the approval's
+	// required_level. Audited.
+	DecideApproval(context.Context, *connect.Request[v1.DecideApprovalRequest]) (*connect.Response[v1.DecideApprovalResponse], error)
 }
 
 // NewFleetServiceClient constructs a client for the cryptos.fleet.v1.FleetService service. By
@@ -497,6 +513,18 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(fleetServiceMethods.ByName("CreateMcpKey")),
 			connect.WithClientOptions(opts...),
 		),
+		listApprovals: connect.NewClient[v1.ListApprovalsRequest, v1.ListApprovalsResponse](
+			httpClient,
+			baseURL+FleetServiceListApprovalsProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("ListApprovals")),
+			connect.WithClientOptions(opts...),
+		),
+		decideApproval: connect.NewClient[v1.DecideApprovalRequest, v1.DecideApprovalResponse](
+			httpClient,
+			baseURL+FleetServiceDecideApprovalProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("DecideApproval")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -536,6 +564,8 @@ type fleetServiceClient struct {
 	listMcpKeys              *connect.Client[v1.ListMcpKeysRequest, v1.ListMcpKeysResponse]
 	revokeMcpKey             *connect.Client[v1.RevokeMcpKeyRequest, v1.RevokeMcpKeyResponse]
 	createMcpKey             *connect.Client[v1.CreateMcpKeyRequest, v1.CreateMcpKeyResponse]
+	listApprovals            *connect.Client[v1.ListApprovalsRequest, v1.ListApprovalsResponse]
+	decideApproval           *connect.Client[v1.DecideApprovalRequest, v1.DecideApprovalResponse]
 }
 
 // ListNodes calls cryptos.fleet.v1.FleetService.ListNodes.
@@ -708,6 +738,16 @@ func (c *fleetServiceClient) CreateMcpKey(ctx context.Context, req *connect.Requ
 	return c.createMcpKey.CallUnary(ctx, req)
 }
 
+// ListApprovals calls cryptos.fleet.v1.FleetService.ListApprovals.
+func (c *fleetServiceClient) ListApprovals(ctx context.Context, req *connect.Request[v1.ListApprovalsRequest]) (*connect.Response[v1.ListApprovalsResponse], error) {
+	return c.listApprovals.CallUnary(ctx, req)
+}
+
+// DecideApproval calls cryptos.fleet.v1.FleetService.DecideApproval.
+func (c *fleetServiceClient) DecideApproval(ctx context.Context, req *connect.Request[v1.DecideApprovalRequest]) (*connect.Response[v1.DecideApprovalResponse], error) {
+	return c.decideApproval.CallUnary(ctx, req)
+}
+
 // FleetServiceHandler is an implementation of the cryptos.fleet.v1.FleetService service.
 type FleetServiceHandler interface {
 	// ListNodes returns a summary for every node the manager knows about.
@@ -858,6 +898,16 @@ type FleetServiceHandler interface {
 	// the caller's own level. Operator-certificate only and audited (the audit
 	// names the key id, label and ceiling, never the key).
 	CreateMcpKey(context.Context, *connect.Request[v1.CreateMcpKeyRequest]) (*connect.Response[v1.CreateMcpKeyResponse], error)
+	// ListApprovals returns step-up approval requests, newest first, optionally
+	// filtered by status. An approval is raised when an MCP tool call needs a
+	// human decision before it runs. Operator-certificate only: an MCP key can
+	// never list approvals.
+	ListApprovals(context.Context, *connect.Request[v1.ListApprovalsRequest]) (*connect.Response[v1.ListApprovalsResponse], error)
+	// DecideApproval approves or denies a pending approval by id and returns the
+	// updated approval. Operator-certificate only: an MCP key can never decide
+	// approvals. The deciding operator's level must be at least the approval's
+	// required_level. Audited.
+	DecideApproval(context.Context, *connect.Request[v1.DecideApprovalRequest]) (*connect.Response[v1.DecideApprovalResponse], error)
 }
 
 // NewFleetServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -1071,6 +1121,18 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(fleetServiceMethods.ByName("CreateMcpKey")),
 		connect.WithHandlerOptions(opts...),
 	)
+	fleetServiceListApprovalsHandler := connect.NewUnaryHandler(
+		FleetServiceListApprovalsProcedure,
+		svc.ListApprovals,
+		connect.WithSchema(fleetServiceMethods.ByName("ListApprovals")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceDecideApprovalHandler := connect.NewUnaryHandler(
+		FleetServiceDecideApprovalProcedure,
+		svc.DecideApproval,
+		connect.WithSchema(fleetServiceMethods.ByName("DecideApproval")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/cryptos.fleet.v1.FleetService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case FleetServiceListNodesProcedure:
@@ -1141,6 +1203,10 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 			fleetServiceRevokeMcpKeyHandler.ServeHTTP(w, r)
 		case FleetServiceCreateMcpKeyProcedure:
 			fleetServiceCreateMcpKeyHandler.ServeHTTP(w, r)
+		case FleetServiceListApprovalsProcedure:
+			fleetServiceListApprovalsHandler.ServeHTTP(w, r)
+		case FleetServiceDecideApprovalProcedure:
+			fleetServiceDecideApprovalHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -1284,4 +1350,12 @@ func (UnimplementedFleetServiceHandler) RevokeMcpKey(context.Context, *connect.R
 
 func (UnimplementedFleetServiceHandler) CreateMcpKey(context.Context, *connect.Request[v1.CreateMcpKeyRequest]) (*connect.Response[v1.CreateMcpKeyResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.CreateMcpKey is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) ListApprovals(context.Context, *connect.Request[v1.ListApprovalsRequest]) (*connect.Response[v1.ListApprovalsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ListApprovals is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) DecideApproval(context.Context, *connect.Request[v1.DecideApprovalRequest]) (*connect.Response[v1.DecideApprovalResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.DecideApproval is not implemented"))
 }

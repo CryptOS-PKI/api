@@ -173,6 +173,10 @@ message CertificateProfile {
   // SANs with the DNS names it supplies (IssueLeafRequest.dns_names). Off by
   // default: the profile's static SANs are then the only names stamped.
   bool allow_request_sans = 10;
+  // validity_policy decides what happens when validity_days would run past
+  // the issuing CA's own notAfter: "cap" (the default when empty) shortens
+  // the certificate to end with its issuer, "reject" refuses to issue.
+  string validity_policy = 11;
 }
 
 message BasicConstraints {

@@ -1,12 +1,29 @@
 version: '3'
 
 # Task targets for the CryptOS-PKI api/ module.
-# Requires on PATH: buf, protoc-gen-go, protoc-gen-go-grpc, protoc-gen-connect-go, golic, npx.
+# Requires on PATH: go, buf, npx. The Go codegen plugins are not taken from PATH:
+# `task tools` installs them at the versions pinned below into .bin/, and
+# buf.gen.yaml runs them from there, so every machine generates the same bytes.
 # The TypeScript plugin (@bufbuild/protoc-gen-es) runs via `npx -y`, pinned by version
 # in buf.gen.yaml; no local npm install needed, but `buf generate` requires network
 # access to fetch it on first run (npx caches after that). Connect-ES v2's unified
 # protoc-gen-es also emits the Connect service definitions -- there is no separate
 # connect-es codegen plugin in the v2 line.
+
+vars:
+  # Bump a pin, then run `task generate` and commit the regenerated tree in the
+  # same change. protoc-gen-connect-go tracks the connectrpc.com/connect runtime
+  # in go.mod.
+  PROTOC_GEN_GO_VERSION: v1.34.2
+  PROTOC_GEN_GO_GRPC_VERSION: v1.5.1
+  PROTOC_GEN_CONNECT_GO_VERSION: v1.20.0
+  # The Go toolchain that builds the plugins is pinned too. protoc-gen-go
+  # formats its output with the go/format it was compiled with, and a Go 1.27
+  # build drops the bare `//` line that earlier builds put before each oneof's
+  # list of wrapper types, so the same plugin version gave different bytes on
+  # different machines. Kept at the go directive in go.mod.
+  PLUGIN_GO_TOOLCHAIN: go1.25.0
+  TOOLS_BIN: '{{.ROOT_DIR}}/.bin'
 
 tasks:
   default:
@@ -25,8 +42,27 @@ tasks:
       - buf lint
       - buf format -d
 
+  tools:
+    desc: Install the pinned Go codegen plugins into .bin/
+    # status reads the Go version and module version stamped into each binary,
+    # so a .bin/ left over from an older pin gets reinstalled instead of
+    # silently reused.
+    status:
+      - go version {{.TOOLS_BIN}}/protoc-gen-go {{.TOOLS_BIN}}/protoc-gen-go-grpc {{.TOOLS_BIN}}/protoc-gen-connect-go | awk '$2 != "{{.PLUGIN_GO_TOOLCHAIN}}" {bad=1} END {exit bad || NR != 3}'
+      - go version -m {{.TOOLS_BIN}}/protoc-gen-go | grep -qE '^[[:space:]]+mod[[:space:]]+google.golang.org/protobuf[[:space:]]+{{.PROTOC_GEN_GO_VERSION}}[[:space:]]'
+      - go version -m {{.TOOLS_BIN}}/protoc-gen-go-grpc | grep -qE '^[[:space:]]+mod[[:space:]]+google.golang.org/grpc/cmd/protoc-gen-go-grpc[[:space:]]+{{.PROTOC_GEN_GO_GRPC_VERSION}}[[:space:]]'
+      - go version -m {{.TOOLS_BIN}}/protoc-gen-connect-go | grep -qE '^[[:space:]]+mod[[:space:]]+connectrpc.com/connect[[:space:]]+{{.PROTOC_GEN_CONNECT_GO_VERSION}}[[:space:]]'
+    env:
+      GOBIN: '{{.TOOLS_BIN}}'
+      GOTOOLCHAIN: '{{.PLUGIN_GO_TOOLCHAIN}}'
+    cmds:
+      - go install google.golang.org/protobuf/cmd/protoc-gen-go@{{.PROTOC_GEN_GO_VERSION}}
+      - go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@{{.PROTOC_GEN_GO_GRPC_VERSION}}
+      - go install connectrpc.com/connect/cmd/protoc-gen-connect-go@{{.PROTOC_GEN_CONNECT_GO_VERSION}}
+
   generate:
-    desc: Generate Go stubs from protos
+    desc: Generate Go and TypeScript stubs from protos with the pinned plugins
+    deps: [tools]
     cmds:
       - buf generate
 

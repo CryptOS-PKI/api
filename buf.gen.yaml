@@ -1,17 +1,20 @@
+# The Go plugins run from .bin/, where `task tools` installs the versions
+# pinned in Taskfile.yml. Run `task generate` rather than `buf generate`
+# directly, so the pinned plugins are installed first.
 version: v2
 inputs:
   - directory: proto
 plugins:
-  - local: protoc-gen-go
+  - local: .bin/protoc-gen-go
     out: go
     opt:
       - paths=source_relative
-  - local: protoc-gen-go-grpc
+  - local: .bin/protoc-gen-go-grpc
     out: go
     opt:
       - paths=source_relative
       - require_unimplemented_servers=false
-  - local: protoc-gen-connect-go
+  - local: .bin/protoc-gen-connect-go
     out: go
     opt:
       - paths=source_relative

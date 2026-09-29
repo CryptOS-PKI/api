@@ -7,11 +7,13 @@ Published as a standalone, versioned Go module. Consumed by [`cryptos`](https://
 ## 📂 Layout
 
 ```
-proto/cryptos/v1/    # .proto sources (the contract)
-go/cryptos/v1/       # generated Go stubs (committed; no toolchain required to consume)
-buf.yaml             # buf module + lint config (STANDARD)
-buf.gen.yaml         # buf generation: protoc-gen-go + protoc-gen-go-grpc
-Taskfile.yml         # fmt / lint / generate / test / ci targets
+proto/cryptos/v1/        # node .proto sources (the contract)
+proto/cryptos/fleet/v1/  # Fleet Manager .proto sources (FleetService)
+go/cryptos/              # generated Go stubs (committed; no toolchain required to consume)
+gen/ts/cryptos/          # generated TypeScript stubs for web/ (committed)
+buf.yaml                 # buf module + lint config (STANDARD)
+buf.gen.yaml             # buf generation: Go (protobuf, gRPC, Connect) + TypeScript (protoc-gen-es)
+Taskfile.yml             # fmt / lint / generate / test / ci targets
 ```
 
 ## 🧱 Phase 1 protos
@@ -24,6 +26,23 @@ Taskfile.yml         # fmt / lint / generate / test / ci targets
 | `status.proto` | `NodeStatus` — role, identity state, TPM state, etcd state, boot count, the revocation preflight result (state, last error, when it was checked), and the DNS resolver source and nameservers. |
 | `config.proto` | `MachineConfig` Phase 1 subset (role/network/storage/bootstrap/pki). |
 | `audit.proto` | `AuditEvent` — hash-chained audit log entry shape. |
+| `fleet/v1/fleet.proto` | `FleetService` — the Fleet Manager's surface over the fleet: node, certificate, profile, adapter, enrollment and operator-credential RPCs, the manager audit log (`ListAudit`), and MCP agent key management (`ListMcpKeys`, `RevokeMcpKey`, `CreateMcpKey`). |
+
+### MCP agent keys and audit actors
+
+The Fleet Manager serves an MCP endpoint for AI agents. An agent authenticates with a long-lived bearer key bound to the serial of the operator certificate that minted it. `FleetService` carries the key management the web UI needs:
+
+| RPC | Does |
+|---|---|
+| `ListMcpKeys` | Lists the caller's keys. An admin sets `all` to list every operator's keys. |
+| `RevokeMcpKey` | Revokes a key by `id`. Operators revoke their own keys; admins revoke any. |
+| `CreateMcpKey` | Mints a key with a `label` and an optional `level_ceiling`, for MCP clients without the OAuth login. The response's `plaintext_key` is returned once and never again. |
+
+- `McpKey` holds `id`, `label`, `client_name`, `operator_cn`, `operator_serial`, `level_ceiling`, `created_at`, `last_used_at` and `revoked_at`. It never carries the key or its hash.
+- A key is identity only. Its effective level is the lower of the bound certificate's live level and `level_ceiling` (`viewer`, `operator` or `admin`), and it stops working when that certificate is revoked or expires.
+- These RPCs accept an operator certificate only; an MCP key can never mint, list or revoke keys.
+
+`AuditEvent` (fleet) records the actor on every entry: `actor_kind` (`cert` or `mcp_key`), `actor_cn`, `actor_serial`, `key_id`, `via` (`web`, `mcp` or `api`), `tool`, `request_digest` and `outcome` (`ok`, `denied`, `pending` or `error`). `approval_id` and `approver_serial` are reserved for step-up approval and stay empty until it ships. All actor fields are empty on entries recorded before the manager captured an actor.
 
 Phase 2 will add role-aware service splits, protocol-adapter management, and full machine-config schema. Phase 3 adds HA, fleet, extensions, and recovery RPCs.
 
@@ -37,7 +56,11 @@ go get github.com/CryptOS-PKI/api@latest
 import cryptosv1 "github.com/CryptOS-PKI/api/go/cryptos/v1"
 ```
 
-Generated TS stubs (for `web/`) ship in a follow-up release once Phase 2 frontend work begins.
+```go
+import fleetv1 "github.com/CryptOS-PKI/api/go/cryptos/fleet/v1"
+```
+
+Generated TypeScript stubs for `web/` live under `gen/ts/cryptos/` (Connect-ES v2, `protoc-gen-es`).
 
 ## 🛠️ Contributing
 
@@ -52,7 +75,7 @@ task generate    # regenerate Go stubs after a .proto change
 task license     # re-inject Apache 2.0 headers via golic
 ```
 
-The generated stubs under `go/cryptos/v1/` are committed; `task ci` fails if they drift from the protos. No GitHub workflow runs that check yet (#73), so run `task ci` before you push.
+The generated stubs under `go/` and `gen/ts/` are committed; `task ci` fails if they drift from the protos. No GitHub workflow runs that check yet (#73), so run `task ci` before you push.
 
 ## 🚦 Status
 

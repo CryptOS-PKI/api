@@ -66,6 +66,9 @@ const (
 	// NodeServiceListRevocationsProcedure is the fully-qualified name of the NodeService's
 	// ListRevocations RPC.
 	NodeServiceListRevocationsProcedure = "/cryptos.v1.NodeService/ListRevocations"
+	// NodeServiceGetIssuedCertificateProcedure is the fully-qualified name of the NodeService's
+	// GetIssuedCertificate RPC.
+	NodeServiceGetIssuedCertificateProcedure = "/cryptos.v1.NodeService/GetIssuedCertificate"
 	// NodeServiceExportCAKeyProcedure is the fully-qualified name of the NodeService's ExportCAKey RPC.
 	NodeServiceExportCAKeyProcedure = "/cryptos.v1.NodeService/ExportCAKey"
 	// NodeServiceImportCAKeyProcedure is the fully-qualified name of the NodeService's ImportCAKey RPC.
@@ -181,6 +184,11 @@ type NodeServiceClient interface {
 	ListIssued(context.Context, *connect.Request[v1.ListIssuedRequest]) (*connect.Response[v1.ListIssuedResponse], error)
 	// ListRevocations returns this node's revoked certificates.
 	ListRevocations(context.Context, *connect.Request[v1.ListRevocationsRequest]) (*connect.Response[v1.ListRevocationsResponse], error)
+	// GetIssuedCertificate returns a certificate this node issued, identified by
+	// its hex serial, with its chain and current status, so a client can fetch
+	// the certificate itself rather than only its inventory entry. NotFound if
+	// the serial is not in this node's issued set.
+	GetIssuedCertificate(context.Context, *connect.Request[v1.GetIssuedCertificateRequest]) (*connect.Response[v1.GetIssuedCertificateResponse], error)
 	// ExportCAKey returns an encrypted backup of this node's software CA key and
 	// certificate chain, sealed under the operator passphrase. The plaintext key
 	// never leaves the node. Admin-authorized; refused on a TPM node (TPM keys
@@ -407,6 +415,12 @@ func NewNodeServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(nodeServiceMethods.ByName("ListRevocations")),
 			connect.WithClientOptions(opts...),
 		),
+		getIssuedCertificate: connect.NewClient[v1.GetIssuedCertificateRequest, v1.GetIssuedCertificateResponse](
+			httpClient,
+			baseURL+NodeServiceGetIssuedCertificateProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("GetIssuedCertificate")),
+			connect.WithClientOptions(opts...),
+		),
 		exportCAKey: connect.NewClient[v1.ExportCAKeyRequest, v1.ExportCAKeyResponse](
 			httpClient,
 			baseURL+NodeServiceExportCAKeyProcedure,
@@ -563,6 +577,7 @@ type nodeServiceClient struct {
 	revokeCertificate            *connect.Client[v1.RevokeCertificateRequest, v1.RevokeCertificateResponse]
 	listIssued                   *connect.Client[v1.ListIssuedRequest, v1.ListIssuedResponse]
 	listRevocations              *connect.Client[v1.ListRevocationsRequest, v1.ListRevocationsResponse]
+	getIssuedCertificate         *connect.Client[v1.GetIssuedCertificateRequest, v1.GetIssuedCertificateResponse]
 	exportCAKey                  *connect.Client[v1.ExportCAKeyRequest, v1.ExportCAKeyResponse]
 	importCAKey                  *connect.Client[v1.ImportCAKeyRequest, v1.ImportCAKeyResponse]
 	beginKeyRotation             *connect.Client[v1.BeginKeyRotationRequest, v1.BeginKeyRotationResponse]
@@ -651,6 +666,11 @@ func (c *nodeServiceClient) ListIssued(ctx context.Context, req *connect.Request
 // ListRevocations calls cryptos.v1.NodeService.ListRevocations.
 func (c *nodeServiceClient) ListRevocations(ctx context.Context, req *connect.Request[v1.ListRevocationsRequest]) (*connect.Response[v1.ListRevocationsResponse], error) {
 	return c.listRevocations.CallUnary(ctx, req)
+}
+
+// GetIssuedCertificate calls cryptos.v1.NodeService.GetIssuedCertificate.
+func (c *nodeServiceClient) GetIssuedCertificate(ctx context.Context, req *connect.Request[v1.GetIssuedCertificateRequest]) (*connect.Response[v1.GetIssuedCertificateResponse], error) {
+	return c.getIssuedCertificate.CallUnary(ctx, req)
 }
 
 // ExportCAKey calls cryptos.v1.NodeService.ExportCAKey.
@@ -820,6 +840,11 @@ type NodeServiceHandler interface {
 	ListIssued(context.Context, *connect.Request[v1.ListIssuedRequest]) (*connect.Response[v1.ListIssuedResponse], error)
 	// ListRevocations returns this node's revoked certificates.
 	ListRevocations(context.Context, *connect.Request[v1.ListRevocationsRequest]) (*connect.Response[v1.ListRevocationsResponse], error)
+	// GetIssuedCertificate returns a certificate this node issued, identified by
+	// its hex serial, with its chain and current status, so a client can fetch
+	// the certificate itself rather than only its inventory entry. NotFound if
+	// the serial is not in this node's issued set.
+	GetIssuedCertificate(context.Context, *connect.Request[v1.GetIssuedCertificateRequest]) (*connect.Response[v1.GetIssuedCertificateResponse], error)
 	// ExportCAKey returns an encrypted backup of this node's software CA key and
 	// certificate chain, sealed under the operator passphrase. The plaintext key
 	// never leaves the node. Admin-authorized; refused on a TPM node (TPM keys
@@ -1042,6 +1067,12 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(nodeServiceMethods.ByName("ListRevocations")),
 		connect.WithHandlerOptions(opts...),
 	)
+	nodeServiceGetIssuedCertificateHandler := connect.NewUnaryHandler(
+		NodeServiceGetIssuedCertificateProcedure,
+		svc.GetIssuedCertificate,
+		connect.WithSchema(nodeServiceMethods.ByName("GetIssuedCertificate")),
+		connect.WithHandlerOptions(opts...),
+	)
 	nodeServiceExportCAKeyHandler := connect.NewUnaryHandler(
 		NodeServiceExportCAKeyProcedure,
 		svc.ExportCAKey,
@@ -1208,6 +1239,8 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 			nodeServiceListIssuedHandler.ServeHTTP(w, r)
 		case NodeServiceListRevocationsProcedure:
 			nodeServiceListRevocationsHandler.ServeHTTP(w, r)
+		case NodeServiceGetIssuedCertificateProcedure:
+			nodeServiceGetIssuedCertificateHandler.ServeHTTP(w, r)
 		case NodeServiceExportCAKeyProcedure:
 			nodeServiceExportCAKeyHandler.ServeHTTP(w, r)
 		case NodeServiceImportCAKeyProcedure:
@@ -1313,6 +1346,10 @@ func (UnimplementedNodeServiceHandler) ListIssued(context.Context, *connect.Requ
 
 func (UnimplementedNodeServiceHandler) ListRevocations(context.Context, *connect.Request[v1.ListRevocationsRequest]) (*connect.Response[v1.ListRevocationsResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.ListRevocations is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) GetIssuedCertificate(context.Context, *connect.Request[v1.GetIssuedCertificateRequest]) (*connect.Response[v1.GetIssuedCertificateResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.GetIssuedCertificate is not implemented"))
 }
 
 func (UnimplementedNodeServiceHandler) ExportCAKey(context.Context, *connect.Request[v1.ExportCAKeyRequest]) (*connect.Response[v1.ExportCAKeyResponse], error) {

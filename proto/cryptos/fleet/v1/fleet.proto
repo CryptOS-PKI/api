@@ -17,6 +17,7 @@ syntax = "proto3";
 
 package cryptos.fleet.v1;
 
+import "cryptos/fleet/v1/operator_ca.proto";
 import "cryptos/v1/config.proto";
 import "cryptos/v1/node.proto";
 import "cryptos/v1/status.proto";
@@ -157,23 +158,79 @@ service FleetService {
   // names the node and restored subject only, never the secret or envelope).
   rpc ImportCAKey(ImportCAKeyRequest) returns (ImportCAKeyResponse);
 
-  // IssueOperatorCredential issues an operator client certificate. The browser
-  // generates the key and CSR; the manager routes signing to the node acting as
-  // the operator CA under an operator-<level> profile that carries the
-  // access-level extension. Only the CSR crosses the wire; the operator key
-  // stays in the browser. Admin-gated and audited (the audit names the subject
-  // and serial only, never the CSR or certificate bytes).
-  rpc IssueOperatorCredential(IssueOperatorCredentialRequest) returns (IssueOperatorCredentialResponse);
+  // IssueOperatorCredential was removed: the manager never signs an operator
+  // credential. The external operator CA signs it, and the result is recorded
+  // with RecordOperatorCredential. Don't reuse the name.
 
-  // RevokeOperatorCredential revokes an operator credential on the operator-CA
-  // node by hex serial, with an RFC 5280 reason code. The manager enforces the
-  // revocation in the authz middleware, so a revoked operator can no longer
-  // authenticate. Admin-gated and audited.
+  // CreateOperatorCredentialRequest stores a pending request for an operator
+  // credential from a CSR with subject CN=<email>, for the external operator
+  // CA to sign out of band. It returns the CSR, the OpenSSL extension section
+  // for the level, and the signing command. The request expires after 30
+  // days. Admin-gated and audited.
+  rpc CreateOperatorCredentialRequest(CreateOperatorCredentialRequestRequest) returns (CreateOperatorCredentialRequestResponse);
+
+  // ListOperatorCredentialRequests returns credential requests, newest first,
+  // optionally filtered by state. Operator-readable.
+  rpc ListOperatorCredentialRequests(ListOperatorCredentialRequestsRequest) returns (ListOperatorCredentialRequestsResponse);
+
+  // CancelOperatorCredentialRequest cancels a pending request. Admin-gated and
+  // audited.
+  rpc CancelOperatorCredentialRequest(CancelOperatorCredentialRequestRequest) returns (CancelOperatorCredentialRequestResponse);
+
+  // RecordOperatorCredential checks and records an operator certificate the
+  // external operator CA signed. With request_id, the level, CN and public key
+  // must match the pending request, which is then completed; without it, a
+  // certificate made entirely out of band is imported. The certificate must
+  // chain to the active operator CA and not be recorded already. Admin-gated
+  // and audited.
+  rpc RecordOperatorCredential(RecordOperatorCredentialRequest) returns (RecordOperatorCredentialResponse);
+
+  // RevokeOperatorCredential puts an operator credential on the manager's
+  // denylist, keyed by issuer and hex serial, with an RFC 5280 reason code.
+  // The authz middleware refuses the credential from its next request. A
+  // serial the manager never recorded can be denied too. It calls no node and
+  // doesn't revoke at the CA: the response warns to revoke there too and
+  // publish a new CRL. Admin-gated and audited.
   rpc RevokeOperatorCredential(RevokeOperatorCredentialRequest) returns (RevokeOperatorCredentialResponse);
 
-  // ListOperatorCredentials returns the operator credentials the manager has
-  // issued, with their level, expiry, and revocation state. Operator-readable.
+  // ListOperatorCredentials returns the operator credentials the manager
+  // knows: first-admin, requested, recorded and observed in use, with their
+  // issuer and revocation state. Operator-readable.
   rpc ListOperatorCredentials(ListOperatorCredentialsRequest) returns (ListOperatorCredentialsResponse);
+
+  // ListOperatorCAs returns the operator CAs the manager trusts or has
+  // trusted, with their CRL and OCSP state. Operator-readable.
+  rpc ListOperatorCAs(ListOperatorCAsRequest) returns (ListOperatorCAsResponse);
+
+  // RegisterOperatorCA registers a new operator CA after first run, with the
+  // same checks, preview and confirm_sha256 step as
+  // BootstrapService.RegisterOperatorCA. The new CA becomes active and the
+  // previous active CA becomes retiring, still trusted until it is retired.
+  // Refused with 1605 ROTATION_IN_PROGRESS while a retiring CA exists.
+  // Admin-gated and audited. Every operator-CA write returns 1607 while the
+  // operator CA comes from the manager's config file.
+  rpc RegisterOperatorCA(RegisterOperatorCARequest) returns (RegisterOperatorCAResponse);
+
+  // RetireOperatorCA stops trusting an operator CA; every certificate under
+  // it is refused from its next request. Refused with 1609 for the last
+  // active CA, and refused when the caller's own certificate chains only to
+  // it unless i_understand_self_lockout is set. Admin-gated and audited.
+  rpc RetireOperatorCA(RetireOperatorCARequest) returns (RetireOperatorCAResponse);
+
+  // SetOperatorCACRLSource changes an operator CA's CRL source. A new URL or
+  // CRL must verify against the CA first; switching to none needs the NO_CRL
+  // acknowledgement and cuts off MCP for certificates under the CA.
+  // Admin-gated and audited.
+  rpc SetOperatorCACRLSource(SetOperatorCACRLSourceRequest) returns (SetOperatorCACRLSourceResponse);
+
+  // UploadOperatorCRL stores a new CRL for an operator CA whose CRL source is
+  // upload. It must verify against the CA and be newer than the stored CRL.
+  // Admin-gated and audited.
+  rpc UploadOperatorCRL(UploadOperatorCRLRequest) returns (UploadOperatorCRLResponse);
+
+  // SetOperatorCAOCSP changes an operator CA's OCSP mode. OCSP_MODE_URL must
+  // pass a probe of the responder first. Admin-gated and audited.
+  rpc SetOperatorCAOCSP(SetOperatorCAOCSPRequest) returns (SetOperatorCAOCSPResponse);
 
   // PreviewAdoption performs the trust-on-first-use step of adopting a new
   // node: it dials the maintenance endpoint (no pin yet), captures the
@@ -799,49 +856,216 @@ message ImportCAKeyResponse {
   string issuer_cn = 2;
 }
 
-// IssueOperatorCredentialRequest carries the operator subject CN, the access
-// level to grant, and the browser-generated CSR to sign under the matching
-// operator-<level> profile.
-message IssueOperatorCredentialRequest {
-  string common_name = 1;
-  string level = 2; // "viewer"|"operator"|"admin"
-  bytes csr_der = 3; // browser-generated
-}
-
-// IssueOperatorCredentialResponse carries the signed operator certificate and
-// its hex serial. The browser assembles the PKCS#12 with its own key.
-message IssueOperatorCredentialResponse {
-  bytes cert_der = 1;
-  string serial_hex = 2;
-}
-
-// RevokeOperatorCredentialRequest names the operator credential to revoke by
+// RevokeOperatorCredentialRequest names the operator credential to deny by
 // hex serial, with the RFC 5280 reason code.
 message RevokeOperatorCredentialRequest {
   string serial_hex = 1;
   int32 reason_code = 2;
+  // issuer_sha256 is the operator CA's fingerprint. Empty means the recorded
+  // credential's issuer, or the active operator CA when the serial isn't
+  // recorded.
+  string issuer_sha256 = 3;
+  // note is a free-text reason kept with the denylist entry.
+  string note = 4;
 }
 
-// RevokeOperatorCredentialResponse echoes the revoked serial and the time it
-// was revoked (RFC3339).
+// RevokeOperatorCredentialResponse echoes the denied serial, its issuer and
+// the time it was denied (RFC3339).
 message RevokeOperatorCredentialResponse {
   string serial_hex = 1;
   string revoked_at = 2;
+  string issuer_sha256 = 3;
+  // warnings include the reminder that the manager's denylist doesn't revoke
+  // at the CA.
+  repeated string warnings = 4;
 }
 
 message ListOperatorCredentialsRequest {}
 
-// OperatorCredential is one issued operator credential row.
+// OperatorCredential is one operator credential the manager knows.
+// Timestamps are RFC3339 strings, empty when unset.
 message OperatorCredential {
+  // common_name is the certificate's CN, the holder's email.
   string common_name = 1;
   string serial_hex = 2;
-  string level = 3;
+  string level = 3; // "viewer"|"operator"|"admin"
   string not_after = 4;
+  // revoked is true when any revocation source refuses the credential.
   bool revoked = 5;
+  // kind is how the manager learned of it: "first_admin", "requested",
+  // "recorded", "observed" (seen in use, never recorded) or "legacy_node"
+  // (issued by a node before external operator CAs; read-only).
+  string kind = 6;
+  // issuer_sha256 is the operator CA's fingerprint, empty for legacy_node.
+  string issuer_sha256 = 7;
+  string email = 8;
+  string full_name = 9;
+  // denylisted is true when the credential is on the manager's denylist.
+  bool denylisted = 10;
+  // crl_revoked is true when the operator CA's CRL lists the credential.
+  bool crl_revoked = 11;
+  string first_seen_at = 12;
+  string last_seen_at = 13;
 }
 
 message ListOperatorCredentialsResponse {
   repeated OperatorCredential items = 1;
+}
+
+// CreateOperatorCredentialRequestRequest asks for a credential at a level for
+// a holder, from a CSR made in the browser or on the holder's machine.
+message CreateOperatorCredentialRequestRequest {
+  string level = 1; // "viewer"|"operator"|"admin"
+  string email = 2;
+  string full_name = 3;
+  // csr_der has subject exactly CN=<email> and a P-384 or RSA 3072+ key, at
+  // most 4 KiB.
+  bytes csr_der = 4;
+}
+
+// CreateOperatorCredentialRequestResponse carries what the CA operator needs
+// to sign the request.
+message CreateOperatorCredentialRequestResponse {
+  string request_id = 1;
+  string csr_pem = 2;
+  // extfile_section is the OpenSSL extension section for the level.
+  string extfile_section = 3;
+  // openssl_command is the openssl ca command that signs the CSR.
+  string openssl_command = 4;
+  string expires_at = 5;
+}
+
+message ListOperatorCredentialRequestsRequest {
+  // state filters to "pending", "completed", "cancelled" or "expired"; empty
+  // lists all.
+  string state = 1;
+}
+
+message ListOperatorCredentialRequestsResponse {
+  repeated OperatorCredentialRequest items = 1;
+}
+
+message CancelOperatorCredentialRequestRequest {
+  string request_id = 1;
+}
+
+message CancelOperatorCredentialRequestResponse {
+  OperatorCredentialRequest request = 1;
+}
+
+// OperatorCredentialRequest is one request for an operator credential.
+// Timestamps are RFC3339 strings, empty when unset.
+message OperatorCredentialRequest {
+  string id = 1;
+  string level = 2;
+  string email = 3;
+  string full_name = 4;
+  // csr_pem is empty once the request is no longer pending.
+  string csr_pem = 5;
+  // state is "pending", "completed", "cancelled" or "expired".
+  string state = 6;
+  string created_by_cn = 7;
+  string created_at = 8;
+  string expires_at = 9;
+  // completed_serial is the recorded certificate's hex serial once completed.
+  string completed_serial = 10;
+}
+
+message RecordOperatorCredentialRequest {
+  // cert_der is exactly one certificate, DER, at most 8 KiB.
+  bytes cert_der = 1;
+  // request_id is the pending request the certificate answers. Optional.
+  string request_id = 2;
+  // full_name is the holder's name when there is no request. Optional.
+  string full_name = 3;
+}
+
+message RecordOperatorCredentialResponse {
+  OperatorCredential credential = 1;
+  // warnings, for example a validity over 400 days.
+  repeated string warnings = 2;
+}
+
+message ListOperatorCAsRequest {}
+
+message ListOperatorCAsResponse {
+  repeated OperatorCA items = 1;
+}
+
+// RegisterOperatorCARequest has the same fields as
+// BootstrapServiceRegisterOperatorCARequest, which documents them.
+message RegisterOperatorCARequest {
+  bytes ca_cert_der = 1;
+  oneof crl_source {
+    string url = 2;
+    bytes crl_der = 3;
+    bool none = 4;
+  }
+  OcspMode ocsp_mode = 5;
+  string ocsp_url = 6;
+  repeated OperatorCAAcknowledgement acknowledgements = 7;
+  string confirm_sha256 = 8;
+}
+
+// RegisterOperatorCAResponse has the same fields as
+// BootstrapServiceRegisterOperatorCAResponse, which documents them.
+message RegisterOperatorCAResponse {
+  OperatorCA operator_ca = 1;
+  bool confirmed = 2;
+  string admin_extfile = 3;
+  OcspProbeResult ocsp_probe = 4;
+}
+
+message RetireOperatorCARequest {
+  string sha256 = 1;
+  // i_understand_self_lockout allows retiring the CA the caller's own
+  // certificate chains to.
+  bool i_understand_self_lockout = 2;
+}
+
+message RetireOperatorCAResponse {
+  OperatorCA operator_ca = 1;
+}
+
+message SetOperatorCACRLSourceRequest {
+  string sha256 = 1;
+  oneof crl_source {
+    // url is an http or https URL; the CRL there must verify first.
+    string url = 2;
+    // none, set to true, means no CRL. It needs the NO_CRL acknowledgement.
+    bool none = 3;
+    // crl_der switches to the upload source with this initial CRL, DER or
+    // PEM, at most 4 MiB.
+    bytes crl_der = 5;
+  }
+  repeated OperatorCAAcknowledgement acknowledgements = 4;
+}
+
+message SetOperatorCACRLSourceResponse {
+  OperatorCA operator_ca = 1;
+}
+
+message UploadOperatorCRLRequest {
+  string sha256 = 1;
+  // crl_der is the CRL, DER or PEM, at most 4 MiB.
+  bytes crl_der = 2;
+}
+
+message UploadOperatorCRLResponse {
+  OperatorCA operator_ca = 1;
+}
+
+message SetOperatorCAOCSPRequest {
+  string sha256 = 1;
+  OcspMode ocsp_mode = 2;
+  // ocsp_url is required for OCSP_MODE_URL, http or https, at most 2 KiB.
+  string ocsp_url = 3;
+}
+
+message SetOperatorCAOCSPResponse {
+  OperatorCA operator_ca = 1;
+  // ocsp_probe is the probe result for OCSP_MODE_URL, absent otherwise.
+  OcspProbeResult ocsp_probe = 2;
 }
 
 // PreviewAdoptionRequest names the maintenance endpoint to inspect.

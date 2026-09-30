@@ -126,7 +126,11 @@ export type ApplyConfigResponse = Message<"cryptos.v1.ApplyConfigResponse"> & {
   generation: bigint;
 
   /**
-   * True when the apply changed a field that takes effect only on reboot.
+   * True when the apply changed a field that takes effect only on reboot. Any
+   * change to an enrolment protocol block (Pki.acme, Pki.est), switching it on
+   * or off included, sets it: the node stores the config and the protocol
+   * changes at the next boot. NodeStatus.config_reboot_pending stays true until
+   * then.
    *
    * @generated from field: bool requires_reboot = 2;
    */

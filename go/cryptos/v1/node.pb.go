@@ -265,7 +265,11 @@ type ApplyConfigResponse struct {
 
 	// Monotonically increasing generation; bumped on every successful apply.
 	Generation uint64 `protobuf:"varint,1,opt,name=generation,proto3" json:"generation,omitempty"`
-	// True when the apply changed a field that takes effect only on reboot.
+	// True when the apply changed a field that takes effect only on reboot. Any
+	// change to an enrolment protocol block (Pki.acme, Pki.est), switching it on
+	// or off included, sets it: the node stores the config and the protocol
+	// changes at the next boot. NodeStatus.config_reboot_pending stays true until
+	// then.
 	RequiresReboot bool `protobuf:"varint,2,opt,name=requires_reboot,json=requiresReboot,proto3" json:"requires_reboot,omitempty"`
 	// SHA-256 digest of the canonical-encoded applied configuration.
 	ConfigDigest []byte `protobuf:"bytes,3,opt,name=config_digest,json=configDigest,proto3" json:"config_digest,omitempty"`

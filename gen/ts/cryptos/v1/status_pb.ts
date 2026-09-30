@@ -12,7 +12,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file cryptos/v1/status.proto.
  */
 export const file_cryptos_v1_status: GenFile = /*@__PURE__*/
-  fileDesc("ChdjcnlwdG9zL3YxL3N0YXR1cy5wcm90bxIKY3J5cHRvcy52MSK3AwoKTm9kZVN0YXR1cxIiCgRyb2xlGAEgASgOMhQuY3J5cHRvcy52MS5Ob2RlUm9sZRIxCg5pZGVudGl0eV9zdGF0ZRgCIAEoDjIZLmNyeXB0b3MudjEuSWRlbnRpdHlTdGF0ZRInCgl0cG1fc3RhdGUYAyABKA4yFC5jcnlwdG9zLnYxLlRwbVN0YXRlEikKCmV0Y2Rfc3RhdGUYBCABKA4yFS5jcnlwdG9zLnYxLkV0Y2RTdGF0ZRISCgpib290X2NvdW50GAUgASgEEhgKEHNvZnR3YXJlX3ZlcnNpb24YBiABKAkSNAoNZmxlZXRfbWFuYWdlchgHIAEoDjIdLmNyeXB0b3MudjEuRmxlZXRNYW5hZ2VyU3RhdGUSPQoUcmV2b2NhdGlvbl9wcmVmbGlnaHQYCCABKAsyHy5jcnlwdG9zLnYxLlJldm9jYXRpb25QcmVmbGlnaHQSLAoIcmVzb2x2ZXIYCSABKAsyGi5jcnlwdG9zLnYxLlJlc29sdmVyU3RhdHVzEi0KCXRpbWVfc3luYxgKIAEoCzIaLmNyeXB0b3MudjEuVGltZVN5bmNTdGF0dXMioAEKE1Jldm9jYXRpb25QcmVmbGlnaHQSMwoFc3RhdGUYASABKA4yJC5jcnlwdG9zLnYxLlJldm9jYXRpb25QcmVmbGlnaHRTdGF0ZRIQCghiYXNlX3VybBgCIAEoCRISCgpsYXN0X2Vycm9yGAMgASgJEi4KCmNoZWNrZWRfYXQYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wImEKDlJlc29sdmVyU3RhdHVzEioKBnNvdXJjZRgBIAEoDjIaLmNyeXB0b3MudjEuUmVzb2x2ZXJTb3VyY2USEwoLbmFtZXNlcnZlcnMYAiADKAkSDgoGc2VhcmNoGAMgAygJIqUCCg5UaW1lU3luY1N0YXR1cxIoCgVzdGF0ZRgBIAEoDjIZLmNyeXB0b3MudjEuVGltZVN5bmNTdGF0ZRImCgZzb3VyY2UYAiABKA4yFi5jcnlwdG9zLnYxLlRpbWVTb3VyY2USDwoHc2VydmVycxgDIAMoCRITCgtsYXN0X3NlcnZlchgEIAEoCRIuCgtsYXN0X29mZnNldBgFIAEoCzIZLmdvb2dsZS5wcm90b2J1Zi5EdXJhdGlvbhIPCgdzdHJhdHVtGAYgASgNEi0KCWxhc3Rfc3luYxgHIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASFwoPc3RlcHBlZF9hdF9ib290GAggASgIEhIKCmxhc3RfZXJyb3IYCSABKAkq6AEKGFJldm9jYXRpb25QcmVmbGlnaHRTdGF0ZRIqCiZSRVZPQ0FUSU9OX1BSRUZMSUdIVF9TVEFURV9VTlNQRUNJRklFRBAAEi0KKVJFVk9DQVRJT05fUFJFRkxJR0hUX1NUQVRFX05PVF9DT05GSUdVUkVEEAESJgoiUkVWT0NBVElPTl9QUkVGTElHSFRfU1RBVEVfUEVORElORxACEiEKHVJFVk9DQVRJT05fUFJFRkxJR0hUX1NUQVRFX09LEAMSJgoiUkVWT0NBVElPTl9QUkVGTElHSFRfU1RBVEVfRkFJTElORxAEKo8BCg5SZXNvbHZlclNvdXJjZRIfChtSRVNPTFZFUl9TT1VSQ0VfVU5TUEVDSUZJRUQQABIYChRSRVNPTFZFUl9TT1VSQ0VfTk9ORRABEiIKHlJFU09MVkVSX1NPVVJDRV9NQUNISU5FX0NPTkZJRxACEh4KGlJFU09MVkVSX1NPVVJDRV9ESENQX0xFQVNFEAMqqwEKDVRpbWVTeW5jU3RhdGUSHwobVElNRV9TWU5DX1NUQVRFX1VOU1BFQ0lGSUVEEAASIgoeVElNRV9TWU5DX1NUQVRFX05PVF9DT05GSUdVUkVEEAESGwoXVElNRV9TWU5DX1NUQVRFX1BFTkRJTkcQAhIaChZUSU1FX1NZTkNfU1RBVEVfU1lOQ0VEEAMSHAoYVElNRV9TWU5DX1NUQVRFX1VOU1lOQ0VEEAQqewoKVGltZVNvdXJjZRIbChdUSU1FX1NPVVJDRV9VTlNQRUNJRklFRBAAEhQKEFRJTUVfU09VUkNFX05PTkUQARIeChpUSU1FX1NPVVJDRV9NQUNISU5FX0NPTkZJRxACEhoKFlRJTUVfU09VUkNFX0RIQ1BfTEVBU0UQAypsCghOb2RlUm9sZRIZChVOT0RFX1JPTEVfVU5TUEVDSUZJRUQQABISCg5OT0RFX1JPTEVfUk9PVBABEhoKFk5PREVfUk9MRV9JTlRFUk1FRElBVEUQAhIVChFOT0RFX1JPTEVfSVNTVUlORxADKrMBCg1JZGVudGl0eVN0YXRlEh4KGklERU5USVRZX1NUQVRFX1VOU1BFQ0lGSUVEEAASFwoTSURFTlRJVFlfU1RBVEVfTk9ORRABEicKI0lERU5USVRZX1NUQVRFX0NFUkVNT05ZX0lOX1BST0dSRVNTEAISHgoaSURFTlRJVFlfU1RBVEVfRVNUQUJMSVNIRUQQAxIgChxJREVOVElUWV9TVEFURV9BV0FJVElOR19DRVJUEAQqeQoIVHBtU3RhdGUSGQoVVFBNX1NUQVRFX1VOU1BFQ0lGSUVEEAASEAoMVFBNX1NUQVRFX09LEAESGQoVVFBNX1NUQVRFX1VOQVZBSUxBQkxFEAISJQohVFBNX1NUQVRFX0lOU1VGRklDSUVOVF9DQVBBQklMSVRZEAMqUwoJRXRjZFN0YXRlEhoKFkVUQ0RfU1RBVEVfVU5TUEVDSUZJRUQQABIRCg1FVENEX1NUQVRFX09LEAESFwoTRVRDRF9TVEFURV9ERUdSQURFRBACKqcBChFGbGVldE1hbmFnZXJTdGF0ZRIjCh9GTEVFVF9NQU5BR0VSX1NUQVRFX1VOU1BFQ0lGSUVEEAASJAogRkxFRVRfTUFOQUdFUl9TVEFURV9OT1RfRU5ST0xMRUQQARIhCh1GTEVFVF9NQU5BR0VSX1NUQVRFX0NPTk5FQ1RFRBACEiQKIEZMRUVUX01BTkFHRVJfU1RBVEVfRElTQ09OTkVDVEVEEANCNFoyZ2l0aHViLmNvbS9DcnlwdE9TLVBLSS9hcGkvZ28vY3J5cHRvcy92MTtjcnlwdG9zdjFiBnByb3RvMw", [file_google_protobuf_duration, file_google_protobuf_timestamp]);
+  fileDesc("ChdjcnlwdG9zL3YxL3N0YXR1cy5wcm90bxIKY3J5cHRvcy52MSKFBAoKTm9kZVN0YXR1cxIiCgRyb2xlGAEgASgOMhQuY3J5cHRvcy52MS5Ob2RlUm9sZRIxCg5pZGVudGl0eV9zdGF0ZRgCIAEoDjIZLmNyeXB0b3MudjEuSWRlbnRpdHlTdGF0ZRInCgl0cG1fc3RhdGUYAyABKA4yFC5jcnlwdG9zLnYxLlRwbVN0YXRlEikKCmV0Y2Rfc3RhdGUYBCABKA4yFS5jcnlwdG9zLnYxLkV0Y2RTdGF0ZRISCgpib290X2NvdW50GAUgASgEEhgKEHNvZnR3YXJlX3ZlcnNpb24YBiABKAkSNAoNZmxlZXRfbWFuYWdlchgHIAEoDjIdLmNyeXB0b3MudjEuRmxlZXRNYW5hZ2VyU3RhdGUSPQoUcmV2b2NhdGlvbl9wcmVmbGlnaHQYCCABKAsyHy5jcnlwdG9zLnYxLlJldm9jYXRpb25QcmVmbGlnaHQSLAoIcmVzb2x2ZXIYCSABKAsyGi5jcnlwdG9zLnYxLlJlc29sdmVyU3RhdHVzEi0KCXRpbWVfc3luYxgKIAEoCzIaLmNyeXB0b3MudjEuVGltZVN5bmNTdGF0dXMSLQoJcHJvdG9jb2xzGAsgAygLMhouY3J5cHRvcy52MS5Qcm90b2NvbFN0YXR1cxIdChVjb25maWdfcmVib290X3BlbmRpbmcYDCABKAgifAoOUHJvdG9jb2xTdGF0dXMSLQoIcHJvdG9jb2wYASABKA4yGy5jcnlwdG9zLnYxLlNlcnZpY2VQcm90b2NvbBISCgpjb25maWd1cmVkGAIgASgIEg8KB3J1bm5pbmcYAyABKAgSFgoOcmVib290X3BlbmRpbmcYBCABKAgioAEKE1Jldm9jYXRpb25QcmVmbGlnaHQSMwoFc3RhdGUYASABKA4yJC5jcnlwdG9zLnYxLlJldm9jYXRpb25QcmVmbGlnaHRTdGF0ZRIQCghiYXNlX3VybBgCIAEoCRISCgpsYXN0X2Vycm9yGAMgASgJEi4KCmNoZWNrZWRfYXQYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wImEKDlJlc29sdmVyU3RhdHVzEioKBnNvdXJjZRgBIAEoDjIaLmNyeXB0b3MudjEuUmVzb2x2ZXJTb3VyY2USEwoLbmFtZXNlcnZlcnMYAiADKAkSDgoGc2VhcmNoGAMgAygJIqUCCg5UaW1lU3luY1N0YXR1cxIoCgVzdGF0ZRgBIAEoDjIZLmNyeXB0b3MudjEuVGltZVN5bmNTdGF0ZRImCgZzb3VyY2UYAiABKA4yFi5jcnlwdG9zLnYxLlRpbWVTb3VyY2USDwoHc2VydmVycxgDIAMoCRITCgtsYXN0X3NlcnZlchgEIAEoCRIuCgtsYXN0X29mZnNldBgFIAEoCzIZLmdvb2dsZS5wcm90b2J1Zi5EdXJhdGlvbhIPCgdzdHJhdHVtGAYgASgNEi0KCWxhc3Rfc3luYxgHIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASFwoPc3RlcHBlZF9hdF9ib290GAggASgIEhIKCmxhc3RfZXJyb3IYCSABKAkqaAoPU2VydmljZVByb3RvY29sEiAKHFNFUlZJQ0VfUFJPVE9DT0xfVU5TUEVDSUZJRUQQABIZChVTRVJWSUNFX1BST1RPQ09MX0FDTUUQARIYChRTRVJWSUNFX1BST1RPQ09MX0VTVBACKugBChhSZXZvY2F0aW9uUHJlZmxpZ2h0U3RhdGUSKgomUkVWT0NBVElPTl9QUkVGTElHSFRfU1RBVEVfVU5TUEVDSUZJRUQQABItCilSRVZPQ0FUSU9OX1BSRUZMSUdIVF9TVEFURV9OT1RfQ09ORklHVVJFRBABEiYKIlJFVk9DQVRJT05fUFJFRkxJR0hUX1NUQVRFX1BFTkRJTkcQAhIhCh1SRVZPQ0FUSU9OX1BSRUZMSUdIVF9TVEFURV9PSxADEiYKIlJFVk9DQVRJT05fUFJFRkxJR0hUX1NUQVRFX0ZBSUxJTkcQBCqPAQoOUmVzb2x2ZXJTb3VyY2USHwobUkVTT0xWRVJfU09VUkNFX1VOU1BFQ0lGSUVEEAASGAoUUkVTT0xWRVJfU09VUkNFX05PTkUQARIiCh5SRVNPTFZFUl9TT1VSQ0VfTUFDSElORV9DT05GSUcQAhIeChpSRVNPTFZFUl9TT1VSQ0VfREhDUF9MRUFTRRADKqsBCg1UaW1lU3luY1N0YXRlEh8KG1RJTUVfU1lOQ19TVEFURV9VTlNQRUNJRklFRBAAEiIKHlRJTUVfU1lOQ19TVEFURV9OT1RfQ09ORklHVVJFRBABEhsKF1RJTUVfU1lOQ19TVEFURV9QRU5ESU5HEAISGgoWVElNRV9TWU5DX1NUQVRFX1NZTkNFRBADEhwKGFRJTUVfU1lOQ19TVEFURV9VTlNZTkNFRBAEKnsKClRpbWVTb3VyY2USGwoXVElNRV9TT1VSQ0VfVU5TUEVDSUZJRUQQABIUChBUSU1FX1NPVVJDRV9OT05FEAESHgoaVElNRV9TT1VSQ0VfTUFDSElORV9DT05GSUcQAhIaChZUSU1FX1NPVVJDRV9ESENQX0xFQVNFEAMqbAoITm9kZVJvbGUSGQoVTk9ERV9ST0xFX1VOU1BFQ0lGSUVEEAASEgoOTk9ERV9ST0xFX1JPT1QQARIaChZOT0RFX1JPTEVfSU5URVJNRURJQVRFEAISFQoRTk9ERV9ST0xFX0lTU1VJTkcQAyqzAQoNSWRlbnRpdHlTdGF0ZRIeChpJREVOVElUWV9TVEFURV9VTlNQRUNJRklFRBAAEhcKE0lERU5USVRZX1NUQVRFX05PTkUQARInCiNJREVOVElUWV9TVEFURV9DRVJFTU9OWV9JTl9QUk9HUkVTUxACEh4KGklERU5USVRZX1NUQVRFX0VTVEFCTElTSEVEEAMSIAocSURFTlRJVFlfU1RBVEVfQVdBSVRJTkdfQ0VSVBAEKnkKCFRwbVN0YXRlEhkKFVRQTV9TVEFURV9VTlNQRUNJRklFRBAAEhAKDFRQTV9TVEFURV9PSxABEhkKFVRQTV9TVEFURV9VTkFWQUlMQUJMRRACEiUKIVRQTV9TVEFURV9JTlNVRkZJQ0lFTlRfQ0FQQUJJTElUWRADKlMKCUV0Y2RTdGF0ZRIaChZFVENEX1NUQVRFX1VOU1BFQ0lGSUVEEAASEQoNRVRDRF9TVEFURV9PSxABEhcKE0VUQ0RfU1RBVEVfREVHUkFERUQQAiqnAQoRRmxlZXRNYW5hZ2VyU3RhdGUSIwofRkxFRVRfTUFOQUdFUl9TVEFURV9VTlNQRUNJRklFRBAAEiQKIEZMRUVUX01BTkFHRVJfU1RBVEVfTk9UX0VOUk9MTEVEEAESIQodRkxFRVRfTUFOQUdFUl9TVEFURV9DT05ORUNURUQQAhIkCiBGTEVFVF9NQU5BR0VSX1NUQVRFX0RJU0NPTk5FQ1RFRBADQjRaMmdpdGh1Yi5jb20vQ3J5cHRPUy1QS0kvYXBpL2dvL2NyeXB0b3MvdjE7Y3J5cHRvc3YxYgZwcm90bzM", [file_google_protobuf_duration, file_google_protobuf_timestamp]);
 
 /**
  * NodeStatus is the response from GetStatus.
@@ -79,6 +79,26 @@ export type NodeStatus = Message<"cryptos.v1.NodeStatus"> & {
    * @generated from field: cryptos.v1.TimeSyncStatus time_sync = 10;
    */
   timeSync?: TimeSyncStatus | undefined;
+
+  /**
+   * protocols reports every enrolment protocol the node knows, configured in
+   * the stored machine config against running this boot. Unset in maintenance
+   * mode.
+   *
+   * @generated from field: repeated cryptos.v1.ProtocolStatus protocols = 11;
+   */
+  protocols: ProtocolStatus[];
+
+  /**
+   * config_reboot_pending is true when the stored machine config differs from
+   * the one this boot started from in a field that takes effect only at boot:
+   * an ApplyConfig answered requires_reboot=true and the node has not rebooted
+   * since. It covers every reboot-required field, not only the protocol
+   * blocks. False in maintenance mode.
+   *
+   * @generated from field: bool config_reboot_pending = 12;
+   */
+  configRebootPending: boolean;
 };
 
 /**
@@ -87,6 +107,51 @@ export type NodeStatus = Message<"cryptos.v1.NodeStatus"> & {
  */
 export const NodeStatusSchema: GenMessage<NodeStatus> = /*@__PURE__*/
   messageDesc(file_cryptos_v1_status, 0);
+
+/**
+ * ProtocolStatus is one enrolment protocol's switch state. A protocol switch
+ * is reboot-required, so configured and running can differ until the next
+ * boot.
+ *
+ * @generated from message cryptos.v1.ProtocolStatus
+ */
+export type ProtocolStatus = Message<"cryptos.v1.ProtocolStatus"> & {
+  /**
+   * @generated from field: cryptos.v1.ServiceProtocol protocol = 1;
+   */
+  protocol: ServiceProtocol;
+
+  /**
+   * configured is true when the stored machine config has the protocol's block
+   * with enabled=true.
+   *
+   * @generated from field: bool configured = 2;
+   */
+  configured: boolean;
+
+  /**
+   * running is true when the protocol's listener started at this boot.
+   *
+   * @generated from field: bool running = 3;
+   */
+  running: boolean;
+
+  /**
+   * reboot_pending is true when the stored block differs from the one the
+   * running listener started from: switched on or off, or with changed
+   * settings. The next boot applies it.
+   *
+   * @generated from field: bool reboot_pending = 4;
+   */
+  rebootPending: boolean;
+};
+
+/**
+ * Describes the message cryptos.v1.ProtocolStatus.
+ * Use `create(ProtocolStatusSchema)` to create a new message.
+ */
+export const ProtocolStatusSchema: GenMessage<ProtocolStatus> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_status, 1);
 
 /**
  * RevocationPreflight reports whether the configured revocation base URL is
@@ -133,7 +198,7 @@ export type RevocationPreflight = Message<"cryptos.v1.RevocationPreflight"> & {
  * Use `create(RevocationPreflightSchema)` to create a new message.
  */
 export const RevocationPreflightSchema: GenMessage<RevocationPreflight> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_status, 1);
+  messageDesc(file_cryptos_v1_status, 2);
 
 /**
  * ResolverStatus reports where the node's DNS resolver configuration came from
@@ -167,7 +232,7 @@ export type ResolverStatus = Message<"cryptos.v1.ResolverStatus"> & {
  * Use `create(ResolverStatusSchema)` to create a new message.
  */
 export const ResolverStatusSchema: GenMessage<ResolverStatus> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_status, 2);
+  messageDesc(file_cryptos_v1_status, 3);
 
 /**
  * TimeSyncStatus reports where the node's time comes from and how the latest
@@ -248,7 +313,40 @@ export type TimeSyncStatus = Message<"cryptos.v1.TimeSyncStatus"> & {
  * Use `create(TimeSyncStatusSchema)` to create a new message.
  */
 export const TimeSyncStatusSchema: GenMessage<TimeSyncStatus> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_status, 3);
+  messageDesc(file_cryptos_v1_status, 4);
+
+/**
+ * ServiceProtocol names an enrolment protocol a node can serve. Values are
+ * added as protocols gain a Pki block.
+ *
+ * @generated from enum cryptos.v1.ServiceProtocol
+ */
+export enum ServiceProtocol {
+  /**
+   * @generated from enum value: SERVICE_PROTOCOL_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * ACME, RFC 8555 (Pki.acme).
+   *
+   * @generated from enum value: SERVICE_PROTOCOL_ACME = 1;
+   */
+  ACME = 1,
+
+  /**
+   * EST, RFC 7030 (Pki.est).
+   *
+   * @generated from enum value: SERVICE_PROTOCOL_EST = 2;
+   */
+  EST = 2,
+}
+
+/**
+ * Describes the enum cryptos.v1.ServiceProtocol.
+ */
+export const ServiceProtocolSchema: GenEnum<ServiceProtocol> = /*@__PURE__*/
+  enumDesc(file_cryptos_v1_status, 0);
 
 /**
  * RevocationPreflightState is the outcome of the latest revocation preflight.
@@ -290,7 +388,7 @@ export enum RevocationPreflightState {
  * Describes the enum cryptos.v1.RevocationPreflightState.
  */
 export const RevocationPreflightStateSchema: GenEnum<RevocationPreflightState> = /*@__PURE__*/
-  enumDesc(file_cryptos_v1_status, 0);
+  enumDesc(file_cryptos_v1_status, 1);
 
 /**
  * ResolverSource names where the node's nameservers came from.
@@ -330,7 +428,7 @@ export enum ResolverSource {
  * Describes the enum cryptos.v1.ResolverSource.
  */
 export const ResolverSourceSchema: GenEnum<ResolverSource> = /*@__PURE__*/
-  enumDesc(file_cryptos_v1_status, 1);
+  enumDesc(file_cryptos_v1_status, 2);
 
 /**
  * TimeSyncState is the node's clock synchronisation state.
@@ -377,7 +475,7 @@ export enum TimeSyncState {
  * Describes the enum cryptos.v1.TimeSyncState.
  */
 export const TimeSyncStateSchema: GenEnum<TimeSyncState> = /*@__PURE__*/
-  enumDesc(file_cryptos_v1_status, 2);
+  enumDesc(file_cryptos_v1_status, 3);
 
 /**
  * TimeSource names where the node's time servers came from.
@@ -416,7 +514,7 @@ export enum TimeSource {
  * Describes the enum cryptos.v1.TimeSource.
  */
 export const TimeSourceSchema: GenEnum<TimeSource> = /*@__PURE__*/
-  enumDesc(file_cryptos_v1_status, 3);
+  enumDesc(file_cryptos_v1_status, 4);
 
 /**
  * NodeRole is the role this node booted into, from machine config.
@@ -449,7 +547,7 @@ export enum NodeRole {
  * Describes the enum cryptos.v1.NodeRole.
  */
 export const NodeRoleSchema: GenEnum<NodeRole> = /*@__PURE__*/
-  enumDesc(file_cryptos_v1_status, 4);
+  enumDesc(file_cryptos_v1_status, 5);
 
 /**
  * IdentityState reflects whether the node has a CA identity yet.
@@ -490,7 +588,7 @@ export enum IdentityState {
  * Describes the enum cryptos.v1.IdentityState.
  */
 export const IdentityStateSchema: GenEnum<IdentityState> = /*@__PURE__*/
-  enumDesc(file_cryptos_v1_status, 5);
+  enumDesc(file_cryptos_v1_status, 6);
 
 /**
  * TpmState reports TPM availability and capabilities.
@@ -523,7 +621,7 @@ export enum TpmState {
  * Describes the enum cryptos.v1.TpmState.
  */
 export const TpmStateSchema: GenEnum<TpmState> = /*@__PURE__*/
-  enumDesc(file_cryptos_v1_status, 6);
+  enumDesc(file_cryptos_v1_status, 7);
 
 /**
  * EtcdState reports the embedded datastore's health.
@@ -551,7 +649,7 @@ export enum EtcdState {
  * Describes the enum cryptos.v1.EtcdState.
  */
 export const EtcdStateSchema: GenEnum<EtcdState> = /*@__PURE__*/
-  enumDesc(file_cryptos_v1_status, 7);
+  enumDesc(file_cryptos_v1_status, 8);
 
 /**
  * FleetManagerState reports whether the node is connected to a Fleet Manager.
@@ -586,5 +684,5 @@ export enum FleetManagerState {
  * Describes the enum cryptos.v1.FleetManagerState.
  */
 export const FleetManagerStateSchema: GenEnum<FleetManagerState> = /*@__PURE__*/
-  enumDesc(file_cryptos_v1_status, 8);
+  enumDesc(file_cryptos_v1_status, 9);
 

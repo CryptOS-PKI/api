@@ -23,8 +23,8 @@ Taskfile.yml             # fmt / lint / generate / test / ci targets
 | `node.proto` | `NodeService` — the per-node management surface: config (`ApplyConfig`, `GetConfig`), status and identity, the first-boot ceremony, CA signing and revocation, key escrow and rotation, reset, in-place image upgrade, and `Reboot` (orderly, CN-confirmed reboot or power-off). |
 | `identity.proto` | `Identity` — DER + PEM + leaf SHA-256 for the CA chain. |
 | `ceremony.proto` | `CeremonyEvent` stream messages + ceremony kind/event enums. |
-| `status.proto` | `NodeStatus` — role, identity state, TPM state, etcd state, boot count, the revocation preflight result (state, last error, when it was checked), the DNS resolver source and nameservers, and the SNTP time-sync state (source, servers, last offset and sync, and the latest error). |
-| `config.proto` | `MachineConfig` Phase 1 subset (role/network/storage/bootstrap/pki). |
+| `status.proto` | `NodeStatus` — role, identity state, TPM state, etcd state, boot count, the revocation preflight result (state, last error, when it was checked), the DNS resolver source and nameservers, the SNTP time-sync state (source, servers, last offset and sync, and the latest error), each enrolment protocol's configured and running state, and whether a stored config change is waiting for a reboot. |
+| `config.proto` | `MachineConfig` Phase 1 subset (role/network/storage/bootstrap/pki), plus the ACME and EST enrolment blocks on `Pki` (`acme`, `est`), each with an explicit `enabled` switch that takes effect at the next boot. |
 | `audit.proto` | `AuditEvent` — hash-chained audit log entry shape. |
 | `fleet/v1/fleet.proto` | `FleetService` — the Fleet Manager's surface over the fleet: node (including `RenameNode`), certificate, profile, adapter, enrollment and operator-credential RPCs, the manager audit log (`ListAudit`), MCP agent key management (`ListMcpKeys`, `RevokeMcpKey`, `CreateMcpKey`), and step-up approvals (`ListApprovals`, `DecideApproval`). |
 

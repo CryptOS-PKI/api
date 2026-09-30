@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file cryptos/v1/config.proto.
  */
 export const file_cryptos_v1_config: GenFile = /*@__PURE__*/
-  fileDesc("ChdjcnlwdG9zL3YxL2NvbmZpZy5wcm90bxIKY3J5cHRvcy52MSKJAwoNTWFjaGluZUNvbmZpZxITCgthcGlfdmVyc2lvbhgBIAEoCRIMCgRraW5kGAIgASgJEiYKCG1ldGFkYXRhGAMgASgLMhQuY3J5cHRvcy52MS5NZXRhZGF0YRIeCgRyb2xlGAQgASgLMhAuY3J5cHRvcy52MS5Sb2xlEiQKB25ldHdvcmsYBSABKAsyEy5jcnlwdG9zLnYxLk5ldHdvcmsSJAoHc3RvcmFnZRgGIAEoCzITLmNyeXB0b3MudjEuU3RvcmFnZRIoCglib290c3RyYXAYByABKAsyFS5jcnlwdG9zLnYxLkJvb3RzdHJhcBIcCgNwa2kYCCABKAsyDy5jcnlwdG9zLnYxLlBraRIkCgdpbnN0YWxsGAkgASgLMhMuY3J5cHRvcy52MS5JbnN0YWxsEicKCXN0YXRlX2tleRgKIAEoCzIULmNyeXB0b3MudjEuU3RhdGVLZXkSKgoKbWFuYWdlbWVudBgLIAEoCzIWLmNyeXB0b3MudjEuTWFuYWdlbWVudCJWCgpNYW5hZ2VtZW50EhIKCm1hbmFnZXJfY24YASABKAkSEQoJdHJ1c3RfcGVtGAIgASgJEiEKGW9wZXJhdG9yX3N1cmZhY2VfcmVhZG9ubHkYAyABKAgiPgoIU3RhdGVLZXkSDAoEbW9kZRgBIAEoCRIkCgNrbXMYAiABKAsyFy5jcnlwdG9zLnYxLkttc1N0YXRlS2V5IjIKC0ttc1N0YXRlS2V5EhAKCGVuZHBvaW50GAEgASgJEhEKCXRydXN0X3BlbRgCIAEoCSIYCghNZXRhZGF0YRIMCgRuYW1lGAEgASgJIhQKBFJvbGUSDAoEa2luZBgBIAEoCSJ4CgdOZXR3b3JrEhEKCWludGVyZmFjZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJEg8KB2dhdGV3YXkYAyABKAkSEwoLbmFtZXNlcnZlcnMYBCADKAkSDgoGc2VhcmNoGAUgAygJEhMKC250cF9zZXJ2ZXJzGAYgAygJIjwKB1N0b3JhZ2USHQoVc3RhdGVfcGFydGl0aW9uX2xhYmVsGAEgASgJEhIKCmZpcnN0X2Jvb3QYAiABKAgiPgoJQm9vdHN0cmFwEhYKDmFkbWluX2NlcnRfcGVtGAEgASgJEhkKEWFkbWluX2NlcnRfc2hhMjU2GAIgASgJIpMDCgNQa2kSFAoMcm9vdF9rZXlfYWxnGAEgASgJEikKDHJvb3Rfc3ViamVjdBgCIAEoCzITLmNyeXB0b3MudjEuU3ViamVjdBIbChNyb290X3ZhbGlkaXR5X3llYXJzGAMgASgNEhsKE3BhdGhfbGVuX2NvbnN0cmFpbnQYBCABKA0SMAoIcHJvZmlsZXMYBSADKAsyHi5jcnlwdG9zLnYxLkNlcnRpZmljYXRlUHJvZmlsZRIiCgZwYXJlbnQYBiABKAsyEi5jcnlwdG9zLnYxLlBhcmVudBIbChNyZXZvY2F0aW9uX2Jhc2VfdXJsGAcgASgJEicKH2FsbG93X3VudmVyaWZpZWRfcmV2b2NhdGlvbl91cmwYCCABKAgSHQoVY3JsX25leHRfdXBkYXRlX2hvdXJzGAkgASgNEhwKFHJldm9jYXRpb25faHR0cF9wb3J0GAogASgNEhoKEnJvb3RfbGVhZl9pc3N1YW5jZRgLIAEoCRIcChRhbGxvd191bnN5bmNlZF9jbG9jaxgMIAEoCCI1CgZQYXJlbnQSEwoLY2FfY2VydF9wZW0YASABKAkSFgoOY2FfY2VydF9zaGEyNTYYAiABKAki6AIKEkNlcnRpZmljYXRlUHJvZmlsZRIMCgRuYW1lGAEgASgJEg8KB2tleV9hbGcYAiABKAkSJAoHc3ViamVjdBgDIAEoCzITLmNyeXB0b3MudjEuU3ViamVjdBIVCg12YWxpZGl0eV9kYXlzGAQgASgNEjcKEWJhc2ljX2NvbnN0cmFpbnRzGAUgASgLMhwuY3J5cHRvcy52MS5CYXNpY0NvbnN0cmFpbnRzEhEKCWtleV91c2FnZRgGIAMoCRIVCg1leHRfa2V5X3VzYWdlGAcgAygJEikKBHNhbnMYCCABKAsyGy5jcnlwdG9zLnYxLlN1YmplY3RBbHROYW1lcxIzChBleHRyYV9leHRlbnNpb25zGAkgAygLMhkuY3J5cHRvcy52MS5YNTA5RXh0ZW5zaW9uEhoKEmFsbG93X3JlcXVlc3Rfc2FucxgKIAEoCBIXCg92YWxpZGl0eV9wb2xpY3kYCyABKAkiRQoQQmFzaWNDb25zdHJhaW50cxINCgVpc19jYRgBIAEoCBIVCghwYXRoX2xlbhgCIAEoDUgAiAEBQgsKCV9wYXRoX2xlbiJrCg9TdWJqZWN0QWx0TmFtZXMSCwoDZG5zGAEgAygJEgoKAmlwGAIgAygJEg0KBWVtYWlsGAMgAygJEgsKA3VyaRgEIAMoCRIWCg5rcmI1X3ByaW5jaXBhbBgFIAMoCRILCgN1cG4YBiADKAkiPQoNWDUwOUV4dGVuc2lvbhILCgNvaWQYASABKAkSEAoIY3JpdGljYWwYAiABKAgSDQoFdmFsdWUYAyABKAwiFwoHSW5zdGFsbBIMCgRkaXNrGAEgASgJImkKB1N1YmplY3QSEwoLY29tbW9uX25hbWUYASABKAkSFAoMb3JnYW5pemF0aW9uGAIgASgJEg8KB2NvdW50cnkYAyABKAkSEAoIcHJvdmluY2UYBCABKAkSEAoIbG9jYWxpdHkYBSABKAlCNFoyZ2l0aHViLmNvbS9DcnlwdE9TLVBLSS9hcGkvZ28vY3J5cHRvcy92MTtjcnlwdG9zdjFiBnByb3RvMw");
+  fileDesc("ChdjcnlwdG9zL3YxL2NvbmZpZy5wcm90bxIKY3J5cHRvcy52MSKJAwoNTWFjaGluZUNvbmZpZxITCgthcGlfdmVyc2lvbhgBIAEoCRIMCgRraW5kGAIgASgJEiYKCG1ldGFkYXRhGAMgASgLMhQuY3J5cHRvcy52MS5NZXRhZGF0YRIeCgRyb2xlGAQgASgLMhAuY3J5cHRvcy52MS5Sb2xlEiQKB25ldHdvcmsYBSABKAsyEy5jcnlwdG9zLnYxLk5ldHdvcmsSJAoHc3RvcmFnZRgGIAEoCzITLmNyeXB0b3MudjEuU3RvcmFnZRIoCglib290c3RyYXAYByABKAsyFS5jcnlwdG9zLnYxLkJvb3RzdHJhcBIcCgNwa2kYCCABKAsyDy5jcnlwdG9zLnYxLlBraRIkCgdpbnN0YWxsGAkgASgLMhMuY3J5cHRvcy52MS5JbnN0YWxsEicKCXN0YXRlX2tleRgKIAEoCzIULmNyeXB0b3MudjEuU3RhdGVLZXkSKgoKbWFuYWdlbWVudBgLIAEoCzIWLmNyeXB0b3MudjEuTWFuYWdlbWVudCJWCgpNYW5hZ2VtZW50EhIKCm1hbmFnZXJfY24YASABKAkSEQoJdHJ1c3RfcGVtGAIgASgJEiEKGW9wZXJhdG9yX3N1cmZhY2VfcmVhZG9ubHkYAyABKAgiPgoIU3RhdGVLZXkSDAoEbW9kZRgBIAEoCRIkCgNrbXMYAiABKAsyFy5jcnlwdG9zLnYxLkttc1N0YXRlS2V5IjIKC0ttc1N0YXRlS2V5EhAKCGVuZHBvaW50GAEgASgJEhEKCXRydXN0X3BlbRgCIAEoCSIYCghNZXRhZGF0YRIMCgRuYW1lGAEgASgJIhQKBFJvbGUSDAoEa2luZBgBIAEoCSJ4CgdOZXR3b3JrEhEKCWludGVyZmFjZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJEg8KB2dhdGV3YXkYAyABKAkSEwoLbmFtZXNlcnZlcnMYBCADKAkSDgoGc2VhcmNoGAUgAygJEhMKC250cF9zZXJ2ZXJzGAYgAygJIjwKB1N0b3JhZ2USHQoVc3RhdGVfcGFydGl0aW9uX2xhYmVsGAEgASgJEhIKCmZpcnN0X2Jvb3QYAiABKAgiPgoJQm9vdHN0cmFwEhYKDmFkbWluX2NlcnRfcGVtGAEgASgJEhkKEWFkbWluX2NlcnRfc2hhMjU2GAIgASgJItEDCgNQa2kSFAoMcm9vdF9rZXlfYWxnGAEgASgJEikKDHJvb3Rfc3ViamVjdBgCIAEoCzITLmNyeXB0b3MudjEuU3ViamVjdBIbChNyb290X3ZhbGlkaXR5X3llYXJzGAMgASgNEhsKE3BhdGhfbGVuX2NvbnN0cmFpbnQYBCABKA0SMAoIcHJvZmlsZXMYBSADKAsyHi5jcnlwdG9zLnYxLkNlcnRpZmljYXRlUHJvZmlsZRIiCgZwYXJlbnQYBiABKAsyEi5jcnlwdG9zLnYxLlBhcmVudBIbChNyZXZvY2F0aW9uX2Jhc2VfdXJsGAcgASgJEicKH2FsbG93X3VudmVyaWZpZWRfcmV2b2NhdGlvbl91cmwYCCABKAgSHQoVY3JsX25leHRfdXBkYXRlX2hvdXJzGAkgASgNEhwKFHJldm9jYXRpb25faHR0cF9wb3J0GAogASgNEhoKEnJvb3RfbGVhZl9pc3N1YW5jZRgLIAEoCRIcChRhbGxvd191bnN5bmNlZF9jbG9jaxgMIAEoCBIeCgRhY21lGA0gASgLMhAuY3J5cHRvcy52MS5BY21lEhwKA2VzdBgOIAEoCzIPLmNyeXB0b3MudjEuRXN0IpsCCgRBY21lEg8KB2VuYWJsZWQYASABKAgSEAoIYmFzZV91cmwYAiABKAkSEQoJaHR0cF9wb3J0GAMgASgNEg8KB3Byb2ZpbGUYBCABKAkSGAoQdGVybXNfb2Zfc2VydmljZRgFIAEoCRIPCgd3ZWJzaXRlGAYgASgJEiAKGGFsbG93X2Fub255bW91c19hY2NvdW50cxgHIAEoCBJBChVleHRlcm5hbF9hY2NvdW50X2tleXMYCCADKAsyIi5jcnlwdG9zLnYxLkFjbWVFeHRlcm5hbEFjY291bnRLZXkSIwobYWxsb3dlZF9pZGVudGlmaWVyX3N1ZmZpeGVzGAkgAygJEhcKD29yZGVyX3R0bF9ob3VycxgKIAEoDSJBChZBY21lRXh0ZXJuYWxBY2NvdW50S2V5Eg4KBmtleV9pZBgBIAEoCRIXCg9obWFjX2tleV9iYXNlNjQYAiABKAki6wEKA0VzdBIPCgdlbmFibGVkGAEgASgIEhEKCWhvc3RuYW1lcxgCIAMoCRIRCglodHRwX3BvcnQYAyABKA0SDwoHcHJvZmlsZRgEIAEoCRINCgVsYWJlbBgFIAEoCRINCgVyZWFsbRgGIAEoCRIjChthbGxvd2VkX2lkZW50aWZpZXJfc3VmZml4ZXMYByADKAkSHAoUYWxsb3dfYW55X2lkZW50aWZpZXIYCCABKAgSOwoSZW5yb2xsX2NyZWRlbnRpYWxzGAkgAygLMh8uY3J5cHRvcy52MS5Fc3RFbnJvbGxDcmVkZW50aWFsIkAKE0VzdEVucm9sbENyZWRlbnRpYWwSEAoIdXNlcm5hbWUYASABKAkSFwoPcGFzc3dvcmRfc2hhMjU2GAIgASgJIjUKBlBhcmVudBITCgtjYV9jZXJ0X3BlbRgBIAEoCRIWCg5jYV9jZXJ0X3NoYTI1NhgCIAEoCSLoAgoSQ2VydGlmaWNhdGVQcm9maWxlEgwKBG5hbWUYASABKAkSDwoHa2V5X2FsZxgCIAEoCRIkCgdzdWJqZWN0GAMgASgLMhMuY3J5cHRvcy52MS5TdWJqZWN0EhUKDXZhbGlkaXR5X2RheXMYBCABKA0SNwoRYmFzaWNfY29uc3RyYWludHMYBSABKAsyHC5jcnlwdG9zLnYxLkJhc2ljQ29uc3RyYWludHMSEQoJa2V5X3VzYWdlGAYgAygJEhUKDWV4dF9rZXlfdXNhZ2UYByADKAkSKQoEc2FucxgIIAEoCzIbLmNyeXB0b3MudjEuU3ViamVjdEFsdE5hbWVzEjMKEGV4dHJhX2V4dGVuc2lvbnMYCSADKAsyGS5jcnlwdG9zLnYxLlg1MDlFeHRlbnNpb24SGgoSYWxsb3dfcmVxdWVzdF9zYW5zGAogASgIEhcKD3ZhbGlkaXR5X3BvbGljeRgLIAEoCSJFChBCYXNpY0NvbnN0cmFpbnRzEg0KBWlzX2NhGAEgASgIEhUKCHBhdGhfbGVuGAIgASgNSACIAQFCCwoJX3BhdGhfbGVuImsKD1N1YmplY3RBbHROYW1lcxILCgNkbnMYASADKAkSCgoCaXAYAiADKAkSDQoFZW1haWwYAyADKAkSCwoDdXJpGAQgAygJEhYKDmtyYjVfcHJpbmNpcGFsGAUgAygJEgsKA3VwbhgGIAMoCSI9Cg1YNTA5RXh0ZW5zaW9uEgsKA29pZBgBIAEoCRIQCghjcml0aWNhbBgCIAEoCBINCgV2YWx1ZRgDIAEoDCIXCgdJbnN0YWxsEgwKBGRpc2sYASABKAkiaQoHU3ViamVjdBITCgtjb21tb25fbmFtZRgBIAEoCRIUCgxvcmdhbml6YXRpb24YAiABKAkSDwoHY291bnRyeRgDIAEoCRIQCghwcm92aW5jZRgEIAEoCRIQCghsb2NhbGl0eRgFIAEoCUI0WjJnaXRodWIuY29tL0NyeXB0T1MtUEtJL2FwaS9nby9jcnlwdG9zL3YxO2NyeXB0b3N2MWIGcHJvdG8z");
 
 /**
  * MachineConfig is the declarative configuration applied via ApplyConfig.
@@ -443,6 +443,22 @@ export type Pki = Message<"cryptos.v1.Pki"> & {
    * @generated from field: bool allow_unsynced_clock = 12;
    */
   allowUnsyncedClock: boolean;
+
+  /**
+   * acme configures the RFC 8555 enrolment endpoint. See "Protocol blocks"
+   * below for how an absent block, enabled=false and enabled=true apply.
+   *
+   * @generated from field: cryptos.v1.Acme acme = 13;
+   */
+  acme?: Acme | undefined;
+
+  /**
+   * est configures the RFC 7030 enrolment endpoint, applied the same way as
+   * acme.
+   *
+   * @generated from field: cryptos.v1.Est est = 14;
+   */
+  est?: Est | undefined;
 };
 
 /**
@@ -451,6 +467,259 @@ export type Pki = Message<"cryptos.v1.Pki"> & {
  */
 export const PkiSchema: GenMessage<Pki> = /*@__PURE__*/
   messageDesc(file_cryptos_v1_config, 9);
+
+/**
+ * Acme is the node's RFC 8555 server.
+ *
+ * @generated from message cryptos.v1.Acme
+ */
+export type Acme = Message<"cryptos.v1.Acme"> & {
+  /**
+   * enabled switches the ACME listener on at the next boot.
+   *
+   * @generated from field: bool enabled = 1;
+   */
+  enabled: boolean;
+
+  /**
+   * base_url is the externally reachable base under which the ACME endpoints
+   * live, for example "https://ca.example.org/acme". Every URL handed to a
+   * client is built from it and every request's signed url header is checked
+   * against it, so it must be what clients dial rather than what the node
+   * binds. Required when enabled.
+   *
+   * @generated from field: string base_url = 2;
+   */
+  baseUrl: string;
+
+  /**
+   * http_port is the TCP port the ACME listener binds. Zero means the node
+   * default. ACME is normally fronted by TLS, so this listener is plain HTTP
+   * and separate from revocation_http_port.
+   *
+   * @generated from field: uint32 http_port = 3;
+   */
+  httpPort: number;
+
+  /**
+   * profile names the non-CA certificate profile in Pki.profiles that ACME
+   * issues under. Required when enabled; there is no default.
+   *
+   * @generated from field: string profile = 4;
+   */
+  profile: string;
+
+  /**
+   * terms_of_service, when set, is advertised in the directory and a new
+   * account must agree to it.
+   *
+   * @generated from field: string terms_of_service = 5;
+   */
+  termsOfService: string;
+
+  /**
+   * website is advertised in the directory meta.
+   *
+   * @generated from field: string website = 6;
+   */
+  website: string;
+
+  /**
+   * allow_anonymous_accounts drops the External Account Binding requirement
+   * (RFC 8555 section 7.3.4), so anyone who can answer an http-01 challenge can
+   * register and order. Off by default.
+   *
+   * @generated from field: bool allow_anonymous_accounts = 7;
+   */
+  allowAnonymousAccounts: boolean;
+
+  /**
+   * external_account_keys are the External Account Binding credentials. At
+   * least one is required when enabled, unless allow_anonymous_accounts is set.
+   *
+   * @generated from field: repeated cryptos.v1.AcmeExternalAccountKey external_account_keys = 8;
+   */
+  externalAccountKeys: AcmeExternalAccountKey[];
+
+  /**
+   * allowed_identifier_suffixes, when non-empty, restricts the DNS names the
+   * node orders for: a name must equal, or be a subdomain of, one of these.
+   * Empty places no name restriction beyond proof of control and the account
+   * binding.
+   *
+   * @generated from field: repeated string allowed_identifier_suffixes = 9;
+   */
+  allowedIdentifierSuffixes: string[];
+
+  /**
+   * order_ttl_hours is how long an order and its authorizations stay valid.
+   * Zero means the node default.
+   *
+   * @generated from field: uint32 order_ttl_hours = 10;
+   */
+  orderTtlHours: number;
+};
+
+/**
+ * Describes the message cryptos.v1.Acme.
+ * Use `create(AcmeSchema)` to create a new message.
+ */
+export const AcmeSchema: GenMessage<Acme> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 10);
+
+/**
+ * AcmeExternalAccountKey is one External Account Binding credential.
+ *
+ * @generated from message cryptos.v1.AcmeExternalAccountKey
+ */
+export type AcmeExternalAccountKey = Message<"cryptos.v1.AcmeExternalAccountKey"> & {
+  /**
+   * key_id is the identifier the client sends as the binding's kid. Unique
+   * within the block.
+   *
+   * @generated from field: string key_id = 1;
+   */
+  keyId: string;
+
+  /**
+   * hmac_key_base64 is the shared HMAC secret, base64url-encoded without
+   * padding, at least 32 bytes decoded. Write-only: GetConfig returns it empty.
+   *
+   * @generated from field: string hmac_key_base64 = 2;
+   */
+  hmacKeyBase64: string;
+};
+
+/**
+ * Describes the message cryptos.v1.AcmeExternalAccountKey.
+ * Use `create(AcmeExternalAccountKeySchema)` to create a new message.
+ */
+export const AcmeExternalAccountKeySchema: GenMessage<AcmeExternalAccountKey> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 11);
+
+/**
+ * Est is the node's RFC 7030 server. It terminates TLS itself, with a server
+ * certificate the node mints from its own CA for hostnames, because
+ * simplereenroll authenticates with a TLS client certificate.
+ *
+ * @generated from message cryptos.v1.Est
+ */
+export type Est = Message<"cryptos.v1.Est"> & {
+  /**
+   * enabled switches the EST listener on at the next boot.
+   *
+   * @generated from field: bool enabled = 1;
+   */
+  enabled: boolean;
+
+  /**
+   * hostnames are the DNS names and IP literals clients reach the endpoint on,
+   * stamped into the listener's server certificate. At least one is required
+   * when enabled.
+   *
+   * @generated from field: repeated string hostnames = 2;
+   */
+  hostnames: string[];
+
+  /**
+   * http_port is the TCP port the EST listener binds. Zero means the node
+   * default.
+   *
+   * @generated from field: uint32 http_port = 3;
+   */
+  httpPort: number;
+
+  /**
+   * profile names the non-CA certificate profile in Pki.profiles that EST
+   * issues under. Required when enabled.
+   *
+   * @generated from field: string profile = 4;
+   */
+  profile: string;
+
+  /**
+   * label is the optional path segment between /.well-known/est and the
+   * operation (RFC 7030 section 3.2.2), a single segment. Empty serves the
+   * unlabelled paths.
+   *
+   * @generated from field: string label = 5;
+   */
+  label: string;
+
+  /**
+   * realm is the HTTP Basic realm offered when simpleenroll challenges.
+   *
+   * @generated from field: string realm = 6;
+   */
+  realm: string;
+
+  /**
+   * allowed_identifier_suffixes restricts the names simpleenroll issues for: a
+   * name must equal, or be a subdomain of, one of these. It does not restrict
+   * simplereenroll, whose names are pinned to the certificate the client
+   * already holds. Required when enroll_credentials is set, unless
+   * allow_any_identifier is true.
+   *
+   * @generated from field: repeated string allowed_identifier_suffixes = 7;
+   */
+  allowedIdentifierSuffixes: string[];
+
+  /**
+   * allow_any_identifier drops that restriction. simpleenroll proves nothing
+   * about control of a name, so without an allowlist one leaked credential
+   * mints a certificate for any name.
+   *
+   * @generated from field: bool allow_any_identifier = 8;
+   */
+  allowAnyIdentifier: boolean;
+
+  /**
+   * enroll_credentials are the HTTP Basic credentials that authorize
+   * simpleenroll. Empty keeps simpleenroll closed and offers
+   * certificate-authenticated renewal (simplereenroll) only.
+   *
+   * @generated from field: repeated cryptos.v1.EstEnrollCredential enroll_credentials = 9;
+   */
+  enrollCredentials: EstEnrollCredential[];
+};
+
+/**
+ * Describes the message cryptos.v1.Est.
+ * Use `create(EstSchema)` to create a new message.
+ */
+export const EstSchema: GenMessage<Est> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 12);
+
+/**
+ * EstEnrollCredential is one simpleenroll credential.
+ *
+ * @generated from message cryptos.v1.EstEnrollCredential
+ */
+export type EstEnrollCredential = Message<"cryptos.v1.EstEnrollCredential"> & {
+  /**
+   * username is the HTTP Basic user name. Unique within the block.
+   *
+   * @generated from field: string username = 1;
+   */
+  username: string;
+
+  /**
+   * password_sha256 is the lowercase hex SHA-256 of the password, so the node
+   * never stores a live credential. The password must be a generated
+   * high-entropy value, because a digest of a chosen word falls to a
+   * dictionary. Write-only: GetConfig returns it empty.
+   *
+   * @generated from field: string password_sha256 = 2;
+   */
+  passwordSha256: string;
+};
+
+/**
+ * Describes the message cryptos.v1.EstEnrollCredential.
+ * Use `create(EstEnrollCredentialSchema)` to create a new message.
+ */
+export const EstEnrollCredentialSchema: GenMessage<EstEnrollCredential> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 13);
 
 /**
  * Parent is the trust anchor a subordinate CA pins for its issuer: the parent
@@ -476,7 +745,7 @@ export type Parent = Message<"cryptos.v1.Parent"> & {
  * Use `create(ParentSchema)` to create a new message.
  */
 export const ParentSchema: GenMessage<Parent> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 10);
+  messageDesc(file_cryptos_v1_config, 14);
 
 /**
  * CertificateProfile drives CSR generation and certificate signing: key
@@ -568,7 +837,7 @@ export type CertificateProfile = Message<"cryptos.v1.CertificateProfile"> & {
  * Use `create(CertificateProfileSchema)` to create a new message.
  */
 export const CertificateProfileSchema: GenMessage<CertificateProfile> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 11);
+  messageDesc(file_cryptos_v1_config, 15);
 
 /**
  * @generated from message cryptos.v1.BasicConstraints
@@ -593,7 +862,7 @@ export type BasicConstraints = Message<"cryptos.v1.BasicConstraints"> & {
  * Use `create(BasicConstraintsSchema)` to create a new message.
  */
 export const BasicConstraintsSchema: GenMessage<BasicConstraints> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 12);
+  messageDesc(file_cryptos_v1_config, 16);
 
 /**
  * @generated from message cryptos.v1.SubjectAltNames
@@ -642,7 +911,7 @@ export type SubjectAltNames = Message<"cryptos.v1.SubjectAltNames"> & {
  * Use `create(SubjectAltNamesSchema)` to create a new message.
  */
 export const SubjectAltNamesSchema: GenMessage<SubjectAltNames> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 13);
+  messageDesc(file_cryptos_v1_config, 17);
 
 /**
  * X509Extension is the raw escape hatch: a dotted OID, criticality flag, and the
@@ -672,7 +941,7 @@ export type X509Extension = Message<"cryptos.v1.X509Extension"> & {
  * Use `create(X509ExtensionSchema)` to create a new message.
  */
 export const X509ExtensionSchema: GenMessage<X509Extension> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 14);
+  messageDesc(file_cryptos_v1_config, 18);
 
 /**
  * Install declares how the node provisions itself to persistent storage during
@@ -695,7 +964,7 @@ export type Install = Message<"cryptos.v1.Install"> & {
  * Use `create(InstallSchema)` to create a new message.
  */
 export const InstallSchema: GenMessage<Install> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 15);
+  messageDesc(file_cryptos_v1_config, 19);
 
 /**
  * @generated from message cryptos.v1.Subject
@@ -736,5 +1005,5 @@ export type Subject = Message<"cryptos.v1.Subject"> & {
  * Use `create(SubjectSchema)` to create a new message.
  */
 export const SubjectSchema: GenMessage<Subject> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 16);
+  messageDesc(file_cryptos_v1_config, 20);
 

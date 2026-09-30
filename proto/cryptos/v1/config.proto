@@ -95,6 +95,12 @@ message Network {
   repeated string nameservers = 4;
   // DNS search domains, in order. Only meaningful with a resolver.
   repeated string search = 5;
+  // ntp_servers are the SNTP servers the node keeps its clock in sync with, at
+  // most three, each an IPv4 literal or a hostname. A hostname is resolved
+  // through the node resolver at each sync. Empty means the node uses the NTP
+  // servers its DHCP lease supplied (option 42), if any; with neither, the node
+  // runs on its hardware clock.
+  repeated string ntp_servers = 6;
 }
 
 message Storage {
@@ -158,6 +164,12 @@ message Pki {
   // (the default) leaves a Root refusing to issue leaves. Carried in the proto
   // so the acknowledgement survives ApplyConfig and reaches an installed node.
   string root_leaf_issuance = 11;
+  // allow_unsynced_clock overrides the fail-closed clock gate. While a time
+  // source is configured (network.ntp_servers or a DHCP lease) but the node
+  // has not yet synced its clock this boot, certificate signing is refused;
+  // true lets it proceed on the unsynced clock. A node with no time source is
+  // never gated, and CRL and OCSP generation are never gated.
+  bool allow_unsynced_clock = 12;
 }
 
 // Parent is the trust anchor a subordinate CA pins for its issuer: the parent

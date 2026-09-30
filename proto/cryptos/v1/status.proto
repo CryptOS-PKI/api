@@ -79,6 +79,8 @@ enum ServiceProtocol {
   SERVICE_PROTOCOL_ACME = 1;
   // EST, RFC 7030 (Pki.est).
   SERVICE_PROTOCOL_EST = 2;
+  // SCEP, RFC 8894 (Pki.scep).
+  SERVICE_PROTOCOL_SCEP = 3;
 }
 
 // RevocationPreflight reports whether the configured revocation base URL is

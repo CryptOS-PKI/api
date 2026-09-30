@@ -22,6 +22,7 @@ package cryptos.v1;
 import "cryptos/v1/ceremony.proto";
 import "cryptos/v1/config.proto";
 import "cryptos/v1/identity.proto";
+import "cryptos/v1/scep.proto";
 import "cryptos/v1/status.proto";
 import "google/protobuf/timestamp.proto";
 
@@ -212,6 +213,47 @@ service NodeService {
   // and served on the local socket; refused in maintenance mode. The caller
   // must echo the node's CA CN, the same confirmation ActivateImage requires.
   rpc Reboot(RebootRequest) returns (RebootResponse);
+
+  // The SCEP RPCs manage the one-time challenges that authorize initial SCEP
+  // enrolment and the queue of enrolments held for approval (see Scep and
+  // ScepProfile.require_approval in config.proto). They are admin-authorized
+  // over mTLS and served on the local socket, like RevokeCertificate; an
+  // operator or viewer certificate is refused with PermissionDenied. They are
+  // refused with FailedPrecondition in maintenance mode and when the SCEP
+  // listener is not running this boot, which is always the case on a Root.
+
+  // MintScepChallenge creates a single-use challenge for one initial
+  // enrolment and returns it. The challenge is returned by this call only: the
+  // node stores a digest of it and no RPC reads it back, so a lost challenge is
+  // revoked and minted again. It is consumed by the first PKCSReq that
+  // presents it, whether that request is issued, refused or queued.
+  rpc MintScepChallenge(MintScepChallengeRequest) returns (MintScepChallengeResponse);
+
+  // ListScepChallenges returns the challenges that are still usable: minted,
+  // not yet consumed, not revoked and not expired. It never carries the
+  // challenge or its digest.
+  rpc ListScepChallenges(ListScepChallengesRequest) returns (ListScepChallengesResponse);
+
+  // RevokeScepChallenge withdraws a usable challenge by id before it is
+  // consumed. NotFound when the id is unknown, already consumed, revoked or
+  // expired.
+  rpc RevokeScepChallenge(RevokeScepChallengeRequest) returns (RevokeScepChallengeResponse);
+
+  // ListScepEnrollments returns the initial enrolments waiting for an admin
+  // decision on profiles with require_approval set, oldest first.
+  rpc ListScepEnrollments(ListScepEnrollmentsRequest) returns (ListScepEnrollmentsResponse);
+
+  // ApproveScepEnrollment issues the certificate for a waiting enrolment under
+  // its profile and returns its serial. The client collects it with its next
+  // CertPoll. NotFound when the id is not waiting. The request is checked
+  // again at approval, against the config and key floor in force then, and a
+  // request that no longer passes is refused with FailedPrecondition and stays
+  // queued for rejection.
+  rpc ApproveScepEnrollment(ApproveScepEnrollmentRequest) returns (ApproveScepEnrollmentResponse);
+
+  // RejectScepEnrollment refuses a waiting enrolment. The client's next
+  // CertPoll is answered FAILURE. NotFound when the id is not waiting.
+  rpc RejectScepEnrollment(RejectScepEnrollmentRequest) returns (RejectScepEnrollmentResponse);
 }
 
 message ApplyConfigRequest {
@@ -240,9 +282,9 @@ message ApplyConfigResponse {
   // Monotonically increasing generation; bumped on every successful apply.
   uint64 generation = 1;
   // True when the apply changed a field that takes effect only on reboot. Any
-  // change to an enrolment protocol block (Pki.acme, Pki.est), switching it on
-  // or off included, sets it: the node stores the config and the protocol
-  // changes at the next boot. NodeStatus.config_reboot_pending stays true until
+  // change to an enrolment protocol block (Pki.acme, Pki.est, Pki.scep),
+  // switching it on or off included, sets it: the node stores the config and
+  // the protocol changes at the next boot. NodeStatus.config_reboot_pending stays true until
   // then.
   bool requires_reboot = 2;
   // SHA-256 digest of the canonical-encoded applied configuration.

@@ -640,7 +640,25 @@ type Pki struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Phase 1: must be "ECDSA-P384" for Roots.
+	// root_key_alg is the algorithm of this node's own CA key, on a Root and on
+	// a subordinate (intermediate or issuing) alike, and so also the signature
+	// algorithm of every certificate the node issues. Accepted values are
+	// "ECDSA-P384", "RSA-3072" and "RSA-4096"; anything else is rejected when
+	// the config is validated. RSA is there so a platform CA that accepts only
+	// RSA-signed chains can be subordinated under this node.
+	//
+	// "RSA-2048" is rejected even though a 2048-bit key could sign: a node
+	// certifies a subject key (its own when a Root self-signs, or the key in a
+	// CSR it signs) only when it is ECDSA P-384 or RSA of at least 3072 bits, so
+	// a 2048-bit CA key would pass validation and then fail at the ceremony or
+	// at subordination.
+	//
+	// An RSA CA key cannot be held in the TPM: with state_key.mode "tpm" (or an
+	// empty mode on a build that defaults to it) the key is refused when it is
+	// created, at the Root ceremony or a subordinate's first boot, and the node
+	// does not fall back to another algorithm. Use state_key.mode "nodeid" or
+	// "kms" for an RSA CA, where the key is kept in software on the encrypted
+	// state partition.
 	RootKeyAlg        string   `protobuf:"bytes,1,opt,name=root_key_alg,json=rootKeyAlg,proto3" json:"root_key_alg,omitempty"`
 	RootSubject       *Subject `protobuf:"bytes,2,opt,name=root_subject,json=rootSubject,proto3" json:"root_subject,omitempty"`
 	RootValidityYears uint32   `protobuf:"varint,3,opt,name=root_validity_years,json=rootValidityYears,proto3" json:"root_validity_years,omitempty"`
@@ -849,7 +867,10 @@ type CertificateProfile struct {
 	unknownFields protoimpl.UnknownFields
 
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// e.g. "ECDSA-P384". Covering subset; RSA sizes and other curves are additive.
+	// key_alg takes the same values as Pki.root_key_alg: "ECDSA-P384",
+	// "RSA-3072" or "RSA-4096", checked when the config is validated. Signing
+	// does not match a CSR against it: any CSR key that is ECDSA P-384 or RSA
+	// of at least 3072 bits is certified.
 	KeyAlg           string            `protobuf:"bytes,2,opt,name=key_alg,json=keyAlg,proto3" json:"key_alg,omitempty"`
 	Subject          *Subject          `protobuf:"bytes,3,opt,name=subject,proto3" json:"subject,omitempty"`
 	ValidityDays     uint32            `protobuf:"varint,4,opt,name=validity_days,json=validityDays,proto3" json:"validity_days,omitempty"`

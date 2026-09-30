@@ -17,6 +17,7 @@ syntax = "proto3";
 
 package cryptos.v1;
 
+import "cryptos/v1/audit.proto";
 import "cryptos/v1/ceremony.proto";
 import "cryptos/v1/config.proto";
 import "cryptos/v1/identity.proto";
@@ -268,6 +269,23 @@ service NodeService {
   // certificates old tokens name. Empty on a node that has never run a TSA.
   // Refused with FailedPrecondition in maintenance mode.
   rpc ListTsaCertificates(ListTsaCertificatesRequest) returns (ListTsaCertificatesResponse);
+
+  // The audit RPCs read the node's hash-chained audit log (see AuditEvent in
+  // audit.proto). They are reads at operator level, held to the node's
+  // existing authorization like ListIssued: served on the local socket and
+  // over mTLS to a caller the node authorizes, and refused with
+  // PermissionDenied otherwise. Their own calls are audited like any other
+  // RPC. Refused with FailedPrecondition in maintenance mode, where the state
+  // partition holding the log is not open.
+
+  // ListAuditEvents returns audit log entries, oldest first, a page at a time,
+  // filtered by time range, event type and actor.
+  rpc ListAuditEvents(ListAuditEventsRequest) returns (ListAuditEventsResponse);
+
+  // VerifyAuditChain verifies the signatures and hash chain over the whole
+  // stored audit log and reports whether it is intact and, if not, the first
+  // sequence number that failed.
+  rpc VerifyAuditChain(VerifyAuditChainRequest) returns (VerifyAuditChainResponse);
 }
 
 message ApplyConfigRequest {

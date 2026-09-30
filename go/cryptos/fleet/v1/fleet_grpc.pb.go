@@ -36,6 +36,7 @@ const (
 	FleetService_RejectEnrollment_FullMethodName         = "/cryptos.fleet.v1.FleetService/RejectEnrollment"
 	FleetService_WhoAmI_FullMethodName                   = "/cryptos.fleet.v1.FleetService/WhoAmI"
 	FleetService_RevokeCertificate_FullMethodName        = "/cryptos.fleet.v1.FleetService/RevokeCertificate"
+	FleetService_GetCertificate_FullMethodName           = "/cryptos.fleet.v1.FleetService/GetCertificate"
 	FleetService_IssueLeaf_FullMethodName                = "/cryptos.fleet.v1.FleetService/IssueLeaf"
 	FleetService_RekeyNode_FullMethodName                = "/cryptos.fleet.v1.FleetService/RekeyNode"
 	FleetService_GetNodeConfig_FullMethodName            = "/cryptos.fleet.v1.FleetService/GetNodeConfig"
@@ -118,6 +119,11 @@ type FleetServiceClient interface {
 	// RevokeCertificate revokes an issued certificate on the node that issued
 	// it, identified by node name and hex serial, with an RFC 5280 reason code.
 	RevokeCertificate(ctx context.Context, in *RevokeCertificateRequest, opts ...grpc.CallOption) (*RevokeCertificateResponse, error)
+	// GetCertificate fetches an issued certificate and its chain, PEM encoded,
+	// from the node that issued it, identified by node name and hex serial.
+	// Readable at viewer level and above; a read, so it is not audited. NotFound
+	// if the node has no certificate with that serial.
+	GetCertificate(ctx context.Context, in *GetCertificateRequest, opts ...grpc.CallOption) (*GetCertificateResponse, error)
 	// IssueLeaf signs a leaf certificate on the named issuing node from a
 	// browser-generated PKCS#10 CSR under a named issuance profile. Only the
 	// CSR crosses the wire; the leaf private key stays in the browser.
@@ -398,6 +404,16 @@ func (c *fleetServiceClient) RevokeCertificate(ctx context.Context, in *RevokeCe
 	return out, nil
 }
 
+func (c *fleetServiceClient) GetCertificate(ctx context.Context, in *GetCertificateRequest, opts ...grpc.CallOption) (*GetCertificateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetCertificateResponse)
+	err := c.cc.Invoke(ctx, FleetService_GetCertificate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *fleetServiceClient) IssueLeaf(ctx context.Context, in *IssueLeafRequest, opts ...grpc.CallOption) (*IssueLeafResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(IssueLeafResponse)
@@ -649,6 +665,11 @@ type FleetServiceServer interface {
 	// RevokeCertificate revokes an issued certificate on the node that issued
 	// it, identified by node name and hex serial, with an RFC 5280 reason code.
 	RevokeCertificate(context.Context, *RevokeCertificateRequest) (*RevokeCertificateResponse, error)
+	// GetCertificate fetches an issued certificate and its chain, PEM encoded,
+	// from the node that issued it, identified by node name and hex serial.
+	// Readable at viewer level and above; a read, so it is not audited. NotFound
+	// if the node has no certificate with that serial.
+	GetCertificate(context.Context, *GetCertificateRequest) (*GetCertificateResponse, error)
 	// IssueLeaf signs a leaf certificate on the named issuing node from a
 	// browser-generated PKCS#10 CSR under a named issuance profile. Only the
 	// CSR crosses the wire; the leaf private key stays in the browser.
@@ -808,6 +829,9 @@ func (UnimplementedFleetServiceServer) WhoAmI(context.Context, *WhoAmIRequest) (
 }
 func (UnimplementedFleetServiceServer) RevokeCertificate(context.Context, *RevokeCertificateRequest) (*RevokeCertificateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RevokeCertificate not implemented")
+}
+func (UnimplementedFleetServiceServer) GetCertificate(context.Context, *GetCertificateRequest) (*GetCertificateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCertificate not implemented")
 }
 func (UnimplementedFleetServiceServer) IssueLeaf(context.Context, *IssueLeafRequest) (*IssueLeafResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IssueLeaf not implemented")
@@ -1185,6 +1209,24 @@ func _FleetService_RevokeCertificate_Handler(srv interface{}, ctx context.Contex
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FleetServiceServer).RevokeCertificate(ctx, req.(*RevokeCertificateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_GetCertificate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCertificateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).GetCertificate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_GetCertificate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).GetCertificate(ctx, req.(*GetCertificateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1580,6 +1622,10 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RevokeCertificate",
 			Handler:    _FleetService_RevokeCertificate_Handler,
+		},
+		{
+			MethodName: "GetCertificate",
+			Handler:    _FleetService_GetCertificate_Handler,
 		},
 		{
 			MethodName: "IssueLeaf",

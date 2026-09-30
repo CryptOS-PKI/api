@@ -32,6 +32,7 @@ const (
 	NodeService_RevokeCertificate_FullMethodName            = "/cryptos.v1.NodeService/RevokeCertificate"
 	NodeService_ListIssued_FullMethodName                   = "/cryptos.v1.NodeService/ListIssued"
 	NodeService_ListRevocations_FullMethodName              = "/cryptos.v1.NodeService/ListRevocations"
+	NodeService_GetIssuedCertificate_FullMethodName         = "/cryptos.v1.NodeService/GetIssuedCertificate"
 	NodeService_ExportCAKey_FullMethodName                  = "/cryptos.v1.NodeService/ExportCAKey"
 	NodeService_ImportCAKey_FullMethodName                  = "/cryptos.v1.NodeService/ImportCAKey"
 	NodeService_BeginKeyRotation_FullMethodName             = "/cryptos.v1.NodeService/BeginKeyRotation"
@@ -111,6 +112,11 @@ type NodeServiceClient interface {
 	ListIssued(ctx context.Context, in *ListIssuedRequest, opts ...grpc.CallOption) (*ListIssuedResponse, error)
 	// ListRevocations returns this node's revoked certificates.
 	ListRevocations(ctx context.Context, in *ListRevocationsRequest, opts ...grpc.CallOption) (*ListRevocationsResponse, error)
+	// GetIssuedCertificate returns a certificate this node issued, identified by
+	// its hex serial, with its chain and current status, so a client can fetch
+	// the certificate itself rather than only its inventory entry. NotFound if
+	// the serial is not in this node's issued set.
+	GetIssuedCertificate(ctx context.Context, in *GetIssuedCertificateRequest, opts ...grpc.CallOption) (*GetIssuedCertificateResponse, error)
 	// ExportCAKey returns an encrypted backup of this node's software CA key and
 	// certificate chain, sealed under the operator passphrase. The plaintext key
 	// never leaves the node. Admin-authorized; refused on a TPM node (TPM keys
@@ -357,6 +363,16 @@ func (c *nodeServiceClient) ListRevocations(ctx context.Context, in *ListRevocat
 	return out, nil
 }
 
+func (c *nodeServiceClient) GetIssuedCertificate(ctx context.Context, in *GetIssuedCertificateRequest, opts ...grpc.CallOption) (*GetIssuedCertificateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetIssuedCertificateResponse)
+	err := c.cc.Invoke(ctx, NodeService_GetIssuedCertificate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *nodeServiceClient) ExportCAKey(ctx context.Context, in *ExportCAKeyRequest, opts ...grpc.CallOption) (*ExportCAKeyResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ExportCAKeyResponse)
@@ -581,6 +597,11 @@ type NodeServiceServer interface {
 	ListIssued(context.Context, *ListIssuedRequest) (*ListIssuedResponse, error)
 	// ListRevocations returns this node's revoked certificates.
 	ListRevocations(context.Context, *ListRevocationsRequest) (*ListRevocationsResponse, error)
+	// GetIssuedCertificate returns a certificate this node issued, identified by
+	// its hex serial, with its chain and current status, so a client can fetch
+	// the certificate itself rather than only its inventory entry. NotFound if
+	// the serial is not in this node's issued set.
+	GetIssuedCertificate(context.Context, *GetIssuedCertificateRequest) (*GetIssuedCertificateResponse, error)
 	// ExportCAKey returns an encrypted backup of this node's software CA key and
 	// certificate chain, sealed under the operator passphrase. The plaintext key
 	// never leaves the node. Admin-authorized; refused on a TPM node (TPM keys
@@ -725,6 +746,9 @@ func (UnimplementedNodeServiceServer) ListIssued(context.Context, *ListIssuedReq
 }
 func (UnimplementedNodeServiceServer) ListRevocations(context.Context, *ListRevocationsRequest) (*ListRevocationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListRevocations not implemented")
+}
+func (UnimplementedNodeServiceServer) GetIssuedCertificate(context.Context, *GetIssuedCertificateRequest) (*GetIssuedCertificateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetIssuedCertificate not implemented")
 }
 func (UnimplementedNodeServiceServer) ExportCAKey(context.Context, *ExportCAKeyRequest) (*ExportCAKeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExportCAKey not implemented")
@@ -1017,6 +1041,24 @@ func _NodeService_ListRevocations_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(NodeServiceServer).ListRevocations(ctx, req.(*ListRevocationsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NodeService_GetIssuedCertificate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetIssuedCertificateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).GetIssuedCertificate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_GetIssuedCertificate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).GetIssuedCertificate(ctx, req.(*GetIssuedCertificateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1352,6 +1394,10 @@ var NodeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListRevocations",
 			Handler:    _NodeService_ListRevocations_Handler,
+		},
+		{
+			MethodName: "GetIssuedCertificate",
+			Handler:    _NodeService_GetIssuedCertificate_Handler,
 		},
 		{
 			MethodName: "ExportCAKey",

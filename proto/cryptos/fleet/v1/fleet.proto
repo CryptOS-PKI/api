@@ -99,6 +99,12 @@ service FleetService {
   // it, identified by node name and hex serial, with an RFC 5280 reason code.
   rpc RevokeCertificate(RevokeCertificateRequest) returns (RevokeCertificateResponse);
 
+  // GetCertificate fetches an issued certificate and its chain, PEM encoded,
+  // from the node that issued it, identified by node name and hex serial.
+  // Readable at viewer level and above; a read, so it is not audited. NotFound
+  // if the node has no certificate with that serial.
+  rpc GetCertificate(GetCertificateRequest) returns (GetCertificateResponse);
+
   // IssueLeaf signs a leaf certificate on the named issuing node from a
   // browser-generated PKCS#10 CSR under a named issuance profile. Only the
   // CSR crosses the wire; the leaf private key stays in the browser.
@@ -524,6 +530,27 @@ message RevokeCertificateResponse {
   string serial_hex = 1;
   string revoked_at = 2;
   int32 reason_code = 3;
+}
+
+// GetCertificateRequest names the issuing node and the certificate to fetch.
+message GetCertificateRequest {
+  // node_name is the issuing node the certificate lives on.
+  string node_name = 1;
+  // serial_hex is the hex-encoded serial of the certificate.
+  string serial_hex = 2;
+}
+
+// GetCertificateResponse carries the certificate, its chain and its status.
+message GetCertificateResponse {
+  // certificate_pem is the PEM-encoded issued certificate.
+  string certificate_pem = 1;
+  // chain_pem is the concatenated PEM chain, from the issuer up to the root.
+  string chain_pem = 2;
+  // status is "valid" | "revoked" | "expired".
+  string status = 3;
+  // revoked_at is when the certificate was revoked (RFC3339); empty unless
+  // status is revoked.
+  string revoked_at = 4;
 }
 
 // IssueLeafRequest carries the issuing node, the browser-generated PKCS#10

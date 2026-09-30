@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file cryptos/v1/config.proto.
  */
 export const file_cryptos_v1_config: GenFile = /*@__PURE__*/
-  fileDesc("ChdjcnlwdG9zL3YxL2NvbmZpZy5wcm90bxIKY3J5cHRvcy52MSKJAwoNTWFjaGluZUNvbmZpZxITCgthcGlfdmVyc2lvbhgBIAEoCRIMCgRraW5kGAIgASgJEiYKCG1ldGFkYXRhGAMgASgLMhQuY3J5cHRvcy52MS5NZXRhZGF0YRIeCgRyb2xlGAQgASgLMhAuY3J5cHRvcy52MS5Sb2xlEiQKB25ldHdvcmsYBSABKAsyEy5jcnlwdG9zLnYxLk5ldHdvcmsSJAoHc3RvcmFnZRgGIAEoCzITLmNyeXB0b3MudjEuU3RvcmFnZRIoCglib290c3RyYXAYByABKAsyFS5jcnlwdG9zLnYxLkJvb3RzdHJhcBIcCgNwa2kYCCABKAsyDy5jcnlwdG9zLnYxLlBraRIkCgdpbnN0YWxsGAkgASgLMhMuY3J5cHRvcy52MS5JbnN0YWxsEicKCXN0YXRlX2tleRgKIAEoCzIULmNyeXB0b3MudjEuU3RhdGVLZXkSKgoKbWFuYWdlbWVudBgLIAEoCzIWLmNyeXB0b3MudjEuTWFuYWdlbWVudCJWCgpNYW5hZ2VtZW50EhIKCm1hbmFnZXJfY24YASABKAkSEQoJdHJ1c3RfcGVtGAIgASgJEiEKGW9wZXJhdG9yX3N1cmZhY2VfcmVhZG9ubHkYAyABKAgiPgoIU3RhdGVLZXkSDAoEbW9kZRgBIAEoCRIkCgNrbXMYAiABKAsyFy5jcnlwdG9zLnYxLkttc1N0YXRlS2V5IjIKC0ttc1N0YXRlS2V5EhAKCGVuZHBvaW50GAEgASgJEhEKCXRydXN0X3BlbRgCIAEoCSIYCghNZXRhZGF0YRIMCgRuYW1lGAEgASgJIhQKBFJvbGUSDAoEa2luZBgBIAEoCSJjCgdOZXR3b3JrEhEKCWludGVyZmFjZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJEg8KB2dhdGV3YXkYAyABKAkSEwoLbmFtZXNlcnZlcnMYBCADKAkSDgoGc2VhcmNoGAUgAygJIjwKB1N0b3JhZ2USHQoVc3RhdGVfcGFydGl0aW9uX2xhYmVsGAEgASgJEhIKCmZpcnN0X2Jvb3QYAiABKAgiPgoJQm9vdHN0cmFwEhYKDmFkbWluX2NlcnRfcGVtGAEgASgJEhkKEWFkbWluX2NlcnRfc2hhMjU2GAIgASgJItMDCgNQa2kSFAoMcm9vdF9rZXlfYWxnGAEgASgJEikKDHJvb3Rfc3ViamVjdBgCIAEoCzITLmNyeXB0b3MudjEuU3ViamVjdBIbChNyb290X3ZhbGlkaXR5X3llYXJzGAMgASgNEhsKE3BhdGhfbGVuX2NvbnN0cmFpbnQYBCABKA0SMAoIcHJvZmlsZXMYBSADKAsyHi5jcnlwdG9zLnYxLkNlcnRpZmljYXRlUHJvZmlsZRIiCgZwYXJlbnQYBiABKAsyEi5jcnlwdG9zLnYxLlBhcmVudBIbChNyZXZvY2F0aW9uX2Jhc2VfdXJsGAcgASgJEicKH2FsbG93X3VudmVyaWZpZWRfcmV2b2NhdGlvbl91cmwYCCABKAgSHQoVY3JsX25leHRfdXBkYXRlX2hvdXJzGAkgASgNEhwKFHJldm9jYXRpb25faHR0cF9wb3J0GAogASgNEhoKEnJvb3RfbGVhZl9pc3N1YW5jZRgLIAEoCRIeCgRhY21lGA0gASgLMhAuY3J5cHRvcy52MS5BY21lEhwKA2VzdBgOIAEoCzIPLmNyeXB0b3MudjEuRXN0Eh4KBHNjZXAYDyABKAsyEC5jcnlwdG9zLnYxLlNjZXAimwIKBEFjbWUSDwoHZW5hYmxlZBgBIAEoCBIQCghiYXNlX3VybBgCIAEoCRIRCglodHRwX3BvcnQYAyABKA0SDwoHcHJvZmlsZRgEIAEoCRIYChB0ZXJtc19vZl9zZXJ2aWNlGAUgASgJEg8KB3dlYnNpdGUYBiABKAkSIAoYYWxsb3dfYW5vbnltb3VzX2FjY291bnRzGAcgASgIEkEKFWV4dGVybmFsX2FjY291bnRfa2V5cxgIIAMoCzIiLmNyeXB0b3MudjEuQWNtZUV4dGVybmFsQWNjb3VudEtleRIjChthbGxvd2VkX2lkZW50aWZpZXJfc3VmZml4ZXMYCSADKAkSFwoPb3JkZXJfdHRsX2hvdXJzGAogASgNIkEKFkFjbWVFeHRlcm5hbEFjY291bnRLZXkSDgoGa2V5X2lkGAEgASgJEhcKD2htYWNfa2V5X2Jhc2U2NBgCIAEoCSLrAQoDRXN0Eg8KB2VuYWJsZWQYASABKAgSEQoJaG9zdG5hbWVzGAIgAygJEhEKCWh0dHBfcG9ydBgDIAEoDRIPCgdwcm9maWxlGAQgASgJEg0KBWxhYmVsGAUgASgJEg0KBXJlYWxtGAYgASgJEiMKG2FsbG93ZWRfaWRlbnRpZmllcl9zdWZmaXhlcxgHIAMoCRIcChRhbGxvd19hbnlfaWRlbnRpZmllchgIIAEoCBI7ChJlbnJvbGxfY3JlZGVudGlhbHMYCSADKAsyHy5jcnlwdG9zLnYxLkVzdEVucm9sbENyZWRlbnRpYWwiQAoTRXN0RW5yb2xsQ3JlZGVudGlhbBIQCgh1c2VybmFtZRgBIAEoCRIXCg9wYXNzd29yZF9zaGEyNTYYAiABKAkimgEKBFNjZXASDwoHZW5hYmxlZBgBIAEoCBIRCglodHRwX3BvcnQYAiABKA0SKQoIcHJvZmlsZXMYAyADKAsyFy5jcnlwdG9zLnYxLlNjZXBQcm9maWxlEiMKG2FsbG93ZWRfaWRlbnRpZmllcl9zdWZmaXhlcxgEIAMoCRIeCgJyYRgFIAEoCzISLmNyeXB0b3MudjEuU2NlcFJhIlIKC1NjZXBQcm9maWxlEg8KB3Byb2ZpbGUYASABKAkSGAoQbWluX3JzYV9rZXlfYml0cxgCIAEoDRIYChByZXF1aXJlX2FwcHJvdmFsGAMgASgIIj4KBlNjZXBSYRIVCg12YWxpZGl0eV9kYXlzGAEgASgNEh0KFXJvdGF0aW9uX292ZXJsYXBfZGF5cxgCIAEoDSI1CgZQYXJlbnQSEwoLY2FfY2VydF9wZW0YASABKAkSFgoOY2FfY2VydF9zaGEyNTYYAiABKAki6AIKEkNlcnRpZmljYXRlUHJvZmlsZRIMCgRuYW1lGAEgASgJEg8KB2tleV9hbGcYAiABKAkSJAoHc3ViamVjdBgDIAEoCzITLmNyeXB0b3MudjEuU3ViamVjdBIVCg12YWxpZGl0eV9kYXlzGAQgASgNEjcKEWJhc2ljX2NvbnN0cmFpbnRzGAUgASgLMhwuY3J5cHRvcy52MS5CYXNpY0NvbnN0cmFpbnRzEhEKCWtleV91c2FnZRgGIAMoCRIVCg1leHRfa2V5X3VzYWdlGAcgAygJEikKBHNhbnMYCCABKAsyGy5jcnlwdG9zLnYxLlN1YmplY3RBbHROYW1lcxIzChBleHRyYV9leHRlbnNpb25zGAkgAygLMhkuY3J5cHRvcy52MS5YNTA5RXh0ZW5zaW9uEhoKEmFsbG93X3JlcXVlc3Rfc2FucxgKIAEoCBIXCg92YWxpZGl0eV9wb2xpY3kYCyABKAkiRQoQQmFzaWNDb25zdHJhaW50cxINCgVpc19jYRgBIAEoCBIVCghwYXRoX2xlbhgCIAEoDUgAiAEBQgsKCV9wYXRoX2xlbiJrCg9TdWJqZWN0QWx0TmFtZXMSCwoDZG5zGAEgAygJEgoKAmlwGAIgAygJEg0KBWVtYWlsGAMgAygJEgsKA3VyaRgEIAMoCRIWCg5rcmI1X3ByaW5jaXBhbBgFIAMoCRILCgN1cG4YBiADKAkiPQoNWDUwOUV4dGVuc2lvbhILCgNvaWQYASABKAkSEAoIY3JpdGljYWwYAiABKAgSDQoFdmFsdWUYAyABKAwiFwoHSW5zdGFsbBIMCgRkaXNrGAEgASgJImkKB1N1YmplY3QSEwoLY29tbW9uX25hbWUYASABKAkSFAoMb3JnYW5pemF0aW9uGAIgASgJEg8KB2NvdW50cnkYAyABKAkSEAoIcHJvdmluY2UYBCABKAkSEAoIbG9jYWxpdHkYBSABKAlCNFoyZ2l0aHViLmNvbS9DcnlwdE9TLVBLSS9hcGkvZ28vY3J5cHRvcy92MTtjcnlwdG9zdjFiBnByb3RvMw");
+  fileDesc("ChdjcnlwdG9zL3YxL2NvbmZpZy5wcm90bxIKY3J5cHRvcy52MSKJAwoNTWFjaGluZUNvbmZpZxITCgthcGlfdmVyc2lvbhgBIAEoCRIMCgRraW5kGAIgASgJEiYKCG1ldGFkYXRhGAMgASgLMhQuY3J5cHRvcy52MS5NZXRhZGF0YRIeCgRyb2xlGAQgASgLMhAuY3J5cHRvcy52MS5Sb2xlEiQKB25ldHdvcmsYBSABKAsyEy5jcnlwdG9zLnYxLk5ldHdvcmsSJAoHc3RvcmFnZRgGIAEoCzITLmNyeXB0b3MudjEuU3RvcmFnZRIoCglib290c3RyYXAYByABKAsyFS5jcnlwdG9zLnYxLkJvb3RzdHJhcBIcCgNwa2kYCCABKAsyDy5jcnlwdG9zLnYxLlBraRIkCgdpbnN0YWxsGAkgASgLMhMuY3J5cHRvcy52MS5JbnN0YWxsEicKCXN0YXRlX2tleRgKIAEoCzIULmNyeXB0b3MudjEuU3RhdGVLZXkSKgoKbWFuYWdlbWVudBgLIAEoCzIWLmNyeXB0b3MudjEuTWFuYWdlbWVudCJWCgpNYW5hZ2VtZW50EhIKCm1hbmFnZXJfY24YASABKAkSEQoJdHJ1c3RfcGVtGAIgASgJEiEKGW9wZXJhdG9yX3N1cmZhY2VfcmVhZG9ubHkYAyABKAgiPgoIU3RhdGVLZXkSDAoEbW9kZRgBIAEoCRIkCgNrbXMYAiABKAsyFy5jcnlwdG9zLnYxLkttc1N0YXRlS2V5IjIKC0ttc1N0YXRlS2V5EhAKCGVuZHBvaW50GAEgASgJEhEKCXRydXN0X3BlbRgCIAEoCSIYCghNZXRhZGF0YRIMCgRuYW1lGAEgASgJIhQKBFJvbGUSDAoEa2luZBgBIAEoCSJjCgdOZXR3b3JrEhEKCWludGVyZmFjZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJEg8KB2dhdGV3YXkYAyABKAkSEwoLbmFtZXNlcnZlcnMYBCADKAkSDgoGc2VhcmNoGAUgAygJIjwKB1N0b3JhZ2USHQoVc3RhdGVfcGFydGl0aW9uX2xhYmVsGAEgASgJEhIKCmZpcnN0X2Jvb3QYAiABKAgiPgoJQm9vdHN0cmFwEhYKDmFkbWluX2NlcnRfcGVtGAEgASgJEhkKEWFkbWluX2NlcnRfc2hhMjU2GAIgASgJIvEDCgNQa2kSFAoMcm9vdF9rZXlfYWxnGAEgASgJEikKDHJvb3Rfc3ViamVjdBgCIAEoCzITLmNyeXB0b3MudjEuU3ViamVjdBIbChNyb290X3ZhbGlkaXR5X3llYXJzGAMgASgNEhsKE3BhdGhfbGVuX2NvbnN0cmFpbnQYBCABKA0SMAoIcHJvZmlsZXMYBSADKAsyHi5jcnlwdG9zLnYxLkNlcnRpZmljYXRlUHJvZmlsZRIiCgZwYXJlbnQYBiABKAsyEi5jcnlwdG9zLnYxLlBhcmVudBIbChNyZXZvY2F0aW9uX2Jhc2VfdXJsGAcgASgJEicKH2FsbG93X3VudmVyaWZpZWRfcmV2b2NhdGlvbl91cmwYCCABKAgSHQoVY3JsX25leHRfdXBkYXRlX2hvdXJzGAkgASgNEhwKFHJldm9jYXRpb25faHR0cF9wb3J0GAogASgNEhoKEnJvb3RfbGVhZl9pc3N1YW5jZRgLIAEoCRIeCgRhY21lGA0gASgLMhAuY3J5cHRvcy52MS5BY21lEhwKA2VzdBgOIAEoCzIPLmNyeXB0b3MudjEuRXN0Eh4KBHNjZXAYDyABKAsyEC5jcnlwdG9zLnYxLlNjZXASHAoDdHNhGBAgASgLMg8uY3J5cHRvcy52MS5Uc2EimwIKBEFjbWUSDwoHZW5hYmxlZBgBIAEoCBIQCghiYXNlX3VybBgCIAEoCRIRCglodHRwX3BvcnQYAyABKA0SDwoHcHJvZmlsZRgEIAEoCRIYChB0ZXJtc19vZl9zZXJ2aWNlGAUgASgJEg8KB3dlYnNpdGUYBiABKAkSIAoYYWxsb3dfYW5vbnltb3VzX2FjY291bnRzGAcgASgIEkEKFWV4dGVybmFsX2FjY291bnRfa2V5cxgIIAMoCzIiLmNyeXB0b3MudjEuQWNtZUV4dGVybmFsQWNjb3VudEtleRIjChthbGxvd2VkX2lkZW50aWZpZXJfc3VmZml4ZXMYCSADKAkSFwoPb3JkZXJfdHRsX2hvdXJzGAogASgNIkEKFkFjbWVFeHRlcm5hbEFjY291bnRLZXkSDgoGa2V5X2lkGAEgASgJEhcKD2htYWNfa2V5X2Jhc2U2NBgCIAEoCSLrAQoDRXN0Eg8KB2VuYWJsZWQYASABKAgSEQoJaG9zdG5hbWVzGAIgAygJEhEKCWh0dHBfcG9ydBgDIAEoDRIPCgdwcm9maWxlGAQgASgJEg0KBWxhYmVsGAUgASgJEg0KBXJlYWxtGAYgASgJEiMKG2FsbG93ZWRfaWRlbnRpZmllcl9zdWZmaXhlcxgHIAMoCRIcChRhbGxvd19hbnlfaWRlbnRpZmllchgIIAEoCBI7ChJlbnJvbGxfY3JlZGVudGlhbHMYCSADKAsyHy5jcnlwdG9zLnYxLkVzdEVucm9sbENyZWRlbnRpYWwiQAoTRXN0RW5yb2xsQ3JlZGVudGlhbBIQCgh1c2VybmFtZRgBIAEoCRIXCg9wYXNzd29yZF9zaGEyNTYYAiABKAkimgEKBFNjZXASDwoHZW5hYmxlZBgBIAEoCBIRCglodHRwX3BvcnQYAiABKA0SKQoIcHJvZmlsZXMYAyADKAsyFy5jcnlwdG9zLnYxLlNjZXBQcm9maWxlEiMKG2FsbG93ZWRfaWRlbnRpZmllcl9zdWZmaXhlcxgEIAMoCRIeCgJyYRgFIAEoCzISLmNyeXB0b3MudjEuU2NlcFJhIlIKC1NjZXBQcm9maWxlEg8KB3Byb2ZpbGUYASABKAkSGAoQbWluX3JzYV9rZXlfYml0cxgCIAEoDRIYChByZXF1aXJlX2FwcHJvdmFsGAMgASgIIj4KBlNjZXBSYRIVCg12YWxpZGl0eV9kYXlzGAEgASgNEh0KFXJvdGF0aW9uX292ZXJsYXBfZGF5cxgCIAEoDSLTAQoDVHNhEg8KB2VuYWJsZWQYASABKAgSEQoJaHR0cF9wb3J0GAIgASgNEhIKCnBvbGljeV9vaWQYAyABKAkSEwoLYWNjdXJhY3lfbXMYBCABKA0SLAoKcmF0ZV9saW1pdBgFIAEoCzIYLmNyeXB0b3MudjEuVHNhUmF0ZUxpbWl0EhgKEGFsbG93ZWRfbmV0d29ya3MYBiADKAkSNwoLY2VydGlmaWNhdGUYByABKAsyIi5jcnlwdG9zLnYxLlRzYUNlcnRpZmljYXRlU2V0dGluZ3MiOgoMVHNhUmF0ZUxpbWl0EhsKE3JlcXVlc3RzX3Blcl9taW51dGUYASABKA0SDQoFYnVyc3QYAiABKA0iTgoWVHNhQ2VydGlmaWNhdGVTZXR0aW5ncxIVCg12YWxpZGl0eV9kYXlzGAEgASgNEh0KFXJvdGF0aW9uX292ZXJsYXBfZGF5cxgCIAEoDSI1CgZQYXJlbnQSEwoLY2FfY2VydF9wZW0YASABKAkSFgoOY2FfY2VydF9zaGEyNTYYAiABKAki6AIKEkNlcnRpZmljYXRlUHJvZmlsZRIMCgRuYW1lGAEgASgJEg8KB2tleV9hbGcYAiABKAkSJAoHc3ViamVjdBgDIAEoCzITLmNyeXB0b3MudjEuU3ViamVjdBIVCg12YWxpZGl0eV9kYXlzGAQgASgNEjcKEWJhc2ljX2NvbnN0cmFpbnRzGAUgASgLMhwuY3J5cHRvcy52MS5CYXNpY0NvbnN0cmFpbnRzEhEKCWtleV91c2FnZRgGIAMoCRIVCg1leHRfa2V5X3VzYWdlGAcgAygJEikKBHNhbnMYCCABKAsyGy5jcnlwdG9zLnYxLlN1YmplY3RBbHROYW1lcxIzChBleHRyYV9leHRlbnNpb25zGAkgAygLMhkuY3J5cHRvcy52MS5YNTA5RXh0ZW5zaW9uEhoKEmFsbG93X3JlcXVlc3Rfc2FucxgKIAEoCBIXCg92YWxpZGl0eV9wb2xpY3kYCyABKAkiRQoQQmFzaWNDb25zdHJhaW50cxINCgVpc19jYRgBIAEoCBIVCghwYXRoX2xlbhgCIAEoDUgAiAEBQgsKCV9wYXRoX2xlbiJrCg9TdWJqZWN0QWx0TmFtZXMSCwoDZG5zGAEgAygJEgoKAmlwGAIgAygJEg0KBWVtYWlsGAMgAygJEgsKA3VyaRgEIAMoCRIWCg5rcmI1X3ByaW5jaXBhbBgFIAMoCRILCgN1cG4YBiADKAkiPQoNWDUwOUV4dGVuc2lvbhILCgNvaWQYASABKAkSEAoIY3JpdGljYWwYAiABKAgSDQoFdmFsdWUYAyABKAwiFwoHSW5zdGFsbBIMCgRkaXNrGAEgASgJImkKB1N1YmplY3QSEwoLY29tbW9uX25hbWUYASABKAkSFAoMb3JnYW5pemF0aW9uGAIgASgJEg8KB2NvdW50cnkYAyABKAkSEAoIcHJvdmluY2UYBCABKAkSEAoIbG9jYWxpdHkYBSABKAlCNFoyZ2l0aHViLmNvbS9DcnlwdE9TLVBLSS9hcGkvZ28vY3J5cHRvcy92MTtjcnlwdG9zdjFiBnByb3RvMw");
 
 /**
  * MachineConfig is the declarative configuration applied via ApplyConfig.
@@ -427,6 +427,14 @@ export type Pki = Message<"cryptos.v1.Pki"> & {
    * @generated from field: cryptos.v1.Scep scep = 15;
    */
   scep?: Scep | undefined;
+
+  /**
+   * tsa configures the RFC 3161 time-stamp authority, applied the same way as
+   * acme.
+   *
+   * @generated from field: cryptos.v1.Tsa tsa = 16;
+   */
+  tsa?: Tsa | undefined;
 };
 
 /**
@@ -841,6 +849,180 @@ export const ScepRaSchema: GenMessage<ScepRa> = /*@__PURE__*/
   messageDesc(file_cryptos_v1_config, 16);
 
 /**
+ * Tsa is the node's RFC 3161 time-stamp authority, for signatures that must
+ * keep verifying after their signing certificate expires (code signing). It
+ * answers HTTP POST requests of type application/timestamp-query on the root
+ * path of its listener with application/timestamp-reply, in plain HTTP as the
+ * RFC allows: the signed token carries its own integrity and there is nothing
+ * confidential in it. It is open to any client the rate limit and
+ * allowed_networks let through; RFC 3161 has no client authentication.
+ *
+ * Tokens are signed by a separate TSA certificate the node issues from its own
+ * CA, with a critical id-kp-timeStamping extended key usage, so the CA key
+ * never signs a token. The TSA key has the same algorithm as the CA key and is
+ * held in the TPM where the node has one, in software otherwise, like the CA
+ * key. Only an Intermediate or Issuing node serves a TSA.
+ *
+ * Accepted message imprint hashes are SHA-256, SHA-384 and SHA-512. SHA-1, MD5
+ * and any other algorithm are refused with failInfo badAlg.
+ *
+ * The TSA fails closed on its clock: while the node's time sync
+ * (NodeStatus.time_sync) has not synced this boot, or its sources disagree,
+ * every request is refused with failInfo timeNotAvailable. The clock override
+ * that lets certificate signing run unsynced does not apply here, because a
+ * timestamp is nothing but a claim about the time. A node with no time source
+ * never syncs, so its TSA refuses every request.
+ *
+ * @generated from message cryptos.v1.Tsa
+ */
+export type Tsa = Message<"cryptos.v1.Tsa"> & {
+  /**
+   * enabled switches the TSA listener on at the next boot. It is rejected
+   * while policy_oid is empty, so the TSA stays off until the operator sets
+   * their own policy.
+   *
+   * @generated from field: bool enabled = 1;
+   */
+  enabled: boolean;
+
+  /**
+   * http_port is the TCP port the TSA listener binds. Zero means the node
+   * default.
+   *
+   * @generated from field: uint32 http_port = 2;
+   */
+  httpPort: number;
+
+  /**
+   * policy_oid is the TSA policy every token names (RFC 3161 section 2.4.2),
+   * in dotted form, for example "1.3.6.1.4.1.<PEN>.<arc>" under the operator's
+   * own IANA Private Enterprise Number. Required when enabled; there is no
+   * default, so no two deployments share a policy by accident. It must be a
+   * valid object identifier: at least two arcs, decimal with no leading zeros,
+   * a first arc of 0, 1 or 2, and a second arc below 40 when the first is 0 or
+   * 1. A request that asks for a different policy (reqPolicy) is refused with
+   * failInfo unacceptedPolicy.
+   *
+   * @generated from field: string policy_oid = 3;
+   */
+  policyOid: string;
+
+  /**
+   * accuracy_ms is the accuracy the TSA claims in every token (the Accuracy
+   * field, RFC 3161 section 2.4.2), in milliseconds either side of genTime.
+   * Zero means 1000. Values above 60000 are rejected. The claim is checked
+   * against the clock: while the offset of the latest time sync
+   * (NodeStatus.time_sync.last_offset) is larger than accuracy_ms, the TSA
+   * refuses requests with timeNotAvailable rather than claim an accuracy the
+   * clock does not have.
+   *
+   * @generated from field: uint32 accuracy_ms = 4;
+   */
+  accuracyMs: number;
+
+  /**
+   * rate_limit bounds how often one client may ask for a token. Unset means
+   * the defaults below; the limit cannot be switched off.
+   *
+   * @generated from field: cryptos.v1.TsaRateLimit rate_limit = 5;
+   */
+  rateLimit?: TsaRateLimit | undefined;
+
+  /**
+   * allowed_networks, when non-empty, are the only client networks the TSA
+   * answers, as IPv4 or IPv6 CIDR prefixes ("10.0.0.0/8", "2001:db8::/32"); a
+   * bare address means that one host. A client outside them is refused with
+   * HTTP 403 before its request is read. Empty answers any client.
+   *
+   * @generated from field: repeated string allowed_networks = 6;
+   */
+  allowedNetworks: string[];
+
+  /**
+   * certificate configures the TSA certificate's lifetime and rotation. Unset
+   * means the defaults below.
+   *
+   * @generated from field: cryptos.v1.TsaCertificateSettings certificate = 7;
+   */
+  certificate?: TsaCertificateSettings | undefined;
+};
+
+/**
+ * Describes the message cryptos.v1.Tsa.
+ * Use `create(TsaSchema)` to create a new message.
+ */
+export const TsaSchema: GenMessage<Tsa> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 17);
+
+/**
+ * TsaRateLimit is a per-client token bucket. A client is its source IPv4
+ * address, or its IPv6 /64, so hopping addresses inside one allocation does
+ * not reset the bucket. A client over its limit gets HTTP 429 with a
+ * Retry-After header, and the request is not read.
+ *
+ * @generated from message cryptos.v1.TsaRateLimit
+ */
+export type TsaRateLimit = Message<"cryptos.v1.TsaRateLimit"> & {
+  /**
+   * requests_per_minute is the steady rate one client may sustain. Zero means
+   * 60.
+   *
+   * @generated from field: uint32 requests_per_minute = 1;
+   */
+  requestsPerMinute: number;
+
+  /**
+   * burst is how many requests a client may make at once before the rate
+   * applies. Zero means requests_per_minute.
+   *
+   * @generated from field: uint32 burst = 2;
+   */
+  burst: number;
+};
+
+/**
+ * Describes the message cryptos.v1.TsaRateLimit.
+ * Use `create(TsaRateLimitSchema)` to create a new message.
+ */
+export const TsaRateLimitSchema: GenMessage<TsaRateLimit> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 18);
+
+/**
+ * TsaCertificateSettings configures the node's TSA certificate. Every TSA
+ * certificate the node has signed with stays published after it is replaced
+ * or expires (NodeService.ListTsaCertificates), so tokens signed before a
+ * rotation still verify.
+ *
+ * @generated from message cryptos.v1.TsaCertificateSettings
+ */
+export type TsaCertificateSettings = Message<"cryptos.v1.TsaCertificateSettings"> & {
+  /**
+   * validity_days is the TSA certificate's lifetime. Zero means 365, which is
+   * also the most accepted.
+   *
+   * @generated from field: uint32 validity_days = 1;
+   */
+  validityDays: number;
+
+  /**
+   * rotation_overlap_days is how long before the TSA certificate expires the
+   * node issues its successor with a new key and starts signing tokens with
+   * it. The old certificate stays valid for the rest of its life. Zero means
+   * 30. Must be less than validity_days.
+   *
+   * @generated from field: uint32 rotation_overlap_days = 2;
+   */
+  rotationOverlapDays: number;
+};
+
+/**
+ * Describes the message cryptos.v1.TsaCertificateSettings.
+ * Use `create(TsaCertificateSettingsSchema)` to create a new message.
+ */
+export const TsaCertificateSettingsSchema: GenMessage<TsaCertificateSettings> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 19);
+
+/**
  * Parent is the trust anchor a subordinate CA pins for its issuer: the parent
  * (or root) CA certificate, by full PEM or by SHA-256 fingerprint. Exactly one
  * is set. Unused by a Root.
@@ -864,7 +1046,7 @@ export type Parent = Message<"cryptos.v1.Parent"> & {
  * Use `create(ParentSchema)` to create a new message.
  */
 export const ParentSchema: GenMessage<Parent> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 17);
+  messageDesc(file_cryptos_v1_config, 20);
 
 /**
  * CertificateProfile drives CSR generation and certificate signing: key
@@ -953,7 +1135,7 @@ export type CertificateProfile = Message<"cryptos.v1.CertificateProfile"> & {
  * Use `create(CertificateProfileSchema)` to create a new message.
  */
 export const CertificateProfileSchema: GenMessage<CertificateProfile> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 18);
+  messageDesc(file_cryptos_v1_config, 21);
 
 /**
  * @generated from message cryptos.v1.BasicConstraints
@@ -978,7 +1160,7 @@ export type BasicConstraints = Message<"cryptos.v1.BasicConstraints"> & {
  * Use `create(BasicConstraintsSchema)` to create a new message.
  */
 export const BasicConstraintsSchema: GenMessage<BasicConstraints> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 19);
+  messageDesc(file_cryptos_v1_config, 22);
 
 /**
  * @generated from message cryptos.v1.SubjectAltNames
@@ -1027,7 +1209,7 @@ export type SubjectAltNames = Message<"cryptos.v1.SubjectAltNames"> & {
  * Use `create(SubjectAltNamesSchema)` to create a new message.
  */
 export const SubjectAltNamesSchema: GenMessage<SubjectAltNames> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 20);
+  messageDesc(file_cryptos_v1_config, 23);
 
 /**
  * X509Extension is the raw escape hatch: a dotted OID, criticality flag, and the
@@ -1057,7 +1239,7 @@ export type X509Extension = Message<"cryptos.v1.X509Extension"> & {
  * Use `create(X509ExtensionSchema)` to create a new message.
  */
 export const X509ExtensionSchema: GenMessage<X509Extension> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 21);
+  messageDesc(file_cryptos_v1_config, 24);
 
 /**
  * Install declares how the node provisions itself to persistent storage during
@@ -1080,7 +1262,7 @@ export type Install = Message<"cryptos.v1.Install"> & {
  * Use `create(InstallSchema)` to create a new message.
  */
 export const InstallSchema: GenMessage<Install> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 22);
+  messageDesc(file_cryptos_v1_config, 25);
 
 /**
  * @generated from message cryptos.v1.Subject
@@ -1121,5 +1303,5 @@ export type Subject = Message<"cryptos.v1.Subject"> & {
  * Use `create(SubjectSchema)` to create a new message.
  */
 export const SubjectSchema: GenMessage<Subject> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 23);
+  messageDesc(file_cryptos_v1_config, 26);
 

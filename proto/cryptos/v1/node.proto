@@ -24,6 +24,7 @@ import "cryptos/v1/config.proto";
 import "cryptos/v1/identity.proto";
 import "cryptos/v1/scep.proto";
 import "cryptos/v1/status.proto";
+import "cryptos/v1/tsa.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/CryptOS-PKI/api/go/cryptos/v1;cryptosv1";
@@ -251,6 +252,15 @@ service NodeService {
   // RejectScepEnrollment refuses a waiting enrolment. The client's next
   // CertPoll is answered FAILURE. NotFound when the id is not waiting.
   rpc RejectScepEnrollment(RejectScepEnrollmentRequest) returns (RejectScepEnrollmentResponse);
+
+  // ListTsaCertificates returns every TSA certificate the node has signed
+  // timestamp tokens with, the current one and all past ones, newest first,
+  // so a relying party can verify a token signed before a rotation. It is a
+  // read, authorized like ListIssued, and it answers whether or not the TSA is
+  // running this boot: switching the TSA off does not unpublish the
+  // certificates old tokens name. Empty on a node that has never run a TSA.
+  // Refused with FailedPrecondition in maintenance mode.
+  rpc ListTsaCertificates(ListTsaCertificatesRequest) returns (ListTsaCertificatesResponse);
 }
 
 message ApplyConfigRequest {

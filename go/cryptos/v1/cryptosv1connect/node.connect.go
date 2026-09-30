@@ -124,6 +124,9 @@ const (
 	// NodeServiceRejectScepEnrollmentProcedure is the fully-qualified name of the NodeService's
 	// RejectScepEnrollment RPC.
 	NodeServiceRejectScepEnrollmentProcedure = "/cryptos.v1.NodeService/RejectScepEnrollment"
+	// NodeServiceListTsaCertificatesProcedure is the fully-qualified name of the NodeService's
+	// ListTsaCertificates RPC.
+	NodeServiceListTsaCertificatesProcedure = "/cryptos.v1.NodeService/ListTsaCertificates"
 )
 
 // NodeServiceClient is a client for the cryptos.v1.NodeService service.
@@ -302,6 +305,14 @@ type NodeServiceClient interface {
 	// RejectScepEnrollment refuses a waiting enrolment. The client's next
 	// CertPoll is answered FAILURE. NotFound when the id is not waiting.
 	RejectScepEnrollment(context.Context, *connect.Request[v1.RejectScepEnrollmentRequest]) (*connect.Response[v1.RejectScepEnrollmentResponse], error)
+	// ListTsaCertificates returns every TSA certificate the node has signed
+	// timestamp tokens with, the current one and all past ones, newest first,
+	// so a relying party can verify a token signed before a rotation. It is a
+	// read, authorized like ListIssued, and it answers whether or not the TSA is
+	// running this boot: switching the TSA off does not unpublish the
+	// certificates old tokens name. Empty on a node that has never run a TSA.
+	// Refused with FailedPrecondition in maintenance mode.
+	ListTsaCertificates(context.Context, *connect.Request[v1.ListTsaCertificatesRequest]) (*connect.Response[v1.ListTsaCertificatesResponse], error)
 }
 
 // NewNodeServiceClient constructs a client for the cryptos.v1.NodeService service. By default, it
@@ -525,6 +536,12 @@ func NewNodeServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(nodeServiceMethods.ByName("RejectScepEnrollment")),
 			connect.WithClientOptions(opts...),
 		),
+		listTsaCertificates: connect.NewClient[v1.ListTsaCertificatesRequest, v1.ListTsaCertificatesResponse](
+			httpClient,
+			baseURL+NodeServiceListTsaCertificatesProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("ListTsaCertificates")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -565,6 +582,7 @@ type nodeServiceClient struct {
 	listScepEnrollments          *connect.Client[v1.ListScepEnrollmentsRequest, v1.ListScepEnrollmentsResponse]
 	approveScepEnrollment        *connect.Client[v1.ApproveScepEnrollmentRequest, v1.ApproveScepEnrollmentResponse]
 	rejectScepEnrollment         *connect.Client[v1.RejectScepEnrollmentRequest, v1.RejectScepEnrollmentResponse]
+	listTsaCertificates          *connect.Client[v1.ListTsaCertificatesRequest, v1.ListTsaCertificatesResponse]
 }
 
 // ApplyConfig calls cryptos.v1.NodeService.ApplyConfig.
@@ -740,6 +758,11 @@ func (c *nodeServiceClient) ApproveScepEnrollment(ctx context.Context, req *conn
 // RejectScepEnrollment calls cryptos.v1.NodeService.RejectScepEnrollment.
 func (c *nodeServiceClient) RejectScepEnrollment(ctx context.Context, req *connect.Request[v1.RejectScepEnrollmentRequest]) (*connect.Response[v1.RejectScepEnrollmentResponse], error) {
 	return c.rejectScepEnrollment.CallUnary(ctx, req)
+}
+
+// ListTsaCertificates calls cryptos.v1.NodeService.ListTsaCertificates.
+func (c *nodeServiceClient) ListTsaCertificates(ctx context.Context, req *connect.Request[v1.ListTsaCertificatesRequest]) (*connect.Response[v1.ListTsaCertificatesResponse], error) {
+	return c.listTsaCertificates.CallUnary(ctx, req)
 }
 
 // NodeServiceHandler is an implementation of the cryptos.v1.NodeService service.
@@ -918,6 +941,14 @@ type NodeServiceHandler interface {
 	// RejectScepEnrollment refuses a waiting enrolment. The client's next
 	// CertPoll is answered FAILURE. NotFound when the id is not waiting.
 	RejectScepEnrollment(context.Context, *connect.Request[v1.RejectScepEnrollmentRequest]) (*connect.Response[v1.RejectScepEnrollmentResponse], error)
+	// ListTsaCertificates returns every TSA certificate the node has signed
+	// timestamp tokens with, the current one and all past ones, newest first,
+	// so a relying party can verify a token signed before a rotation. It is a
+	// read, authorized like ListIssued, and it answers whether or not the TSA is
+	// running this boot: switching the TSA off does not unpublish the
+	// certificates old tokens name. Empty on a node that has never run a TSA.
+	// Refused with FailedPrecondition in maintenance mode.
+	ListTsaCertificates(context.Context, *connect.Request[v1.ListTsaCertificatesRequest]) (*connect.Response[v1.ListTsaCertificatesResponse], error)
 }
 
 // NewNodeServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -1137,6 +1168,12 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(nodeServiceMethods.ByName("RejectScepEnrollment")),
 		connect.WithHandlerOptions(opts...),
 	)
+	nodeServiceListTsaCertificatesHandler := connect.NewUnaryHandler(
+		NodeServiceListTsaCertificatesProcedure,
+		svc.ListTsaCertificates,
+		connect.WithSchema(nodeServiceMethods.ByName("ListTsaCertificates")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/cryptos.v1.NodeService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case NodeServiceApplyConfigProcedure:
@@ -1209,6 +1246,8 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 			nodeServiceApproveScepEnrollmentHandler.ServeHTTP(w, r)
 		case NodeServiceRejectScepEnrollmentProcedure:
 			nodeServiceRejectScepEnrollmentHandler.ServeHTTP(w, r)
+		case NodeServiceListTsaCertificatesProcedure:
+			nodeServiceListTsaCertificatesHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -1356,4 +1395,8 @@ func (UnimplementedNodeServiceHandler) ApproveScepEnrollment(context.Context, *c
 
 func (UnimplementedNodeServiceHandler) RejectScepEnrollment(context.Context, *connect.Request[v1.RejectScepEnrollmentRequest]) (*connect.Response[v1.RejectScepEnrollmentResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.RejectScepEnrollment is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) ListTsaCertificates(context.Context, *connect.Request[v1.ListTsaCertificatesRequest]) (*connect.Response[v1.ListTsaCertificatesResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.ListTsaCertificates is not implemented"))
 }

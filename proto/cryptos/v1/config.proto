@@ -149,12 +149,15 @@ message Pki {
   // scep configures the RFC 8894 enrolment endpoint, applied the same way as
   // acme.
   Scep scep = 15;
+  // tsa configures the RFC 3161 time-stamp authority, applied the same way as
+  // acme.
+  Tsa tsa = 16;
 }
 
 // Protocol blocks
 //
-// Each enrolment protocol a node can serve has its own block on Pki (acme, est
-// and scep today). Every block follows the same rules, and a protocol added later
+// Each enrolment protocol a node can serve has its own block on Pki (acme, est,
+// scep and tsa today). Every block follows the same rules, and a protocol added later
 // gets a block of the same shape:
 //
 //   - The first field is an explicit `enabled` flag. A protocol is opened
@@ -347,6 +350,95 @@ message ScepRa {
   // and requests encrypted to either the old or the new RA decrypt, so a
   // device that cached the old certificate still enrols. Zero means 30. Must
   // be less than validity_days.
+  uint32 rotation_overlap_days = 2;
+}
+
+// Tsa is the node's RFC 3161 time-stamp authority, for signatures that must
+// keep verifying after their signing certificate expires (code signing). It
+// answers HTTP POST requests of type application/timestamp-query on the root
+// path of its listener with application/timestamp-reply, in plain HTTP as the
+// RFC allows: the signed token carries its own integrity and there is nothing
+// confidential in it. It is open to any client the rate limit and
+// allowed_networks let through; RFC 3161 has no client authentication.
+//
+// Tokens are signed by a separate TSA certificate the node issues from its own
+// CA, with a critical id-kp-timeStamping extended key usage, so the CA key
+// never signs a token. The TSA key has the same algorithm as the CA key and is
+// held in the TPM where the node has one, in software otherwise, like the CA
+// key. Only an Intermediate or Issuing node serves a TSA.
+//
+// Accepted message imprint hashes are SHA-256, SHA-384 and SHA-512. SHA-1, MD5
+// and any other algorithm are refused with failInfo badAlg.
+//
+// The TSA fails closed on its clock: while the node's time sync
+// (NodeStatus.time_sync) has not synced this boot, or its sources disagree,
+// every request is refused with failInfo timeNotAvailable. The clock override
+// that lets certificate signing run unsynced does not apply here, because a
+// timestamp is nothing but a claim about the time. A node with no time source
+// never syncs, so its TSA refuses every request.
+message Tsa {
+  // enabled switches the TSA listener on at the next boot. It is rejected
+  // while policy_oid is empty, so the TSA stays off until the operator sets
+  // their own policy.
+  bool enabled = 1;
+  // http_port is the TCP port the TSA listener binds. Zero means the node
+  // default.
+  uint32 http_port = 2;
+  // policy_oid is the TSA policy every token names (RFC 3161 section 2.4.2),
+  // in dotted form, for example "1.3.6.1.4.1.<PEN>.<arc>" under the operator's
+  // own IANA Private Enterprise Number. Required when enabled; there is no
+  // default, so no two deployments share a policy by accident. It must be a
+  // valid object identifier: at least two arcs, decimal with no leading zeros,
+  // a first arc of 0, 1 or 2, and a second arc below 40 when the first is 0 or
+  // 1. A request that asks for a different policy (reqPolicy) is refused with
+  // failInfo unacceptedPolicy.
+  string policy_oid = 3;
+  // accuracy_ms is the accuracy the TSA claims in every token (the Accuracy
+  // field, RFC 3161 section 2.4.2), in milliseconds either side of genTime.
+  // Zero means 1000. Values above 60000 are rejected. The claim is checked
+  // against the clock: while the offset of the latest time sync
+  // (NodeStatus.time_sync.last_offset) is larger than accuracy_ms, the TSA
+  // refuses requests with timeNotAvailable rather than claim an accuracy the
+  // clock does not have.
+  uint32 accuracy_ms = 4;
+  // rate_limit bounds how often one client may ask for a token. Unset means
+  // the defaults below; the limit cannot be switched off.
+  TsaRateLimit rate_limit = 5;
+  // allowed_networks, when non-empty, are the only client networks the TSA
+  // answers, as IPv4 or IPv6 CIDR prefixes ("10.0.0.0/8", "2001:db8::/32"); a
+  // bare address means that one host. A client outside them is refused with
+  // HTTP 403 before its request is read. Empty answers any client.
+  repeated string allowed_networks = 6;
+  // certificate configures the TSA certificate's lifetime and rotation. Unset
+  // means the defaults below.
+  TsaCertificateSettings certificate = 7;
+}
+
+// TsaRateLimit is a per-client token bucket. A client is its source IPv4
+// address, or its IPv6 /64, so hopping addresses inside one allocation does
+// not reset the bucket. A client over its limit gets HTTP 429 with a
+// Retry-After header, and the request is not read.
+message TsaRateLimit {
+  // requests_per_minute is the steady rate one client may sustain. Zero means
+  // 60.
+  uint32 requests_per_minute = 1;
+  // burst is how many requests a client may make at once before the rate
+  // applies. Zero means requests_per_minute.
+  uint32 burst = 2;
+}
+
+// TsaCertificateSettings configures the node's TSA certificate. Every TSA
+// certificate the node has signed with stays published after it is replaced
+// or expires (NodeService.ListTsaCertificates), so tokens signed before a
+// rotation still verify.
+message TsaCertificateSettings {
+  // validity_days is the TSA certificate's lifetime. Zero means 365, which is
+  // also the most accepted.
+  uint32 validity_days = 1;
+  // rotation_overlap_days is how long before the TSA certificate expires the
+  // node issues its successor with a new key and starts signing tokens with
+  // it. The old certificate stays valid for the rest of its life. Zero means
+  // 30. Must be less than validity_days.
   uint32 rotation_overlap_days = 2;
 }
 

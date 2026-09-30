@@ -54,6 +54,7 @@ const (
 	NodeService_ListScepEnrollments_FullMethodName          = "/cryptos.v1.NodeService/ListScepEnrollments"
 	NodeService_ApproveScepEnrollment_FullMethodName        = "/cryptos.v1.NodeService/ApproveScepEnrollment"
 	NodeService_RejectScepEnrollment_FullMethodName         = "/cryptos.v1.NodeService/RejectScepEnrollment"
+	NodeService_ListTsaCertificates_FullMethodName          = "/cryptos.v1.NodeService/ListTsaCertificates"
 )
 
 // NodeServiceClient is the client API for NodeService service.
@@ -241,6 +242,14 @@ type NodeServiceClient interface {
 	// RejectScepEnrollment refuses a waiting enrolment. The client's next
 	// CertPoll is answered FAILURE. NotFound when the id is not waiting.
 	RejectScepEnrollment(ctx context.Context, in *RejectScepEnrollmentRequest, opts ...grpc.CallOption) (*RejectScepEnrollmentResponse, error)
+	// ListTsaCertificates returns every TSA certificate the node has signed
+	// timestamp tokens with, the current one and all past ones, newest first,
+	// so a relying party can verify a token signed before a rotation. It is a
+	// read, authorized like ListIssued, and it answers whether or not the TSA is
+	// running this boot: switching the TSA off does not unpublish the
+	// certificates old tokens name. Empty on a node that has never run a TSA.
+	// Refused with FailedPrecondition in maintenance mode.
+	ListTsaCertificates(ctx context.Context, in *ListTsaCertificatesRequest, opts ...grpc.CallOption) (*ListTsaCertificatesResponse, error)
 }
 
 type nodeServiceClient struct {
@@ -613,6 +622,16 @@ func (c *nodeServiceClient) RejectScepEnrollment(ctx context.Context, in *Reject
 	return out, nil
 }
 
+func (c *nodeServiceClient) ListTsaCertificates(ctx context.Context, in *ListTsaCertificatesRequest, opts ...grpc.CallOption) (*ListTsaCertificatesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListTsaCertificatesResponse)
+	err := c.cc.Invoke(ctx, NodeService_ListTsaCertificates_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NodeServiceServer is the server API for NodeService service.
 // All implementations should embed UnimplementedNodeServiceServer
 // for forward compatibility.
@@ -798,6 +817,14 @@ type NodeServiceServer interface {
 	// RejectScepEnrollment refuses a waiting enrolment. The client's next
 	// CertPoll is answered FAILURE. NotFound when the id is not waiting.
 	RejectScepEnrollment(context.Context, *RejectScepEnrollmentRequest) (*RejectScepEnrollmentResponse, error)
+	// ListTsaCertificates returns every TSA certificate the node has signed
+	// timestamp tokens with, the current one and all past ones, newest first,
+	// so a relying party can verify a token signed before a rotation. It is a
+	// read, authorized like ListIssued, and it answers whether or not the TSA is
+	// running this boot: switching the TSA off does not unpublish the
+	// certificates old tokens name. Empty on a node that has never run a TSA.
+	// Refused with FailedPrecondition in maintenance mode.
+	ListTsaCertificates(context.Context, *ListTsaCertificatesRequest) (*ListTsaCertificatesResponse, error)
 }
 
 // UnimplementedNodeServiceServer should be embedded to have
@@ -911,6 +938,9 @@ func (UnimplementedNodeServiceServer) ApproveScepEnrollment(context.Context, *Ap
 }
 func (UnimplementedNodeServiceServer) RejectScepEnrollment(context.Context, *RejectScepEnrollmentRequest) (*RejectScepEnrollmentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RejectScepEnrollment not implemented")
+}
+func (UnimplementedNodeServiceServer) ListTsaCertificates(context.Context, *ListTsaCertificatesRequest) (*ListTsaCertificatesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListTsaCertificates not implemented")
 }
 func (UnimplementedNodeServiceServer) testEmbeddedByValue() {}
 
@@ -1544,6 +1574,24 @@ func _NodeService_RejectScepEnrollment_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NodeService_ListTsaCertificates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListTsaCertificatesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).ListTsaCertificates(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_ListTsaCertificates_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).ListTsaCertificates(ctx, req.(*ListTsaCertificatesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NodeService_ServiceDesc is the grpc.ServiceDesc for NodeService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1682,6 +1730,10 @@ var NodeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RejectScepEnrollment",
 			Handler:    _NodeService_RejectScepEnrollment_Handler,
+		},
+		{
+			MethodName: "ListTsaCertificates",
+			Handler:    _NodeService_ListTsaCertificates_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

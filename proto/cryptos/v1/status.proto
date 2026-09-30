@@ -81,6 +81,8 @@ enum ServiceProtocol {
   SERVICE_PROTOCOL_EST = 2;
   // SCEP, RFC 8894 (Pki.scep).
   SERVICE_PROTOCOL_SCEP = 3;
+  // RFC 3161 time-stamp authority (Pki.tsa).
+  SERVICE_PROTOCOL_TSA = 4;
 }
 
 // RevocationPreflight reports whether the configured revocation base URL is

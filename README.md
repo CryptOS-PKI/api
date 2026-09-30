@@ -20,12 +20,13 @@ Taskfile.yml             # fmt / lint / generate / test / ci targets
 
 | File | Defines |
 |---|---|
-| `node.proto` | `NodeService` — the per-node management surface: config (`ApplyConfig`, `GetConfig`), status and identity, the first-boot ceremony, CA signing and revocation, key escrow and rotation, reset, in-place image upgrade, `Reboot` (orderly, CN-confirmed reboot or power-off), and SCEP administration (one-time enrolment challenges and the approval queue). |
+| `node.proto` | `NodeService` — the per-node management surface: config (`ApplyConfig`, `GetConfig`), status and identity, the first-boot ceremony, CA signing and revocation, key escrow and rotation, reset, in-place image upgrade, `Reboot` (orderly, CN-confirmed reboot or power-off), SCEP administration (one-time enrolment challenges and the approval queue), and the list of TSA certificates, current and past (`ListTsaCertificates`). |
 | `identity.proto` | `Identity` — DER + PEM + leaf SHA-256 for the CA chain. |
 | `ceremony.proto` | `CeremonyEvent` stream messages + ceremony kind/event enums. |
 | `status.proto` | `NodeStatus` — role, identity state, TPM state, etcd state, boot count, the revocation preflight result (state, last error, when it was checked), the DNS resolver source and nameservers, the SNTP time-sync state (source, servers, last offset and sync, and the latest error), each enrolment protocol's configured and running state, and whether a stored config change is waiting for a reboot. |
-| `config.proto` | `MachineConfig` Phase 1 subset (role/network/storage/bootstrap/pki), plus the ACME, EST and SCEP enrolment blocks on `Pki` (`acme`, `est`, `scep`), each with an explicit `enabled` switch that takes effect at the next boot. |
+| `config.proto` | `MachineConfig` Phase 1 subset (role/network/storage/bootstrap/pki), plus the ACME, EST and SCEP enrolment blocks and the RFC 3161 time-stamp authority block on `Pki` (`acme`, `est`, `scep`, `tsa`), each with an explicit `enabled` switch that takes effect at the next boot. |
 | `scep.proto` | The SCEP challenge and approval-queue messages. A challenge is returned once, when it is minted, and no read carries it or its digest. |
+| `tsa.proto` | The TSA certificate messages `ListTsaCertificates` returns, kept after rotation so old timestamp tokens still verify. |
 | `audit.proto` | `AuditEvent` — hash-chained audit log entry shape. |
 | `fleet/v1/fleet.proto` | `FleetService` — the Fleet Manager's surface over the fleet: node (including `RenameNode`), certificate, profile, adapter, enrollment and operator-credential RPCs, the manager audit log (`ListAudit`), MCP agent key management (`ListMcpKeys`, `RevokeMcpKey`, `CreateMcpKey`), step-up approvals (`ListApprovals`, `DecideApproval`), and the per-node enrolment protocol switch (`SetNodeProtocol`, with each node's protocol state and `reboot_required` on `NodeSummary`). |
 

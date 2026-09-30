@@ -116,6 +116,8 @@ const (
 	// FleetServiceDecommissionNodeProcedure is the fully-qualified name of the FleetService's
 	// DecommissionNode RPC.
 	FleetServiceDecommissionNodeProcedure = "/cryptos.fleet.v1.FleetService/DecommissionNode"
+	// FleetServiceRenameNodeProcedure is the fully-qualified name of the FleetService's RenameNode RPC.
+	FleetServiceRenameNodeProcedure = "/cryptos.fleet.v1.FleetService/RenameNode"
 	// FleetServiceListMcpKeysProcedure is the fully-qualified name of the FleetService's ListMcpKeys
 	// RPC.
 	FleetServiceListMcpKeysProcedure = "/cryptos.fleet.v1.FleetService/ListMcpKeys"
@@ -186,7 +188,7 @@ type FleetServiceClient interface {
 	// presented client certificate (subject CN, cert serial, access level).
 	WhoAmI(context.Context, *connect.Request[v1.WhoAmIRequest]) (*connect.Response[v1.WhoAmIResponse], error)
 	// RevokeCertificate revokes an issued certificate on the node that issued
-	// it, identified by node name and hex serial, with an RFC 5280 reason code.
+	// it, identified by node and hex serial, with an RFC 5280 reason code.
 	RevokeCertificate(context.Context, *connect.Request[v1.RevokeCertificateRequest]) (*connect.Response[v1.RevokeCertificateResponse], error)
 	// IssueLeaf signs a leaf certificate on the named issuing node from a
 	// browser-generated PKCS#10 CSR under a named issuance profile. Only the
@@ -259,6 +261,16 @@ type FleetServiceClient interface {
 	// must echo the node's current Root CA CN as confirmation. Admin-gated and
 	// audited (the audit names the node and that it was wiped, never any secret).
 	DecommissionNode(context.Context, *connect.Request[v1.DecommissionNodeRequest]) (*connect.Response[v1.DecommissionNodeResponse], error)
+	// RenameNode changes a node's display name. The node is addressed by its
+	// stable ID, which never changes, so URLs, audit entries and references
+	// recorded against the ID keep pointing at the node. Returns the updated
+	// node. NotFound if no node has node_id; AlreadyExists if another node
+	// already has new_name; InvalidArgument if new_name is not an RFC 1123 label
+	// (1 to 63 lowercase letters, digits and hyphens, starting and ending with a
+	// letter or digit). Renaming a node to its current name returns it unchanged
+	// and records nothing. Admin-gated and audited (node-renamed, with the old
+	// and new names).
+	RenameNode(context.Context, *connect.Request[v1.RenameNodeRequest]) (*connect.Response[v1.RenameNodeResponse], error)
 	// ListMcpKeys returns the MCP agent keys bound to the calling operator's
 	// certificate. An admin may set all to list every operator's keys; a
 	// non-admin that sets all is refused. The listing never carries a key or its
@@ -481,6 +493,12 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(fleetServiceMethods.ByName("DecommissionNode")),
 			connect.WithClientOptions(opts...),
 		),
+		renameNode: connect.NewClient[v1.RenameNodeRequest, v1.RenameNodeResponse](
+			httpClient,
+			baseURL+FleetServiceRenameNodeProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("RenameNode")),
+			connect.WithClientOptions(opts...),
+		),
 		listMcpKeys: connect.NewClient[v1.ListMcpKeysRequest, v1.ListMcpKeysResponse](
 			httpClient,
 			baseURL+FleetServiceListMcpKeysProcedure,
@@ -546,6 +564,7 @@ type fleetServiceClient struct {
 	listInstallDisks         *connect.Client[v1.ListInstallDisksRequest, v1.ListInstallDisksResponse]
 	adoptNode                *connect.Client[v1.AdoptNodeRequest, v1.AdoptNodeResponse]
 	decommissionNode         *connect.Client[v1.DecommissionNodeRequest, v1.DecommissionNodeResponse]
+	renameNode               *connect.Client[v1.RenameNodeRequest, v1.RenameNodeResponse]
 	listMcpKeys              *connect.Client[v1.ListMcpKeysRequest, v1.ListMcpKeysResponse]
 	revokeMcpKey             *connect.Client[v1.RevokeMcpKeyRequest, v1.RevokeMcpKeyResponse]
 	createMcpKey             *connect.Client[v1.CreateMcpKeyRequest, v1.CreateMcpKeyResponse]
@@ -703,6 +722,11 @@ func (c *fleetServiceClient) DecommissionNode(ctx context.Context, req *connect.
 	return c.decommissionNode.CallUnary(ctx, req)
 }
 
+// RenameNode calls cryptos.fleet.v1.FleetService.RenameNode.
+func (c *fleetServiceClient) RenameNode(ctx context.Context, req *connect.Request[v1.RenameNodeRequest]) (*connect.Response[v1.RenameNodeResponse], error) {
+	return c.renameNode.CallUnary(ctx, req)
+}
+
 // ListMcpKeys calls cryptos.fleet.v1.FleetService.ListMcpKeys.
 func (c *fleetServiceClient) ListMcpKeys(ctx context.Context, req *connect.Request[v1.ListMcpKeysRequest]) (*connect.Response[v1.ListMcpKeysResponse], error) {
 	return c.listMcpKeys.CallUnary(ctx, req)
@@ -781,7 +805,7 @@ type FleetServiceHandler interface {
 	// presented client certificate (subject CN, cert serial, access level).
 	WhoAmI(context.Context, *connect.Request[v1.WhoAmIRequest]) (*connect.Response[v1.WhoAmIResponse], error)
 	// RevokeCertificate revokes an issued certificate on the node that issued
-	// it, identified by node name and hex serial, with an RFC 5280 reason code.
+	// it, identified by node and hex serial, with an RFC 5280 reason code.
 	RevokeCertificate(context.Context, *connect.Request[v1.RevokeCertificateRequest]) (*connect.Response[v1.RevokeCertificateResponse], error)
 	// IssueLeaf signs a leaf certificate on the named issuing node from a
 	// browser-generated PKCS#10 CSR under a named issuance profile. Only the
@@ -854,6 +878,16 @@ type FleetServiceHandler interface {
 	// must echo the node's current Root CA CN as confirmation. Admin-gated and
 	// audited (the audit names the node and that it was wiped, never any secret).
 	DecommissionNode(context.Context, *connect.Request[v1.DecommissionNodeRequest]) (*connect.Response[v1.DecommissionNodeResponse], error)
+	// RenameNode changes a node's display name. The node is addressed by its
+	// stable ID, which never changes, so URLs, audit entries and references
+	// recorded against the ID keep pointing at the node. Returns the updated
+	// node. NotFound if no node has node_id; AlreadyExists if another node
+	// already has new_name; InvalidArgument if new_name is not an RFC 1123 label
+	// (1 to 63 lowercase letters, digits and hyphens, starting and ending with a
+	// letter or digit). Renaming a node to its current name returns it unchanged
+	// and records nothing. Admin-gated and audited (node-renamed, with the old
+	// and new names).
+	RenameNode(context.Context, *connect.Request[v1.RenameNodeRequest]) (*connect.Response[v1.RenameNodeResponse], error)
 	// ListMcpKeys returns the MCP agent keys bound to the calling operator's
 	// certificate. An admin may set all to list every operator's keys; a
 	// non-admin that sets all is refused. The listing never carries a key or its
@@ -1072,6 +1106,12 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(fleetServiceMethods.ByName("DecommissionNode")),
 		connect.WithHandlerOptions(opts...),
 	)
+	fleetServiceRenameNodeHandler := connect.NewUnaryHandler(
+		FleetServiceRenameNodeProcedure,
+		svc.RenameNode,
+		connect.WithSchema(fleetServiceMethods.ByName("RenameNode")),
+		connect.WithHandlerOptions(opts...),
+	)
 	fleetServiceListMcpKeysHandler := connect.NewUnaryHandler(
 		FleetServiceListMcpKeysProcedure,
 		svc.ListMcpKeys,
@@ -1164,6 +1204,8 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 			fleetServiceAdoptNodeHandler.ServeHTTP(w, r)
 		case FleetServiceDecommissionNodeProcedure:
 			fleetServiceDecommissionNodeHandler.ServeHTTP(w, r)
+		case FleetServiceRenameNodeProcedure:
+			fleetServiceRenameNodeHandler.ServeHTTP(w, r)
 		case FleetServiceListMcpKeysProcedure:
 			fleetServiceListMcpKeysHandler.ServeHTTP(w, r)
 		case FleetServiceRevokeMcpKeyProcedure:
@@ -1301,6 +1343,10 @@ func (UnimplementedFleetServiceHandler) AdoptNode(context.Context, *connect.Requ
 
 func (UnimplementedFleetServiceHandler) DecommissionNode(context.Context, *connect.Request[v1.DecommissionNodeRequest]) (*connect.Response[v1.DecommissionNodeResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.DecommissionNode is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) RenameNode(context.Context, *connect.Request[v1.RenameNodeRequest]) (*connect.Response[v1.RenameNodeResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.RenameNode is not implemented"))
 }
 
 func (UnimplementedFleetServiceHandler) ListMcpKeys(context.Context, *connect.Request[v1.ListMcpKeysRequest]) (*connect.Response[v1.ListMcpKeysResponse], error) {

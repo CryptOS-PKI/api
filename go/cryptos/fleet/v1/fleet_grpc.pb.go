@@ -50,6 +50,7 @@ const (
 	FleetService_ListInstallDisks_FullMethodName         = "/cryptos.fleet.v1.FleetService/ListInstallDisks"
 	FleetService_AdoptNode_FullMethodName                = "/cryptos.fleet.v1.FleetService/AdoptNode"
 	FleetService_DecommissionNode_FullMethodName         = "/cryptos.fleet.v1.FleetService/DecommissionNode"
+	FleetService_RenameNode_FullMethodName               = "/cryptos.fleet.v1.FleetService/RenameNode"
 	FleetService_ListMcpKeys_FullMethodName              = "/cryptos.fleet.v1.FleetService/ListMcpKeys"
 	FleetService_RevokeMcpKey_FullMethodName             = "/cryptos.fleet.v1.FleetService/RevokeMcpKey"
 	FleetService_CreateMcpKey_FullMethodName             = "/cryptos.fleet.v1.FleetService/CreateMcpKey"
@@ -130,7 +131,7 @@ type FleetServiceClient interface {
 	// presented client certificate (subject CN, cert serial, access level).
 	WhoAmI(ctx context.Context, in *WhoAmIRequest, opts ...grpc.CallOption) (*WhoAmIResponse, error)
 	// RevokeCertificate revokes an issued certificate on the node that issued
-	// it, identified by node name and hex serial, with an RFC 5280 reason code.
+	// it, identified by node and hex serial, with an RFC 5280 reason code.
 	RevokeCertificate(ctx context.Context, in *RevokeCertificateRequest, opts ...grpc.CallOption) (*RevokeCertificateResponse, error)
 	// IssueLeaf signs a leaf certificate on the named issuing node from a
 	// browser-generated PKCS#10 CSR under a named issuance profile. Only the
@@ -203,6 +204,16 @@ type FleetServiceClient interface {
 	// must echo the node's current Root CA CN as confirmation. Admin-gated and
 	// audited (the audit names the node and that it was wiped, never any secret).
 	DecommissionNode(ctx context.Context, in *DecommissionNodeRequest, opts ...grpc.CallOption) (*DecommissionNodeResponse, error)
+	// RenameNode changes a node's display name. The node is addressed by its
+	// stable ID, which never changes, so URLs, audit entries and references
+	// recorded against the ID keep pointing at the node. Returns the updated
+	// node. NotFound if no node has node_id; AlreadyExists if another node
+	// already has new_name; InvalidArgument if new_name is not an RFC 1123 label
+	// (1 to 63 lowercase letters, digits and hyphens, starting and ending with a
+	// letter or digit). Renaming a node to its current name returns it unchanged
+	// and records nothing. Admin-gated and audited (node-renamed, with the old
+	// and new names).
+	RenameNode(ctx context.Context, in *RenameNodeRequest, opts ...grpc.CallOption) (*RenameNodeResponse, error)
 	// ListMcpKeys returns the MCP agent keys bound to the calling operator's
 	// certificate. An admin may set all to list every operator's keys; a
 	// non-admin that sets all is refused. The listing never carries a key or its
@@ -561,6 +572,16 @@ func (c *fleetServiceClient) DecommissionNode(ctx context.Context, in *Decommiss
 	return out, nil
 }
 
+func (c *fleetServiceClient) RenameNode(ctx context.Context, in *RenameNodeRequest, opts ...grpc.CallOption) (*RenameNodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RenameNodeResponse)
+	err := c.cc.Invoke(ctx, FleetService_RenameNode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *fleetServiceClient) ListMcpKeys(ctx context.Context, in *ListMcpKeysRequest, opts ...grpc.CallOption) (*ListMcpKeysResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListMcpKeysResponse)
@@ -684,7 +705,7 @@ type FleetServiceServer interface {
 	// presented client certificate (subject CN, cert serial, access level).
 	WhoAmI(context.Context, *WhoAmIRequest) (*WhoAmIResponse, error)
 	// RevokeCertificate revokes an issued certificate on the node that issued
-	// it, identified by node name and hex serial, with an RFC 5280 reason code.
+	// it, identified by node and hex serial, with an RFC 5280 reason code.
 	RevokeCertificate(context.Context, *RevokeCertificateRequest) (*RevokeCertificateResponse, error)
 	// IssueLeaf signs a leaf certificate on the named issuing node from a
 	// browser-generated PKCS#10 CSR under a named issuance profile. Only the
@@ -757,6 +778,16 @@ type FleetServiceServer interface {
 	// must echo the node's current Root CA CN as confirmation. Admin-gated and
 	// audited (the audit names the node and that it was wiped, never any secret).
 	DecommissionNode(context.Context, *DecommissionNodeRequest) (*DecommissionNodeResponse, error)
+	// RenameNode changes a node's display name. The node is addressed by its
+	// stable ID, which never changes, so URLs, audit entries and references
+	// recorded against the ID keep pointing at the node. Returns the updated
+	// node. NotFound if no node has node_id; AlreadyExists if another node
+	// already has new_name; InvalidArgument if new_name is not an RFC 1123 label
+	// (1 to 63 lowercase letters, digits and hyphens, starting and ending with a
+	// letter or digit). Renaming a node to its current name returns it unchanged
+	// and records nothing. Admin-gated and audited (node-renamed, with the old
+	// and new names).
+	RenameNode(context.Context, *RenameNodeRequest) (*RenameNodeResponse, error)
 	// ListMcpKeys returns the MCP agent keys bound to the calling operator's
 	// certificate. An admin may set all to list every operator's keys; a
 	// non-admin that sets all is refused. The listing never carries a key or its
@@ -887,6 +918,9 @@ func (UnimplementedFleetServiceServer) AdoptNode(*AdoptNodeRequest, grpc.ServerS
 }
 func (UnimplementedFleetServiceServer) DecommissionNode(context.Context, *DecommissionNodeRequest) (*DecommissionNodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DecommissionNode not implemented")
+}
+func (UnimplementedFleetServiceServer) RenameNode(context.Context, *RenameNodeRequest) (*RenameNodeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RenameNode not implemented")
 }
 func (UnimplementedFleetServiceServer) ListMcpKeys(context.Context, *ListMcpKeysRequest) (*ListMcpKeysResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListMcpKeys not implemented")
@@ -1474,6 +1508,24 @@ func _FleetService_DecommissionNode_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FleetService_RenameNode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RenameNodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).RenameNode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_RenameNode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).RenameNode(ctx, req.(*RenameNodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _FleetService_ListMcpKeys_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListMcpKeysRequest)
 	if err := dec(in); err != nil {
@@ -1690,6 +1742,10 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DecommissionNode",
 			Handler:    _FleetService_DecommissionNode_Handler,
+		},
+		{
+			MethodName: "RenameNode",
+			Handler:    _FleetService_RenameNode_Handler,
 		},
 		{
 			MethodName: "ListMcpKeys",

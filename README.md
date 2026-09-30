@@ -26,7 +26,7 @@ Taskfile.yml             # fmt / lint / generate / test / ci targets
 | `status.proto` | `NodeStatus` — role, identity state, TPM state, etcd state, boot count, the revocation preflight result (state, last error, when it was checked), the DNS resolver source and nameservers, each enrolment protocol's configured and running state, and whether a stored config change is waiting for a reboot. |
 | `config.proto` | `MachineConfig` Phase 1 subset (role/network/storage/bootstrap/pki), plus the ACME and EST enrolment blocks on `Pki` (`acme`, `est`), each with an explicit `enabled` switch that takes effect at the next boot. |
 | `audit.proto` | `AuditEvent` — hash-chained audit log entry shape. |
-| `fleet/v1/fleet.proto` | `FleetService` — the Fleet Manager's surface over the fleet: node, certificate, profile, adapter, enrollment and operator-credential RPCs, the manager audit log (`ListAudit`), MCP agent key management (`ListMcpKeys`, `RevokeMcpKey`, `CreateMcpKey`), and step-up approvals (`ListApprovals`, `DecideApproval`). |
+| `fleet/v1/fleet.proto` | `FleetService` — the Fleet Manager's surface over the fleet: node, certificate, profile, adapter, enrollment and operator-credential RPCs, the manager audit log (`ListAudit`), MCP agent key management (`ListMcpKeys`, `RevokeMcpKey`, `CreateMcpKey`), step-up approvals (`ListApprovals`, `DecideApproval`), and the per-node enrolment protocol switch (`SetNodeProtocol`, with each node's protocol state and `reboot_required` on `NodeSummary`). |
 
 ### MCP agent keys and audit actors
 

@@ -61,6 +61,9 @@ const (
 	// FleetServiceSetAdapterEnabledProcedure is the fully-qualified name of the FleetService's
 	// SetAdapterEnabled RPC.
 	FleetServiceSetAdapterEnabledProcedure = "/cryptos.fleet.v1.FleetService/SetAdapterEnabled"
+	// FleetServiceSetNodeProtocolProcedure is the fully-qualified name of the FleetService's
+	// SetNodeProtocol RPC.
+	FleetServiceSetNodeProtocolProcedure = "/cryptos.fleet.v1.FleetService/SetNodeProtocol"
 	// FleetServiceListAuditProcedure is the fully-qualified name of the FleetService's ListAudit RPC.
 	FleetServiceListAuditProcedure = "/cryptos.fleet.v1.FleetService/ListAudit"
 	// FleetServiceListEnrollmentsProcedure is the fully-qualified name of the FleetService's
@@ -169,6 +172,19 @@ type FleetServiceClient interface {
 	// engines that serve enrollment requests ship in a later program, so an
 	// enabled adapter does not yet answer requests. Admin-gated and audited.
 	SetAdapterEnabled(context.Context, *connect.Request[v1.SetAdapterEnabledRequest]) (*connect.Response[v1.SetAdapterEnabledResponse], error)
+	// SetNodeProtocol switches one enrolment protocol on or off on one managed
+	// node. The manager fetches the node's config, sets that protocol block's
+	// enabled flag, leaves its other settings as the node returned them, and
+	// applies it back through the node's ApplyConfig. Write-only secrets come
+	// back blank from the node and are sent blank, so the node keeps what it
+	// stores; they never reach the manager. The other protocol blocks are left
+	// out of the apply, so the node keeps them unchanged. A switch is
+	// reboot-required: the node stores it and the listener changes at the next
+	// boot, and NodeSummary.reboot_required stays true until the node reports it
+	// running in the new state. The node's refusal (a Root refusing
+	// enabled=true, a block that fails validation) is returned as its error.
+	// Admin-gated and audited.
+	SetNodeProtocol(context.Context, *connect.Request[v1.SetNodeProtocolRequest]) (*connect.Response[v1.SetNodeProtocolResponse], error)
 	// ListAudit returns the manager's audit log.
 	ListAudit(context.Context, *connect.Request[v1.ListAuditRequest]) (*connect.Response[v1.ListAuditResponse], error)
 	// ListEnrollments returns the manager's pending and resolved enrollment
@@ -361,6 +377,12 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(fleetServiceMethods.ByName("SetAdapterEnabled")),
 			connect.WithClientOptions(opts...),
 		),
+		setNodeProtocol: connect.NewClient[v1.SetNodeProtocolRequest, v1.SetNodeProtocolResponse](
+			httpClient,
+			baseURL+FleetServiceSetNodeProtocolProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("SetNodeProtocol")),
+			connect.WithClientOptions(opts...),
+		),
 		listAudit: connect.NewClient[v1.ListAuditRequest, v1.ListAuditResponse](
 			httpClient,
 			baseURL+FleetServiceListAuditProcedure,
@@ -526,6 +548,7 @@ type fleetServiceClient struct {
 	applyProfileToNode       *connect.Client[v1.ApplyProfileToNodeRequest, v1.ApplyProfileToNodeResponse]
 	listAdapters             *connect.Client[v1.ListAdaptersRequest, v1.ListAdaptersResponse]
 	setAdapterEnabled        *connect.Client[v1.SetAdapterEnabledRequest, v1.SetAdapterEnabledResponse]
+	setNodeProtocol          *connect.Client[v1.SetNodeProtocolRequest, v1.SetNodeProtocolResponse]
 	listAudit                *connect.Client[v1.ListAuditRequest, v1.ListAuditResponse]
 	listEnrollments          *connect.Client[v1.ListEnrollmentsRequest, v1.ListEnrollmentsResponse]
 	createEnrollment         *connect.Client[v1.CreateEnrollmentRequest, v1.CreateEnrollmentResponse]
@@ -601,6 +624,11 @@ func (c *fleetServiceClient) ListAdapters(ctx context.Context, req *connect.Requ
 // SetAdapterEnabled calls cryptos.fleet.v1.FleetService.SetAdapterEnabled.
 func (c *fleetServiceClient) SetAdapterEnabled(ctx context.Context, req *connect.Request[v1.SetAdapterEnabledRequest]) (*connect.Response[v1.SetAdapterEnabledResponse], error) {
 	return c.setAdapterEnabled.CallUnary(ctx, req)
+}
+
+// SetNodeProtocol calls cryptos.fleet.v1.FleetService.SetNodeProtocol.
+func (c *fleetServiceClient) SetNodeProtocol(ctx context.Context, req *connect.Request[v1.SetNodeProtocolRequest]) (*connect.Response[v1.SetNodeProtocolResponse], error) {
+	return c.setNodeProtocol.CallUnary(ctx, req)
 }
 
 // ListAudit calls cryptos.fleet.v1.FleetService.ListAudit.
@@ -764,6 +792,19 @@ type FleetServiceHandler interface {
 	// engines that serve enrollment requests ship in a later program, so an
 	// enabled adapter does not yet answer requests. Admin-gated and audited.
 	SetAdapterEnabled(context.Context, *connect.Request[v1.SetAdapterEnabledRequest]) (*connect.Response[v1.SetAdapterEnabledResponse], error)
+	// SetNodeProtocol switches one enrolment protocol on or off on one managed
+	// node. The manager fetches the node's config, sets that protocol block's
+	// enabled flag, leaves its other settings as the node returned them, and
+	// applies it back through the node's ApplyConfig. Write-only secrets come
+	// back blank from the node and are sent blank, so the node keeps what it
+	// stores; they never reach the manager. The other protocol blocks are left
+	// out of the apply, so the node keeps them unchanged. A switch is
+	// reboot-required: the node stores it and the listener changes at the next
+	// boot, and NodeSummary.reboot_required stays true until the node reports it
+	// running in the new state. The node's refusal (a Root refusing
+	// enabled=true, a block that fails validation) is returned as its error.
+	// Admin-gated and audited.
+	SetNodeProtocol(context.Context, *connect.Request[v1.SetNodeProtocolRequest]) (*connect.Response[v1.SetNodeProtocolResponse], error)
 	// ListAudit returns the manager's audit log.
 	ListAudit(context.Context, *connect.Request[v1.ListAuditRequest]) (*connect.Response[v1.ListAuditResponse], error)
 	// ListEnrollments returns the manager's pending and resolved enrollment
@@ -952,6 +993,12 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(fleetServiceMethods.ByName("SetAdapterEnabled")),
 		connect.WithHandlerOptions(opts...),
 	)
+	fleetServiceSetNodeProtocolHandler := connect.NewUnaryHandler(
+		FleetServiceSetNodeProtocolProcedure,
+		svc.SetNodeProtocol,
+		connect.WithSchema(fleetServiceMethods.ByName("SetNodeProtocol")),
+		connect.WithHandlerOptions(opts...),
+	)
 	fleetServiceListAuditHandler := connect.NewUnaryHandler(
 		FleetServiceListAuditProcedure,
 		svc.ListAudit,
@@ -1124,6 +1171,8 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 			fleetServiceListAdaptersHandler.ServeHTTP(w, r)
 		case FleetServiceSetAdapterEnabledProcedure:
 			fleetServiceSetAdapterEnabledHandler.ServeHTTP(w, r)
+		case FleetServiceSetNodeProtocolProcedure:
+			fleetServiceSetNodeProtocolHandler.ServeHTTP(w, r)
 		case FleetServiceListAuditProcedure:
 			fleetServiceListAuditHandler.ServeHTTP(w, r)
 		case FleetServiceListEnrollmentsProcedure:
@@ -1221,6 +1270,10 @@ func (UnimplementedFleetServiceHandler) ListAdapters(context.Context, *connect.R
 
 func (UnimplementedFleetServiceHandler) SetAdapterEnabled(context.Context, *connect.Request[v1.SetAdapterEnabledRequest]) (*connect.Response[v1.SetAdapterEnabledResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.SetAdapterEnabled is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) SetNodeProtocol(context.Context, *connect.Request[v1.SetNodeProtocolRequest]) (*connect.Response[v1.SetNodeProtocolResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.SetNodeProtocol is not implemented"))
 }
 
 func (UnimplementedFleetServiceHandler) ListAudit(context.Context, *connect.Request[v1.ListAuditRequest]) (*connect.Response[v1.ListAuditResponse], error) {

@@ -21,6 +21,7 @@ package cryptos.fleet.v1;
 
 import "cryptos/v1/config.proto";
 import "cryptos/v1/node.proto";
+import "cryptos/v1/status.proto";
 
 option go_package = "github.com/CryptOS-PKI/api/go/cryptos/fleet/v1;fleetv1";
 
@@ -72,6 +73,20 @@ service FleetService {
   // engines that serve enrollment requests ship in a later program, so an
   // enabled adapter does not yet answer requests. Admin-gated and audited.
   rpc SetAdapterEnabled(SetAdapterEnabledRequest) returns (SetAdapterEnabledResponse);
+
+  // SetNodeProtocol switches one enrolment protocol on or off on one managed
+  // node. The manager fetches the node's config, sets that protocol block's
+  // enabled flag, leaves its other settings as the node returned them, and
+  // applies it back through the node's ApplyConfig. Write-only secrets come
+  // back blank from the node and are sent blank, so the node keeps what it
+  // stores; they never reach the manager. The other protocol blocks are left
+  // out of the apply, so the node keeps them unchanged. A switch is
+  // reboot-required: the node stores it and the listener changes at the next
+  // boot, and NodeSummary.reboot_required stays true until the node reports it
+  // running in the new state. The node's refusal (a Root refusing
+  // enabled=true, a block that fails validation) is returned as its error.
+  // Admin-gated and audited.
+  rpc SetNodeProtocol(SetNodeProtocolRequest) returns (SetNodeProtocolResponse);
 
   // ListAudit returns the manager's audit log.
   rpc ListAudit(ListAuditRequest) returns (ListAuditResponse);
@@ -329,6 +344,14 @@ message NodeSummary {
   string issuer = 6;
   Health health = 7;
   string health_detail = 8;
+  // protocols is the node's enrolment protocol state as it reports it:
+  // configured in the stored config against running this boot. Empty when the
+  // node is down or predates the report.
+  repeated cryptos.v1.ProtocolStatus protocols = 10;
+  // reboot_required is true when the node holds a stored change that takes
+  // effect only at its next boot: the node reports config_reboot_pending, or a
+  // protocol switch the manager applied has not yet shown up as running.
+  bool reboot_required = 11;
 }
 
 // NodeIdentity carries the node's CA chain, mirroring cryptos.v1.Identity
@@ -591,6 +614,27 @@ message ApplyNodeConfigResponse {
   // generation is the node's monotonically increasing config generation.
   uint64 generation = 1;
   // requires_reboot is true when the applied change takes effect only on reboot.
+  bool requires_reboot = 2;
+}
+
+// SetNodeProtocolRequest names the node, the protocol and its new state.
+message SetNodeProtocolRequest {
+  // node_name is the managed node to switch the protocol on.
+  string node_name = 1;
+  // protocol is the enrolment protocol to switch.
+  cryptos.v1.ServiceProtocol protocol = 2;
+  // enabled switches the protocol on (true) or off (false) at the node's next
+  // boot.
+  bool enabled = 3;
+}
+
+// SetNodeProtocolResponse carries the node's answer to the apply.
+message SetNodeProtocolResponse {
+  // generation is the node's config generation after the apply.
+  uint64 generation = 1;
+  // requires_reboot is true when the node stored a change that takes effect at
+  // its next boot. False when the protocol was already in the requested state
+  // and nothing was applied.
   bool requires_reboot = 2;
 }
 

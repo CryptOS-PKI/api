@@ -87,7 +87,7 @@ task tools       # install the pinned codegen plugins into .bin/ (generate runs 
 task license     # re-inject Apache 2.0 headers via golic
 ```
 
-The generated stubs under `go/` and `gen/ts/` are committed; `task ci` fails if they drift from the protos. No GitHub workflow runs that check yet (#73), so run `task ci` before you push.
+The generated stubs under `go/` and `gen/ts/` are committed; `task ci` fails if they drift from the protos. The Generated Output check (`.github/workflows/ci-generate.yaml`) runs the same `task generate:verify` on every pull request with the same pinned plugins, so a PR whose committed stubs don't match its protos fails. Run `task ci` before you push to catch it first.
 
 ## 🚦 Status
 

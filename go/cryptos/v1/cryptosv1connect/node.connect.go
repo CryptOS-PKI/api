@@ -130,6 +130,12 @@ const (
 	// NodeServiceListTsaCertificatesProcedure is the fully-qualified name of the NodeService's
 	// ListTsaCertificates RPC.
 	NodeServiceListTsaCertificatesProcedure = "/cryptos.v1.NodeService/ListTsaCertificates"
+	// NodeServiceListAuditEventsProcedure is the fully-qualified name of the NodeService's
+	// ListAuditEvents RPC.
+	NodeServiceListAuditEventsProcedure = "/cryptos.v1.NodeService/ListAuditEvents"
+	// NodeServiceVerifyAuditChainProcedure is the fully-qualified name of the NodeService's
+	// VerifyAuditChain RPC.
+	NodeServiceVerifyAuditChainProcedure = "/cryptos.v1.NodeService/VerifyAuditChain"
 )
 
 // NodeServiceClient is a client for the cryptos.v1.NodeService service.
@@ -324,6 +330,13 @@ type NodeServiceClient interface {
 	// certificates old tokens name. Empty on a node that has never run a TSA.
 	// Refused with FailedPrecondition in maintenance mode.
 	ListTsaCertificates(context.Context, *connect.Request[v1.ListTsaCertificatesRequest]) (*connect.Response[v1.ListTsaCertificatesResponse], error)
+	// ListAuditEvents returns audit log entries, oldest first, a page at a time,
+	// filtered by time range, event type and actor.
+	ListAuditEvents(context.Context, *connect.Request[v1.ListAuditEventsRequest]) (*connect.Response[v1.ListAuditEventsResponse], error)
+	// VerifyAuditChain verifies the signatures and hash chain over the whole
+	// stored audit log and reports whether it is intact and, if not, the first
+	// sequence number that failed.
+	VerifyAuditChain(context.Context, *connect.Request[v1.VerifyAuditChainRequest]) (*connect.Response[v1.VerifyAuditChainResponse], error)
 }
 
 // NewNodeServiceClient constructs a client for the cryptos.v1.NodeService service. By default, it
@@ -559,6 +572,18 @@ func NewNodeServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(nodeServiceMethods.ByName("ListTsaCertificates")),
 			connect.WithClientOptions(opts...),
 		),
+		listAuditEvents: connect.NewClient[v1.ListAuditEventsRequest, v1.ListAuditEventsResponse](
+			httpClient,
+			baseURL+NodeServiceListAuditEventsProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("ListAuditEvents")),
+			connect.WithClientOptions(opts...),
+		),
+		verifyAuditChain: connect.NewClient[v1.VerifyAuditChainRequest, v1.VerifyAuditChainResponse](
+			httpClient,
+			baseURL+NodeServiceVerifyAuditChainProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("VerifyAuditChain")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -601,6 +626,8 @@ type nodeServiceClient struct {
 	approveScepEnrollment        *connect.Client[v1.ApproveScepEnrollmentRequest, v1.ApproveScepEnrollmentResponse]
 	rejectScepEnrollment         *connect.Client[v1.RejectScepEnrollmentRequest, v1.RejectScepEnrollmentResponse]
 	listTsaCertificates          *connect.Client[v1.ListTsaCertificatesRequest, v1.ListTsaCertificatesResponse]
+	listAuditEvents              *connect.Client[v1.ListAuditEventsRequest, v1.ListAuditEventsResponse]
+	verifyAuditChain             *connect.Client[v1.VerifyAuditChainRequest, v1.VerifyAuditChainResponse]
 }
 
 // ApplyConfig calls cryptos.v1.NodeService.ApplyConfig.
@@ -786,6 +813,16 @@ func (c *nodeServiceClient) RejectScepEnrollment(ctx context.Context, req *conne
 // ListTsaCertificates calls cryptos.v1.NodeService.ListTsaCertificates.
 func (c *nodeServiceClient) ListTsaCertificates(ctx context.Context, req *connect.Request[v1.ListTsaCertificatesRequest]) (*connect.Response[v1.ListTsaCertificatesResponse], error) {
 	return c.listTsaCertificates.CallUnary(ctx, req)
+}
+
+// ListAuditEvents calls cryptos.v1.NodeService.ListAuditEvents.
+func (c *nodeServiceClient) ListAuditEvents(ctx context.Context, req *connect.Request[v1.ListAuditEventsRequest]) (*connect.Response[v1.ListAuditEventsResponse], error) {
+	return c.listAuditEvents.CallUnary(ctx, req)
+}
+
+// VerifyAuditChain calls cryptos.v1.NodeService.VerifyAuditChain.
+func (c *nodeServiceClient) VerifyAuditChain(ctx context.Context, req *connect.Request[v1.VerifyAuditChainRequest]) (*connect.Response[v1.VerifyAuditChainResponse], error) {
+	return c.verifyAuditChain.CallUnary(ctx, req)
 }
 
 // NodeServiceHandler is an implementation of the cryptos.v1.NodeService service.
@@ -980,6 +1017,13 @@ type NodeServiceHandler interface {
 	// certificates old tokens name. Empty on a node that has never run a TSA.
 	// Refused with FailedPrecondition in maintenance mode.
 	ListTsaCertificates(context.Context, *connect.Request[v1.ListTsaCertificatesRequest]) (*connect.Response[v1.ListTsaCertificatesResponse], error)
+	// ListAuditEvents returns audit log entries, oldest first, a page at a time,
+	// filtered by time range, event type and actor.
+	ListAuditEvents(context.Context, *connect.Request[v1.ListAuditEventsRequest]) (*connect.Response[v1.ListAuditEventsResponse], error)
+	// VerifyAuditChain verifies the signatures and hash chain over the whole
+	// stored audit log and reports whether it is intact and, if not, the first
+	// sequence number that failed.
+	VerifyAuditChain(context.Context, *connect.Request[v1.VerifyAuditChainRequest]) (*connect.Response[v1.VerifyAuditChainResponse], error)
 }
 
 // NewNodeServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -1211,6 +1255,18 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(nodeServiceMethods.ByName("ListTsaCertificates")),
 		connect.WithHandlerOptions(opts...),
 	)
+	nodeServiceListAuditEventsHandler := connect.NewUnaryHandler(
+		NodeServiceListAuditEventsProcedure,
+		svc.ListAuditEvents,
+		connect.WithSchema(nodeServiceMethods.ByName("ListAuditEvents")),
+		connect.WithHandlerOptions(opts...),
+	)
+	nodeServiceVerifyAuditChainHandler := connect.NewUnaryHandler(
+		NodeServiceVerifyAuditChainProcedure,
+		svc.VerifyAuditChain,
+		connect.WithSchema(nodeServiceMethods.ByName("VerifyAuditChain")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/cryptos.v1.NodeService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case NodeServiceApplyConfigProcedure:
@@ -1287,6 +1343,10 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 			nodeServiceRejectScepEnrollmentHandler.ServeHTTP(w, r)
 		case NodeServiceListTsaCertificatesProcedure:
 			nodeServiceListTsaCertificatesHandler.ServeHTTP(w, r)
+		case NodeServiceListAuditEventsProcedure:
+			nodeServiceListAuditEventsHandler.ServeHTTP(w, r)
+		case NodeServiceVerifyAuditChainProcedure:
+			nodeServiceVerifyAuditChainHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -1442,4 +1502,12 @@ func (UnimplementedNodeServiceHandler) RejectScepEnrollment(context.Context, *co
 
 func (UnimplementedNodeServiceHandler) ListTsaCertificates(context.Context, *connect.Request[v1.ListTsaCertificatesRequest]) (*connect.Response[v1.ListTsaCertificatesResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.ListTsaCertificates is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) ListAuditEvents(context.Context, *connect.Request[v1.ListAuditEventsRequest]) (*connect.Response[v1.ListAuditEventsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.ListAuditEvents is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) VerifyAuditChain(context.Context, *connect.Request[v1.VerifyAuditChainRequest]) (*connect.Response[v1.VerifyAuditChainResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.VerifyAuditChain is not implemented"))
 }

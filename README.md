@@ -20,14 +20,14 @@ Taskfile.yml             # fmt / lint / generate / test / ci targets
 
 | File | Defines |
 |---|---|
-| `node.proto` | `NodeService` — the per-node management surface: config (`ApplyConfig`, `GetConfig`), status and identity, the first-boot ceremony, CA signing and revocation, fetching an issued certificate and its chain by serial (`GetIssuedCertificate`), key escrow and rotation, reset, in-place image upgrade, `Reboot` (orderly, CN-confirmed reboot or power-off), SCEP administration (one-time enrolment challenges and the approval queue), and the list of TSA certificates, current and past (`ListTsaCertificates`). |
+| `node.proto` | `NodeService` — the per-node management surface: config (`ApplyConfig`, `GetConfig`), status and identity, the first-boot ceremony, CA signing and revocation, fetching an issued certificate and its chain by serial (`GetIssuedCertificate`), key escrow and rotation, reset, in-place image upgrade, `Reboot` (orderly, CN-confirmed reboot or power-off), SCEP administration (one-time enrolment challenges and the approval queue), the list of TSA certificates, current and past (`ListTsaCertificates`), and reading and verifying the audit log (`ListAuditEvents`, `VerifyAuditChain`). |
 | `identity.proto` | `Identity` — DER + PEM + leaf SHA-256 for the CA chain. |
 | `ceremony.proto` | `CeremonyEvent` stream messages + ceremony kind/event enums. |
 | `status.proto` | `NodeStatus` — role, identity state, TPM state, etcd state, boot count, the revocation preflight result (state, last error, when it was checked), the DNS resolver source and nameservers, the SNTP time-sync state (source, servers, last offset and sync, and the latest error), each enrolment protocol's configured and running state, and whether a stored config change is waiting for a reboot. |
 | `config.proto` | `MachineConfig` Phase 1 subset (role/network/storage/bootstrap/pki), plus the ACME, EST and SCEP enrolment blocks, the RFC 3161 time-stamp authority block and the Windows autoenrolment (MS-XCEP/WSTEP) block on `Pki` (`acme`, `est`, `scep`, `tsa`, `windows_enrollment`), each with an explicit `enabled` switch that takes effect at the next boot. |
 | `scep.proto` | The SCEP challenge and approval-queue messages. A challenge is returned once, when it is minted, and no read carries it or its digest. |
 | `tsa.proto` | The TSA certificate messages `ListTsaCertificates` returns, kept after rotation so old timestamp tokens still verify. |
-| `audit.proto` | `AuditEvent` — hash-chained audit log entry shape. |
+| `audit.proto` | `AuditEvent` — hash-chained audit log entry shape, plus the `ListAuditEvents` and `VerifyAuditChain` messages. |
 | `fleet/v1/fleet.proto` | `FleetService` — the Fleet Manager's surface over the fleet: node (including `RenameNode`), certificate (including `GetCertificate`, an issued certificate and its chain by serial), profile, adapter, enrollment and operator-credential RPCs, the manager audit log (`ListAudit`), MCP agent key management (`ListMcpKeys`, `RevokeMcpKey`, `CreateMcpKey`), step-up approvals (`ListApprovals`, `DecideApproval`), and the per-node enrolment protocol switch (`SetNodeProtocol`, with each node's protocol state and `reboot_required` on `NodeSummary`). |
 
 ### Node IDs and renaming
@@ -50,6 +50,20 @@ A client fetches an issued certificate and its chain by serial:
 
 - `status` is `valid`, `revoked` or `expired`. `revoked_at` is RFC3339, empty unless the certificate is revoked.
 - An unknown serial is `NotFound`. `GetCertificate` is readable at viewer level and above.
+
+### Reading and verifying the node audit log
+
+The node signs and hash-chains every RPC it serves into an audit log on its encrypted state partition. Two `NodeService` reads expose it:
+
+| RPC | Takes | Returns |
+|---|---|---|
+| `ListAuditEvents` | `page_size`, `page_token`, `from_time`, `to_time`, `event_type`, `actor` | `entries` (repeated `AuditLogEntry`, oldest first), `next_page_token` |
+| `VerifyAuditChain` | nothing | `entry_count`, `intact`, `first_broken_sequence`, `reason` |
+
+- `AuditLogEntry` holds `event` (the stored `AuditEvent`: `seq`, `ts`, `actor_subject`, `rpc_method`, `outcome`, `details`, `request_digest_sha256`, `prev_entry_sha256`), `entry_sha256` (the hash the next entry chains to), and `target` and `summary`, which the node derives for display and which aren't part of the chain.
+- `from_time` and `to_time` are RFC3339 (`from_time` inclusive, `to_time` exclusive). `event_type` matches `rpc_method` in full or by method name alone, and `actor` matches text within `actor_subject`. Empty filters match everything.
+- `VerifyAuditChain` checks every signature, a gap-free `seq` from 1, and each `prev_entry_sha256`. A broken chain comes back as `intact` false with `first_broken_sequence` and `reason`, not as an RPC error. `first_broken_sequence` is 0 when the chain is intact.
+- Both are operator-level reads under the node's existing authorization, like `ListIssued`, and are refused in maintenance mode.
 
 ### MCP agent keys and audit actors
 

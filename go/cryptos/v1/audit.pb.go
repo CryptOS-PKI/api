@@ -187,6 +187,369 @@ func (x *AuditEvent) GetDetails() map[string]string {
 	return nil
 }
 
+// AuditLogEntry is one audit log entry as ListAuditEvents returns it.
+type AuditLogEntry struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// event is the entry exactly as the node stored, signed and chained it.
+	Event *AuditEvent `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
+	// entry_sha256 is the SHA-256 of the entry's stored encoding: the value the
+	// next entry's prev_entry_sha256 must equal. The node computes it from the
+	// bytes on disk, since re-encoding event would not reproduce them.
+	EntrySha256 []byte `protobuf:"bytes,2,opt,name=entry_sha256,json=entrySha256,proto3" json:"entry_sha256,omitempty"`
+	// target names what the call acted on when the entry records it, for
+	// example a certificate serial; empty when the entry names no target. The
+	// node derives it from event for display; it is not part of the chain.
+	Target string `protobuf:"bytes,3,opt,name=target,proto3" json:"target,omitempty"`
+	// summary is a one-line, human-readable description of the entry, derived
+	// by the node from event for display; it is not part of the chain.
+	Summary string `protobuf:"bytes,4,opt,name=summary,proto3" json:"summary,omitempty"`
+}
+
+func (x *AuditLogEntry) Reset() {
+	*x = AuditLogEntry{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_v1_audit_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AuditLogEntry) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AuditLogEntry) ProtoMessage() {}
+
+func (x *AuditLogEntry) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_v1_audit_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AuditLogEntry.ProtoReflect.Descriptor instead.
+func (*AuditLogEntry) Descriptor() ([]byte, []int) {
+	return file_cryptos_v1_audit_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *AuditLogEntry) GetEvent() *AuditEvent {
+	if x != nil {
+		return x.Event
+	}
+	return nil
+}
+
+func (x *AuditLogEntry) GetEntrySha256() []byte {
+	if x != nil {
+		return x.EntrySha256
+	}
+	return nil
+}
+
+func (x *AuditLogEntry) GetTarget() string {
+	if x != nil {
+		return x.Target
+	}
+	return ""
+}
+
+func (x *AuditLogEntry) GetSummary() string {
+	if x != nil {
+		return x.Summary
+	}
+	return ""
+}
+
+// ListAuditEventsRequest pages through the node's audit log, oldest entry
+// first (ascending seq). Every filter is optional and they combine with AND.
+type ListAuditEventsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// page_size is the most entries to return. Zero means the node's default;
+	// the node caps larger values. Negative is InvalidArgument.
+	PageSize int32 `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	// page_token is the next_page_token of the previous call, made with the
+	// same filters; empty starts at the oldest matching entry. A token the node
+	// did not issue, or one reused with different filters, is InvalidArgument.
+	PageToken string `protobuf:"bytes,2,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
+	// from_time keeps entries whose ts is at or after this RFC3339 time; empty
+	// is unbounded. Not RFC3339 is InvalidArgument.
+	FromTime string `protobuf:"bytes,3,opt,name=from_time,json=fromTime,proto3" json:"from_time,omitempty"`
+	// to_time keeps entries whose ts is before this RFC3339 time; empty is
+	// unbounded. Not RFC3339, or earlier than from_time, is InvalidArgument.
+	ToTime string `protobuf:"bytes,4,opt,name=to_time,json=toTime,proto3" json:"to_time,omitempty"`
+	// event_type keeps entries whose rpc_method matches: either the full
+	// method, e.g. "/cryptos.v1.NodeService/RevokeCertificate", or its method
+	// name alone, e.g. "RevokeCertificate". Empty matches every entry.
+	EventType string `protobuf:"bytes,5,opt,name=event_type,json=eventType,proto3" json:"event_type,omitempty"`
+	// actor keeps entries whose actor_subject contains this text (case
+	// sensitive). Empty matches every entry.
+	Actor string `protobuf:"bytes,6,opt,name=actor,proto3" json:"actor,omitempty"`
+}
+
+func (x *ListAuditEventsRequest) Reset() {
+	*x = ListAuditEventsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_v1_audit_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListAuditEventsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListAuditEventsRequest) ProtoMessage() {}
+
+func (x *ListAuditEventsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_v1_audit_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListAuditEventsRequest.ProtoReflect.Descriptor instead.
+func (*ListAuditEventsRequest) Descriptor() ([]byte, []int) {
+	return file_cryptos_v1_audit_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *ListAuditEventsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *ListAuditEventsRequest) GetPageToken() string {
+	if x != nil {
+		return x.PageToken
+	}
+	return ""
+}
+
+func (x *ListAuditEventsRequest) GetFromTime() string {
+	if x != nil {
+		return x.FromTime
+	}
+	return ""
+}
+
+func (x *ListAuditEventsRequest) GetToTime() string {
+	if x != nil {
+		return x.ToTime
+	}
+	return ""
+}
+
+func (x *ListAuditEventsRequest) GetEventType() string {
+	if x != nil {
+		return x.EventType
+	}
+	return ""
+}
+
+func (x *ListAuditEventsRequest) GetActor() string {
+	if x != nil {
+		return x.Actor
+	}
+	return ""
+}
+
+type ListAuditEventsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// entries are the matching entries on this page, in ascending seq order.
+	Entries []*AuditLogEntry `protobuf:"bytes,1,rep,name=entries,proto3" json:"entries,omitempty"`
+	// next_page_token fetches the next page; empty when this is the last page.
+	NextPageToken string `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
+}
+
+func (x *ListAuditEventsResponse) Reset() {
+	*x = ListAuditEventsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_v1_audit_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListAuditEventsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListAuditEventsResponse) ProtoMessage() {}
+
+func (x *ListAuditEventsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_v1_audit_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListAuditEventsResponse.ProtoReflect.Descriptor instead.
+func (*ListAuditEventsResponse) Descriptor() ([]byte, []int) {
+	return file_cryptos_v1_audit_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ListAuditEventsResponse) GetEntries() []*AuditLogEntry {
+	if x != nil {
+		return x.Entries
+	}
+	return nil
+}
+
+func (x *ListAuditEventsResponse) GetNextPageToken() string {
+	if x != nil {
+		return x.NextPageToken
+	}
+	return ""
+}
+
+type VerifyAuditChainRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *VerifyAuditChainRequest) Reset() {
+	*x = VerifyAuditChainRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_v1_audit_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *VerifyAuditChainRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VerifyAuditChainRequest) ProtoMessage() {}
+
+func (x *VerifyAuditChainRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_v1_audit_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VerifyAuditChainRequest.ProtoReflect.Descriptor instead.
+func (*VerifyAuditChainRequest) Descriptor() ([]byte, []int) {
+	return file_cryptos_v1_audit_proto_rawDescGZIP(), []int{4}
+}
+
+// VerifyAuditChainResponse reports the result of walking the whole stored
+// log: every entry's signature, a gap-free seq starting at 1, and each
+// entry's prev_entry_sha256 against the prior entry's hash. A broken chain
+// is a result, not an RPC error; the RPC fails only when the log cannot be
+// read at all.
+type VerifyAuditChainResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// entry_count is the number of entries in the stored log.
+	EntryCount uint64 `protobuf:"varint,1,opt,name=entry_count,json=entryCount,proto3" json:"entry_count,omitempty"`
+	// intact is true when every entry verified.
+	Intact bool `protobuf:"varint,2,opt,name=intact,proto3" json:"intact,omitempty"`
+	// first_broken_sequence is the seq at which verification first failed:
+	// the seq the failing entry held, or the one expected at that position when
+	// the entry could not be read. 0 when intact.
+	FirstBrokenSequence uint64 `protobuf:"varint,3,opt,name=first_broken_sequence,json=firstBrokenSequence,proto3" json:"first_broken_sequence,omitempty"`
+	// reason says why verification failed at first_broken_sequence, e.g. a
+	// signature mismatch, a seq gap or a prev_entry_sha256 mismatch; empty when
+	// intact.
+	Reason string `protobuf:"bytes,4,opt,name=reason,proto3" json:"reason,omitempty"`
+}
+
+func (x *VerifyAuditChainResponse) Reset() {
+	*x = VerifyAuditChainResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_cryptos_v1_audit_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *VerifyAuditChainResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VerifyAuditChainResponse) ProtoMessage() {}
+
+func (x *VerifyAuditChainResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_cryptos_v1_audit_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VerifyAuditChainResponse.ProtoReflect.Descriptor instead.
+func (*VerifyAuditChainResponse) Descriptor() ([]byte, []int) {
+	return file_cryptos_v1_audit_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *VerifyAuditChainResponse) GetEntryCount() uint64 {
+	if x != nil {
+		return x.EntryCount
+	}
+	return 0
+}
+
+func (x *VerifyAuditChainResponse) GetIntact() bool {
+	if x != nil {
+		return x.Intact
+	}
+	return false
+}
+
+func (x *VerifyAuditChainResponse) GetFirstBrokenSequence() uint64 {
+	if x != nil {
+		return x.FirstBrokenSequence
+	}
+	return 0
+}
+
+func (x *VerifyAuditChainResponse) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
 var File_cryptos_v1_audit_proto protoreflect.FileDescriptor
 
 var file_cryptos_v1_audit_proto_rawDesc = []byte{
@@ -220,16 +583,57 @@ var file_cryptos_v1_audit_proto_rawDesc = []byte{
 	0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28,
 	0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18,
 	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01,
-	0x2a, 0x59, 0x0a, 0x07, 0x4f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0x12, 0x17, 0x0a, 0x13, 0x4f,
-	0x55, 0x54, 0x43, 0x4f, 0x4d, 0x45, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49,
-	0x45, 0x44, 0x10, 0x00, 0x12, 0x0e, 0x0a, 0x0a, 0x4f, 0x55, 0x54, 0x43, 0x4f, 0x4d, 0x45, 0x5f,
-	0x4f, 0x4b, 0x10, 0x01, 0x12, 0x12, 0x0a, 0x0e, 0x4f, 0x55, 0x54, 0x43, 0x4f, 0x4d, 0x45, 0x5f,
-	0x44, 0x45, 0x4e, 0x49, 0x45, 0x44, 0x10, 0x02, 0x12, 0x11, 0x0a, 0x0d, 0x4f, 0x55, 0x54, 0x43,
-	0x4f, 0x4d, 0x45, 0x5f, 0x45, 0x52, 0x52, 0x4f, 0x52, 0x10, 0x03, 0x42, 0x34, 0x5a, 0x32, 0x67,
-	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x43, 0x72, 0x79, 0x70, 0x74, 0x4f,
-	0x53, 0x2d, 0x50, 0x4b, 0x49, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x2f, 0x63, 0x72, 0x79,
-	0x70, 0x74, 0x6f, 0x73, 0x2f, 0x76, 0x31, 0x3b, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x76,
-	0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x22, 0x92, 0x01, 0x0a, 0x0d, 0x41, 0x75, 0x64, 0x69, 0x74, 0x4c, 0x6f, 0x67, 0x45, 0x6e, 0x74,
+	0x72, 0x79, 0x12, 0x2c, 0x0a, 0x05, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x16, 0x2e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x41,
+	0x75, 0x64, 0x69, 0x74, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x52, 0x05, 0x65, 0x76, 0x65, 0x6e, 0x74,
+	0x12, 0x21, 0x0a, 0x0c, 0x65, 0x6e, 0x74, 0x72, 0x79, 0x5f, 0x73, 0x68, 0x61, 0x32, 0x35, 0x36,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0b, 0x65, 0x6e, 0x74, 0x72, 0x79, 0x53, 0x68, 0x61,
+	0x32, 0x35, 0x36, 0x12, 0x16, 0x0a, 0x06, 0x74, 0x61, 0x72, 0x67, 0x65, 0x74, 0x18, 0x03, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x06, 0x74, 0x61, 0x72, 0x67, 0x65, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x73,
+	0x75, 0x6d, 0x6d, 0x61, 0x72, 0x79, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x73, 0x75,
+	0x6d, 0x6d, 0x61, 0x72, 0x79, 0x22, 0xbf, 0x01, 0x0a, 0x16, 0x4c, 0x69, 0x73, 0x74, 0x41, 0x75,
+	0x64, 0x69, 0x74, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x12, 0x1b, 0x0a, 0x09, 0x70, 0x61, 0x67, 0x65, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x05, 0x52, 0x08, 0x70, 0x61, 0x67, 0x65, 0x53, 0x69, 0x7a, 0x65, 0x12, 0x1d, 0x0a,
+	0x0a, 0x70, 0x61, 0x67, 0x65, 0x5f, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x09, 0x70, 0x61, 0x67, 0x65, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x12, 0x1b, 0x0a, 0x09,
+	0x66, 0x72, 0x6f, 0x6d, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x08, 0x66, 0x72, 0x6f, 0x6d, 0x54, 0x69, 0x6d, 0x65, 0x12, 0x17, 0x0a, 0x07, 0x74, 0x6f, 0x5f,
+	0x74, 0x69, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x74, 0x6f, 0x54, 0x69,
+	0x6d, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x74, 0x79, 0x70, 0x65,
+	0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x54, 0x79, 0x70,
+	0x65, 0x12, 0x14, 0x0a, 0x05, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x05, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x22, 0x76, 0x0a, 0x17, 0x4c, 0x69, 0x73, 0x74, 0x41,
+	0x75, 0x64, 0x69, 0x74, 0x45, 0x76, 0x65, 0x6e, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x33, 0x0a, 0x07, 0x65, 0x6e, 0x74, 0x72, 0x69, 0x65, 0x73, 0x18, 0x01, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x2e, 0x76, 0x31,
+	0x2e, 0x41, 0x75, 0x64, 0x69, 0x74, 0x4c, 0x6f, 0x67, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x52, 0x07,
+	0x65, 0x6e, 0x74, 0x72, 0x69, 0x65, 0x73, 0x12, 0x26, 0x0a, 0x0f, 0x6e, 0x65, 0x78, 0x74, 0x5f,
+	0x70, 0x61, 0x67, 0x65, 0x5f, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x0d, 0x6e, 0x65, 0x78, 0x74, 0x50, 0x61, 0x67, 0x65, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x22,
+	0x19, 0x0a, 0x17, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x41, 0x75, 0x64, 0x69, 0x74, 0x43, 0x68,
+	0x61, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x9f, 0x01, 0x0a, 0x18, 0x56,
+	0x65, 0x72, 0x69, 0x66, 0x79, 0x41, 0x75, 0x64, 0x69, 0x74, 0x43, 0x68, 0x61, 0x69, 0x6e, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x65, 0x6e, 0x74, 0x72, 0x79,
+	0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0a, 0x65, 0x6e,
+	0x74, 0x72, 0x79, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x69, 0x6e, 0x74, 0x61,
+	0x63, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x06, 0x69, 0x6e, 0x74, 0x61, 0x63, 0x74,
+	0x12, 0x32, 0x0a, 0x15, 0x66, 0x69, 0x72, 0x73, 0x74, 0x5f, 0x62, 0x72, 0x6f, 0x6b, 0x65, 0x6e,
+	0x5f, 0x73, 0x65, 0x71, 0x75, 0x65, 0x6e, 0x63, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x52,
+	0x13, 0x66, 0x69, 0x72, 0x73, 0x74, 0x42, 0x72, 0x6f, 0x6b, 0x65, 0x6e, 0x53, 0x65, 0x71, 0x75,
+	0x65, 0x6e, 0x63, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x72, 0x65, 0x61, 0x73, 0x6f, 0x6e, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x72, 0x65, 0x61, 0x73, 0x6f, 0x6e, 0x2a, 0x59, 0x0a, 0x07,
+	0x4f, 0x75, 0x74, 0x63, 0x6f, 0x6d, 0x65, 0x12, 0x17, 0x0a, 0x13, 0x4f, 0x55, 0x54, 0x43, 0x4f,
+	0x4d, 0x45, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00,
+	0x12, 0x0e, 0x0a, 0x0a, 0x4f, 0x55, 0x54, 0x43, 0x4f, 0x4d, 0x45, 0x5f, 0x4f, 0x4b, 0x10, 0x01,
+	0x12, 0x12, 0x0a, 0x0e, 0x4f, 0x55, 0x54, 0x43, 0x4f, 0x4d, 0x45, 0x5f, 0x44, 0x45, 0x4e, 0x49,
+	0x45, 0x44, 0x10, 0x02, 0x12, 0x11, 0x0a, 0x0d, 0x4f, 0x55, 0x54, 0x43, 0x4f, 0x4d, 0x45, 0x5f,
+	0x45, 0x52, 0x52, 0x4f, 0x52, 0x10, 0x03, 0x42, 0x34, 0x5a, 0x32, 0x67, 0x69, 0x74, 0x68, 0x75,
+	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x43, 0x72, 0x79, 0x70, 0x74, 0x4f, 0x53, 0x2d, 0x50, 0x4b,
+	0x49, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x6f, 0x2f, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73,
+	0x2f, 0x76, 0x31, 0x3b, 0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x73, 0x76, 0x31, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -245,22 +649,29 @@ func file_cryptos_v1_audit_proto_rawDescGZIP() []byte {
 }
 
 var file_cryptos_v1_audit_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_cryptos_v1_audit_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_cryptos_v1_audit_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_cryptos_v1_audit_proto_goTypes = []any{
-	(Outcome)(0),                  // 0: cryptos.v1.Outcome
-	(*AuditEvent)(nil),            // 1: cryptos.v1.AuditEvent
-	nil,                           // 2: cryptos.v1.AuditEvent.DetailsEntry
-	(*timestamppb.Timestamp)(nil), // 3: google.protobuf.Timestamp
+	(Outcome)(0),                     // 0: cryptos.v1.Outcome
+	(*AuditEvent)(nil),               // 1: cryptos.v1.AuditEvent
+	(*AuditLogEntry)(nil),            // 2: cryptos.v1.AuditLogEntry
+	(*ListAuditEventsRequest)(nil),   // 3: cryptos.v1.ListAuditEventsRequest
+	(*ListAuditEventsResponse)(nil),  // 4: cryptos.v1.ListAuditEventsResponse
+	(*VerifyAuditChainRequest)(nil),  // 5: cryptos.v1.VerifyAuditChainRequest
+	(*VerifyAuditChainResponse)(nil), // 6: cryptos.v1.VerifyAuditChainResponse
+	nil,                              // 7: cryptos.v1.AuditEvent.DetailsEntry
+	(*timestamppb.Timestamp)(nil),    // 8: google.protobuf.Timestamp
 }
 var file_cryptos_v1_audit_proto_depIdxs = []int32{
-	3, // 0: cryptos.v1.AuditEvent.ts:type_name -> google.protobuf.Timestamp
+	8, // 0: cryptos.v1.AuditEvent.ts:type_name -> google.protobuf.Timestamp
 	0, // 1: cryptos.v1.AuditEvent.outcome:type_name -> cryptos.v1.Outcome
-	2, // 2: cryptos.v1.AuditEvent.details:type_name -> cryptos.v1.AuditEvent.DetailsEntry
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	7, // 2: cryptos.v1.AuditEvent.details:type_name -> cryptos.v1.AuditEvent.DetailsEntry
+	1, // 3: cryptos.v1.AuditLogEntry.event:type_name -> cryptos.v1.AuditEvent
+	2, // 4: cryptos.v1.ListAuditEventsResponse.entries:type_name -> cryptos.v1.AuditLogEntry
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_cryptos_v1_audit_proto_init() }
@@ -281,6 +692,66 @@ func file_cryptos_v1_audit_proto_init() {
 				return nil
 			}
 		}
+		file_cryptos_v1_audit_proto_msgTypes[1].Exporter = func(v any, i int) any {
+			switch v := v.(*AuditLogEntry); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_v1_audit_proto_msgTypes[2].Exporter = func(v any, i int) any {
+			switch v := v.(*ListAuditEventsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_v1_audit_proto_msgTypes[3].Exporter = func(v any, i int) any {
+			switch v := v.(*ListAuditEventsResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_v1_audit_proto_msgTypes[4].Exporter = func(v any, i int) any {
+			switch v := v.(*VerifyAuditChainRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_cryptos_v1_audit_proto_msgTypes[5].Exporter = func(v any, i int) any {
+			switch v := v.(*VerifyAuditChainResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -288,7 +759,7 @@ func file_cryptos_v1_audit_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_cryptos_v1_audit_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   2,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

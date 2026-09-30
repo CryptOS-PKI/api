@@ -12,7 +12,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file cryptos/v1/audit.proto.
  */
 export const file_cryptos_v1_audit: GenFile = /*@__PURE__*/
-  fileDesc("ChZjcnlwdG9zL3YxL2F1ZGl0LnByb3RvEgpjcnlwdG9zLnYxIrICCgpBdWRpdEV2ZW50EgsKA3NlcRgBIAEoBBImCgJ0cxgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASFQoNYWN0b3Jfc3ViamVjdBgDIAEoCRISCgpycGNfbWV0aG9kGAQgASgJEh0KFXJlcXVlc3RfZGlnZXN0X3NoYTI1NhgFIAEoDBIkCgdvdXRjb21lGAYgASgOMhMuY3J5cHRvcy52MS5PdXRjb21lEhkKEXByZXZfZW50cnlfc2hhMjU2GAcgASgMEjQKB2RldGFpbHMYCCADKAsyIy5jcnlwdG9zLnYxLkF1ZGl0RXZlbnQuRGV0YWlsc0VudHJ5Gi4KDERldGFpbHNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAk6AjgBKlkKB091dGNvbWUSFwoTT1VUQ09NRV9VTlNQRUNJRklFRBAAEg4KCk9VVENPTUVfT0sQARISCg5PVVRDT01FX0RFTklFRBACEhEKDU9VVENPTUVfRVJST1IQA0I0WjJnaXRodWIuY29tL0NyeXB0T1MtUEtJL2FwaS9nby9jcnlwdG9zL3YxO2NyeXB0b3N2MWIGcHJvdG8z", [file_google_protobuf_timestamp]);
+  fileDesc("ChZjcnlwdG9zL3YxL2F1ZGl0LnByb3RvEgpjcnlwdG9zLnYxIrICCgpBdWRpdEV2ZW50EgsKA3NlcRgBIAEoBBImCgJ0cxgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASFQoNYWN0b3Jfc3ViamVjdBgDIAEoCRISCgpycGNfbWV0aG9kGAQgASgJEh0KFXJlcXVlc3RfZGlnZXN0X3NoYTI1NhgFIAEoDBIkCgdvdXRjb21lGAYgASgOMhMuY3J5cHRvcy52MS5PdXRjb21lEhkKEXByZXZfZW50cnlfc2hhMjU2GAcgASgMEjQKB2RldGFpbHMYCCADKAsyIy5jcnlwdG9zLnYxLkF1ZGl0RXZlbnQuRGV0YWlsc0VudHJ5Gi4KDERldGFpbHNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAk6AjgBIm0KDUF1ZGl0TG9nRW50cnkSJQoFZXZlbnQYASABKAsyFi5jcnlwdG9zLnYxLkF1ZGl0RXZlbnQSFAoMZW50cnlfc2hhMjU2GAIgASgMEg4KBnRhcmdldBgDIAEoCRIPCgdzdW1tYXJ5GAQgASgJIoYBChZMaXN0QXVkaXRFdmVudHNSZXF1ZXN0EhEKCXBhZ2Vfc2l6ZRgBIAEoBRISCgpwYWdlX3Rva2VuGAIgASgJEhEKCWZyb21fdGltZRgDIAEoCRIPCgd0b190aW1lGAQgASgJEhIKCmV2ZW50X3R5cGUYBSABKAkSDQoFYWN0b3IYBiABKAkiXgoXTGlzdEF1ZGl0RXZlbnRzUmVzcG9uc2USKgoHZW50cmllcxgBIAMoCzIZLmNyeXB0b3MudjEuQXVkaXRMb2dFbnRyeRIXCg9uZXh0X3BhZ2VfdG9rZW4YAiABKAkiGQoXVmVyaWZ5QXVkaXRDaGFpblJlcXVlc3QibgoYVmVyaWZ5QXVkaXRDaGFpblJlc3BvbnNlEhMKC2VudHJ5X2NvdW50GAEgASgEEg4KBmludGFjdBgCIAEoCBIdChVmaXJzdF9icm9rZW5fc2VxdWVuY2UYAyABKAQSDgoGcmVhc29uGAQgASgJKlkKB091dGNvbWUSFwoTT1VUQ09NRV9VTlNQRUNJRklFRBAAEg4KCk9VVENPTUVfT0sQARISCg5PVVRDT01FX0RFTklFRBACEhEKDU9VVENPTUVfRVJST1IQA0I0WjJnaXRodWIuY29tL0NyeXB0T1MtUEtJL2FwaS9nby9jcnlwdG9zL3YxO2NyeXB0b3N2MWIGcHJvdG8z", [file_google_protobuf_timestamp]);
 
 /**
  * AuditEvent is one entry in the hash-chained audit log. Stored as
@@ -83,6 +83,207 @@ export type AuditEvent = Message<"cryptos.v1.AuditEvent"> & {
  */
 export const AuditEventSchema: GenMessage<AuditEvent> = /*@__PURE__*/
   messageDesc(file_cryptos_v1_audit, 0);
+
+/**
+ * AuditLogEntry is one audit log entry as ListAuditEvents returns it.
+ *
+ * @generated from message cryptos.v1.AuditLogEntry
+ */
+export type AuditLogEntry = Message<"cryptos.v1.AuditLogEntry"> & {
+  /**
+   * event is the entry exactly as the node stored, signed and chained it.
+   *
+   * @generated from field: cryptos.v1.AuditEvent event = 1;
+   */
+  event?: AuditEvent | undefined;
+
+  /**
+   * entry_sha256 is the SHA-256 of the entry's stored encoding: the value the
+   * next entry's prev_entry_sha256 must equal. The node computes it from the
+   * bytes on disk, since re-encoding event would not reproduce them.
+   *
+   * @generated from field: bytes entry_sha256 = 2;
+   */
+  entrySha256: Uint8Array;
+
+  /**
+   * target names what the call acted on when the entry records it, for
+   * example a certificate serial; empty when the entry names no target. The
+   * node derives it from event for display; it is not part of the chain.
+   *
+   * @generated from field: string target = 3;
+   */
+  target: string;
+
+  /**
+   * summary is a one-line, human-readable description of the entry, derived
+   * by the node from event for display; it is not part of the chain.
+   *
+   * @generated from field: string summary = 4;
+   */
+  summary: string;
+};
+
+/**
+ * Describes the message cryptos.v1.AuditLogEntry.
+ * Use `create(AuditLogEntrySchema)` to create a new message.
+ */
+export const AuditLogEntrySchema: GenMessage<AuditLogEntry> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_audit, 1);
+
+/**
+ * ListAuditEventsRequest pages through the node's audit log, oldest entry
+ * first (ascending seq). Every filter is optional and they combine with AND.
+ *
+ * @generated from message cryptos.v1.ListAuditEventsRequest
+ */
+export type ListAuditEventsRequest = Message<"cryptos.v1.ListAuditEventsRequest"> & {
+  /**
+   * page_size is the most entries to return. Zero means the node's default;
+   * the node caps larger values. Negative is InvalidArgument.
+   *
+   * @generated from field: int32 page_size = 1;
+   */
+  pageSize: number;
+
+  /**
+   * page_token is the next_page_token of the previous call, made with the
+   * same filters; empty starts at the oldest matching entry. A token the node
+   * did not issue, or one reused with different filters, is InvalidArgument.
+   *
+   * @generated from field: string page_token = 2;
+   */
+  pageToken: string;
+
+  /**
+   * from_time keeps entries whose ts is at or after this RFC3339 time; empty
+   * is unbounded. Not RFC3339 is InvalidArgument.
+   *
+   * @generated from field: string from_time = 3;
+   */
+  fromTime: string;
+
+  /**
+   * to_time keeps entries whose ts is before this RFC3339 time; empty is
+   * unbounded. Not RFC3339, or earlier than from_time, is InvalidArgument.
+   *
+   * @generated from field: string to_time = 4;
+   */
+  toTime: string;
+
+  /**
+   * event_type keeps entries whose rpc_method matches: either the full
+   * method, e.g. "/cryptos.v1.NodeService/RevokeCertificate", or its method
+   * name alone, e.g. "RevokeCertificate". Empty matches every entry.
+   *
+   * @generated from field: string event_type = 5;
+   */
+  eventType: string;
+
+  /**
+   * actor keeps entries whose actor_subject contains this text (case
+   * sensitive). Empty matches every entry.
+   *
+   * @generated from field: string actor = 6;
+   */
+  actor: string;
+};
+
+/**
+ * Describes the message cryptos.v1.ListAuditEventsRequest.
+ * Use `create(ListAuditEventsRequestSchema)` to create a new message.
+ */
+export const ListAuditEventsRequestSchema: GenMessage<ListAuditEventsRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_audit, 2);
+
+/**
+ * @generated from message cryptos.v1.ListAuditEventsResponse
+ */
+export type ListAuditEventsResponse = Message<"cryptos.v1.ListAuditEventsResponse"> & {
+  /**
+   * entries are the matching entries on this page, in ascending seq order.
+   *
+   * @generated from field: repeated cryptos.v1.AuditLogEntry entries = 1;
+   */
+  entries: AuditLogEntry[];
+
+  /**
+   * next_page_token fetches the next page; empty when this is the last page.
+   *
+   * @generated from field: string next_page_token = 2;
+   */
+  nextPageToken: string;
+};
+
+/**
+ * Describes the message cryptos.v1.ListAuditEventsResponse.
+ * Use `create(ListAuditEventsResponseSchema)` to create a new message.
+ */
+export const ListAuditEventsResponseSchema: GenMessage<ListAuditEventsResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_audit, 3);
+
+/**
+ * @generated from message cryptos.v1.VerifyAuditChainRequest
+ */
+export type VerifyAuditChainRequest = Message<"cryptos.v1.VerifyAuditChainRequest"> & {
+};
+
+/**
+ * Describes the message cryptos.v1.VerifyAuditChainRequest.
+ * Use `create(VerifyAuditChainRequestSchema)` to create a new message.
+ */
+export const VerifyAuditChainRequestSchema: GenMessage<VerifyAuditChainRequest> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_audit, 4);
+
+/**
+ * VerifyAuditChainResponse reports the result of walking the whole stored
+ * log: every entry's signature, a gap-free seq starting at 1, and each
+ * entry's prev_entry_sha256 against the prior entry's hash. A broken chain
+ * is a result, not an RPC error; the RPC fails only when the log cannot be
+ * read at all.
+ *
+ * @generated from message cryptos.v1.VerifyAuditChainResponse
+ */
+export type VerifyAuditChainResponse = Message<"cryptos.v1.VerifyAuditChainResponse"> & {
+  /**
+   * entry_count is the number of entries in the stored log.
+   *
+   * @generated from field: uint64 entry_count = 1;
+   */
+  entryCount: bigint;
+
+  /**
+   * intact is true when every entry verified.
+   *
+   * @generated from field: bool intact = 2;
+   */
+  intact: boolean;
+
+  /**
+   * first_broken_sequence is the seq at which verification first failed:
+   * the seq the failing entry held, or the one expected at that position when
+   * the entry could not be read. 0 when intact.
+   *
+   * @generated from field: uint64 first_broken_sequence = 3;
+   */
+  firstBrokenSequence: bigint;
+
+  /**
+   * reason says why verification failed at first_broken_sequence, e.g. a
+   * signature mismatch, a seq gap or a prev_entry_sha256 mismatch; empty when
+   * intact.
+   *
+   * @generated from field: string reason = 4;
+   */
+  reason: string;
+};
+
+/**
+ * Describes the message cryptos.v1.VerifyAuditChainResponse.
+ * Use `create(VerifyAuditChainResponseSchema)` to create a new message.
+ */
+export const VerifyAuditChainResponseSchema: GenMessage<VerifyAuditChainResponse> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_audit, 5);
 
 /**
  * @generated from enum cryptos.v1.Outcome

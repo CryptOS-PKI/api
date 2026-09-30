@@ -56,6 +56,8 @@ const (
 	NodeService_ApproveScepEnrollment_FullMethodName        = "/cryptos.v1.NodeService/ApproveScepEnrollment"
 	NodeService_RejectScepEnrollment_FullMethodName         = "/cryptos.v1.NodeService/RejectScepEnrollment"
 	NodeService_ListTsaCertificates_FullMethodName          = "/cryptos.v1.NodeService/ListTsaCertificates"
+	NodeService_ListAuditEvents_FullMethodName              = "/cryptos.v1.NodeService/ListAuditEvents"
+	NodeService_VerifyAuditChain_FullMethodName             = "/cryptos.v1.NodeService/VerifyAuditChain"
 )
 
 // NodeServiceClient is the client API for NodeService service.
@@ -259,6 +261,13 @@ type NodeServiceClient interface {
 	// certificates old tokens name. Empty on a node that has never run a TSA.
 	// Refused with FailedPrecondition in maintenance mode.
 	ListTsaCertificates(ctx context.Context, in *ListTsaCertificatesRequest, opts ...grpc.CallOption) (*ListTsaCertificatesResponse, error)
+	// ListAuditEvents returns audit log entries, oldest first, a page at a time,
+	// filtered by time range, event type and actor.
+	ListAuditEvents(ctx context.Context, in *ListAuditEventsRequest, opts ...grpc.CallOption) (*ListAuditEventsResponse, error)
+	// VerifyAuditChain verifies the signatures and hash chain over the whole
+	// stored audit log and reports whether it is intact and, if not, the first
+	// sequence number that failed.
+	VerifyAuditChain(ctx context.Context, in *VerifyAuditChainRequest, opts ...grpc.CallOption) (*VerifyAuditChainResponse, error)
 }
 
 type nodeServiceClient struct {
@@ -651,6 +660,26 @@ func (c *nodeServiceClient) ListTsaCertificates(ctx context.Context, in *ListTsa
 	return out, nil
 }
 
+func (c *nodeServiceClient) ListAuditEvents(ctx context.Context, in *ListAuditEventsRequest, opts ...grpc.CallOption) (*ListAuditEventsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListAuditEventsResponse)
+	err := c.cc.Invoke(ctx, NodeService_ListAuditEvents_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nodeServiceClient) VerifyAuditChain(ctx context.Context, in *VerifyAuditChainRequest, opts ...grpc.CallOption) (*VerifyAuditChainResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(VerifyAuditChainResponse)
+	err := c.cc.Invoke(ctx, NodeService_VerifyAuditChain_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NodeServiceServer is the server API for NodeService service.
 // All implementations should embed UnimplementedNodeServiceServer
 // for forward compatibility.
@@ -852,6 +881,13 @@ type NodeServiceServer interface {
 	// certificates old tokens name. Empty on a node that has never run a TSA.
 	// Refused with FailedPrecondition in maintenance mode.
 	ListTsaCertificates(context.Context, *ListTsaCertificatesRequest) (*ListTsaCertificatesResponse, error)
+	// ListAuditEvents returns audit log entries, oldest first, a page at a time,
+	// filtered by time range, event type and actor.
+	ListAuditEvents(context.Context, *ListAuditEventsRequest) (*ListAuditEventsResponse, error)
+	// VerifyAuditChain verifies the signatures and hash chain over the whole
+	// stored audit log and reports whether it is intact and, if not, the first
+	// sequence number that failed.
+	VerifyAuditChain(context.Context, *VerifyAuditChainRequest) (*VerifyAuditChainResponse, error)
 }
 
 // UnimplementedNodeServiceServer should be embedded to have
@@ -971,6 +1007,12 @@ func (UnimplementedNodeServiceServer) RejectScepEnrollment(context.Context, *Rej
 }
 func (UnimplementedNodeServiceServer) ListTsaCertificates(context.Context, *ListTsaCertificatesRequest) (*ListTsaCertificatesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListTsaCertificates not implemented")
+}
+func (UnimplementedNodeServiceServer) ListAuditEvents(context.Context, *ListAuditEventsRequest) (*ListAuditEventsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListAuditEvents not implemented")
+}
+func (UnimplementedNodeServiceServer) VerifyAuditChain(context.Context, *VerifyAuditChainRequest) (*VerifyAuditChainResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifyAuditChain not implemented")
 }
 func (UnimplementedNodeServiceServer) testEmbeddedByValue() {}
 
@@ -1640,6 +1682,42 @@ func _NodeService_ListTsaCertificates_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NodeService_ListAuditEvents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAuditEventsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).ListAuditEvents(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_ListAuditEvents_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).ListAuditEvents(ctx, req.(*ListAuditEventsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NodeService_VerifyAuditChain_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerifyAuditChainRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).VerifyAuditChain(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_VerifyAuditChain_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).VerifyAuditChain(ctx, req.(*VerifyAuditChainRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NodeService_ServiceDesc is the grpc.ServiceDesc for NodeService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1786,6 +1864,14 @@ var NodeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListTsaCertificates",
 			Handler:    _NodeService_ListTsaCertificates_Handler,
+		},
+		{
+			MethodName: "ListAuditEvents",
+			Handler:    _NodeService_ListAuditEvents_Handler,
+		},
+		{
+			MethodName: "VerifyAuditChain",
+			Handler:    _NodeService_VerifyAuditChain_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

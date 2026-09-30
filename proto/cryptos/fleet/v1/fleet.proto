@@ -247,11 +247,27 @@ service FleetService {
 
   // AdoptNode provisions a new maintenance node end to end and streams progress.
   // Pinned to the fingerprint the operator confirmed via PreviewAdoption, the
-  // manager applies the initial config, awaits the reboot, drives the first-boot
-  // ceremony, and registers the node. Each streamed message carries a phase
-  // (applying-config, installing, awaiting-reboot, ceremony, established) with
-  // human-readable detail; the final message sets done. Admin-gated and audited.
+  // manager applies the initial config, awaits the reboot, waits for the
+  // operator to confirm the installed node's certificate fingerprint
+  // (ConfirmAdoptionFingerprint), drives the first-boot ceremony, and
+  // registers the node. Each streamed message carries a phase (see
+  // AdoptNodeResponse) with human-readable detail; the final message sets
+  // done. Admin-gated and audited.
   rpc AdoptNode(AdoptNodeRequest) returns (stream AdoptNodeResponse);
+
+  // ConfirmAdoptionFingerprint lets a paused adoption continue. After the node
+  // installs and reboots it presents a new management certificate that
+  // nothing links to the maintenance fingerprint confirmed via
+  // PreviewAdoption, so AdoptNode streams the
+  // awaiting-fingerprint-confirmation phase with that certificate's SHA-256
+  // and waits. The operator compares it with the Mgmt SHA-256 line on the
+  // node's console and sends it back here. On a match (case and colons
+  // ignored) the adoption resumes and the presented certificate is what the
+  // manager trusts and records; on a mismatch the manager returns
+  // InvalidArgument, the adoption stream ends with the error phase, and
+  // nothing is recorded. NotFound means no adoption with that ID is waiting.
+  // Admin-gated and audited.
+  rpc ConfirmAdoptionFingerprint(ConfirmAdoptionFingerprintRequest) returns (ConfirmAdoptionFingerprintResponse);
 
   // DecommissionNode remotely wipes a managed node's identity and data via the
   // node's mTLS-served RemoteReset, then reboots it into maintenance. The caller
@@ -1098,8 +1114,9 @@ message AdoptNodeRequest {
 }
 
 // AdoptNodeResponse is streamed during adoption. phase is one of
-// applying-config, installing, awaiting-reboot, ceremony, established; done is
-// set on the final message.
+// applying-config, installing, awaiting-reboot,
+// awaiting-fingerprint-confirmation, ceremony, established,
+// awaiting-certificate or error; done is set on the final message.
 message AdoptNodeResponse {
   string phase = 1;
   string detail = 2;
@@ -1107,7 +1124,29 @@ message AdoptNodeResponse {
   // node_id is the stable ID (NodeSummary.id) the manager assigned the adopted
   // node; set on the final message only.
   string node_id = 4;
+  // adoption_id names this adoption run; set on every message. Pass it to
+  // ConfirmAdoptionFingerprint.
+  string adoption_id = 5;
+  // presented_cert_sha256 is the lowercase hex SHA-256 of the management
+  // certificate the installed node presents after its reboot. Set only on the
+  // awaiting-fingerprint-confirmation phase, where the adoption waits for
+  // ConfirmAdoptionFingerprint.
+  string presented_cert_sha256 = 6;
 }
+
+// ConfirmAdoptionFingerprintRequest names the paused adoption and the
+// fingerprint the operator read on the node's console.
+message ConfirmAdoptionFingerprintRequest {
+  // adoption_id is AdoptNodeResponse.adoption_id.
+  string adoption_id = 1;
+  // cert_sha256 is the SHA-256 the operator confirmed, hex with or without
+  // colons, in either case.
+  string cert_sha256 = 2;
+}
+
+// ConfirmAdoptionFingerprintResponse is empty: the adoption's progress
+// continues on the AdoptNode stream.
+message ConfirmAdoptionFingerprintResponse {}
 
 // DecommissionNodeRequest names the managed node to wipe and echoes its current
 // Root CA CN as destructive confirmation.

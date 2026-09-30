@@ -59,7 +59,7 @@ jobs:
         id: drafter
         uses: release-drafter/release-drafter@v7
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Update CHANGELOG
         uses: Bugs5382/changelog-updater-action@v0.3.2

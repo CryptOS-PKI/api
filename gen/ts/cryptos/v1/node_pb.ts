@@ -389,7 +389,8 @@ export const RemoteResetResponseSchema: GenMessage<RemoteResetResponse> = /*@__P
  */
 export type AttestRequest = Message<"cryptos.v1.AttestRequest"> & {
   /**
-   * Random challenge from the manager; the node signs it with its identity key.
+   * Random challenge from the manager. The node signs a domain-separated
+   * message built from it (see AttestResponse.signature), never the raw nonce.
    *
    * @generated from field: bytes nonce = 1;
    */
@@ -408,7 +409,16 @@ export const AttestRequestSchema: GenMessage<AttestRequest> = /*@__PURE__*/
  */
 export type AttestResponse = Message<"cryptos.v1.AttestResponse"> & {
   /**
-   * ECDSA signature (ASN.1 DER) over SHA-384 of the nonce.
+   * Signature by the node's CA identity key over SHA-384 of the message
+   *   "CryptOS-PKI attestation v1" || 0x00 || uint32_be(len(nonce)) || nonce
+   * where the context string is its 26 ASCII bytes with no terminator, 0x00
+   * is a single separator byte, and uint32_be is the nonce length as a 4-byte
+   * big-endian integer. The encoding follows the identity key type: an ECDSA
+   * key gives an ASN.1 DER SEQUENCE { r INTEGER, s INTEGER }, and an RSA key
+   * gives an RSASSA-PKCS1-v1_5 signature with SHA-384 (raw bytes, the length
+   * of the modulus). A verifier rebuilds the message from the nonce it sent,
+   * hashes it with SHA-384 and checks the signature against identity_pub_der
+   * using the scheme that key's type implies.
    *
    * @generated from field: bytes signature = 1;
    */
@@ -1723,7 +1733,10 @@ export const NodeService: GenService<{
   /**
    * Attest signs the caller's nonce with the node's CA identity key so the
    * Fleet Manager can verify possession of the node identity (challenge-
-   * response). ek_pub/ek_cert are reserved for future TPM EK attestation.
+   * response). The nonce is domain-separated before signing (see
+   * AttestResponse.signature), so an Attest signature can never be replayed
+   * as a certificate, CRL or OCSP signature. ek_pub/ek_cert are reserved for
+   * future TPM EK attestation.
    *
    * @generated from rpc cryptos.v1.NodeService.Attest
    */

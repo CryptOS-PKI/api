@@ -95,6 +95,12 @@ message Network {
   repeated string nameservers = 4;
   // DNS search domains, in order. Only meaningful with a resolver.
   repeated string search = 5;
+  // ntp_servers are the SNTP servers the node keeps its clock in sync with, at
+  // most three, each an IPv4 literal or a hostname. A hostname is resolved
+  // through the node resolver at each sync. Empty means the node uses the NTP
+  // servers its DHCP lease supplied (option 42), if any; with neither, the node
+  // runs on its hardware clock.
+  repeated string ntp_servers = 6;
 }
 
 message Storage {
@@ -110,7 +116,25 @@ message Bootstrap {
 }
 
 message Pki {
-  // Phase 1: must be "ECDSA-P384" for Roots.
+  // root_key_alg is the algorithm of this node's own CA key, on a Root and on
+  // a subordinate (intermediate or issuing) alike, and so also the signature
+  // algorithm of every certificate the node issues. Accepted values are
+  // "ECDSA-P384", "RSA-3072" and "RSA-4096"; anything else is rejected when
+  // the config is validated. RSA is there so a platform CA that accepts only
+  // RSA-signed chains can be subordinated under this node.
+  //
+  // "RSA-2048" is rejected even though a 2048-bit key could sign: a node
+  // certifies a subject key (its own when a Root self-signs, or the key in a
+  // CSR it signs) only when it is ECDSA P-384 or RSA of at least 3072 bits, so
+  // a 2048-bit CA key would pass validation and then fail at the ceremony or
+  // at subordination.
+  //
+  // An RSA CA key cannot be held in the TPM: with state_key.mode "tpm" (or an
+  // empty mode on a build that defaults to it) the key is refused when it is
+  // created, at the Root ceremony or a subordinate's first boot, and the node
+  // does not fall back to another algorithm. Use state_key.mode "nodeid" or
+  // "kms" for an RSA CA, where the key is kept in software on the encrypted
+  // state partition.
   string root_key_alg = 1;
   Subject root_subject = 2;
   uint32 root_validity_years = 3;
@@ -140,6 +164,12 @@ message Pki {
   // (the default) leaves a Root refusing to issue leaves. Carried in the proto
   // so the acknowledgement survives ApplyConfig and reaches an installed node.
   string root_leaf_issuance = 11;
+  // allow_unsynced_clock overrides the fail-closed clock gate. While a time
+  // source is configured (network.ntp_servers or a DHCP lease) but the node
+  // has not yet synced its clock this boot, certificate signing is refused;
+  // true lets it proceed on the unsynced clock. A node with no time source is
+  // never gated, and CRL and OCSP generation are never gated.
+  bool allow_unsynced_clock = 12;
   // acme configures the RFC 8555 enrolment endpoint. See "Protocol blocks"
   // below for how an absent block, enabled=false and enabled=true apply.
   Acme acme = 13;
@@ -456,7 +486,10 @@ message Parent {
 // set grows additively toward the full X.509 catalog.
 message CertificateProfile {
   string name = 1;
-  // e.g. "ECDSA-P384". Covering subset; RSA sizes and other curves are additive.
+  // key_alg takes the same values as Pki.root_key_alg: "ECDSA-P384",
+  // "RSA-3072" or "RSA-4096", checked when the config is validated. Signing
+  // does not match a CSR against it: any CSR key that is ECDSA P-384 or RSA
+  // of at least 3072 bits is certified.
   string key_alg = 2;
   Subject subject = 3;
   uint32 validity_days = 4;

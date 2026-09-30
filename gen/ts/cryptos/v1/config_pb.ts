@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file cryptos/v1/config.proto.
  */
 export const file_cryptos_v1_config: GenFile = /*@__PURE__*/
-  fileDesc("ChdjcnlwdG9zL3YxL2NvbmZpZy5wcm90bxIKY3J5cHRvcy52MSKJAwoNTWFjaGluZUNvbmZpZxITCgthcGlfdmVyc2lvbhgBIAEoCRIMCgRraW5kGAIgASgJEiYKCG1ldGFkYXRhGAMgASgLMhQuY3J5cHRvcy52MS5NZXRhZGF0YRIeCgRyb2xlGAQgASgLMhAuY3J5cHRvcy52MS5Sb2xlEiQKB25ldHdvcmsYBSABKAsyEy5jcnlwdG9zLnYxLk5ldHdvcmsSJAoHc3RvcmFnZRgGIAEoCzITLmNyeXB0b3MudjEuU3RvcmFnZRIoCglib290c3RyYXAYByABKAsyFS5jcnlwdG9zLnYxLkJvb3RzdHJhcBIcCgNwa2kYCCABKAsyDy5jcnlwdG9zLnYxLlBraRIkCgdpbnN0YWxsGAkgASgLMhMuY3J5cHRvcy52MS5JbnN0YWxsEicKCXN0YXRlX2tleRgKIAEoCzIULmNyeXB0b3MudjEuU3RhdGVLZXkSKgoKbWFuYWdlbWVudBgLIAEoCzIWLmNyeXB0b3MudjEuTWFuYWdlbWVudCJWCgpNYW5hZ2VtZW50EhIKCm1hbmFnZXJfY24YASABKAkSEQoJdHJ1c3RfcGVtGAIgASgJEiEKGW9wZXJhdG9yX3N1cmZhY2VfcmVhZG9ubHkYAyABKAgiPgoIU3RhdGVLZXkSDAoEbW9kZRgBIAEoCRIkCgNrbXMYAiABKAsyFy5jcnlwdG9zLnYxLkttc1N0YXRlS2V5IjIKC0ttc1N0YXRlS2V5EhAKCGVuZHBvaW50GAEgASgJEhEKCXRydXN0X3BlbRgCIAEoCSIYCghNZXRhZGF0YRIMCgRuYW1lGAEgASgJIhQKBFJvbGUSDAoEa2luZBgBIAEoCSJjCgdOZXR3b3JrEhEKCWludGVyZmFjZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJEg8KB2dhdGV3YXkYAyABKAkSEwoLbmFtZXNlcnZlcnMYBCADKAkSDgoGc2VhcmNoGAUgAygJIjwKB1N0b3JhZ2USHQoVc3RhdGVfcGFydGl0aW9uX2xhYmVsGAEgASgJEhIKCmZpcnN0X2Jvb3QYAiABKAgiPgoJQm9vdHN0cmFwEhYKDmFkbWluX2NlcnRfcGVtGAEgASgJEhkKEWFkbWluX2NlcnRfc2hhMjU2GAIgASgJIrMDCgNQa2kSFAoMcm9vdF9rZXlfYWxnGAEgASgJEikKDHJvb3Rfc3ViamVjdBgCIAEoCzITLmNyeXB0b3MudjEuU3ViamVjdBIbChNyb290X3ZhbGlkaXR5X3llYXJzGAMgASgNEhsKE3BhdGhfbGVuX2NvbnN0cmFpbnQYBCABKA0SMAoIcHJvZmlsZXMYBSADKAsyHi5jcnlwdG9zLnYxLkNlcnRpZmljYXRlUHJvZmlsZRIiCgZwYXJlbnQYBiABKAsyEi5jcnlwdG9zLnYxLlBhcmVudBIbChNyZXZvY2F0aW9uX2Jhc2VfdXJsGAcgASgJEicKH2FsbG93X3VudmVyaWZpZWRfcmV2b2NhdGlvbl91cmwYCCABKAgSHQoVY3JsX25leHRfdXBkYXRlX2hvdXJzGAkgASgNEhwKFHJldm9jYXRpb25faHR0cF9wb3J0GAogASgNEhoKEnJvb3RfbGVhZl9pc3N1YW5jZRgLIAEoCRIeCgRhY21lGA0gASgLMhAuY3J5cHRvcy52MS5BY21lEhwKA2VzdBgOIAEoCzIPLmNyeXB0b3MudjEuRXN0IpsCCgRBY21lEg8KB2VuYWJsZWQYASABKAgSEAoIYmFzZV91cmwYAiABKAkSEQoJaHR0cF9wb3J0GAMgASgNEg8KB3Byb2ZpbGUYBCABKAkSGAoQdGVybXNfb2Zfc2VydmljZRgFIAEoCRIPCgd3ZWJzaXRlGAYgASgJEiAKGGFsbG93X2Fub255bW91c19hY2NvdW50cxgHIAEoCBJBChVleHRlcm5hbF9hY2NvdW50X2tleXMYCCADKAsyIi5jcnlwdG9zLnYxLkFjbWVFeHRlcm5hbEFjY291bnRLZXkSIwobYWxsb3dlZF9pZGVudGlmaWVyX3N1ZmZpeGVzGAkgAygJEhcKD29yZGVyX3R0bF9ob3VycxgKIAEoDSJBChZBY21lRXh0ZXJuYWxBY2NvdW50S2V5Eg4KBmtleV9pZBgBIAEoCRIXCg9obWFjX2tleV9iYXNlNjQYAiABKAki6wEKA0VzdBIPCgdlbmFibGVkGAEgASgIEhEKCWhvc3RuYW1lcxgCIAMoCRIRCglodHRwX3BvcnQYAyABKA0SDwoHcHJvZmlsZRgEIAEoCRINCgVsYWJlbBgFIAEoCRINCgVyZWFsbRgGIAEoCRIjChthbGxvd2VkX2lkZW50aWZpZXJfc3VmZml4ZXMYByADKAkSHAoUYWxsb3dfYW55X2lkZW50aWZpZXIYCCABKAgSOwoSZW5yb2xsX2NyZWRlbnRpYWxzGAkgAygLMh8uY3J5cHRvcy52MS5Fc3RFbnJvbGxDcmVkZW50aWFsIkAKE0VzdEVucm9sbENyZWRlbnRpYWwSEAoIdXNlcm5hbWUYASABKAkSFwoPcGFzc3dvcmRfc2hhMjU2GAIgASgJIjUKBlBhcmVudBITCgtjYV9jZXJ0X3BlbRgBIAEoCRIWCg5jYV9jZXJ0X3NoYTI1NhgCIAEoCSLoAgoSQ2VydGlmaWNhdGVQcm9maWxlEgwKBG5hbWUYASABKAkSDwoHa2V5X2FsZxgCIAEoCRIkCgdzdWJqZWN0GAMgASgLMhMuY3J5cHRvcy52MS5TdWJqZWN0EhUKDXZhbGlkaXR5X2RheXMYBCABKA0SNwoRYmFzaWNfY29uc3RyYWludHMYBSABKAsyHC5jcnlwdG9zLnYxLkJhc2ljQ29uc3RyYWludHMSEQoJa2V5X3VzYWdlGAYgAygJEhUKDWV4dF9rZXlfdXNhZ2UYByADKAkSKQoEc2FucxgIIAEoCzIbLmNyeXB0b3MudjEuU3ViamVjdEFsdE5hbWVzEjMKEGV4dHJhX2V4dGVuc2lvbnMYCSADKAsyGS5jcnlwdG9zLnYxLlg1MDlFeHRlbnNpb24SGgoSYWxsb3dfcmVxdWVzdF9zYW5zGAogASgIEhcKD3ZhbGlkaXR5X3BvbGljeRgLIAEoCSJFChBCYXNpY0NvbnN0cmFpbnRzEg0KBWlzX2NhGAEgASgIEhUKCHBhdGhfbGVuGAIgASgNSACIAQFCCwoJX3BhdGhfbGVuImsKD1N1YmplY3RBbHROYW1lcxILCgNkbnMYASADKAkSCgoCaXAYAiADKAkSDQoFZW1haWwYAyADKAkSCwoDdXJpGAQgAygJEhYKDmtyYjVfcHJpbmNpcGFsGAUgAygJEgsKA3VwbhgGIAMoCSI9Cg1YNTA5RXh0ZW5zaW9uEgsKA29pZBgBIAEoCRIQCghjcml0aWNhbBgCIAEoCBINCgV2YWx1ZRgDIAEoDCIXCgdJbnN0YWxsEgwKBGRpc2sYASABKAkiaQoHU3ViamVjdBITCgtjb21tb25fbmFtZRgBIAEoCRIUCgxvcmdhbml6YXRpb24YAiABKAkSDwoHY291bnRyeRgDIAEoCRIQCghwcm92aW5jZRgEIAEoCRIQCghsb2NhbGl0eRgFIAEoCUI0WjJnaXRodWIuY29tL0NyeXB0T1MtUEtJL2FwaS9nby9jcnlwdG9zL3YxO2NyeXB0b3N2MWIGcHJvdG8z");
+  fileDesc("ChdjcnlwdG9zL3YxL2NvbmZpZy5wcm90bxIKY3J5cHRvcy52MSKJAwoNTWFjaGluZUNvbmZpZxITCgthcGlfdmVyc2lvbhgBIAEoCRIMCgRraW5kGAIgASgJEiYKCG1ldGFkYXRhGAMgASgLMhQuY3J5cHRvcy52MS5NZXRhZGF0YRIeCgRyb2xlGAQgASgLMhAuY3J5cHRvcy52MS5Sb2xlEiQKB25ldHdvcmsYBSABKAsyEy5jcnlwdG9zLnYxLk5ldHdvcmsSJAoHc3RvcmFnZRgGIAEoCzITLmNyeXB0b3MudjEuU3RvcmFnZRIoCglib290c3RyYXAYByABKAsyFS5jcnlwdG9zLnYxLkJvb3RzdHJhcBIcCgNwa2kYCCABKAsyDy5jcnlwdG9zLnYxLlBraRIkCgdpbnN0YWxsGAkgASgLMhMuY3J5cHRvcy52MS5JbnN0YWxsEicKCXN0YXRlX2tleRgKIAEoCzIULmNyeXB0b3MudjEuU3RhdGVLZXkSKgoKbWFuYWdlbWVudBgLIAEoCzIWLmNyeXB0b3MudjEuTWFuYWdlbWVudCJWCgpNYW5hZ2VtZW50EhIKCm1hbmFnZXJfY24YASABKAkSEQoJdHJ1c3RfcGVtGAIgASgJEiEKGW9wZXJhdG9yX3N1cmZhY2VfcmVhZG9ubHkYAyABKAgiPgoIU3RhdGVLZXkSDAoEbW9kZRgBIAEoCRIkCgNrbXMYAiABKAsyFy5jcnlwdG9zLnYxLkttc1N0YXRlS2V5IjIKC0ttc1N0YXRlS2V5EhAKCGVuZHBvaW50GAEgASgJEhEKCXRydXN0X3BlbRgCIAEoCSIYCghNZXRhZGF0YRIMCgRuYW1lGAEgASgJIhQKBFJvbGUSDAoEa2luZBgBIAEoCSJ4CgdOZXR3b3JrEhEKCWludGVyZmFjZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJEg8KB2dhdGV3YXkYAyABKAkSEwoLbmFtZXNlcnZlcnMYBCADKAkSDgoGc2VhcmNoGAUgAygJEhMKC250cF9zZXJ2ZXJzGAYgAygJIjwKB1N0b3JhZ2USHQoVc3RhdGVfcGFydGl0aW9uX2xhYmVsGAEgASgJEhIKCmZpcnN0X2Jvb3QYAiABKAgiPgoJQm9vdHN0cmFwEhYKDmFkbWluX2NlcnRfcGVtGAEgASgJEhkKEWFkbWluX2NlcnRfc2hhMjU2GAIgASgJItEDCgNQa2kSFAoMcm9vdF9rZXlfYWxnGAEgASgJEikKDHJvb3Rfc3ViamVjdBgCIAEoCzITLmNyeXB0b3MudjEuU3ViamVjdBIbChNyb290X3ZhbGlkaXR5X3llYXJzGAMgASgNEhsKE3BhdGhfbGVuX2NvbnN0cmFpbnQYBCABKA0SMAoIcHJvZmlsZXMYBSADKAsyHi5jcnlwdG9zLnYxLkNlcnRpZmljYXRlUHJvZmlsZRIiCgZwYXJlbnQYBiABKAsyEi5jcnlwdG9zLnYxLlBhcmVudBIbChNyZXZvY2F0aW9uX2Jhc2VfdXJsGAcgASgJEicKH2FsbG93X3VudmVyaWZpZWRfcmV2b2NhdGlvbl91cmwYCCABKAgSHQoVY3JsX25leHRfdXBkYXRlX2hvdXJzGAkgASgNEhwKFHJldm9jYXRpb25faHR0cF9wb3J0GAogASgNEhoKEnJvb3RfbGVhZl9pc3N1YW5jZRgLIAEoCRIcChRhbGxvd191bnN5bmNlZF9jbG9jaxgMIAEoCBIeCgRhY21lGA0gASgLMhAuY3J5cHRvcy52MS5BY21lEhwKA2VzdBgOIAEoCzIPLmNyeXB0b3MudjEuRXN0IpsCCgRBY21lEg8KB2VuYWJsZWQYASABKAgSEAoIYmFzZV91cmwYAiABKAkSEQoJaHR0cF9wb3J0GAMgASgNEg8KB3Byb2ZpbGUYBCABKAkSGAoQdGVybXNfb2Zfc2VydmljZRgFIAEoCRIPCgd3ZWJzaXRlGAYgASgJEiAKGGFsbG93X2Fub255bW91c19hY2NvdW50cxgHIAEoCBJBChVleHRlcm5hbF9hY2NvdW50X2tleXMYCCADKAsyIi5jcnlwdG9zLnYxLkFjbWVFeHRlcm5hbEFjY291bnRLZXkSIwobYWxsb3dlZF9pZGVudGlmaWVyX3N1ZmZpeGVzGAkgAygJEhcKD29yZGVyX3R0bF9ob3VycxgKIAEoDSJBChZBY21lRXh0ZXJuYWxBY2NvdW50S2V5Eg4KBmtleV9pZBgBIAEoCRIXCg9obWFjX2tleV9iYXNlNjQYAiABKAki6wEKA0VzdBIPCgdlbmFibGVkGAEgASgIEhEKCWhvc3RuYW1lcxgCIAMoCRIRCglodHRwX3BvcnQYAyABKA0SDwoHcHJvZmlsZRgEIAEoCRINCgVsYWJlbBgFIAEoCRINCgVyZWFsbRgGIAEoCRIjChthbGxvd2VkX2lkZW50aWZpZXJfc3VmZml4ZXMYByADKAkSHAoUYWxsb3dfYW55X2lkZW50aWZpZXIYCCABKAgSOwoSZW5yb2xsX2NyZWRlbnRpYWxzGAkgAygLMh8uY3J5cHRvcy52MS5Fc3RFbnJvbGxDcmVkZW50aWFsIkAKE0VzdEVucm9sbENyZWRlbnRpYWwSEAoIdXNlcm5hbWUYASABKAkSFwoPcGFzc3dvcmRfc2hhMjU2GAIgASgJIjUKBlBhcmVudBITCgtjYV9jZXJ0X3BlbRgBIAEoCRIWCg5jYV9jZXJ0X3NoYTI1NhgCIAEoCSLoAgoSQ2VydGlmaWNhdGVQcm9maWxlEgwKBG5hbWUYASABKAkSDwoHa2V5X2FsZxgCIAEoCRIkCgdzdWJqZWN0GAMgASgLMhMuY3J5cHRvcy52MS5TdWJqZWN0EhUKDXZhbGlkaXR5X2RheXMYBCABKA0SNwoRYmFzaWNfY29uc3RyYWludHMYBSABKAsyHC5jcnlwdG9zLnYxLkJhc2ljQ29uc3RyYWludHMSEQoJa2V5X3VzYWdlGAYgAygJEhUKDWV4dF9rZXlfdXNhZ2UYByADKAkSKQoEc2FucxgIIAEoCzIbLmNyeXB0b3MudjEuU3ViamVjdEFsdE5hbWVzEjMKEGV4dHJhX2V4dGVuc2lvbnMYCSADKAsyGS5jcnlwdG9zLnYxLlg1MDlFeHRlbnNpb24SGgoSYWxsb3dfcmVxdWVzdF9zYW5zGAogASgIEhcKD3ZhbGlkaXR5X3BvbGljeRgLIAEoCSJFChBCYXNpY0NvbnN0cmFpbnRzEg0KBWlzX2NhGAEgASgIEhUKCHBhdGhfbGVuGAIgASgNSACIAQFCCwoJX3BhdGhfbGVuImsKD1N1YmplY3RBbHROYW1lcxILCgNkbnMYASADKAkSCgoCaXAYAiADKAkSDQoFZW1haWwYAyADKAkSCwoDdXJpGAQgAygJEhYKDmtyYjVfcHJpbmNpcGFsGAUgAygJEgsKA3VwbhgGIAMoCSI9Cg1YNTA5RXh0ZW5zaW9uEgsKA29pZBgBIAEoCRIQCghjcml0aWNhbBgCIAEoCBINCgV2YWx1ZRgDIAEoDCIXCgdJbnN0YWxsEgwKBGRpc2sYASABKAkiaQoHU3ViamVjdBITCgtjb21tb25fbmFtZRgBIAEoCRIUCgxvcmdhbml6YXRpb24YAiABKAkSDwoHY291bnRyeRgDIAEoCRIQCghwcm92aW5jZRgEIAEoCRIQCghsb2NhbGl0eRgFIAEoCUI0WjJnaXRodWIuY29tL0NyeXB0T1MtUEtJL2FwaS9nby9jcnlwdG9zL3YxO2NyeXB0b3N2MWIGcHJvdG8z");
 
 /**
  * MachineConfig is the declarative configuration applied via ApplyConfig.
@@ -262,6 +262,17 @@ export type Network = Message<"cryptos.v1.Network"> & {
    * @generated from field: repeated string search = 5;
    */
   search: string[];
+
+  /**
+   * ntp_servers are the SNTP servers the node keeps its clock in sync with, at
+   * most three, each an IPv4 literal or a hostname. A hostname is resolved
+   * through the node resolver at each sync. Empty means the node uses the NTP
+   * servers its DHCP lease supplied (option 42), if any; with neither, the node
+   * runs on its hardware clock.
+   *
+   * @generated from field: repeated string ntp_servers = 6;
+   */
+  ntpServers: string[];
 };
 
 /**
@@ -323,7 +334,25 @@ export const BootstrapSchema: GenMessage<Bootstrap> = /*@__PURE__*/
  */
 export type Pki = Message<"cryptos.v1.Pki"> & {
   /**
-   * Phase 1: must be "ECDSA-P384" for Roots.
+   * root_key_alg is the algorithm of this node's own CA key, on a Root and on
+   * a subordinate (intermediate or issuing) alike, and so also the signature
+   * algorithm of every certificate the node issues. Accepted values are
+   * "ECDSA-P384", "RSA-3072" and "RSA-4096"; anything else is rejected when
+   * the config is validated. RSA is there so a platform CA that accepts only
+   * RSA-signed chains can be subordinated under this node.
+   *
+   * "RSA-2048" is rejected even though a 2048-bit key could sign: a node
+   * certifies a subject key (its own when a Root self-signs, or the key in a
+   * CSR it signs) only when it is ECDSA P-384 or RSA of at least 3072 bits, so
+   * a 2048-bit CA key would pass validation and then fail at the ceremony or
+   * at subordination.
+   *
+   * An RSA CA key cannot be held in the TPM: with state_key.mode "tpm" (or an
+   * empty mode on a build that defaults to it) the key is refused when it is
+   * created, at the Root ceremony or a subordinate's first boot, and the node
+   * does not fall back to another algorithm. Use state_key.mode "nodeid" or
+   * "kms" for an RSA CA, where the key is kept in software on the encrypted
+   * state partition.
    *
    * @generated from field: string root_key_alg = 1;
    */
@@ -403,6 +432,17 @@ export type Pki = Message<"cryptos.v1.Pki"> & {
    * @generated from field: string root_leaf_issuance = 11;
    */
   rootLeafIssuance: string;
+
+  /**
+   * allow_unsynced_clock overrides the fail-closed clock gate. While a time
+   * source is configured (network.ntp_servers or a DHCP lease) but the node
+   * has not yet synced its clock this boot, certificate signing is refused;
+   * true lets it proceed on the unsynced clock. A node with no time source is
+   * never gated, and CRL and OCSP generation are never gated.
+   *
+   * @generated from field: bool allow_unsynced_clock = 12;
+   */
+  allowUnsyncedClock: boolean;
 
   /**
    * acme configures the RFC 8555 enrolment endpoint. See "Protocol blocks"
@@ -722,7 +762,10 @@ export type CertificateProfile = Message<"cryptos.v1.CertificateProfile"> & {
   name: string;
 
   /**
-   * e.g. "ECDSA-P384". Covering subset; RSA sizes and other curves are additive.
+   * key_alg takes the same values as Pki.root_key_alg: "ECDSA-P384",
+   * "RSA-3072" or "RSA-4096", checked when the config is validated. Signing
+   * does not match a CSR against it: any CSR key that is ECDSA P-384 or RSA
+   * of at least 3072 bits is certified.
    *
    * @generated from field: string key_alg = 2;
    */

@@ -26,7 +26,16 @@ Taskfile.yml             # fmt / lint / generate / test / ci targets
 | `status.proto` | `NodeStatus` — role, identity state, TPM state, etcd state, boot count, the revocation preflight result (state, last error, when it was checked), the DNS resolver source and nameservers, and the SNTP time-sync state (source, servers, last offset and sync, and the latest error). |
 | `config.proto` | `MachineConfig` Phase 1 subset (role/network/storage/bootstrap/pki). |
 | `audit.proto` | `AuditEvent` — hash-chained audit log entry shape. |
-| `fleet/v1/fleet.proto` | `FleetService` — the Fleet Manager's surface over the fleet: node, certificate, profile, adapter, enrollment and operator-credential RPCs, the manager audit log (`ListAudit`), MCP agent key management (`ListMcpKeys`, `RevokeMcpKey`, `CreateMcpKey`), and step-up approvals (`ListApprovals`, `DecideApproval`). |
+| `fleet/v1/fleet.proto` | `FleetService` — the Fleet Manager's surface over the fleet: node (including `RenameNode`), certificate, profile, adapter, enrollment and operator-credential RPCs, the manager audit log (`ListAudit`), MCP agent key management (`ListMcpKeys`, `RevokeMcpKey`, `CreateMcpKey`), and step-up approvals (`ListApprovals`, `DecideApproval`). |
+
+### Node IDs and renaming
+
+Every node has a stable `id` on `NodeSummary`: a UUIDv7 in canonical lowercase form that the manager assigns when the node joins the fleet and never changes or reuses. Its `name` is a display label.
+
+- Every request that addresses a node takes `node_id` (`child_node_id` on `CreateEnrollmentRequest`). The old name fields still resolve a node's current name for one release and are deprecated. If both are set and name different nodes, the manager returns `InvalidArgument`.
+- `GetNodeRequest.name` also resolves a name the node held before a rename, when no current node has it, so old links still find the node.
+- `Certificate.issuer_node_id`, `EnrollmentRequest.admitted_node_id`, `AuditEvent.node_id` and the final `AdoptNodeResponse.node_id` carry the ID of the node they point at.
+- `RenameNode` takes `node_id` and `new_name` and returns the updated `NodeSummary`. It fails with `NotFound` when no node has the ID, `AlreadyExists` when another node has the name, and `InvalidArgument` when the name isn't an RFC 1123 label. Renaming to the current name changes nothing. It's admin-only and audited as `node-renamed`.
 
 ### MCP agent keys and audit actors
 

@@ -29,6 +29,7 @@ const (
 	FleetService_ApplyProfileToNode_FullMethodName       = "/cryptos.fleet.v1.FleetService/ApplyProfileToNode"
 	FleetService_ListAdapters_FullMethodName             = "/cryptos.fleet.v1.FleetService/ListAdapters"
 	FleetService_SetAdapterEnabled_FullMethodName        = "/cryptos.fleet.v1.FleetService/SetAdapterEnabled"
+	FleetService_SetNodeProtocol_FullMethodName          = "/cryptos.fleet.v1.FleetService/SetNodeProtocol"
 	FleetService_ListAudit_FullMethodName                = "/cryptos.fleet.v1.FleetService/ListAudit"
 	FleetService_ListEnrollments_FullMethodName          = "/cryptos.fleet.v1.FleetService/ListEnrollments"
 	FleetService_CreateEnrollment_FullMethodName         = "/cryptos.fleet.v1.FleetService/CreateEnrollment"
@@ -100,6 +101,19 @@ type FleetServiceClient interface {
 	// engines that serve enrollment requests ship in a later program, so an
 	// enabled adapter does not yet answer requests. Admin-gated and audited.
 	SetAdapterEnabled(ctx context.Context, in *SetAdapterEnabledRequest, opts ...grpc.CallOption) (*SetAdapterEnabledResponse, error)
+	// SetNodeProtocol switches one enrolment protocol on or off on one managed
+	// node. The manager fetches the node's config, sets that protocol block's
+	// enabled flag, leaves its other settings as the node returned them, and
+	// applies it back through the node's ApplyConfig. Write-only secrets come
+	// back blank from the node and are sent blank, so the node keeps what it
+	// stores; they never reach the manager. The other protocol blocks are left
+	// out of the apply, so the node keeps them unchanged. A switch is
+	// reboot-required: the node stores it and the listener changes at the next
+	// boot, and NodeSummary.reboot_required stays true until the node reports it
+	// running in the new state. The node's refusal (a Root refusing
+	// enabled=true, a block that fails validation) is returned as its error.
+	// Admin-gated and audited.
+	SetNodeProtocol(ctx context.Context, in *SetNodeProtocolRequest, opts ...grpc.CallOption) (*SetNodeProtocolResponse, error)
 	// ListAudit returns the manager's audit log.
 	ListAudit(ctx context.Context, in *ListAuditRequest, opts ...grpc.CallOption) (*ListAuditResponse, error)
 	// ListEnrollments returns the manager's pending and resolved enrollment
@@ -333,6 +347,16 @@ func (c *fleetServiceClient) SetAdapterEnabled(ctx context.Context, in *SetAdapt
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SetAdapterEnabledResponse)
 	err := c.cc.Invoke(ctx, FleetService_SetAdapterEnabled_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) SetNodeProtocol(ctx context.Context, in *SetNodeProtocolRequest, opts ...grpc.CallOption) (*SetNodeProtocolResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetNodeProtocolResponse)
+	err := c.cc.Invoke(ctx, FleetService_SetNodeProtocol_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -651,6 +675,19 @@ type FleetServiceServer interface {
 	// engines that serve enrollment requests ship in a later program, so an
 	// enabled adapter does not yet answer requests. Admin-gated and audited.
 	SetAdapterEnabled(context.Context, *SetAdapterEnabledRequest) (*SetAdapterEnabledResponse, error)
+	// SetNodeProtocol switches one enrolment protocol on or off on one managed
+	// node. The manager fetches the node's config, sets that protocol block's
+	// enabled flag, leaves its other settings as the node returned them, and
+	// applies it back through the node's ApplyConfig. Write-only secrets come
+	// back blank from the node and are sent blank, so the node keeps what it
+	// stores; they never reach the manager. The other protocol blocks are left
+	// out of the apply, so the node keeps them unchanged. A switch is
+	// reboot-required: the node stores it and the listener changes at the next
+	// boot, and NodeSummary.reboot_required stays true until the node reports it
+	// running in the new state. The node's refusal (a Root refusing
+	// enabled=true, a block that fails validation) is returned as its error.
+	// Admin-gated and audited.
+	SetNodeProtocol(context.Context, *SetNodeProtocolRequest) (*SetNodeProtocolResponse, error)
 	// ListAudit returns the manager's audit log.
 	ListAudit(context.Context, *ListAuditRequest) (*ListAuditResponse, error)
 	// ListEnrollments returns the manager's pending and resolved enrollment
@@ -818,6 +855,9 @@ func (UnimplementedFleetServiceServer) ListAdapters(context.Context, *ListAdapte
 }
 func (UnimplementedFleetServiceServer) SetAdapterEnabled(context.Context, *SetAdapterEnabledRequest) (*SetAdapterEnabledResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetAdapterEnabled not implemented")
+}
+func (UnimplementedFleetServiceServer) SetNodeProtocol(context.Context, *SetNodeProtocolRequest) (*SetNodeProtocolResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetNodeProtocol not implemented")
 }
 func (UnimplementedFleetServiceServer) ListAudit(context.Context, *ListAuditRequest) (*ListAuditResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListAudit not implemented")
@@ -1093,6 +1133,24 @@ func _FleetService_SetAdapterEnabled_Handler(srv interface{}, ctx context.Contex
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FleetServiceServer).SetAdapterEnabled(ctx, req.(*SetAdapterEnabledRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_SetNodeProtocol_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetNodeProtocolRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).SetNodeProtocol(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_SetNodeProtocol_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).SetNodeProtocol(ctx, req.(*SetNodeProtocolRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1604,6 +1662,10 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetAdapterEnabled",
 			Handler:    _FleetService_SetAdapterEnabled_Handler,
+		},
+		{
+			MethodName: "SetNodeProtocol",
+			Handler:    _FleetService_SetNodeProtocol_Handler,
 		},
 		{
 			MethodName: "ListAudit",

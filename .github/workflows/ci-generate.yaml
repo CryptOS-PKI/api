@@ -1,0 +1,126 @@
+name: Generated Output
+# Regenerate the Go and TypeScript stubs from the protos and fail when the
+# committed output under go/ or gen/ does not match. This is `task
+# generate:verify`, the same check `task ci` runs locally; the local run is
+# advisory, and without this job a stale gen/ts tree drifted for a release
+# cycle with nothing failing.
+#
+# Every tool is pinned. buf and task are release binaries checked against the
+# SHA-256 their releases publish. The Go plugins are built by `task tools` at
+# the versions and Go toolchain pinned in Taskfile.yml, so this job produces
+# the bytes a developer's `task generate` does. The TypeScript plugin is the
+# `npx -y @bufbuild/protoc-gen-es@<version>` pinned in buf.gen.yaml.
+#
+# A gate that passes when its tooling is missing is worse than no gate, so the
+# TypeScript plugin is fetched in its own step before generation: a registry
+# or network failure fails that step by name, and the fetched package is
+# checked against a pinned integrity hash. Generation then runs with npm
+# offline, so it can only use the package that was checked, and buf exits
+# non-zero if any plugin fails to run. No actions/cache: nothing runs on main,
+# and a pull request's cache is not shared with other pull requests, so a
+# cache would rarely be hit.
+#
+# Pull requests only, and not while the PR is a draft; the PR run covers what
+# merges, so nothing reruns on push to main. No paths filter: a filtered-out
+# workflow never reports, which would leave a required check pending forever.
+on:
+  pull_request:
+    branches: [main]
+    # edited is here so retargeting a stacked PR onto main starts CI. Jobs
+    # skip edited events that did not change the base (title/body edits), and
+    # a skipped job is not billed.
+    types: [opened, synchronize, reopened, ready_for_review, edited]
+# One run per PR per workflow: a new push cancels the older PR run. A title or
+# body edit gets its own group, so its run never cancels real CI.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}${{ github.event.action == 'edited' && github.event.changes.base == null && format('-edit-{0}', github.run_id) || '' }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  generate:
+    name: 🧬 Generated output is current${{ github.event.action == 'edited' && github.event.changes.base == null && ' (edit, not run)' || '' }}
+    if: github.event.pull_request.draft == false && (github.event.action != 'edited' || github.event.changes.base != null)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      # go.mod's go directive is the toolchain Taskfile.yml pins for building
+      # the plugins, so `task tools` finds it installed instead of downloading.
+      - name: 🐹 Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
+
+      - name: 🟢 Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.21.0
+
+      # Update each SHA256 together with its VERSION (from the release's
+      # checksums file: sha256.txt for buf, task_checksums.txt for task).
+      - name: 📦 Install buf and task
+        env:
+          BUF_VERSION: 1.73.0
+          BUF_SHA256: 8f2986298ad08f0cc1bf999b9797b7c383adf32d7edf0f73d6f1e1a701baeac1
+          TASK_VERSION: 3.53.1
+          TASK_SHA256: a54a408f6861ff921f6e87774180db31bacd8c1e7c944ca696db9fea49a82fc7
+        run: |
+          set -euo pipefail
+          bin="$RUNNER_TEMP/bin"
+          mkdir -p "$bin"
+
+          curl -sSfL -o "$bin/buf" \
+            "https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/buf-Linux-x86_64"
+          echo "${BUF_SHA256}  $bin/buf" | sha256sum -c -
+          chmod +x "$bin/buf"
+
+          task_tgz="$RUNNER_TEMP/task_linux_amd64.tar.gz"
+          curl -sSfL -o "$task_tgz" \
+            "https://github.com/go-task/task/releases/download/v${TASK_VERSION}/task_linux_amd64.tar.gz"
+          echo "${TASK_SHA256}  $task_tgz" | sha256sum -c -
+          tar -xzf "$task_tgz" -C "$bin" task
+
+          echo "$bin" >> "$GITHUB_PATH"
+          "$bin/buf" --version
+          "$bin/task" --version
+
+      # The version comes from buf.gen.yaml, so this fetches exactly what
+      # generation will run. PROTOC_GEN_ES_VERSION and PROTOC_GEN_ES_INTEGRITY
+      # are bumped together with buf.gen.yaml; the integrity is the package's
+      # dist.integrity (`npm view @bufbuild/protoc-gen-es@<version> dist.integrity`).
+      - name: 📦 Fetch the TypeScript plugin
+        env:
+          PROTOC_GEN_ES_VERSION: 2.12.1
+          PROTOC_GEN_ES_INTEGRITY: sha512-SWa7XvRYRouMo+vBQmpNFZ+ZEqQ8AC0LpL4QWAo1gvstLhFh/Y7Nf/a+MK7ZxDq5LZSThwfk974L1sFxO3OaGw==
+        run: |
+          set -euo pipefail
+          spec="$(grep -oE '@bufbuild/protoc-gen-es@[0-9A-Za-z.+-]+' buf.gen.yaml)"
+          if [ "$spec" != "@bufbuild/protoc-gen-es@${PROTOC_GEN_ES_VERSION}" ]; then
+            echo "buf.gen.yaml runs '$spec' but this workflow pins ${PROTOC_GEN_ES_VERSION}." >&2
+            echo "Update PROTOC_GEN_ES_VERSION and PROTOC_GEN_ES_INTEGRITY to match." >&2
+            exit 1
+          fi
+
+          npx -y "$spec" --version
+
+          # npx installs each package spec into its own _npx/<hash> directory;
+          # find the one for this spec rather than trusting a glob.
+          manifest="$(grep -lF "\"$spec\"" "$(npm config get cache)"/_npx/*/package.json | head -n 1)"
+          lock="$(dirname "$manifest")/node_modules/.package-lock.json"
+          got="$(jq -r '.packages["node_modules/@bufbuild/protoc-gen-es"] | "\(.version) \(.integrity)"' "$lock")"
+          if [ "$got" != "${PROTOC_GEN_ES_VERSION} ${PROTOC_GEN_ES_INTEGRITY}" ]; then
+            echo "Fetched @bufbuild/protoc-gen-es does not match the pin." >&2
+            echo "want: ${PROTOC_GEN_ES_VERSION} ${PROTOC_GEN_ES_INTEGRITY}" >&2
+            echo "got:  $got" >&2
+            exit 1
+          fi
+          echo "@bufbuild/protoc-gen-es $got"
+
+      - name: 🧬 Regenerate and compare
+        env:
+          npm_config_offline: 'true'
+        run: task generate:verify

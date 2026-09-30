@@ -45,6 +45,14 @@ Every node has a stable `id` on `NodeSummary`: a UUIDv7 in canonical lowercase f
 - `Certificate.issuer_node_id`, `EnrollmentRequest.admitted_node_id`, `AuditEvent.node_id` and the final `AdoptNodeResponse.node_id` carry the ID of the node they point at.
 - `RenameNode` takes `node_id` and `new_name` and returns the updated `NodeSummary`. It fails with `NotFound` when no node has the ID, `AlreadyExists` when another node has the name, and `InvalidArgument` when the name isn't an RFC 1123 label. Renaming to the current name changes nothing. It's admin-only and audited as `node-renamed`.
 
+### Confirming an adopted node's fingerprint
+
+`AdoptNode` streams progress while the manager installs a maintenance node. After the node reboots it presents a new management certificate that nothing links to the maintenance fingerprint confirmed with `PreviewAdoption`, so the adoption pauses until the operator confirms it:
+
+- Every `AdoptNodeResponse` carries `adoption_id`. The `awaiting-fingerprint-confirmation` phase also carries `presented_cert_sha256`, the lowercase hex SHA-256 of the certificate the node now presents, and the stream waits there.
+- The operator compares it with the `Mgmt SHA-256` line on the node's console and calls `ConfirmAdoptionFingerprint` with `adoption_id` and `cert_sha256` (hex, colons and case ignored). The response is empty; progress continues on the `AdoptNode` stream.
+- A mismatch returns `InvalidArgument`, ends the adoption with the `error` phase and records nothing. `NotFound` means no adoption with that ID is waiting. The RPC is admin-only and audited.
+
 ### Fetching an issued certificate
 
 A client fetches an issued certificate and its chain by serial:

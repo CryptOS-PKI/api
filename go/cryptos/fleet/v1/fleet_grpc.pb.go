@@ -59,6 +59,7 @@ const (
 	FleetService_PreviewAdoption_FullMethodName                 = "/cryptos.fleet.v1.FleetService/PreviewAdoption"
 	FleetService_ListInstallDisks_FullMethodName                = "/cryptos.fleet.v1.FleetService/ListInstallDisks"
 	FleetService_AdoptNode_FullMethodName                       = "/cryptos.fleet.v1.FleetService/AdoptNode"
+	FleetService_ConfirmAdoptionFingerprint_FullMethodName      = "/cryptos.fleet.v1.FleetService/ConfirmAdoptionFingerprint"
 	FleetService_DecommissionNode_FullMethodName                = "/cryptos.fleet.v1.FleetService/DecommissionNode"
 	FleetService_RenameNode_FullMethodName                      = "/cryptos.fleet.v1.FleetService/RenameNode"
 	FleetService_ListMcpKeys_FullMethodName                     = "/cryptos.fleet.v1.FleetService/ListMcpKeys"
@@ -252,11 +253,26 @@ type FleetServiceClient interface {
 	ListInstallDisks(ctx context.Context, in *ListInstallDisksRequest, opts ...grpc.CallOption) (*ListInstallDisksResponse, error)
 	// AdoptNode provisions a new maintenance node end to end and streams progress.
 	// Pinned to the fingerprint the operator confirmed via PreviewAdoption, the
-	// manager applies the initial config, awaits the reboot, drives the first-boot
-	// ceremony, and registers the node. Each streamed message carries a phase
-	// (applying-config, installing, awaiting-reboot, ceremony, established) with
-	// human-readable detail; the final message sets done. Admin-gated and audited.
+	// manager applies the initial config, awaits the reboot, waits for the
+	// operator to confirm the installed node's certificate fingerprint
+	// (ConfirmAdoptionFingerprint), drives the first-boot ceremony, and
+	// registers the node. Each streamed message carries a phase (see
+	// AdoptNodeResponse) with human-readable detail; the final message sets
+	// done. Admin-gated and audited.
 	AdoptNode(ctx context.Context, in *AdoptNodeRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[AdoptNodeResponse], error)
+	// ConfirmAdoptionFingerprint lets a paused adoption continue. After the node
+	// installs and reboots it presents a new management certificate that
+	// nothing links to the maintenance fingerprint confirmed via
+	// PreviewAdoption, so AdoptNode streams the
+	// awaiting-fingerprint-confirmation phase with that certificate's SHA-256
+	// and waits. The operator compares it with the Mgmt SHA-256 line on the
+	// node's console and sends it back here. On a match (case and colons
+	// ignored) the adoption resumes and the presented certificate is what the
+	// manager trusts and records; on a mismatch the manager returns
+	// InvalidArgument, the adoption stream ends with the error phase, and
+	// nothing is recorded. NotFound means no adoption with that ID is waiting.
+	// Admin-gated and audited.
+	ConfirmAdoptionFingerprint(ctx context.Context, in *ConfirmAdoptionFingerprintRequest, opts ...grpc.CallOption) (*ConfirmAdoptionFingerprintResponse, error)
 	// DecommissionNode remotely wipes a managed node's identity and data via the
 	// node's mTLS-served RemoteReset, then reboots it into maintenance. The caller
 	// must echo the node's current Root CA CN as confirmation. Admin-gated and
@@ -720,6 +736,16 @@ func (c *fleetServiceClient) AdoptNode(ctx context.Context, in *AdoptNodeRequest
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type FleetService_AdoptNodeClient = grpc.ServerStreamingClient[AdoptNodeResponse]
 
+func (c *fleetServiceClient) ConfirmAdoptionFingerprint(ctx context.Context, in *ConfirmAdoptionFingerprintRequest, opts ...grpc.CallOption) (*ConfirmAdoptionFingerprintResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ConfirmAdoptionFingerprintResponse)
+	err := c.cc.Invoke(ctx, FleetService_ConfirmAdoptionFingerprint_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *fleetServiceClient) DecommissionNode(ctx context.Context, in *DecommissionNodeRequest, opts ...grpc.CallOption) (*DecommissionNodeResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(DecommissionNodeResponse)
@@ -974,11 +1000,26 @@ type FleetServiceServer interface {
 	ListInstallDisks(context.Context, *ListInstallDisksRequest) (*ListInstallDisksResponse, error)
 	// AdoptNode provisions a new maintenance node end to end and streams progress.
 	// Pinned to the fingerprint the operator confirmed via PreviewAdoption, the
-	// manager applies the initial config, awaits the reboot, drives the first-boot
-	// ceremony, and registers the node. Each streamed message carries a phase
-	// (applying-config, installing, awaiting-reboot, ceremony, established) with
-	// human-readable detail; the final message sets done. Admin-gated and audited.
+	// manager applies the initial config, awaits the reboot, waits for the
+	// operator to confirm the installed node's certificate fingerprint
+	// (ConfirmAdoptionFingerprint), drives the first-boot ceremony, and
+	// registers the node. Each streamed message carries a phase (see
+	// AdoptNodeResponse) with human-readable detail; the final message sets
+	// done. Admin-gated and audited.
 	AdoptNode(*AdoptNodeRequest, grpc.ServerStreamingServer[AdoptNodeResponse]) error
+	// ConfirmAdoptionFingerprint lets a paused adoption continue. After the node
+	// installs and reboots it presents a new management certificate that
+	// nothing links to the maintenance fingerprint confirmed via
+	// PreviewAdoption, so AdoptNode streams the
+	// awaiting-fingerprint-confirmation phase with that certificate's SHA-256
+	// and waits. The operator compares it with the Mgmt SHA-256 line on the
+	// node's console and sends it back here. On a match (case and colons
+	// ignored) the adoption resumes and the presented certificate is what the
+	// manager trusts and records; on a mismatch the manager returns
+	// InvalidArgument, the adoption stream ends with the error phase, and
+	// nothing is recorded. NotFound means no adoption with that ID is waiting.
+	// Admin-gated and audited.
+	ConfirmAdoptionFingerprint(context.Context, *ConfirmAdoptionFingerprintRequest) (*ConfirmAdoptionFingerprintResponse, error)
 	// DecommissionNode remotely wipes a managed node's identity and data via the
 	// node's mTLS-served RemoteReset, then reboots it into maintenance. The caller
 	// must echo the node's current Root CA CN as confirmation. Admin-gated and
@@ -1151,6 +1192,9 @@ func (UnimplementedFleetServiceServer) ListInstallDisks(context.Context, *ListIn
 }
 func (UnimplementedFleetServiceServer) AdoptNode(*AdoptNodeRequest, grpc.ServerStreamingServer[AdoptNodeResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method AdoptNode not implemented")
+}
+func (UnimplementedFleetServiceServer) ConfirmAdoptionFingerprint(context.Context, *ConfirmAdoptionFingerprintRequest) (*ConfirmAdoptionFingerprintResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ConfirmAdoptionFingerprint not implemented")
 }
 func (UnimplementedFleetServiceServer) DecommissionNode(context.Context, *DecommissionNodeRequest) (*DecommissionNodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DecommissionNode not implemented")
@@ -1906,6 +1950,24 @@ func _FleetService_AdoptNode_Handler(srv interface{}, stream grpc.ServerStream) 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type FleetService_AdoptNodeServer = grpc.ServerStreamingServer[AdoptNodeResponse]
 
+func _FleetService_ConfirmAdoptionFingerprint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ConfirmAdoptionFingerprintRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).ConfirmAdoptionFingerprint(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_ConfirmAdoptionFingerprint_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).ConfirmAdoptionFingerprint(ctx, req.(*ConfirmAdoptionFingerprintRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _FleetService_DecommissionNode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DecommissionNodeRequest)
 	if err := dec(in); err != nil {
@@ -2194,6 +2256,10 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListInstallDisks",
 			Handler:    _FleetService_ListInstallDisks_Handler,
+		},
+		{
+			MethodName: "ConfirmAdoptionFingerprint",
+			Handler:    _FleetService_ConfirmAdoptionFingerprint_Handler,
 		},
 		{
 			MethodName: "DecommissionNode",

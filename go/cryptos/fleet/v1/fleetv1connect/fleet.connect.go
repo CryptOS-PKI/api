@@ -146,6 +146,9 @@ const (
 	FleetServiceListInstallDisksProcedure = "/cryptos.fleet.v1.FleetService/ListInstallDisks"
 	// FleetServiceAdoptNodeProcedure is the fully-qualified name of the FleetService's AdoptNode RPC.
 	FleetServiceAdoptNodeProcedure = "/cryptos.fleet.v1.FleetService/AdoptNode"
+	// FleetServiceConfirmAdoptionFingerprintProcedure is the fully-qualified name of the FleetService's
+	// ConfirmAdoptionFingerprint RPC.
+	FleetServiceConfirmAdoptionFingerprintProcedure = "/cryptos.fleet.v1.FleetService/ConfirmAdoptionFingerprint"
 	// FleetServiceDecommissionNodeProcedure is the fully-qualified name of the FleetService's
 	// DecommissionNode RPC.
 	FleetServiceDecommissionNodeProcedure = "/cryptos.fleet.v1.FleetService/DecommissionNode"
@@ -345,11 +348,26 @@ type FleetServiceClient interface {
 	ListInstallDisks(context.Context, *connect.Request[v1.ListInstallDisksRequest]) (*connect.Response[v1.ListInstallDisksResponse], error)
 	// AdoptNode provisions a new maintenance node end to end and streams progress.
 	// Pinned to the fingerprint the operator confirmed via PreviewAdoption, the
-	// manager applies the initial config, awaits the reboot, drives the first-boot
-	// ceremony, and registers the node. Each streamed message carries a phase
-	// (applying-config, installing, awaiting-reboot, ceremony, established) with
-	// human-readable detail; the final message sets done. Admin-gated and audited.
+	// manager applies the initial config, awaits the reboot, waits for the
+	// operator to confirm the installed node's certificate fingerprint
+	// (ConfirmAdoptionFingerprint), drives the first-boot ceremony, and
+	// registers the node. Each streamed message carries a phase (see
+	// AdoptNodeResponse) with human-readable detail; the final message sets
+	// done. Admin-gated and audited.
 	AdoptNode(context.Context, *connect.Request[v1.AdoptNodeRequest]) (*connect.ServerStreamForClient[v1.AdoptNodeResponse], error)
+	// ConfirmAdoptionFingerprint lets a paused adoption continue. After the node
+	// installs and reboots it presents a new management certificate that
+	// nothing links to the maintenance fingerprint confirmed via
+	// PreviewAdoption, so AdoptNode streams the
+	// awaiting-fingerprint-confirmation phase with that certificate's SHA-256
+	// and waits. The operator compares it with the Mgmt SHA-256 line on the
+	// node's console and sends it back here. On a match (case and colons
+	// ignored) the adoption resumes and the presented certificate is what the
+	// manager trusts and records; on a mismatch the manager returns
+	// InvalidArgument, the adoption stream ends with the error phase, and
+	// nothing is recorded. NotFound means no adoption with that ID is waiting.
+	// Admin-gated and audited.
+	ConfirmAdoptionFingerprint(context.Context, *connect.Request[v1.ConfirmAdoptionFingerprintRequest]) (*connect.Response[v1.ConfirmAdoptionFingerprintResponse], error)
 	// DecommissionNode remotely wipes a managed node's identity and data via the
 	// node's mTLS-served RemoteReset, then reboots it into maintenance. The caller
 	// must echo the node's current Root CA CN as confirmation. Admin-gated and
@@ -647,6 +665,12 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(fleetServiceMethods.ByName("AdoptNode")),
 			connect.WithClientOptions(opts...),
 		),
+		confirmAdoptionFingerprint: connect.NewClient[v1.ConfirmAdoptionFingerprintRequest, v1.ConfirmAdoptionFingerprintResponse](
+			httpClient,
+			baseURL+FleetServiceConfirmAdoptionFingerprintProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("ConfirmAdoptionFingerprint")),
+			connect.WithClientOptions(opts...),
+		),
 		decommissionNode: connect.NewClient[v1.DecommissionNodeRequest, v1.DecommissionNodeResponse](
 			httpClient,
 			baseURL+FleetServiceDecommissionNodeProcedure,
@@ -734,6 +758,7 @@ type fleetServiceClient struct {
 	previewAdoption                 *connect.Client[v1.PreviewAdoptionRequest, v1.PreviewAdoptionResponse]
 	listInstallDisks                *connect.Client[v1.ListInstallDisksRequest, v1.ListInstallDisksResponse]
 	adoptNode                       *connect.Client[v1.AdoptNodeRequest, v1.AdoptNodeResponse]
+	confirmAdoptionFingerprint      *connect.Client[v1.ConfirmAdoptionFingerprintRequest, v1.ConfirmAdoptionFingerprintResponse]
 	decommissionNode                *connect.Client[v1.DecommissionNodeRequest, v1.DecommissionNodeResponse]
 	renameNode                      *connect.Client[v1.RenameNodeRequest, v1.RenameNodeResponse]
 	listMcpKeys                     *connect.Client[v1.ListMcpKeysRequest, v1.ListMcpKeysResponse]
@@ -944,6 +969,11 @@ func (c *fleetServiceClient) ListInstallDisks(ctx context.Context, req *connect.
 // AdoptNode calls cryptos.fleet.v1.FleetService.AdoptNode.
 func (c *fleetServiceClient) AdoptNode(ctx context.Context, req *connect.Request[v1.AdoptNodeRequest]) (*connect.ServerStreamForClient[v1.AdoptNodeResponse], error) {
 	return c.adoptNode.CallServerStream(ctx, req)
+}
+
+// ConfirmAdoptionFingerprint calls cryptos.fleet.v1.FleetService.ConfirmAdoptionFingerprint.
+func (c *fleetServiceClient) ConfirmAdoptionFingerprint(ctx context.Context, req *connect.Request[v1.ConfirmAdoptionFingerprintRequest]) (*connect.Response[v1.ConfirmAdoptionFingerprintResponse], error) {
+	return c.confirmAdoptionFingerprint.CallUnary(ctx, req)
 }
 
 // DecommissionNode calls cryptos.fleet.v1.FleetService.DecommissionNode.
@@ -1158,11 +1188,26 @@ type FleetServiceHandler interface {
 	ListInstallDisks(context.Context, *connect.Request[v1.ListInstallDisksRequest]) (*connect.Response[v1.ListInstallDisksResponse], error)
 	// AdoptNode provisions a new maintenance node end to end and streams progress.
 	// Pinned to the fingerprint the operator confirmed via PreviewAdoption, the
-	// manager applies the initial config, awaits the reboot, drives the first-boot
-	// ceremony, and registers the node. Each streamed message carries a phase
-	// (applying-config, installing, awaiting-reboot, ceremony, established) with
-	// human-readable detail; the final message sets done. Admin-gated and audited.
+	// manager applies the initial config, awaits the reboot, waits for the
+	// operator to confirm the installed node's certificate fingerprint
+	// (ConfirmAdoptionFingerprint), drives the first-boot ceremony, and
+	// registers the node. Each streamed message carries a phase (see
+	// AdoptNodeResponse) with human-readable detail; the final message sets
+	// done. Admin-gated and audited.
 	AdoptNode(context.Context, *connect.Request[v1.AdoptNodeRequest], *connect.ServerStream[v1.AdoptNodeResponse]) error
+	// ConfirmAdoptionFingerprint lets a paused adoption continue. After the node
+	// installs and reboots it presents a new management certificate that
+	// nothing links to the maintenance fingerprint confirmed via
+	// PreviewAdoption, so AdoptNode streams the
+	// awaiting-fingerprint-confirmation phase with that certificate's SHA-256
+	// and waits. The operator compares it with the Mgmt SHA-256 line on the
+	// node's console and sends it back here. On a match (case and colons
+	// ignored) the adoption resumes and the presented certificate is what the
+	// manager trusts and records; on a mismatch the manager returns
+	// InvalidArgument, the adoption stream ends with the error phase, and
+	// nothing is recorded. NotFound means no adoption with that ID is waiting.
+	// Admin-gated and audited.
+	ConfirmAdoptionFingerprint(context.Context, *connect.Request[v1.ConfirmAdoptionFingerprintRequest]) (*connect.Response[v1.ConfirmAdoptionFingerprintResponse], error)
 	// DecommissionNode remotely wipes a managed node's identity and data via the
 	// node's mTLS-served RemoteReset, then reboots it into maintenance. The caller
 	// must echo the node's current Root CA CN as confirmation. Admin-gated and
@@ -1456,6 +1501,12 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(fleetServiceMethods.ByName("AdoptNode")),
 		connect.WithHandlerOptions(opts...),
 	)
+	fleetServiceConfirmAdoptionFingerprintHandler := connect.NewUnaryHandler(
+		FleetServiceConfirmAdoptionFingerprintProcedure,
+		svc.ConfirmAdoptionFingerprint,
+		connect.WithSchema(fleetServiceMethods.ByName("ConfirmAdoptionFingerprint")),
+		connect.WithHandlerOptions(opts...),
+	)
 	fleetServiceDecommissionNodeHandler := connect.NewUnaryHandler(
 		FleetServiceDecommissionNodeProcedure,
 		svc.DecommissionNode,
@@ -1580,6 +1631,8 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 			fleetServiceListInstallDisksHandler.ServeHTTP(w, r)
 		case FleetServiceAdoptNodeProcedure:
 			fleetServiceAdoptNodeHandler.ServeHTTP(w, r)
+		case FleetServiceConfirmAdoptionFingerprintProcedure:
+			fleetServiceConfirmAdoptionFingerprintHandler.ServeHTTP(w, r)
 		case FleetServiceDecommissionNodeProcedure:
 			fleetServiceDecommissionNodeHandler.ServeHTTP(w, r)
 		case FleetServiceRenameNodeProcedure:
@@ -1761,6 +1814,10 @@ func (UnimplementedFleetServiceHandler) ListInstallDisks(context.Context, *conne
 
 func (UnimplementedFleetServiceHandler) AdoptNode(context.Context, *connect.Request[v1.AdoptNodeRequest], *connect.ServerStream[v1.AdoptNodeResponse]) error {
 	return connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.AdoptNode is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) ConfirmAdoptionFingerprint(context.Context, *connect.Request[v1.ConfirmAdoptionFingerprintRequest]) (*connect.Response[v1.ConfirmAdoptionFingerprintResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ConfirmAdoptionFingerprint is not implemented"))
 }
 
 func (UnimplementedFleetServiceHandler) DecommissionNode(context.Context, *connect.Request[v1.DecommissionNodeRequest]) (*connect.Response[v1.DecommissionNodeResponse], error) {

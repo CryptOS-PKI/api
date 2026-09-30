@@ -95,4 +95,4 @@ The generated stubs under `go/` and `gen/ts/` are committed; `task ci` fails if 
 
 ## 📄 License
 
-[Apache License 2.0](LICENSE). Copyright 2026 Shane.
+[Apache License 2.0](LICENSE). Copyright The CryptOS Authors.

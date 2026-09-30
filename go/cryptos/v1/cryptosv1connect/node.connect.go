@@ -106,6 +106,24 @@ const (
 	NodeServiceGetImageStatusProcedure = "/cryptos.v1.NodeService/GetImageStatus"
 	// NodeServiceRebootProcedure is the fully-qualified name of the NodeService's Reboot RPC.
 	NodeServiceRebootProcedure = "/cryptos.v1.NodeService/Reboot"
+	// NodeServiceMintScepChallengeProcedure is the fully-qualified name of the NodeService's
+	// MintScepChallenge RPC.
+	NodeServiceMintScepChallengeProcedure = "/cryptos.v1.NodeService/MintScepChallenge"
+	// NodeServiceListScepChallengesProcedure is the fully-qualified name of the NodeService's
+	// ListScepChallenges RPC.
+	NodeServiceListScepChallengesProcedure = "/cryptos.v1.NodeService/ListScepChallenges"
+	// NodeServiceRevokeScepChallengeProcedure is the fully-qualified name of the NodeService's
+	// RevokeScepChallenge RPC.
+	NodeServiceRevokeScepChallengeProcedure = "/cryptos.v1.NodeService/RevokeScepChallenge"
+	// NodeServiceListScepEnrollmentsProcedure is the fully-qualified name of the NodeService's
+	// ListScepEnrollments RPC.
+	NodeServiceListScepEnrollmentsProcedure = "/cryptos.v1.NodeService/ListScepEnrollments"
+	// NodeServiceApproveScepEnrollmentProcedure is the fully-qualified name of the NodeService's
+	// ApproveScepEnrollment RPC.
+	NodeServiceApproveScepEnrollmentProcedure = "/cryptos.v1.NodeService/ApproveScepEnrollment"
+	// NodeServiceRejectScepEnrollmentProcedure is the fully-qualified name of the NodeService's
+	// RejectScepEnrollment RPC.
+	NodeServiceRejectScepEnrollmentProcedure = "/cryptos.v1.NodeService/RejectScepEnrollment"
 )
 
 // NodeServiceClient is a client for the cryptos.v1.NodeService service.
@@ -257,6 +275,33 @@ type NodeServiceClient interface {
 	// and served on the local socket; refused in maintenance mode. The caller
 	// must echo the node's CA CN, the same confirmation ActivateImage requires.
 	Reboot(context.Context, *connect.Request[v1.RebootRequest]) (*connect.Response[v1.RebootResponse], error)
+	// MintScepChallenge creates a single-use challenge for one initial
+	// enrolment and returns it. The challenge is returned by this call only: the
+	// node stores a digest of it and no RPC reads it back, so a lost challenge is
+	// revoked and minted again. It is consumed by the first PKCSReq that
+	// presents it, whether that request is issued, refused or queued.
+	MintScepChallenge(context.Context, *connect.Request[v1.MintScepChallengeRequest]) (*connect.Response[v1.MintScepChallengeResponse], error)
+	// ListScepChallenges returns the challenges that are still usable: minted,
+	// not yet consumed, not revoked and not expired. It never carries the
+	// challenge or its digest.
+	ListScepChallenges(context.Context, *connect.Request[v1.ListScepChallengesRequest]) (*connect.Response[v1.ListScepChallengesResponse], error)
+	// RevokeScepChallenge withdraws a usable challenge by id before it is
+	// consumed. NotFound when the id is unknown, already consumed, revoked or
+	// expired.
+	RevokeScepChallenge(context.Context, *connect.Request[v1.RevokeScepChallengeRequest]) (*connect.Response[v1.RevokeScepChallengeResponse], error)
+	// ListScepEnrollments returns the initial enrolments waiting for an admin
+	// decision on profiles with require_approval set, oldest first.
+	ListScepEnrollments(context.Context, *connect.Request[v1.ListScepEnrollmentsRequest]) (*connect.Response[v1.ListScepEnrollmentsResponse], error)
+	// ApproveScepEnrollment issues the certificate for a waiting enrolment under
+	// its profile and returns its serial. The client collects it with its next
+	// CertPoll. NotFound when the id is not waiting. The request is checked
+	// again at approval, against the config and key floor in force then, and a
+	// request that no longer passes is refused with FailedPrecondition and stays
+	// queued for rejection.
+	ApproveScepEnrollment(context.Context, *connect.Request[v1.ApproveScepEnrollmentRequest]) (*connect.Response[v1.ApproveScepEnrollmentResponse], error)
+	// RejectScepEnrollment refuses a waiting enrolment. The client's next
+	// CertPoll is answered FAILURE. NotFound when the id is not waiting.
+	RejectScepEnrollment(context.Context, *connect.Request[v1.RejectScepEnrollmentRequest]) (*connect.Response[v1.RejectScepEnrollmentResponse], error)
 }
 
 // NewNodeServiceClient constructs a client for the cryptos.v1.NodeService service. By default, it
@@ -444,6 +489,42 @@ func NewNodeServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(nodeServiceMethods.ByName("Reboot")),
 			connect.WithClientOptions(opts...),
 		),
+		mintScepChallenge: connect.NewClient[v1.MintScepChallengeRequest, v1.MintScepChallengeResponse](
+			httpClient,
+			baseURL+NodeServiceMintScepChallengeProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("MintScepChallenge")),
+			connect.WithClientOptions(opts...),
+		),
+		listScepChallenges: connect.NewClient[v1.ListScepChallengesRequest, v1.ListScepChallengesResponse](
+			httpClient,
+			baseURL+NodeServiceListScepChallengesProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("ListScepChallenges")),
+			connect.WithClientOptions(opts...),
+		),
+		revokeScepChallenge: connect.NewClient[v1.RevokeScepChallengeRequest, v1.RevokeScepChallengeResponse](
+			httpClient,
+			baseURL+NodeServiceRevokeScepChallengeProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("RevokeScepChallenge")),
+			connect.WithClientOptions(opts...),
+		),
+		listScepEnrollments: connect.NewClient[v1.ListScepEnrollmentsRequest, v1.ListScepEnrollmentsResponse](
+			httpClient,
+			baseURL+NodeServiceListScepEnrollmentsProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("ListScepEnrollments")),
+			connect.WithClientOptions(opts...),
+		),
+		approveScepEnrollment: connect.NewClient[v1.ApproveScepEnrollmentRequest, v1.ApproveScepEnrollmentResponse](
+			httpClient,
+			baseURL+NodeServiceApproveScepEnrollmentProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("ApproveScepEnrollment")),
+			connect.WithClientOptions(opts...),
+		),
+		rejectScepEnrollment: connect.NewClient[v1.RejectScepEnrollmentRequest, v1.RejectScepEnrollmentResponse](
+			httpClient,
+			baseURL+NodeServiceRejectScepEnrollmentProcedure,
+			connect.WithSchema(nodeServiceMethods.ByName("RejectScepEnrollment")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -478,6 +559,12 @@ type nodeServiceClient struct {
 	activateImage                *connect.Client[v1.ActivateImageRequest, v1.ActivateImageResponse]
 	getImageStatus               *connect.Client[v1.GetImageStatusRequest, v1.GetImageStatusResponse]
 	reboot                       *connect.Client[v1.RebootRequest, v1.RebootResponse]
+	mintScepChallenge            *connect.Client[v1.MintScepChallengeRequest, v1.MintScepChallengeResponse]
+	listScepChallenges           *connect.Client[v1.ListScepChallengesRequest, v1.ListScepChallengesResponse]
+	revokeScepChallenge          *connect.Client[v1.RevokeScepChallengeRequest, v1.RevokeScepChallengeResponse]
+	listScepEnrollments          *connect.Client[v1.ListScepEnrollmentsRequest, v1.ListScepEnrollmentsResponse]
+	approveScepEnrollment        *connect.Client[v1.ApproveScepEnrollmentRequest, v1.ApproveScepEnrollmentResponse]
+	rejectScepEnrollment         *connect.Client[v1.RejectScepEnrollmentRequest, v1.RejectScepEnrollmentResponse]
 }
 
 // ApplyConfig calls cryptos.v1.NodeService.ApplyConfig.
@@ -623,6 +710,36 @@ func (c *nodeServiceClient) GetImageStatus(ctx context.Context, req *connect.Req
 // Reboot calls cryptos.v1.NodeService.Reboot.
 func (c *nodeServiceClient) Reboot(ctx context.Context, req *connect.Request[v1.RebootRequest]) (*connect.Response[v1.RebootResponse], error) {
 	return c.reboot.CallUnary(ctx, req)
+}
+
+// MintScepChallenge calls cryptos.v1.NodeService.MintScepChallenge.
+func (c *nodeServiceClient) MintScepChallenge(ctx context.Context, req *connect.Request[v1.MintScepChallengeRequest]) (*connect.Response[v1.MintScepChallengeResponse], error) {
+	return c.mintScepChallenge.CallUnary(ctx, req)
+}
+
+// ListScepChallenges calls cryptos.v1.NodeService.ListScepChallenges.
+func (c *nodeServiceClient) ListScepChallenges(ctx context.Context, req *connect.Request[v1.ListScepChallengesRequest]) (*connect.Response[v1.ListScepChallengesResponse], error) {
+	return c.listScepChallenges.CallUnary(ctx, req)
+}
+
+// RevokeScepChallenge calls cryptos.v1.NodeService.RevokeScepChallenge.
+func (c *nodeServiceClient) RevokeScepChallenge(ctx context.Context, req *connect.Request[v1.RevokeScepChallengeRequest]) (*connect.Response[v1.RevokeScepChallengeResponse], error) {
+	return c.revokeScepChallenge.CallUnary(ctx, req)
+}
+
+// ListScepEnrollments calls cryptos.v1.NodeService.ListScepEnrollments.
+func (c *nodeServiceClient) ListScepEnrollments(ctx context.Context, req *connect.Request[v1.ListScepEnrollmentsRequest]) (*connect.Response[v1.ListScepEnrollmentsResponse], error) {
+	return c.listScepEnrollments.CallUnary(ctx, req)
+}
+
+// ApproveScepEnrollment calls cryptos.v1.NodeService.ApproveScepEnrollment.
+func (c *nodeServiceClient) ApproveScepEnrollment(ctx context.Context, req *connect.Request[v1.ApproveScepEnrollmentRequest]) (*connect.Response[v1.ApproveScepEnrollmentResponse], error) {
+	return c.approveScepEnrollment.CallUnary(ctx, req)
+}
+
+// RejectScepEnrollment calls cryptos.v1.NodeService.RejectScepEnrollment.
+func (c *nodeServiceClient) RejectScepEnrollment(ctx context.Context, req *connect.Request[v1.RejectScepEnrollmentRequest]) (*connect.Response[v1.RejectScepEnrollmentResponse], error) {
+	return c.rejectScepEnrollment.CallUnary(ctx, req)
 }
 
 // NodeServiceHandler is an implementation of the cryptos.v1.NodeService service.
@@ -774,6 +891,33 @@ type NodeServiceHandler interface {
 	// and served on the local socket; refused in maintenance mode. The caller
 	// must echo the node's CA CN, the same confirmation ActivateImage requires.
 	Reboot(context.Context, *connect.Request[v1.RebootRequest]) (*connect.Response[v1.RebootResponse], error)
+	// MintScepChallenge creates a single-use challenge for one initial
+	// enrolment and returns it. The challenge is returned by this call only: the
+	// node stores a digest of it and no RPC reads it back, so a lost challenge is
+	// revoked and minted again. It is consumed by the first PKCSReq that
+	// presents it, whether that request is issued, refused or queued.
+	MintScepChallenge(context.Context, *connect.Request[v1.MintScepChallengeRequest]) (*connect.Response[v1.MintScepChallengeResponse], error)
+	// ListScepChallenges returns the challenges that are still usable: minted,
+	// not yet consumed, not revoked and not expired. It never carries the
+	// challenge or its digest.
+	ListScepChallenges(context.Context, *connect.Request[v1.ListScepChallengesRequest]) (*connect.Response[v1.ListScepChallengesResponse], error)
+	// RevokeScepChallenge withdraws a usable challenge by id before it is
+	// consumed. NotFound when the id is unknown, already consumed, revoked or
+	// expired.
+	RevokeScepChallenge(context.Context, *connect.Request[v1.RevokeScepChallengeRequest]) (*connect.Response[v1.RevokeScepChallengeResponse], error)
+	// ListScepEnrollments returns the initial enrolments waiting for an admin
+	// decision on profiles with require_approval set, oldest first.
+	ListScepEnrollments(context.Context, *connect.Request[v1.ListScepEnrollmentsRequest]) (*connect.Response[v1.ListScepEnrollmentsResponse], error)
+	// ApproveScepEnrollment issues the certificate for a waiting enrolment under
+	// its profile and returns its serial. The client collects it with its next
+	// CertPoll. NotFound when the id is not waiting. The request is checked
+	// again at approval, against the config and key floor in force then, and a
+	// request that no longer passes is refused with FailedPrecondition and stays
+	// queued for rejection.
+	ApproveScepEnrollment(context.Context, *connect.Request[v1.ApproveScepEnrollmentRequest]) (*connect.Response[v1.ApproveScepEnrollmentResponse], error)
+	// RejectScepEnrollment refuses a waiting enrolment. The client's next
+	// CertPoll is answered FAILURE. NotFound when the id is not waiting.
+	RejectScepEnrollment(context.Context, *connect.Request[v1.RejectScepEnrollmentRequest]) (*connect.Response[v1.RejectScepEnrollmentResponse], error)
 }
 
 // NewNodeServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -957,6 +1101,42 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(nodeServiceMethods.ByName("Reboot")),
 		connect.WithHandlerOptions(opts...),
 	)
+	nodeServiceMintScepChallengeHandler := connect.NewUnaryHandler(
+		NodeServiceMintScepChallengeProcedure,
+		svc.MintScepChallenge,
+		connect.WithSchema(nodeServiceMethods.ByName("MintScepChallenge")),
+		connect.WithHandlerOptions(opts...),
+	)
+	nodeServiceListScepChallengesHandler := connect.NewUnaryHandler(
+		NodeServiceListScepChallengesProcedure,
+		svc.ListScepChallenges,
+		connect.WithSchema(nodeServiceMethods.ByName("ListScepChallenges")),
+		connect.WithHandlerOptions(opts...),
+	)
+	nodeServiceRevokeScepChallengeHandler := connect.NewUnaryHandler(
+		NodeServiceRevokeScepChallengeProcedure,
+		svc.RevokeScepChallenge,
+		connect.WithSchema(nodeServiceMethods.ByName("RevokeScepChallenge")),
+		connect.WithHandlerOptions(opts...),
+	)
+	nodeServiceListScepEnrollmentsHandler := connect.NewUnaryHandler(
+		NodeServiceListScepEnrollmentsProcedure,
+		svc.ListScepEnrollments,
+		connect.WithSchema(nodeServiceMethods.ByName("ListScepEnrollments")),
+		connect.WithHandlerOptions(opts...),
+	)
+	nodeServiceApproveScepEnrollmentHandler := connect.NewUnaryHandler(
+		NodeServiceApproveScepEnrollmentProcedure,
+		svc.ApproveScepEnrollment,
+		connect.WithSchema(nodeServiceMethods.ByName("ApproveScepEnrollment")),
+		connect.WithHandlerOptions(opts...),
+	)
+	nodeServiceRejectScepEnrollmentHandler := connect.NewUnaryHandler(
+		NodeServiceRejectScepEnrollmentProcedure,
+		svc.RejectScepEnrollment,
+		connect.WithSchema(nodeServiceMethods.ByName("RejectScepEnrollment")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/cryptos.v1.NodeService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case NodeServiceApplyConfigProcedure:
@@ -1017,6 +1197,18 @@ func NewNodeServiceHandler(svc NodeServiceHandler, opts ...connect.HandlerOption
 			nodeServiceGetImageStatusHandler.ServeHTTP(w, r)
 		case NodeServiceRebootProcedure:
 			nodeServiceRebootHandler.ServeHTTP(w, r)
+		case NodeServiceMintScepChallengeProcedure:
+			nodeServiceMintScepChallengeHandler.ServeHTTP(w, r)
+		case NodeServiceListScepChallengesProcedure:
+			nodeServiceListScepChallengesHandler.ServeHTTP(w, r)
+		case NodeServiceRevokeScepChallengeProcedure:
+			nodeServiceRevokeScepChallengeHandler.ServeHTTP(w, r)
+		case NodeServiceListScepEnrollmentsProcedure:
+			nodeServiceListScepEnrollmentsHandler.ServeHTTP(w, r)
+		case NodeServiceApproveScepEnrollmentProcedure:
+			nodeServiceApproveScepEnrollmentHandler.ServeHTTP(w, r)
+		case NodeServiceRejectScepEnrollmentProcedure:
+			nodeServiceRejectScepEnrollmentHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -1140,4 +1332,28 @@ func (UnimplementedNodeServiceHandler) GetImageStatus(context.Context, *connect.
 
 func (UnimplementedNodeServiceHandler) Reboot(context.Context, *connect.Request[v1.RebootRequest]) (*connect.Response[v1.RebootResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.Reboot is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) MintScepChallenge(context.Context, *connect.Request[v1.MintScepChallengeRequest]) (*connect.Response[v1.MintScepChallengeResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.MintScepChallenge is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) ListScepChallenges(context.Context, *connect.Request[v1.ListScepChallengesRequest]) (*connect.Response[v1.ListScepChallengesResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.ListScepChallenges is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) RevokeScepChallenge(context.Context, *connect.Request[v1.RevokeScepChallengeRequest]) (*connect.Response[v1.RevokeScepChallengeResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.RevokeScepChallenge is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) ListScepEnrollments(context.Context, *connect.Request[v1.ListScepEnrollmentsRequest]) (*connect.Response[v1.ListScepEnrollmentsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.ListScepEnrollments is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) ApproveScepEnrollment(context.Context, *connect.Request[v1.ApproveScepEnrollmentRequest]) (*connect.Response[v1.ApproveScepEnrollmentResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.ApproveScepEnrollment is not implemented"))
+}
+
+func (UnimplementedNodeServiceHandler) RejectScepEnrollment(context.Context, *connect.Request[v1.RejectScepEnrollmentRequest]) (*connect.Response[v1.RejectScepEnrollmentResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.v1.NodeService.RejectScepEnrollment is not implemented"))
 }

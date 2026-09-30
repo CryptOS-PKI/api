@@ -48,6 +48,12 @@ const (
 	NodeService_ActivateImage_FullMethodName                = "/cryptos.v1.NodeService/ActivateImage"
 	NodeService_GetImageStatus_FullMethodName               = "/cryptos.v1.NodeService/GetImageStatus"
 	NodeService_Reboot_FullMethodName                       = "/cryptos.v1.NodeService/Reboot"
+	NodeService_MintScepChallenge_FullMethodName            = "/cryptos.v1.NodeService/MintScepChallenge"
+	NodeService_ListScepChallenges_FullMethodName           = "/cryptos.v1.NodeService/ListScepChallenges"
+	NodeService_RevokeScepChallenge_FullMethodName          = "/cryptos.v1.NodeService/RevokeScepChallenge"
+	NodeService_ListScepEnrollments_FullMethodName          = "/cryptos.v1.NodeService/ListScepEnrollments"
+	NodeService_ApproveScepEnrollment_FullMethodName        = "/cryptos.v1.NodeService/ApproveScepEnrollment"
+	NodeService_RejectScepEnrollment_FullMethodName         = "/cryptos.v1.NodeService/RejectScepEnrollment"
 )
 
 // NodeServiceClient is the client API for NodeService service.
@@ -208,6 +214,33 @@ type NodeServiceClient interface {
 	// and served on the local socket; refused in maintenance mode. The caller
 	// must echo the node's CA CN, the same confirmation ActivateImage requires.
 	Reboot(ctx context.Context, in *RebootRequest, opts ...grpc.CallOption) (*RebootResponse, error)
+	// MintScepChallenge creates a single-use challenge for one initial
+	// enrolment and returns it. The challenge is returned by this call only: the
+	// node stores a digest of it and no RPC reads it back, so a lost challenge is
+	// revoked and minted again. It is consumed by the first PKCSReq that
+	// presents it, whether that request is issued, refused or queued.
+	MintScepChallenge(ctx context.Context, in *MintScepChallengeRequest, opts ...grpc.CallOption) (*MintScepChallengeResponse, error)
+	// ListScepChallenges returns the challenges that are still usable: minted,
+	// not yet consumed, not revoked and not expired. It never carries the
+	// challenge or its digest.
+	ListScepChallenges(ctx context.Context, in *ListScepChallengesRequest, opts ...grpc.CallOption) (*ListScepChallengesResponse, error)
+	// RevokeScepChallenge withdraws a usable challenge by id before it is
+	// consumed. NotFound when the id is unknown, already consumed, revoked or
+	// expired.
+	RevokeScepChallenge(ctx context.Context, in *RevokeScepChallengeRequest, opts ...grpc.CallOption) (*RevokeScepChallengeResponse, error)
+	// ListScepEnrollments returns the initial enrolments waiting for an admin
+	// decision on profiles with require_approval set, oldest first.
+	ListScepEnrollments(ctx context.Context, in *ListScepEnrollmentsRequest, opts ...grpc.CallOption) (*ListScepEnrollmentsResponse, error)
+	// ApproveScepEnrollment issues the certificate for a waiting enrolment under
+	// its profile and returns its serial. The client collects it with its next
+	// CertPoll. NotFound when the id is not waiting. The request is checked
+	// again at approval, against the config and key floor in force then, and a
+	// request that no longer passes is refused with FailedPrecondition and stays
+	// queued for rejection.
+	ApproveScepEnrollment(ctx context.Context, in *ApproveScepEnrollmentRequest, opts ...grpc.CallOption) (*ApproveScepEnrollmentResponse, error)
+	// RejectScepEnrollment refuses a waiting enrolment. The client's next
+	// CertPoll is answered FAILURE. NotFound when the id is not waiting.
+	RejectScepEnrollment(ctx context.Context, in *RejectScepEnrollmentRequest, opts ...grpc.CallOption) (*RejectScepEnrollmentResponse, error)
 }
 
 type nodeServiceClient struct {
@@ -520,6 +553,66 @@ func (c *nodeServiceClient) Reboot(ctx context.Context, in *RebootRequest, opts 
 	return out, nil
 }
 
+func (c *nodeServiceClient) MintScepChallenge(ctx context.Context, in *MintScepChallengeRequest, opts ...grpc.CallOption) (*MintScepChallengeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MintScepChallengeResponse)
+	err := c.cc.Invoke(ctx, NodeService_MintScepChallenge_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nodeServiceClient) ListScepChallenges(ctx context.Context, in *ListScepChallengesRequest, opts ...grpc.CallOption) (*ListScepChallengesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListScepChallengesResponse)
+	err := c.cc.Invoke(ctx, NodeService_ListScepChallenges_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nodeServiceClient) RevokeScepChallenge(ctx context.Context, in *RevokeScepChallengeRequest, opts ...grpc.CallOption) (*RevokeScepChallengeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RevokeScepChallengeResponse)
+	err := c.cc.Invoke(ctx, NodeService_RevokeScepChallenge_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nodeServiceClient) ListScepEnrollments(ctx context.Context, in *ListScepEnrollmentsRequest, opts ...grpc.CallOption) (*ListScepEnrollmentsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListScepEnrollmentsResponse)
+	err := c.cc.Invoke(ctx, NodeService_ListScepEnrollments_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nodeServiceClient) ApproveScepEnrollment(ctx context.Context, in *ApproveScepEnrollmentRequest, opts ...grpc.CallOption) (*ApproveScepEnrollmentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ApproveScepEnrollmentResponse)
+	err := c.cc.Invoke(ctx, NodeService_ApproveScepEnrollment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nodeServiceClient) RejectScepEnrollment(ctx context.Context, in *RejectScepEnrollmentRequest, opts ...grpc.CallOption) (*RejectScepEnrollmentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RejectScepEnrollmentResponse)
+	err := c.cc.Invoke(ctx, NodeService_RejectScepEnrollment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NodeServiceServer is the server API for NodeService service.
 // All implementations should embed UnimplementedNodeServiceServer
 // for forward compatibility.
@@ -678,6 +771,33 @@ type NodeServiceServer interface {
 	// and served on the local socket; refused in maintenance mode. The caller
 	// must echo the node's CA CN, the same confirmation ActivateImage requires.
 	Reboot(context.Context, *RebootRequest) (*RebootResponse, error)
+	// MintScepChallenge creates a single-use challenge for one initial
+	// enrolment and returns it. The challenge is returned by this call only: the
+	// node stores a digest of it and no RPC reads it back, so a lost challenge is
+	// revoked and minted again. It is consumed by the first PKCSReq that
+	// presents it, whether that request is issued, refused or queued.
+	MintScepChallenge(context.Context, *MintScepChallengeRequest) (*MintScepChallengeResponse, error)
+	// ListScepChallenges returns the challenges that are still usable: minted,
+	// not yet consumed, not revoked and not expired. It never carries the
+	// challenge or its digest.
+	ListScepChallenges(context.Context, *ListScepChallengesRequest) (*ListScepChallengesResponse, error)
+	// RevokeScepChallenge withdraws a usable challenge by id before it is
+	// consumed. NotFound when the id is unknown, already consumed, revoked or
+	// expired.
+	RevokeScepChallenge(context.Context, *RevokeScepChallengeRequest) (*RevokeScepChallengeResponse, error)
+	// ListScepEnrollments returns the initial enrolments waiting for an admin
+	// decision on profiles with require_approval set, oldest first.
+	ListScepEnrollments(context.Context, *ListScepEnrollmentsRequest) (*ListScepEnrollmentsResponse, error)
+	// ApproveScepEnrollment issues the certificate for a waiting enrolment under
+	// its profile and returns its serial. The client collects it with its next
+	// CertPoll. NotFound when the id is not waiting. The request is checked
+	// again at approval, against the config and key floor in force then, and a
+	// request that no longer passes is refused with FailedPrecondition and stays
+	// queued for rejection.
+	ApproveScepEnrollment(context.Context, *ApproveScepEnrollmentRequest) (*ApproveScepEnrollmentResponse, error)
+	// RejectScepEnrollment refuses a waiting enrolment. The client's next
+	// CertPoll is answered FAILURE. NotFound when the id is not waiting.
+	RejectScepEnrollment(context.Context, *RejectScepEnrollmentRequest) (*RejectScepEnrollmentResponse, error)
 }
 
 // UnimplementedNodeServiceServer should be embedded to have
@@ -773,6 +893,24 @@ func (UnimplementedNodeServiceServer) GetImageStatus(context.Context, *GetImageS
 }
 func (UnimplementedNodeServiceServer) Reboot(context.Context, *RebootRequest) (*RebootResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Reboot not implemented")
+}
+func (UnimplementedNodeServiceServer) MintScepChallenge(context.Context, *MintScepChallengeRequest) (*MintScepChallengeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MintScepChallenge not implemented")
+}
+func (UnimplementedNodeServiceServer) ListScepChallenges(context.Context, *ListScepChallengesRequest) (*ListScepChallengesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListScepChallenges not implemented")
+}
+func (UnimplementedNodeServiceServer) RevokeScepChallenge(context.Context, *RevokeScepChallengeRequest) (*RevokeScepChallengeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RevokeScepChallenge not implemented")
+}
+func (UnimplementedNodeServiceServer) ListScepEnrollments(context.Context, *ListScepEnrollmentsRequest) (*ListScepEnrollmentsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListScepEnrollments not implemented")
+}
+func (UnimplementedNodeServiceServer) ApproveScepEnrollment(context.Context, *ApproveScepEnrollmentRequest) (*ApproveScepEnrollmentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ApproveScepEnrollment not implemented")
+}
+func (UnimplementedNodeServiceServer) RejectScepEnrollment(context.Context, *RejectScepEnrollmentRequest) (*RejectScepEnrollmentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RejectScepEnrollment not implemented")
 }
 func (UnimplementedNodeServiceServer) testEmbeddedByValue() {}
 
@@ -1298,6 +1436,114 @@ func _NodeService_Reboot_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NodeService_MintScepChallenge_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MintScepChallengeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).MintScepChallenge(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_MintScepChallenge_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).MintScepChallenge(ctx, req.(*MintScepChallengeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NodeService_ListScepChallenges_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListScepChallengesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).ListScepChallenges(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_ListScepChallenges_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).ListScepChallenges(ctx, req.(*ListScepChallengesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NodeService_RevokeScepChallenge_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevokeScepChallengeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).RevokeScepChallenge(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_RevokeScepChallenge_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).RevokeScepChallenge(ctx, req.(*RevokeScepChallengeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NodeService_ListScepEnrollments_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListScepEnrollmentsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).ListScepEnrollments(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_ListScepEnrollments_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).ListScepEnrollments(ctx, req.(*ListScepEnrollmentsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NodeService_ApproveScepEnrollment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ApproveScepEnrollmentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).ApproveScepEnrollment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_ApproveScepEnrollment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).ApproveScepEnrollment(ctx, req.(*ApproveScepEnrollmentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NodeService_RejectScepEnrollment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RejectScepEnrollmentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NodeServiceServer).RejectScepEnrollment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NodeService_RejectScepEnrollment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NodeServiceServer).RejectScepEnrollment(ctx, req.(*RejectScepEnrollmentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NodeService_ServiceDesc is the grpc.ServiceDesc for NodeService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1412,6 +1658,30 @@ var NodeService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Reboot",
 			Handler:    _NodeService_Reboot_Handler,
+		},
+		{
+			MethodName: "MintScepChallenge",
+			Handler:    _NodeService_MintScepChallenge_Handler,
+		},
+		{
+			MethodName: "ListScepChallenges",
+			Handler:    _NodeService_ListScepChallenges_Handler,
+		},
+		{
+			MethodName: "RevokeScepChallenge",
+			Handler:    _NodeService_RevokeScepChallenge_Handler,
+		},
+		{
+			MethodName: "ListScepEnrollments",
+			Handler:    _NodeService_ListScepEnrollments_Handler,
+		},
+		{
+			MethodName: "ApproveScepEnrollment",
+			Handler:    _NodeService_ApproveScepEnrollment_Handler,
+		},
+		{
+			MethodName: "RejectScepEnrollment",
+			Handler:    _NodeService_RejectScepEnrollment_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

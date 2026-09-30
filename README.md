@@ -24,7 +24,7 @@ Taskfile.yml             # fmt / lint / generate / test / ci targets
 | `identity.proto` | `Identity` — DER + PEM + leaf SHA-256 for the CA chain. |
 | `ceremony.proto` | `CeremonyEvent` stream messages + ceremony kind/event enums. |
 | `status.proto` | `NodeStatus` — role, identity state, TPM state, etcd state, boot count, the revocation preflight result (state, last error, when it was checked), the DNS resolver source and nameservers, the SNTP time-sync state (source, servers, last offset and sync, and the latest error), each enrolment protocol's configured and running state, and whether a stored config change is waiting for a reboot. |
-| `config.proto` | `MachineConfig` Phase 1 subset (role/network/storage/bootstrap/pki), plus the ACME, EST and SCEP enrolment blocks and the RFC 3161 time-stamp authority block on `Pki` (`acme`, `est`, `scep`, `tsa`), each with an explicit `enabled` switch that takes effect at the next boot. |
+| `config.proto` | `MachineConfig` Phase 1 subset (role/network/storage/bootstrap/pki), plus the ACME, EST and SCEP enrolment blocks, the RFC 3161 time-stamp authority block and the Windows autoenrolment (MS-XCEP/WSTEP) block on `Pki` (`acme`, `est`, `scep`, `tsa`, `windows_enrollment`), each with an explicit `enabled` switch that takes effect at the next boot. |
 | `scep.proto` | The SCEP challenge and approval-queue messages. A challenge is returned once, when it is minted, and no read carries it or its digest. |
 | `tsa.proto` | The TSA certificate messages `ListTsaCertificates` returns, kept after rotation so old timestamp tokens still verify. |
 | `audit.proto` | `AuditEvent` — hash-chained audit log entry shape. |

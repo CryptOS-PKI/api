@@ -144,7 +144,7 @@ Generated TypeScript stubs for `web/` live under `gen/ts/cryptos/` (Connect-ES v
 
 ## 🛠️ Contributing
 
-Requires Go 1.25+, [`buf`](https://buf.build/docs/installation), `npx`, and [`go-task`](https://taskfile.dev).
+Requires Go 1.26.8+, [`buf`](https://buf.build/docs/installation), `npx`, and [`go-task`](https://taskfile.dev).
 
 The codegen plugins are pinned, so every machine generates the same bytes. `task generate` installs `protoc-gen-go`, `protoc-gen-go-grpc` and `protoc-gen-connect-go` into `.bin/` at the versions set in `Taskfile.yml`, built with the pinned Go toolchain, and `buf.gen.yaml` runs them from there. Any copies on your `PATH` are ignored. Run `task generate` rather than a bare `buf generate`. To bump a plugin, change its version in `Taskfile.yml` and commit the regenerated tree in the same PR.
 

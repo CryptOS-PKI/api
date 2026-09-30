@@ -22,7 +22,7 @@ vars:
   # build drops the bare `//` line that earlier builds put before each oneof's
   # list of wrapper types, so the same plugin version gave different bytes on
   # different machines. Kept at the go directive in go.mod.
-  PLUGIN_GO_TOOLCHAIN: go1.25.0
+  PLUGIN_GO_TOOLCHAIN: go1.26.8
   TOOLS_BIN: '{{.ROOT_DIR}}/.bin'
 
 tasks:

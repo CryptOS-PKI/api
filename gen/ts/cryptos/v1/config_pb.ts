@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file cryptos/v1/config.proto.
  */
 export const file_cryptos_v1_config: GenFile = /*@__PURE__*/
-  fileDesc("ChdjcnlwdG9zL3YxL2NvbmZpZy5wcm90bxIKY3J5cHRvcy52MSKJAwoNTWFjaGluZUNvbmZpZxITCgthcGlfdmVyc2lvbhgBIAEoCRIMCgRraW5kGAIgASgJEiYKCG1ldGFkYXRhGAMgASgLMhQuY3J5cHRvcy52MS5NZXRhZGF0YRIeCgRyb2xlGAQgASgLMhAuY3J5cHRvcy52MS5Sb2xlEiQKB25ldHdvcmsYBSABKAsyEy5jcnlwdG9zLnYxLk5ldHdvcmsSJAoHc3RvcmFnZRgGIAEoCzITLmNyeXB0b3MudjEuU3RvcmFnZRIoCglib290c3RyYXAYByABKAsyFS5jcnlwdG9zLnYxLkJvb3RzdHJhcBIcCgNwa2kYCCABKAsyDy5jcnlwdG9zLnYxLlBraRIkCgdpbnN0YWxsGAkgASgLMhMuY3J5cHRvcy52MS5JbnN0YWxsEicKCXN0YXRlX2tleRgKIAEoCzIULmNyeXB0b3MudjEuU3RhdGVLZXkSKgoKbWFuYWdlbWVudBgLIAEoCzIWLmNyeXB0b3MudjEuTWFuYWdlbWVudCJWCgpNYW5hZ2VtZW50EhIKCm1hbmFnZXJfY24YASABKAkSEQoJdHJ1c3RfcGVtGAIgASgJEiEKGW9wZXJhdG9yX3N1cmZhY2VfcmVhZG9ubHkYAyABKAgiPgoIU3RhdGVLZXkSDAoEbW9kZRgBIAEoCRIkCgNrbXMYAiABKAsyFy5jcnlwdG9zLnYxLkttc1N0YXRlS2V5IjIKC0ttc1N0YXRlS2V5EhAKCGVuZHBvaW50GAEgASgJEhEKCXRydXN0X3BlbRgCIAEoCSIYCghNZXRhZGF0YRIMCgRuYW1lGAEgASgJIhQKBFJvbGUSDAoEa2luZBgBIAEoCSJjCgdOZXR3b3JrEhEKCWludGVyZmFjZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJEg8KB2dhdGV3YXkYAyABKAkSEwoLbmFtZXNlcnZlcnMYBCADKAkSDgoGc2VhcmNoGAUgAygJIjwKB1N0b3JhZ2USHQoVc3RhdGVfcGFydGl0aW9uX2xhYmVsGAEgASgJEhIKCmZpcnN0X2Jvb3QYAiABKAgiPgoJQm9vdHN0cmFwEhYKDmFkbWluX2NlcnRfcGVtGAEgASgJEhkKEWFkbWluX2NlcnRfc2hhMjU2GAIgASgJIvUCCgNQa2kSFAoMcm9vdF9rZXlfYWxnGAEgASgJEikKDHJvb3Rfc3ViamVjdBgCIAEoCzITLmNyeXB0b3MudjEuU3ViamVjdBIbChNyb290X3ZhbGlkaXR5X3llYXJzGAMgASgNEhsKE3BhdGhfbGVuX2NvbnN0cmFpbnQYBCABKA0SMAoIcHJvZmlsZXMYBSADKAsyHi5jcnlwdG9zLnYxLkNlcnRpZmljYXRlUHJvZmlsZRIiCgZwYXJlbnQYBiABKAsyEi5jcnlwdG9zLnYxLlBhcmVudBIbChNyZXZvY2F0aW9uX2Jhc2VfdXJsGAcgASgJEicKH2FsbG93X3VudmVyaWZpZWRfcmV2b2NhdGlvbl91cmwYCCABKAgSHQoVY3JsX25leHRfdXBkYXRlX2hvdXJzGAkgASgNEhwKFHJldm9jYXRpb25faHR0cF9wb3J0GAogASgNEhoKEnJvb3RfbGVhZl9pc3N1YW5jZRgLIAEoCSI1CgZQYXJlbnQSEwoLY2FfY2VydF9wZW0YASABKAkSFgoOY2FfY2VydF9zaGEyNTYYAiABKAki6AIKEkNlcnRpZmljYXRlUHJvZmlsZRIMCgRuYW1lGAEgASgJEg8KB2tleV9hbGcYAiABKAkSJAoHc3ViamVjdBgDIAEoCzITLmNyeXB0b3MudjEuU3ViamVjdBIVCg12YWxpZGl0eV9kYXlzGAQgASgNEjcKEWJhc2ljX2NvbnN0cmFpbnRzGAUgASgLMhwuY3J5cHRvcy52MS5CYXNpY0NvbnN0cmFpbnRzEhEKCWtleV91c2FnZRgGIAMoCRIVCg1leHRfa2V5X3VzYWdlGAcgAygJEikKBHNhbnMYCCABKAsyGy5jcnlwdG9zLnYxLlN1YmplY3RBbHROYW1lcxIzChBleHRyYV9leHRlbnNpb25zGAkgAygLMhkuY3J5cHRvcy52MS5YNTA5RXh0ZW5zaW9uEhoKEmFsbG93X3JlcXVlc3Rfc2FucxgKIAEoCBIXCg92YWxpZGl0eV9wb2xpY3kYCyABKAkiRQoQQmFzaWNDb25zdHJhaW50cxINCgVpc19jYRgBIAEoCBIVCghwYXRoX2xlbhgCIAEoDUgAiAEBQgsKCV9wYXRoX2xlbiJrCg9TdWJqZWN0QWx0TmFtZXMSCwoDZG5zGAEgAygJEgoKAmlwGAIgAygJEg0KBWVtYWlsGAMgAygJEgsKA3VyaRgEIAMoCRIWCg5rcmI1X3ByaW5jaXBhbBgFIAMoCRILCgN1cG4YBiADKAkiPQoNWDUwOUV4dGVuc2lvbhILCgNvaWQYASABKAkSEAoIY3JpdGljYWwYAiABKAgSDQoFdmFsdWUYAyABKAwiFwoHSW5zdGFsbBIMCgRkaXNrGAEgASgJImkKB1N1YmplY3QSEwoLY29tbW9uX25hbWUYASABKAkSFAoMb3JnYW5pemF0aW9uGAIgASgJEg8KB2NvdW50cnkYAyABKAkSEAoIcHJvdmluY2UYBCABKAkSEAoIbG9jYWxpdHkYBSABKAlCNFoyZ2l0aHViLmNvbS9DcnlwdE9TLVBLSS9hcGkvZ28vY3J5cHRvcy92MTtjcnlwdG9zdjFiBnByb3RvMw");
+  fileDesc("ChdjcnlwdG9zL3YxL2NvbmZpZy5wcm90bxIKY3J5cHRvcy52MSKJAwoNTWFjaGluZUNvbmZpZxITCgthcGlfdmVyc2lvbhgBIAEoCRIMCgRraW5kGAIgASgJEiYKCG1ldGFkYXRhGAMgASgLMhQuY3J5cHRvcy52MS5NZXRhZGF0YRIeCgRyb2xlGAQgASgLMhAuY3J5cHRvcy52MS5Sb2xlEiQKB25ldHdvcmsYBSABKAsyEy5jcnlwdG9zLnYxLk5ldHdvcmsSJAoHc3RvcmFnZRgGIAEoCzITLmNyeXB0b3MudjEuU3RvcmFnZRIoCglib290c3RyYXAYByABKAsyFS5jcnlwdG9zLnYxLkJvb3RzdHJhcBIcCgNwa2kYCCABKAsyDy5jcnlwdG9zLnYxLlBraRIkCgdpbnN0YWxsGAkgASgLMhMuY3J5cHRvcy52MS5JbnN0YWxsEicKCXN0YXRlX2tleRgKIAEoCzIULmNyeXB0b3MudjEuU3RhdGVLZXkSKgoKbWFuYWdlbWVudBgLIAEoCzIWLmNyeXB0b3MudjEuTWFuYWdlbWVudCJWCgpNYW5hZ2VtZW50EhIKCm1hbmFnZXJfY24YASABKAkSEQoJdHJ1c3RfcGVtGAIgASgJEiEKGW9wZXJhdG9yX3N1cmZhY2VfcmVhZG9ubHkYAyABKAgiPgoIU3RhdGVLZXkSDAoEbW9kZRgBIAEoCRIkCgNrbXMYAiABKAsyFy5jcnlwdG9zLnYxLkttc1N0YXRlS2V5IjIKC0ttc1N0YXRlS2V5EhAKCGVuZHBvaW50GAEgASgJEhEKCXRydXN0X3BlbRgCIAEoCSIYCghNZXRhZGF0YRIMCgRuYW1lGAEgASgJIhQKBFJvbGUSDAoEa2luZBgBIAEoCSJ4CgdOZXR3b3JrEhEKCWludGVyZmFjZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJEg8KB2dhdGV3YXkYAyABKAkSEwoLbmFtZXNlcnZlcnMYBCADKAkSDgoGc2VhcmNoGAUgAygJEhMKC250cF9zZXJ2ZXJzGAYgAygJIjwKB1N0b3JhZ2USHQoVc3RhdGVfcGFydGl0aW9uX2xhYmVsGAEgASgJEhIKCmZpcnN0X2Jvb3QYAiABKAgiPgoJQm9vdHN0cmFwEhYKDmFkbWluX2NlcnRfcGVtGAEgASgJEhkKEWFkbWluX2NlcnRfc2hhMjU2GAIgASgJIsoECgNQa2kSFAoMcm9vdF9rZXlfYWxnGAEgASgJEikKDHJvb3Rfc3ViamVjdBgCIAEoCzITLmNyeXB0b3MudjEuU3ViamVjdBIbChNyb290X3ZhbGlkaXR5X3llYXJzGAMgASgNEhsKE3BhdGhfbGVuX2NvbnN0cmFpbnQYBCABKA0SMAoIcHJvZmlsZXMYBSADKAsyHi5jcnlwdG9zLnYxLkNlcnRpZmljYXRlUHJvZmlsZRIiCgZwYXJlbnQYBiABKAsyEi5jcnlwdG9zLnYxLlBhcmVudBIbChNyZXZvY2F0aW9uX2Jhc2VfdXJsGAcgASgJEicKH2FsbG93X3VudmVyaWZpZWRfcmV2b2NhdGlvbl91cmwYCCABKAgSHQoVY3JsX25leHRfdXBkYXRlX2hvdXJzGAkgASgNEhwKFHJldm9jYXRpb25faHR0cF9wb3J0GAogASgNEhoKEnJvb3RfbGVhZl9pc3N1YW5jZRgLIAEoCRIcChRhbGxvd191bnN5bmNlZF9jbG9jaxgMIAEoCBIeCgRhY21lGA0gASgLMhAuY3J5cHRvcy52MS5BY21lEhwKA2VzdBgOIAEoCzIPLmNyeXB0b3MudjEuRXN0Eh4KBHNjZXAYDyABKAsyEC5jcnlwdG9zLnYxLlNjZXASHAoDdHNhGBAgASgLMg8uY3J5cHRvcy52MS5Uc2ESOQoSd2luZG93c19lbnJvbGxtZW50GBEgASgLMh0uY3J5cHRvcy52MS5XaW5kb3dzRW5yb2xsbWVudCKbAgoEQWNtZRIPCgdlbmFibGVkGAEgASgIEhAKCGJhc2VfdXJsGAIgASgJEhEKCWh0dHBfcG9ydBgDIAEoDRIPCgdwcm9maWxlGAQgASgJEhgKEHRlcm1zX29mX3NlcnZpY2UYBSABKAkSDwoHd2Vic2l0ZRgGIAEoCRIgChhhbGxvd19hbm9ueW1vdXNfYWNjb3VudHMYByABKAgSQQoVZXh0ZXJuYWxfYWNjb3VudF9rZXlzGAggAygLMiIuY3J5cHRvcy52MS5BY21lRXh0ZXJuYWxBY2NvdW50S2V5EiMKG2FsbG93ZWRfaWRlbnRpZmllcl9zdWZmaXhlcxgJIAMoCRIXCg9vcmRlcl90dGxfaG91cnMYCiABKA0iQQoWQWNtZUV4dGVybmFsQWNjb3VudEtleRIOCgZrZXlfaWQYASABKAkSFwoPaG1hY19rZXlfYmFzZTY0GAIgASgJIusBCgNFc3QSDwoHZW5hYmxlZBgBIAEoCBIRCglob3N0bmFtZXMYAiADKAkSEQoJaHR0cF9wb3J0GAMgASgNEg8KB3Byb2ZpbGUYBCABKAkSDQoFbGFiZWwYBSABKAkSDQoFcmVhbG0YBiABKAkSIwobYWxsb3dlZF9pZGVudGlmaWVyX3N1ZmZpeGVzGAcgAygJEhwKFGFsbG93X2FueV9pZGVudGlmaWVyGAggASgIEjsKEmVucm9sbF9jcmVkZW50aWFscxgJIAMoCzIfLmNyeXB0b3MudjEuRXN0RW5yb2xsQ3JlZGVudGlhbCJAChNFc3RFbnJvbGxDcmVkZW50aWFsEhAKCHVzZXJuYW1lGAEgASgJEhcKD3Bhc3N3b3JkX3NoYTI1NhgCIAEoCSKaAQoEU2NlcBIPCgdlbmFibGVkGAEgASgIEhEKCWh0dHBfcG9ydBgCIAEoDRIpCghwcm9maWxlcxgDIAMoCzIXLmNyeXB0b3MudjEuU2NlcFByb2ZpbGUSIwobYWxsb3dlZF9pZGVudGlmaWVyX3N1ZmZpeGVzGAQgAygJEh4KAnJhGAUgASgLMhIuY3J5cHRvcy52MS5TY2VwUmEiUgoLU2NlcFByb2ZpbGUSDwoHcHJvZmlsZRgBIAEoCRIYChBtaW5fcnNhX2tleV9iaXRzGAIgASgNEhgKEHJlcXVpcmVfYXBwcm92YWwYAyABKAgiPgoGU2NlcFJhEhUKDXZhbGlkaXR5X2RheXMYASABKA0SHQoVcm90YXRpb25fb3ZlcmxhcF9kYXlzGAIgASgNItMBCgNUc2ESDwoHZW5hYmxlZBgBIAEoCBIRCglodHRwX3BvcnQYAiABKA0SEgoKcG9saWN5X29pZBgDIAEoCRITCgthY2N1cmFjeV9tcxgEIAEoDRIsCgpyYXRlX2xpbWl0GAUgASgLMhguY3J5cHRvcy52MS5Uc2FSYXRlTGltaXQSGAoQYWxsb3dlZF9uZXR3b3JrcxgGIAMoCRI3CgtjZXJ0aWZpY2F0ZRgHIAEoCzIiLmNyeXB0b3MudjEuVHNhQ2VydGlmaWNhdGVTZXR0aW5ncyI6CgxUc2FSYXRlTGltaXQSGwoTcmVxdWVzdHNfcGVyX21pbnV0ZRgBIAEoDRINCgVidXJzdBgCIAEoDSJOChZUc2FDZXJ0aWZpY2F0ZVNldHRpbmdzEhUKDXZhbGlkaXR5X2RheXMYASABKA0SHQoVcm90YXRpb25fb3ZlcmxhcF9kYXlzGAIgASgNIrECChFXaW5kb3dzRW5yb2xsbWVudBIPCgdlbmFibGVkGAEgASgIEhEKCWhvc3RuYW1lcxgCIAMoCRISCgpodHRwc19wb3J0GAMgASgNEhMKC3BvbGljeV9wYXRoGAQgASgJEhcKD2Vucm9sbG1lbnRfcGF0aBgFIAEoCRIUCgxyZW5ld2FsX3BhdGgYBiABKAkSLQoIa2VyYmVyb3MYByABKAsyGy5jcnlwdG9zLnYxLldpbmRvd3NLZXJiZXJvcxIlCgRsZGFwGAggASgLMhcuY3J5cHRvcy52MS5XaW5kb3dzTGRhcBIuCgl0ZW1wbGF0ZXMYCSADKAsyGy5jcnlwdG9zLnYxLldpbmRvd3NUZW1wbGF0ZRIaChJvbWl0X3NpZF9leHRlbnNpb24YCiABKAgiSwoPV2luZG93c0tlcmJlcm9zEg0KBXJlYWxtGAEgASgJEhkKEXNlcnZpY2VfcHJpbmNpcGFsGAIgASgJEg4KBmtleXRhYhgDIAEoDCJrCgtXaW5kb3dzTGRhcBIMCgR1cmxzGAEgAygJEikKBGJpbmQYAiABKAsyGy5jcnlwdG9zLnYxLldpbmRvd3NMZGFwQmluZBIQCghiYXNlX2RucxgDIAMoCRIRCgl0cnVzdF9wZW0YBCABKAkiVQoPV2luZG93c0xkYXBCaW5kEgwKBG1vZGUYASABKAkSDwoHYmluZF9kbhgCIAEoCRIQCghwYXNzd29yZBgDIAEoCRIRCglwcmluY2lwYWwYBCABKAkioQEKD1dpbmRvd3NUZW1wbGF0ZRIMCgRuYW1lGAEgASgJEg8KB3Byb2ZpbGUYAiABKAkSFwoPZW5yb2xsbWVudF90eXBlGAMgASgJEiEKGWFsbG93X2NlcnRpZmljYXRlX3JlbmV3YWwYBCABKAgSFgoOYWxsb3dlZF9ncm91cHMYBSADKAkSGwoTcmVuZXdhbF9wZXJpb2RfZGF5cxgGIAEoDSI1CgZQYXJlbnQSEwoLY2FfY2VydF9wZW0YASABKAkSFgoOY2FfY2VydF9zaGEyNTYYAiABKAki6AIKEkNlcnRpZmljYXRlUHJvZmlsZRIMCgRuYW1lGAEgASgJEg8KB2tleV9hbGcYAiABKAkSJAoHc3ViamVjdBgDIAEoCzITLmNyeXB0b3MudjEuU3ViamVjdBIVCg12YWxpZGl0eV9kYXlzGAQgASgNEjcKEWJhc2ljX2NvbnN0cmFpbnRzGAUgASgLMhwuY3J5cHRvcy52MS5CYXNpY0NvbnN0cmFpbnRzEhEKCWtleV91c2FnZRgGIAMoCRIVCg1leHRfa2V5X3VzYWdlGAcgAygJEikKBHNhbnMYCCABKAsyGy5jcnlwdG9zLnYxLlN1YmplY3RBbHROYW1lcxIzChBleHRyYV9leHRlbnNpb25zGAkgAygLMhkuY3J5cHRvcy52MS5YNTA5RXh0ZW5zaW9uEhoKEmFsbG93X3JlcXVlc3Rfc2FucxgKIAEoCBIXCg92YWxpZGl0eV9wb2xpY3kYCyABKAkiRQoQQmFzaWNDb25zdHJhaW50cxINCgVpc19jYRgBIAEoCBIVCghwYXRoX2xlbhgCIAEoDUgAiAEBQgsKCV9wYXRoX2xlbiJrCg9TdWJqZWN0QWx0TmFtZXMSCwoDZG5zGAEgAygJEgoKAmlwGAIgAygJEg0KBWVtYWlsGAMgAygJEgsKA3VyaRgEIAMoCRIWCg5rcmI1X3ByaW5jaXBhbBgFIAMoCRILCgN1cG4YBiADKAkiPQoNWDUwOUV4dGVuc2lvbhILCgNvaWQYASABKAkSEAoIY3JpdGljYWwYAiABKAgSDQoFdmFsdWUYAyABKAwiFwoHSW5zdGFsbBIMCgRkaXNrGAEgASgJImkKB1N1YmplY3QSEwoLY29tbW9uX25hbWUYASABKAkSFAoMb3JnYW5pemF0aW9uGAIgASgJEg8KB2NvdW50cnkYAyABKAkSEAoIcHJvdmluY2UYBCABKAkSEAoIbG9jYWxpdHkYBSABKAlCNFoyZ2l0aHViLmNvbS9DcnlwdE9TLVBLSS9hcGkvZ28vY3J5cHRvcy92MTtjcnlwdG9zdjFiBnByb3RvMw");
 
 /**
  * MachineConfig is the declarative configuration applied via ApplyConfig.
@@ -262,6 +262,17 @@ export type Network = Message<"cryptos.v1.Network"> & {
    * @generated from field: repeated string search = 5;
    */
   search: string[];
+
+  /**
+   * ntp_servers are the SNTP servers the node keeps its clock in sync with, at
+   * most three, each an IPv4 literal or a hostname. A hostname is resolved
+   * through the node resolver at each sync. Empty means the node uses the NTP
+   * servers its DHCP lease supplied (option 42), if any; with neither, the node
+   * runs on its hardware clock.
+   *
+   * @generated from field: repeated string ntp_servers = 6;
+   */
+  ntpServers: string[];
 };
 
 /**
@@ -323,7 +334,25 @@ export const BootstrapSchema: GenMessage<Bootstrap> = /*@__PURE__*/
  */
 export type Pki = Message<"cryptos.v1.Pki"> & {
   /**
-   * Phase 1: must be "ECDSA-P384" for Roots.
+   * root_key_alg is the algorithm of this node's own CA key, on a Root and on
+   * a subordinate (intermediate or issuing) alike, and so also the signature
+   * algorithm of every certificate the node issues. Accepted values are
+   * "ECDSA-P384", "RSA-3072" and "RSA-4096"; anything else is rejected when
+   * the config is validated. RSA is there so a platform CA that accepts only
+   * RSA-signed chains can be subordinated under this node.
+   *
+   * "RSA-2048" is rejected even though a 2048-bit key could sign: a node
+   * certifies a subject key (its own when a Root self-signs, or the key in a
+   * CSR it signs) only when it is ECDSA P-384 or RSA of at least 3072 bits, so
+   * a 2048-bit CA key would pass validation and then fail at the ceremony or
+   * at subordination.
+   *
+   * An RSA CA key cannot be held in the TPM: with state_key.mode "tpm" (or an
+   * empty mode on a build that defaults to it) the key is refused when it is
+   * created, at the Root ceremony or a subordinate's first boot, and the node
+   * does not fall back to another algorithm. Use state_key.mode "nodeid" or
+   * "kms" for an RSA CA, where the key is kept in software on the encrypted
+   * state partition.
    *
    * @generated from field: string root_key_alg = 1;
    */
@@ -403,6 +432,57 @@ export type Pki = Message<"cryptos.v1.Pki"> & {
    * @generated from field: string root_leaf_issuance = 11;
    */
   rootLeafIssuance: string;
+
+  /**
+   * allow_unsynced_clock overrides the fail-closed clock gate. While a time
+   * source is configured (network.ntp_servers or a DHCP lease) but the node
+   * has not yet synced its clock this boot, certificate signing is refused;
+   * true lets it proceed on the unsynced clock. A node with no time source is
+   * never gated, and CRL and OCSP generation are never gated.
+   *
+   * @generated from field: bool allow_unsynced_clock = 12;
+   */
+  allowUnsyncedClock: boolean;
+
+  /**
+   * acme configures the RFC 8555 enrolment endpoint. See "Protocol blocks"
+   * below for how an absent block, enabled=false and enabled=true apply.
+   *
+   * @generated from field: cryptos.v1.Acme acme = 13;
+   */
+  acme?: Acme | undefined;
+
+  /**
+   * est configures the RFC 7030 enrolment endpoint, applied the same way as
+   * acme.
+   *
+   * @generated from field: cryptos.v1.Est est = 14;
+   */
+  est?: Est | undefined;
+
+  /**
+   * scep configures the RFC 8894 enrolment endpoint, applied the same way as
+   * acme.
+   *
+   * @generated from field: cryptos.v1.Scep scep = 15;
+   */
+  scep?: Scep | undefined;
+
+  /**
+   * tsa configures the RFC 3161 time-stamp authority, applied the same way as
+   * acme.
+   *
+   * @generated from field: cryptos.v1.Tsa tsa = 16;
+   */
+  tsa?: Tsa | undefined;
+
+  /**
+   * windows_enrollment configures the Windows autoenrolment endpoints
+   * (MS-XCEP policy and MS-WSTEP enrolment), applied the same way as acme.
+   *
+   * @generated from field: cryptos.v1.WindowsEnrollment windows_enrollment = 17;
+   */
+  windowsEnrollment?: WindowsEnrollment | undefined;
 };
 
 /**
@@ -411,6 +491,985 @@ export type Pki = Message<"cryptos.v1.Pki"> & {
  */
 export const PkiSchema: GenMessage<Pki> = /*@__PURE__*/
   messageDesc(file_cryptos_v1_config, 9);
+
+/**
+ * Acme is the node's RFC 8555 server.
+ *
+ * @generated from message cryptos.v1.Acme
+ */
+export type Acme = Message<"cryptos.v1.Acme"> & {
+  /**
+   * enabled switches the ACME listener on at the next boot.
+   *
+   * @generated from field: bool enabled = 1;
+   */
+  enabled: boolean;
+
+  /**
+   * base_url is the externally reachable base under which the ACME endpoints
+   * live, for example "https://ca.example.org/acme". Every URL handed to a
+   * client is built from it and every request's signed url header is checked
+   * against it, so it must be what clients dial rather than what the node
+   * binds. Required when enabled.
+   *
+   * @generated from field: string base_url = 2;
+   */
+  baseUrl: string;
+
+  /**
+   * http_port is the TCP port the ACME listener binds. Zero means the node
+   * default. ACME is normally fronted by TLS, so this listener is plain HTTP
+   * and separate from revocation_http_port.
+   *
+   * @generated from field: uint32 http_port = 3;
+   */
+  httpPort: number;
+
+  /**
+   * profile names the non-CA certificate profile in Pki.profiles that ACME
+   * issues under. Required when enabled; there is no default.
+   *
+   * @generated from field: string profile = 4;
+   */
+  profile: string;
+
+  /**
+   * terms_of_service, when set, is advertised in the directory and a new
+   * account must agree to it.
+   *
+   * @generated from field: string terms_of_service = 5;
+   */
+  termsOfService: string;
+
+  /**
+   * website is advertised in the directory meta.
+   *
+   * @generated from field: string website = 6;
+   */
+  website: string;
+
+  /**
+   * allow_anonymous_accounts drops the External Account Binding requirement
+   * (RFC 8555 section 7.3.4), so anyone who can answer an http-01 challenge can
+   * register and order. Off by default.
+   *
+   * @generated from field: bool allow_anonymous_accounts = 7;
+   */
+  allowAnonymousAccounts: boolean;
+
+  /**
+   * external_account_keys are the External Account Binding credentials. At
+   * least one is required when enabled, unless allow_anonymous_accounts is set.
+   *
+   * @generated from field: repeated cryptos.v1.AcmeExternalAccountKey external_account_keys = 8;
+   */
+  externalAccountKeys: AcmeExternalAccountKey[];
+
+  /**
+   * allowed_identifier_suffixes, when non-empty, restricts the DNS names the
+   * node orders for: a name must equal, or be a subdomain of, one of these.
+   * Empty places no name restriction beyond proof of control and the account
+   * binding.
+   *
+   * @generated from field: repeated string allowed_identifier_suffixes = 9;
+   */
+  allowedIdentifierSuffixes: string[];
+
+  /**
+   * order_ttl_hours is how long an order and its authorizations stay valid.
+   * Zero means the node default.
+   *
+   * @generated from field: uint32 order_ttl_hours = 10;
+   */
+  orderTtlHours: number;
+};
+
+/**
+ * Describes the message cryptos.v1.Acme.
+ * Use `create(AcmeSchema)` to create a new message.
+ */
+export const AcmeSchema: GenMessage<Acme> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 10);
+
+/**
+ * AcmeExternalAccountKey is one External Account Binding credential.
+ *
+ * @generated from message cryptos.v1.AcmeExternalAccountKey
+ */
+export type AcmeExternalAccountKey = Message<"cryptos.v1.AcmeExternalAccountKey"> & {
+  /**
+   * key_id is the identifier the client sends as the binding's kid. Unique
+   * within the block.
+   *
+   * @generated from field: string key_id = 1;
+   */
+  keyId: string;
+
+  /**
+   * hmac_key_base64 is the shared HMAC secret, base64url-encoded without
+   * padding, at least 32 bytes decoded. Write-only: GetConfig returns it empty.
+   *
+   * @generated from field: string hmac_key_base64 = 2;
+   */
+  hmacKeyBase64: string;
+};
+
+/**
+ * Describes the message cryptos.v1.AcmeExternalAccountKey.
+ * Use `create(AcmeExternalAccountKeySchema)` to create a new message.
+ */
+export const AcmeExternalAccountKeySchema: GenMessage<AcmeExternalAccountKey> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 11);
+
+/**
+ * Est is the node's RFC 7030 server. It terminates TLS itself, with a server
+ * certificate the node mints from its own CA for hostnames, because
+ * simplereenroll authenticates with a TLS client certificate.
+ *
+ * @generated from message cryptos.v1.Est
+ */
+export type Est = Message<"cryptos.v1.Est"> & {
+  /**
+   * enabled switches the EST listener on at the next boot.
+   *
+   * @generated from field: bool enabled = 1;
+   */
+  enabled: boolean;
+
+  /**
+   * hostnames are the DNS names and IP literals clients reach the endpoint on,
+   * stamped into the listener's server certificate. At least one is required
+   * when enabled.
+   *
+   * @generated from field: repeated string hostnames = 2;
+   */
+  hostnames: string[];
+
+  /**
+   * http_port is the TCP port the EST listener binds. Zero means the node
+   * default.
+   *
+   * @generated from field: uint32 http_port = 3;
+   */
+  httpPort: number;
+
+  /**
+   * profile names the non-CA certificate profile in Pki.profiles that EST
+   * issues under. Required when enabled.
+   *
+   * @generated from field: string profile = 4;
+   */
+  profile: string;
+
+  /**
+   * label is the optional path segment between /.well-known/est and the
+   * operation (RFC 7030 section 3.2.2), a single segment. Empty serves the
+   * unlabelled paths.
+   *
+   * @generated from field: string label = 5;
+   */
+  label: string;
+
+  /**
+   * realm is the HTTP Basic realm offered when simpleenroll challenges.
+   *
+   * @generated from field: string realm = 6;
+   */
+  realm: string;
+
+  /**
+   * allowed_identifier_suffixes restricts the names simpleenroll issues for: a
+   * name must equal, or be a subdomain of, one of these. It does not restrict
+   * simplereenroll, whose names are pinned to the certificate the client
+   * already holds. Required when enroll_credentials is set, unless
+   * allow_any_identifier is true.
+   *
+   * @generated from field: repeated string allowed_identifier_suffixes = 7;
+   */
+  allowedIdentifierSuffixes: string[];
+
+  /**
+   * allow_any_identifier drops that restriction. simpleenroll proves nothing
+   * about control of a name, so without an allowlist one leaked credential
+   * mints a certificate for any name.
+   *
+   * @generated from field: bool allow_any_identifier = 8;
+   */
+  allowAnyIdentifier: boolean;
+
+  /**
+   * enroll_credentials are the HTTP Basic credentials that authorize
+   * simpleenroll. Empty keeps simpleenroll closed and offers
+   * certificate-authenticated renewal (simplereenroll) only.
+   *
+   * @generated from field: repeated cryptos.v1.EstEnrollCredential enroll_credentials = 9;
+   */
+  enrollCredentials: EstEnrollCredential[];
+};
+
+/**
+ * Describes the message cryptos.v1.Est.
+ * Use `create(EstSchema)` to create a new message.
+ */
+export const EstSchema: GenMessage<Est> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 12);
+
+/**
+ * EstEnrollCredential is one simpleenroll credential.
+ *
+ * @generated from message cryptos.v1.EstEnrollCredential
+ */
+export type EstEnrollCredential = Message<"cryptos.v1.EstEnrollCredential"> & {
+  /**
+   * username is the HTTP Basic user name. Unique within the block.
+   *
+   * @generated from field: string username = 1;
+   */
+  username: string;
+
+  /**
+   * password_sha256 is the lowercase hex SHA-256 of the password, so the node
+   * never stores a live credential. The password must be a generated
+   * high-entropy value, because a digest of a chosen word falls to a
+   * dictionary. Write-only: GetConfig returns it empty.
+   *
+   * @generated from field: string password_sha256 = 2;
+   */
+  passwordSha256: string;
+};
+
+/**
+ * Describes the message cryptos.v1.EstEnrollCredential.
+ * Use `create(EstEnrollCredentialSchema)` to create a new message.
+ */
+export const EstEnrollCredentialSchema: GenMessage<EstEnrollCredential> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 13);
+
+/**
+ * Scep is the node's RFC 8894 server. It is plain HTTP, as the RFC intends:
+ * the CMS envelope carries confidentiality and integrity. Clients encrypt
+ * requests to, and verify responses from, an RA certificate the node mints
+ * from its own CA, so the CA key only ever signs certificates.
+ *
+ * Initial enrolment (PKCSReq) is authorized by a one-time challenge minted
+ * with NodeService.MintScepChallenge. Renewal (RenewalReq) is authorized by
+ * the client's current certificate, which must chain to this node's CA and not
+ * be revoked, and the renewed certificate keeps that certificate's names.
+ * There is no static shared challenge, by design: one secret configured for
+ * every device would let anyone who lifts it from one device enrol as any.
+ *
+ * @generated from message cryptos.v1.Scep
+ */
+export type Scep = Message<"cryptos.v1.Scep"> & {
+  /**
+   * enabled switches the SCEP listener on at the next boot.
+   *
+   * @generated from field: bool enabled = 1;
+   */
+  enabled: boolean;
+
+  /**
+   * http_port is the TCP port the SCEP listener binds. Zero means the node
+   * default.
+   *
+   * @generated from field: uint32 http_port = 2;
+   */
+  httpPort: number;
+
+  /**
+   * profiles are the certificate profiles SCEP issues from, each with its own
+   * key floor and approval switch. At least one is required when enabled, and
+   * a profile name appears at most once. A challenge names the profile its
+   * enrolment issues from; a renewal issues from the profile of the
+   * certificate being renewed.
+   *
+   * @generated from field: repeated cryptos.v1.ScepProfile profiles = 3;
+   */
+  profiles: ScepProfile[];
+
+  /**
+   * allowed_identifier_suffixes restricts the names an initial enrolment
+   * issues for: every DNS name in the request, and the subject common name,
+   * must equal, or be a subdomain of, one of these. Required when enabled;
+   * unlike EST there is no switch to drop it, because a challenge proves
+   * nothing about control of a name. It does not restrict renewal, whose names
+   * are pinned to the certificate the client already holds.
+   *
+   * @generated from field: repeated string allowed_identifier_suffixes = 4;
+   */
+  allowedIdentifierSuffixes: string[];
+
+  /**
+   * ra configures the RA certificate that decrypts requests and signs
+   * responses. Unset means the defaults below.
+   *
+   * @generated from field: cryptos.v1.ScepRa ra = 5;
+   */
+  ra?: ScepRa | undefined;
+};
+
+/**
+ * Describes the message cryptos.v1.Scep.
+ * Use `create(ScepSchema)` to create a new message.
+ */
+export const ScepSchema: GenMessage<Scep> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 14);
+
+/**
+ * ScepProfile is one certificate profile SCEP may issue from.
+ *
+ * @generated from message cryptos.v1.ScepProfile
+ */
+export type ScepProfile = Message<"cryptos.v1.ScepProfile"> & {
+  /**
+   * profile names a non-CA certificate profile in Pki.profiles. Required.
+   *
+   * @generated from field: string profile = 1;
+   */
+  profile: string;
+
+  /**
+   * min_rsa_key_bits is the smallest RSA subject key this profile accepts over
+   * SCEP. Zero means 3072, the node-wide floor. 2048 is the lowest value
+   * accepted, for devices that cannot hold a larger key (Cisco IOS and IOS-XE
+   * trustpoints are limited to RSA 2048), and a value below it is rejected.
+   * Stronger RSA keys and ECDSA P-384 keys are always accepted. The floor
+   * applies only to certificates this profile issues over SCEP: the node's
+   * own CA, RA and listener keys stay RSA 3072 or larger, or ECDSA P-384, and
+   * other issuance paths keep the node-wide floor.
+   *
+   * @generated from field: uint32 min_rsa_key_bits = 2;
+   */
+  minRsaKeyBits: number;
+
+  /**
+   * require_approval holds every initial enrolment for this profile in a
+   * queue: the client is answered PENDING and polls (CertPoll) until an admin
+   * approves or rejects it with ApproveScepEnrollment or RejectScepEnrollment.
+   * Off by default, where the one-time challenge is the approval and the node
+   * issues or refuses on the spot. Renewals are never queued.
+   *
+   * @generated from field: bool require_approval = 3;
+   */
+  requireApproval: boolean;
+};
+
+/**
+ * Describes the message cryptos.v1.ScepProfile.
+ * Use `create(ScepProfileSchema)` to create a new message.
+ */
+export const ScepProfileSchema: GenMessage<ScepProfile> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 15);
+
+/**
+ * ScepRa configures the node's SCEP RA certificate. The RA key is RSA 3072
+ * (key transport needs an RSA recipient) with key usage digitalSignature and
+ * keyEncipherment, sealed on the state partition and never in the clear.
+ *
+ * @generated from message cryptos.v1.ScepRa
+ */
+export type ScepRa = Message<"cryptos.v1.ScepRa"> & {
+  /**
+   * validity_days is the RA certificate's lifetime. Zero means 365, which is
+   * also the most accepted.
+   *
+   * @generated from field: uint32 validity_days = 1;
+   */
+  validityDays: number;
+
+  /**
+   * rotation_overlap_days is how long before the RA certificate expires the
+   * node mints its successor. During the overlap GetCACert offers the new RA,
+   * and requests encrypted to either the old or the new RA decrypt, so a
+   * device that cached the old certificate still enrols. Zero means 30. Must
+   * be less than validity_days.
+   *
+   * @generated from field: uint32 rotation_overlap_days = 2;
+   */
+  rotationOverlapDays: number;
+};
+
+/**
+ * Describes the message cryptos.v1.ScepRa.
+ * Use `create(ScepRaSchema)` to create a new message.
+ */
+export const ScepRaSchema: GenMessage<ScepRa> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 16);
+
+/**
+ * Tsa is the node's RFC 3161 time-stamp authority, for signatures that must
+ * keep verifying after their signing certificate expires (code signing). It
+ * answers HTTP POST requests of type application/timestamp-query on the root
+ * path of its listener with application/timestamp-reply, in plain HTTP as the
+ * RFC allows: the signed token carries its own integrity and there is nothing
+ * confidential in it. It is open to any client the rate limit and
+ * allowed_networks let through; RFC 3161 has no client authentication.
+ *
+ * Tokens are signed by a separate TSA certificate the node issues from its own
+ * CA, with a critical id-kp-timeStamping extended key usage, so the CA key
+ * never signs a token. The TSA key has the same algorithm as the CA key and is
+ * held in the TPM where the node has one, in software otherwise, like the CA
+ * key. Only an Intermediate or Issuing node serves a TSA.
+ *
+ * Accepted message imprint hashes are SHA-256, SHA-384 and SHA-512. SHA-1, MD5
+ * and any other algorithm are refused with failInfo badAlg.
+ *
+ * The TSA fails closed on its clock: while the node's time sync
+ * (NodeStatus.time_sync) has not synced this boot, or its sources disagree,
+ * every request is refused with failInfo timeNotAvailable. The clock override
+ * that lets certificate signing run unsynced does not apply here, because a
+ * timestamp is nothing but a claim about the time. A node with no time source
+ * never syncs, so its TSA refuses every request.
+ *
+ * @generated from message cryptos.v1.Tsa
+ */
+export type Tsa = Message<"cryptos.v1.Tsa"> & {
+  /**
+   * enabled switches the TSA listener on at the next boot. It is rejected
+   * while policy_oid is empty, so the TSA stays off until the operator sets
+   * their own policy.
+   *
+   * @generated from field: bool enabled = 1;
+   */
+  enabled: boolean;
+
+  /**
+   * http_port is the TCP port the TSA listener binds. Zero means the node
+   * default.
+   *
+   * @generated from field: uint32 http_port = 2;
+   */
+  httpPort: number;
+
+  /**
+   * policy_oid is the TSA policy every token names (RFC 3161 section 2.4.2),
+   * in dotted form, for example "1.3.6.1.4.1.<PEN>.<arc>" under the operator's
+   * own IANA Private Enterprise Number. Required when enabled; there is no
+   * default, so no two deployments share a policy by accident. It must be a
+   * valid object identifier: at least two arcs, decimal with no leading zeros,
+   * a first arc of 0, 1 or 2, and a second arc below 40 when the first is 0 or
+   * 1. A request that asks for a different policy (reqPolicy) is refused with
+   * failInfo unacceptedPolicy.
+   *
+   * @generated from field: string policy_oid = 3;
+   */
+  policyOid: string;
+
+  /**
+   * accuracy_ms is the accuracy the TSA claims in every token (the Accuracy
+   * field, RFC 3161 section 2.4.2), in milliseconds either side of genTime.
+   * Zero means 1000. Values above 60000 are rejected. The claim is checked
+   * against the clock: while the offset of the latest time sync
+   * (NodeStatus.time_sync.last_offset) is larger than accuracy_ms, the TSA
+   * refuses requests with timeNotAvailable rather than claim an accuracy the
+   * clock does not have.
+   *
+   * @generated from field: uint32 accuracy_ms = 4;
+   */
+  accuracyMs: number;
+
+  /**
+   * rate_limit bounds how often one client may ask for a token. Unset means
+   * the defaults below; the limit cannot be switched off.
+   *
+   * @generated from field: cryptos.v1.TsaRateLimit rate_limit = 5;
+   */
+  rateLimit?: TsaRateLimit | undefined;
+
+  /**
+   * allowed_networks, when non-empty, are the only client networks the TSA
+   * answers, as IPv4 or IPv6 CIDR prefixes ("10.0.0.0/8", "2001:db8::/32"); a
+   * bare address means that one host. A client outside them is refused with
+   * HTTP 403 before its request is read. Empty answers any client.
+   *
+   * @generated from field: repeated string allowed_networks = 6;
+   */
+  allowedNetworks: string[];
+
+  /**
+   * certificate configures the TSA certificate's lifetime and rotation. Unset
+   * means the defaults below.
+   *
+   * @generated from field: cryptos.v1.TsaCertificateSettings certificate = 7;
+   */
+  certificate?: TsaCertificateSettings | undefined;
+};
+
+/**
+ * Describes the message cryptos.v1.Tsa.
+ * Use `create(TsaSchema)` to create a new message.
+ */
+export const TsaSchema: GenMessage<Tsa> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 17);
+
+/**
+ * TsaRateLimit is a per-client token bucket. A client is its source IPv4
+ * address, or its IPv6 /64, so hopping addresses inside one allocation does
+ * not reset the bucket. A client over its limit gets HTTP 429 with a
+ * Retry-After header, and the request is not read.
+ *
+ * @generated from message cryptos.v1.TsaRateLimit
+ */
+export type TsaRateLimit = Message<"cryptos.v1.TsaRateLimit"> & {
+  /**
+   * requests_per_minute is the steady rate one client may sustain. Zero means
+   * 60.
+   *
+   * @generated from field: uint32 requests_per_minute = 1;
+   */
+  requestsPerMinute: number;
+
+  /**
+   * burst is how many requests a client may make at once before the rate
+   * applies. Zero means requests_per_minute.
+   *
+   * @generated from field: uint32 burst = 2;
+   */
+  burst: number;
+};
+
+/**
+ * Describes the message cryptos.v1.TsaRateLimit.
+ * Use `create(TsaRateLimitSchema)` to create a new message.
+ */
+export const TsaRateLimitSchema: GenMessage<TsaRateLimit> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 18);
+
+/**
+ * TsaCertificateSettings configures the node's TSA certificate. Every TSA
+ * certificate the node has signed with stays published after it is replaced
+ * or expires (NodeService.ListTsaCertificates), so tokens signed before a
+ * rotation still verify.
+ *
+ * @generated from message cryptos.v1.TsaCertificateSettings
+ */
+export type TsaCertificateSettings = Message<"cryptos.v1.TsaCertificateSettings"> & {
+  /**
+   * validity_days is the TSA certificate's lifetime. Zero means 365, which is
+   * also the most accepted.
+   *
+   * @generated from field: uint32 validity_days = 1;
+   */
+  validityDays: number;
+
+  /**
+   * rotation_overlap_days is how long before the TSA certificate expires the
+   * node issues its successor with a new key and starts signing tokens with
+   * it. The old certificate stays valid for the rest of its life. Zero means
+   * 30. Must be less than validity_days.
+   *
+   * @generated from field: uint32 rotation_overlap_days = 2;
+   */
+  rotationOverlapDays: number;
+};
+
+/**
+ * Describes the message cryptos.v1.TsaCertificateSettings.
+ * Use `create(TsaCertificateSettingsSchema)` to create a new message.
+ */
+export const TsaCertificateSettingsSchema: GenMessage<TsaCertificateSettings> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 19);
+
+/**
+ * WindowsEnrollment is the node's Windows autoenrolment service: the
+ * certificate enrolment policy endpoint of MS-XCEP and the enrolment endpoint
+ * of MS-WSTEP, which Group Policy ("Certificate Services Client - Certificate
+ * Enrollment Policy") points domain-joined machines and users at. Both speak
+ * SOAP 1.2 over HTTPS (MS-XCEP section 2.1, MS-WSTEP section 2.1). The node
+ * terminates TLS itself, with a server certificate it mints from its own CA
+ * for hostnames, as EST does. No agent is installed on the clients and no
+ * template objects are created in Active Directory: CryptOS is the source of
+ * truth for what is published.
+ *
+ * The listener serves three paths:
+ *
+ *   - policy_path answers GetPolicies (MS-XCEP section 3.1.4.1) with one
+ *     CertificateEnrollmentPolicy per entry in templates and one CA, this
+ *     node, whose certificate is the node's CA certificate
+ *     (section 3.1.4.1.3.2). It is authenticated by Kerberos only.
+ *   - enrollment_path takes RequestSecurityToken with the Issue request type
+ *     (MS-WSTEP section 3.1.4.2.1.1) for first enrolment, authenticated by
+ *     Kerberos. The policy advertises it as a CAURI with clientAuthentication
+ *     2, Transport Kerberos, and renewalOnly false (MS-XCEP section
+ *     3.1.4.1.3.5).
+ *   - renewal_path takes the same Issue request for renewal by the current
+ *     certificate. The policy advertises it as a CAURI with clientAuthentication
+ *     8, X.509 certificate, and renewalOnly true, and lists it only while at
+ *     least one template has allow_certificate_renewal set.
+ *
+ * Kerberos is transport authentication (MS-WSTEP section 3.1.1.1.1): HTTP
+ * Negotiate (SPNEGO, RFC 4559) inside the TLS session, checked against the
+ * keytab. Only a client principal in kerberos.realm is accepted.
+ *
+ * Renewal is authenticated by the certificate being renewed. A template that
+ * allows it is published with enrollmentFlags 0x00000040 (MS-XCEP section
+ * 3.1.4.1.3.1), which tells the client to sign the renewal request with the
+ * existing certificate's private key (MS-WCCE section 3.2.2.6.2.1.4.5.6). The
+ * node accepts the renewal only when that signature verifies, the certificate
+ * chains to this node's CA, is unexpired and not revoked, and was issued from
+ * the same template. The certificate may also be presented as a TLS client
+ * certificate (MS-WSTEP section 3.1.1.1.2); it must then be the same
+ * certificate that signed the request.
+ *
+ * Identity never comes from the request. For every enrolment and renewal the
+ * node looks the account up in Active Directory over LDAP (ldap below) and
+ * builds the certificate from that entry, ignoring the subject and every name
+ * the CSR asks for:
+ *
+ *   - A machine template takes the computer account named by the Kerberos
+ *     client principal (HOST$@REALM). The subject common name and the DNS
+ *     name in the subject alternative name are its dNSHostName.
+ *   - A user template takes the user account named by the Kerberos client
+ *     principal. The subject common name is its cn and the subject alternative
+ *     name carries its userPrincipalName as a UPN.
+ *   - Unless omit_sid_extension is set, the certificate carries the account's
+ *     objectSid in the szOID_NTDS_CA_SECURITY_EXT extension
+ *     (1.3.6.1.4.1.311.25.2), the strong certificate mapping domain controllers
+ *     check for certificate logon.
+ *   - A renewal finds the account by the SID in the certificate being renewed
+ *     (by its names when the certificate has no SID extension) and takes the
+ *     names afresh, so a renamed account renews under its new name.
+ *   - A disabled account, an account that matches more than once across
+ *     base_dns, or one outside a template's allowed_groups is refused.
+ *
+ * The policy publishes each template with the subject name flags that say the
+ * CA builds the names (never "supplied in the request"), generalFlags
+ * 0x00000040 on machine templates so clients enrol in the machine context, a
+ * minimal key length of 3072 (the node-wide RSA floor), and no key archival.
+ * CryptOS never holds a client's private key, so the KET request type (MS-WSTEP
+ * section 3.1.4.2.2) is answered with a SOAP fault. Nothing is held for
+ * approval, so QueryTokenStatus (MS-WSTEP section 3.1.4.2.1.2) is answered
+ * with a SOAP fault too. The policyID (MS-XCEP section 3.1.4.1.3.23) is
+ * derived from the node's CA certificate, so the two nodes of an HA pair
+ * answer with the same policy, and nextUpdateHours is 8, the Windows Server
+ * default.
+ *
+ * Only an Intermediate or Issuing node serves it. It may run alongside the
+ * other protocol blocks on one node; a node dedicated to it is the suggested
+ * setup.
+ *
+ * @generated from message cryptos.v1.WindowsEnrollment
+ */
+export type WindowsEnrollment = Message<"cryptos.v1.WindowsEnrollment"> & {
+  /**
+   * enabled switches the Windows enrolment listener on at the next boot.
+   *
+   * @generated from field: bool enabled = 1;
+   */
+  enabled: boolean;
+
+  /**
+   * hostnames are the DNS names clients reach the endpoints on, stamped into
+   * the listener's server certificate. The first is the host in every URL the
+   * policy hands out and in kerberos.service_principal. At least one is
+   * required when enabled, and each must be a DNS name, not an IP literal,
+   * because Kerberos names the service by host.
+   *
+   * @generated from field: repeated string hostnames = 2;
+   */
+  hostnames: string[];
+
+  /**
+   * https_port is the TCP port the listener binds. Zero means 443, the port
+   * Group Policy assumes when the policy URL names none. It must differ from
+   * every other enabled listener's port on the node.
+   *
+   * @generated from field: uint32 https_port = 3;
+   */
+  httpsPort: number;
+
+  /**
+   * policy_path is the MS-XCEP endpoint path, the one the Group Policy
+   * enrolment policy URL names. Empty means "/xcep".
+   *
+   * @generated from field: string policy_path = 4;
+   */
+  policyPath: string;
+
+  /**
+   * enrollment_path is the Kerberos MS-WSTEP endpoint path. Empty means
+   * "/wstep/kerberos".
+   *
+   * @generated from field: string enrollment_path = 5;
+   */
+  enrollmentPath: string;
+
+  /**
+   * renewal_path is the certificate-authenticated MS-WSTEP endpoint path.
+   * Empty means "/wstep/certificate". The three paths must each be
+   * absolute, contain no query or fragment, and differ from one another.
+   *
+   * @generated from field: string renewal_path = 6;
+   */
+  renewalPath: string;
+
+  /**
+   * kerberos is the service identity clients authenticate to. Required when
+   * enabled.
+   *
+   * @generated from field: cryptos.v1.WindowsKerberos kerberos = 7;
+   */
+  kerberos?: WindowsKerberos | undefined;
+
+  /**
+   * ldap is how the node reads the authenticated account from Active
+   * Directory. Required when enabled.
+   *
+   * @generated from field: cryptos.v1.WindowsLdap ldap = 8;
+   */
+  ldap?: WindowsLdap | undefined;
+
+  /**
+   * templates are the certificate templates the policy publishes, each mapped
+   * to a CryptOS profile. At least one is required when enabled.
+   *
+   * @generated from field: repeated cryptos.v1.WindowsTemplate templates = 9;
+   */
+  templates: WindowsTemplate[];
+
+  /**
+   * omit_sid_extension drops the szOID_NTDS_CA_SECURITY_EXT SID extension
+   * from issued certificates. Off by default, so certificates carry it: once
+   * domain controllers enforce strong certificate mapping (Full Enforcement),
+   * a certificate without it, or an explicit altSecurityIdentities mapping,
+   * fails certificate logon.
+   *
+   * @generated from field: bool omit_sid_extension = 10;
+   */
+  omitSidExtension: boolean;
+};
+
+/**
+ * Describes the message cryptos.v1.WindowsEnrollment.
+ * Use `create(WindowsEnrollmentSchema)` to create a new message.
+ */
+export const WindowsEnrollmentSchema: GenMessage<WindowsEnrollment> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 20);
+
+/**
+ * WindowsKerberos is the Kerberos service the Windows endpoints run as: an
+ * Active Directory service account with the SPN registered on it and a keytab
+ * exported for it.
+ *
+ * @generated from message cryptos.v1.WindowsKerberos
+ */
+export type WindowsKerberos = Message<"cryptos.v1.WindowsKerberos"> & {
+  /**
+   * realm is the Kerberos realm, the Active Directory domain's DNS name in
+   * upper case, for example "EXAMPLE.ORG". Required when enabled. Only client
+   * principals in this realm are accepted.
+   *
+   * @generated from field: string realm = 1;
+   */
+  realm: string;
+
+  /**
+   * service_principal is the SPN clients request tickets for, "HTTP/" followed
+   * by the first entry of hostnames, for example "HTTP/enroll.example.org",
+   * without the realm. Required when enabled. It must be registered on the
+   * service account and nowhere else in the forest, or clients cannot get a
+   * ticket for it.
+   *
+   * @generated from field: string service_principal = 2;
+   */
+  servicePrincipal: string;
+
+  /**
+   * keytab is the MIT keytab (format version 0x0502) holding the service
+   * account's keys for service_principal@realm. Required when enabled. Only
+   * AES256 and AES128 keys (aes256-cts-hmac-sha1-96, aes128-cts-hmac-sha1-96)
+   * are used; a keytab with no AES key for the principal is rejected, and RC4
+   * and DES keys are ignored. Write-only: GetConfig returns it empty, and an
+   * apply that leaves it empty keeps the stored keytab while service_principal
+   * is unchanged.
+   *
+   * @generated from field: bytes keytab = 3;
+   */
+  keytab: Uint8Array;
+};
+
+/**
+ * Describes the message cryptos.v1.WindowsKerberos.
+ * Use `create(WindowsKerberosSchema)` to create a new message.
+ */
+export const WindowsKerberosSchema: GenMessage<WindowsKerberos> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 21);
+
+/**
+ * WindowsLdap is the node's read-only view of Active Directory, used to build
+ * every certificate from the authenticated account's entry.
+ *
+ * @generated from message cryptos.v1.WindowsLdap
+ */
+export type WindowsLdap = Message<"cryptos.v1.WindowsLdap"> & {
+  /**
+   * urls are the domain controllers to query, tried in order, each
+   * "ldaps://host" or "ldaps://host:port" (636 when the port is absent, 3269
+   * for a global catalog). At least one is required when enabled. Only
+   * ldaps is accepted: a plain "ldap://" URL, or StartTLS, is rejected, so the
+   * bind credential and the directory data never cross the network in the
+   * clear.
+   *
+   * @generated from field: repeated string urls = 1;
+   */
+  urls: string[];
+
+  /**
+   * bind is the account the node binds as. Required when enabled. It needs
+   * read access to the accounts under base_dns and nothing more.
+   *
+   * @generated from field: cryptos.v1.WindowsLdapBind bind = 2;
+   */
+  bind?: WindowsLdapBind | undefined;
+
+  /**
+   * base_dns are the subtrees searched for the authenticated account, for
+   * example "DC=example,DC=org". At least one is required when enabled.
+   *
+   * @generated from field: repeated string base_dns = 3;
+   */
+  baseDns: string[];
+
+  /**
+   * trust_pem is the PEM bundle of the CA certificates that issued the domain
+   * controllers' LDAPS certificates. Required when enabled; the node trusts
+   * nothing else for these connections, and each controller's certificate must
+   * name the host in its URL.
+   *
+   * @generated from field: string trust_pem = 4;
+   */
+  trustPem: string;
+};
+
+/**
+ * Describes the message cryptos.v1.WindowsLdap.
+ * Use `create(WindowsLdapSchema)` to create a new message.
+ */
+export const WindowsLdapSchema: GenMessage<WindowsLdap> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 22);
+
+/**
+ * WindowsLdapBind is how the node authenticates to the domain controllers.
+ *
+ * @generated from message cryptos.v1.WindowsLdapBind
+ */
+export type WindowsLdapBind = Message<"cryptos.v1.WindowsLdapBind"> & {
+  /**
+   * mode is "simple" (an LDAP simple bind over the TLS session) or "kerberos"
+   * (SASL GSSAPI with the keys in WindowsKerberos.keytab). Required when
+   * enabled. A Kerberos bind sends the TLS channel binding token, so it works
+   * where domain controllers require LDAP channel binding.
+   *
+   * @generated from field: string mode = 1;
+   */
+  mode: string;
+
+  /**
+   * bind_dn is the account a simple bind names, as a distinguished name or a
+   * userPrincipalName. Required for simple, rejected for kerberos.
+   *
+   * @generated from field: string bind_dn = 2;
+   */
+  bindDn: string;
+
+  /**
+   * password is the simple bind password. Required for simple, rejected for
+   * kerberos. Write-only: GetConfig returns it empty, and an apply that leaves
+   * it empty keeps the stored password while bind_dn is unchanged.
+   *
+   * @generated from field: string password = 3;
+   */
+  password: string;
+
+  /**
+   * principal is the Kerberos client principal a kerberos bind uses, without
+   * the realm. Empty means WindowsKerberos.service_principal. The keytab must
+   * hold an AES key for it. Rejected for simple.
+   *
+   * @generated from field: string principal = 4;
+   */
+  principal: string;
+};
+
+/**
+ * Describes the message cryptos.v1.WindowsLdapBind.
+ * Use `create(WindowsLdapBindSchema)` to create a new message.
+ */
+export const WindowsLdapBindSchema: GenMessage<WindowsLdapBind> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 23);
+
+/**
+ * WindowsTemplate is one certificate template the policy publishes.
+ *
+ * @generated from message cryptos.v1.WindowsTemplate
+ */
+export type WindowsTemplate = Message<"cryptos.v1.WindowsTemplate"> & {
+  /**
+   * name is the template name the policy publishes (the commonName of its
+   * CertificateEnrollmentPolicy, MS-XCEP section 3.1.4.1.3.1), and the name
+   * clients and certreq use. Required, and unique within the block.
+   *
+   * @generated from field: string name = 1;
+   */
+  name: string;
+
+  /**
+   * profile names the non-CA certificate profile in Pki.profiles the template
+   * issues from. Required. The profile's key usage, extended key usage,
+   * validity and extensions apply; its subject and names are replaced by those
+   * read from Active Directory.
+   *
+   * @generated from field: string profile = 2;
+   */
+  profile: string;
+
+  /**
+   * enrollment_type is "machine" or "user": which kind of account may enrol
+   * and whose directory entry the certificate is built from. Required. A
+   * Kerberos client principal of the other kind is refused.
+   *
+   * @generated from field: string enrollment_type = 3;
+   */
+  enrollmentType: string;
+
+  /**
+   * allow_certificate_renewal lets a certificate issued from this template be
+   * renewed at renewal_path, authenticated by the certificate itself instead of
+   * Kerberos. Off means every renewal is a fresh Kerberos enrolment.
+   *
+   * @generated from field: bool allow_certificate_renewal = 4;
+   */
+  allowCertificateRenewal: boolean;
+
+  /**
+   * allowed_groups, when non-empty, are the distinguished names of the Active
+   * Directory groups whose members may enrol, membership checked transitively
+   * (LDAP_MATCHING_RULE_IN_CHAIN, 1.2.840.113556.1.4.1941). The policy offers
+   * the template, with enroll and autoEnroll permission, only to accounts in
+   * one of them, and a renewal re-checks it. Empty offers it to every account
+   * of enrollment_type under the base DNs.
+   *
+   * @generated from field: repeated string allowed_groups = 5;
+   */
+  allowedGroups: string[];
+
+  /**
+   * renewal_period_days is how long before expiry clients start renewing
+   * (renewalPeriodSeconds, MS-XCEP section 3.1.4.1.3.8). Zero means one fifth
+   * of the profile's validity, rounded down to whole days and at least one. It
+   * must be less than the profile's validity.
+   *
+   * @generated from field: uint32 renewal_period_days = 6;
+   */
+  renewalPeriodDays: number;
+};
+
+/**
+ * Describes the message cryptos.v1.WindowsTemplate.
+ * Use `create(WindowsTemplateSchema)` to create a new message.
+ */
+export const WindowsTemplateSchema: GenMessage<WindowsTemplate> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 24);
 
 /**
  * Parent is the trust anchor a subordinate CA pins for its issuer: the parent
@@ -436,7 +1495,7 @@ export type Parent = Message<"cryptos.v1.Parent"> & {
  * Use `create(ParentSchema)` to create a new message.
  */
 export const ParentSchema: GenMessage<Parent> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 10);
+  messageDesc(file_cryptos_v1_config, 25);
 
 /**
  * CertificateProfile drives CSR generation and certificate signing: key
@@ -453,7 +1512,10 @@ export type CertificateProfile = Message<"cryptos.v1.CertificateProfile"> & {
   name: string;
 
   /**
-   * e.g. "ECDSA-P384". Covering subset; RSA sizes and other curves are additive.
+   * key_alg takes the same values as Pki.root_key_alg: "ECDSA-P384",
+   * "RSA-3072" or "RSA-4096", checked when the config is validated. Signing
+   * does not match a CSR against it: any CSR key that is ECDSA P-384 or RSA
+   * of at least 3072 bits is certified.
    *
    * @generated from field: string key_alg = 2;
    */
@@ -525,7 +1587,7 @@ export type CertificateProfile = Message<"cryptos.v1.CertificateProfile"> & {
  * Use `create(CertificateProfileSchema)` to create a new message.
  */
 export const CertificateProfileSchema: GenMessage<CertificateProfile> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 11);
+  messageDesc(file_cryptos_v1_config, 26);
 
 /**
  * @generated from message cryptos.v1.BasicConstraints
@@ -550,7 +1612,7 @@ export type BasicConstraints = Message<"cryptos.v1.BasicConstraints"> & {
  * Use `create(BasicConstraintsSchema)` to create a new message.
  */
 export const BasicConstraintsSchema: GenMessage<BasicConstraints> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 12);
+  messageDesc(file_cryptos_v1_config, 27);
 
 /**
  * @generated from message cryptos.v1.SubjectAltNames
@@ -599,7 +1661,7 @@ export type SubjectAltNames = Message<"cryptos.v1.SubjectAltNames"> & {
  * Use `create(SubjectAltNamesSchema)` to create a new message.
  */
 export const SubjectAltNamesSchema: GenMessage<SubjectAltNames> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 13);
+  messageDesc(file_cryptos_v1_config, 28);
 
 /**
  * X509Extension is the raw escape hatch: a dotted OID, criticality flag, and the
@@ -629,7 +1691,7 @@ export type X509Extension = Message<"cryptos.v1.X509Extension"> & {
  * Use `create(X509ExtensionSchema)` to create a new message.
  */
 export const X509ExtensionSchema: GenMessage<X509Extension> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 14);
+  messageDesc(file_cryptos_v1_config, 29);
 
 /**
  * Install declares how the node provisions itself to persistent storage during
@@ -652,7 +1714,7 @@ export type Install = Message<"cryptos.v1.Install"> & {
  * Use `create(InstallSchema)` to create a new message.
  */
 export const InstallSchema: GenMessage<Install> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 15);
+  messageDesc(file_cryptos_v1_config, 30);
 
 /**
  * @generated from message cryptos.v1.Subject
@@ -693,5 +1755,5 @@ export type Subject = Message<"cryptos.v1.Subject"> & {
  * Use `create(SubjectSchema)` to create a new message.
  */
 export const SubjectSchema: GenMessage<Subject> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 16);
+  messageDesc(file_cryptos_v1_config, 31);
 

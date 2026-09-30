@@ -57,10 +57,11 @@ minutes per PR:
   are steps of one `✅ PR Checks` job (`job-pr-checks.yaml`). Every step runs even when an earlier
   one fails, so the log shows every failure. There is no separate Gitleaks workflow any more (it
   also ran on every push to every branch, so each PR commit was scanned twice).
-- **Pull requests only.** Actionlint, the licence-header check (GoLic) and the Go dependency licence
-  check (`job-license-check-go.yaml`) run on pull requests, not on push to `main`: the squash merge
-  lands the tree the PR run already checked. Only Release Drafter (on push to `main`) and Label Sync
-  (when `.github/labels.yml` changes) run on `main`.
+- **Pull requests only.** Actionlint, the licence-header check (GoLic), the Go dependency licence
+  check (`job-license-check-go.yaml`) and the generated-output check (`ci-generate.yaml`) run on
+  pull requests, not on push to `main`: the squash merge lands the tree the PR run already
+  checked. Only Release Drafter (on push to `main`) and Label Sync (when `.github/labels.yml`
+  changes) run on `main`.
 - **Edits.** PR Checks and the Label Checker rerun on a title or body edit. The other PR
   workflows run on an `edited` event only when the PR's base changed (a stacked PR retargeted onto
   `main`); a skipped job is not billed.
@@ -69,8 +70,10 @@ minutes per PR:
   billed a minute per run to do nothing.
 - **Every job has a `timeout-minutes`**, so a hung job stops long before GitHub's 360-minute
   default.
-- **Prebuilt tools.** Actionlint installs its pinned release binary, checked against the published
-  SHA-256, instead of compiling `actionlint@latest` on every run.
+- **Prebuilt tools.** Actionlint, and buf and task in the generated-output check, install pinned
+  release binaries checked against the published SHA-256, instead of compiling `@latest` on every
+  run. The generated-output check also checks the fetched `@bufbuild/protoc-gen-es` against a
+  pinned integrity hash, so bump that pin with `buf.gen.yaml`.
 - **Fork PRs.** Every PR workflow uses `pull_request`, never `pull_request_target`, so a PR from a
   fork runs the same checks with a read-only token and no secrets. The Label Checker cannot label
   a fork PR itself; a maintainer adds the label, and that reruns the check.

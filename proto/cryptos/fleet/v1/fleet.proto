@@ -19,6 +19,7 @@ package cryptos.fleet.v1;
 
 import "cryptos/v1/config.proto";
 import "cryptos/v1/node.proto";
+import "cryptos/v1/status.proto";
 
 option go_package = "github.com/CryptOS-PKI/api/go/cryptos/fleet/v1;fleetv1";
 
@@ -71,6 +72,20 @@ service FleetService {
   // enabled adapter does not yet answer requests. Admin-gated and audited.
   rpc SetAdapterEnabled(SetAdapterEnabledRequest) returns (SetAdapterEnabledResponse);
 
+  // SetNodeProtocol switches one enrolment protocol on or off on one managed
+  // node. The manager fetches the node's config, sets that protocol block's
+  // enabled flag, leaves its other settings as the node returned them, and
+  // applies it back through the node's ApplyConfig. Write-only secrets come
+  // back blank from the node and are sent blank, so the node keeps what it
+  // stores; they never reach the manager. The other protocol blocks are left
+  // out of the apply, so the node keeps them unchanged. A switch is
+  // reboot-required: the node stores it and the listener changes at the next
+  // boot, and NodeSummary.reboot_required stays true until the node reports it
+  // running in the new state. The node's refusal (a Root refusing
+  // enabled=true, a block that fails validation) is returned as its error.
+  // Admin-gated and audited.
+  rpc SetNodeProtocol(SetNodeProtocolRequest) returns (SetNodeProtocolResponse);
+
   // ListAudit returns the manager's audit log.
   rpc ListAudit(ListAuditRequest) returns (ListAuditResponse);
 
@@ -94,7 +109,7 @@ service FleetService {
   rpc WhoAmI(WhoAmIRequest) returns (WhoAmIResponse);
 
   // RevokeCertificate revokes an issued certificate on the node that issued
-  // it, identified by node name and hex serial, with an RFC 5280 reason code.
+  // it, identified by node and hex serial, with an RFC 5280 reason code.
   rpc RevokeCertificate(RevokeCertificateRequest) returns (RevokeCertificateResponse);
 
   // IssueLeaf signs a leaf certificate on the named issuing node from a
@@ -181,6 +196,17 @@ service FleetService {
   // audited (the audit names the node and that it was wiped, never any secret).
   rpc DecommissionNode(DecommissionNodeRequest) returns (DecommissionNodeResponse);
 
+  // RenameNode changes a node's display name. The node is addressed by its
+  // stable ID, which never changes, so URLs, audit entries and references
+  // recorded against the ID keep pointing at the node. Returns the updated
+  // node. NotFound if no node has node_id; AlreadyExists if another node
+  // already has new_name; InvalidArgument if new_name is not an RFC 1123 label
+  // (1 to 63 lowercase letters, digits and hyphens, starting and ending with a
+  // letter or digit). Renaming a node to its current name returns it unchanged
+  // and records nothing. Admin-gated and audited (node-renamed, with the old
+  // and new names).
+  rpc RenameNode(RenameNodeRequest) returns (RenameNodeResponse);
+
   // ListMcpKeys returns the MCP agent keys bound to the calling operator's
   // certificate. An admin may set all to list every operator's keys; a
   // non-admin that sets all is refused. The listing never carries a key or its
@@ -223,7 +249,15 @@ message ListNodesResponse {
 }
 
 message GetNodeRequest {
+  // name is the node's display name.
+  // Deprecated: use node_id. Still resolves the node's current name for one
+  // release. Unlike other requests, a name the node held before a rename also
+  // resolves when no current node has it, so old links still find the node.
   string name = 1;
+  // node_id is the stable ID (NodeSummary.id) of the node. Preferred over
+  // name; when both are set they must name the same node, or the
+  // manager returns InvalidArgument.
+  string node_id = 2;
 }
 
 message GetNodeResponse {
@@ -232,7 +266,14 @@ message GetNodeResponse {
 
 message ListCertificatesRequest {
   // node scopes the result to a single node by name; empty means all nodes.
+  // Deprecated: use node_id. Still resolves the node's current name for one
+  // release.
   string node = 1;
+  // node_id scopes the result to a single node by its stable ID
+  // (NodeSummary.id). Preferred over node; when both are set they must name
+  // the same node, or the manager returns InvalidArgument. Both empty means
+  // all nodes.
+  string node_id = 2;
 }
 
 message ListCertificatesResponse {
@@ -266,8 +307,14 @@ message DeleteProfileResponse {}
 // ApplyProfileToNodeRequest names the managed node and the catalog profile to
 // push onto it.
 message ApplyProfileToNodeRequest {
+  // Deprecated: use node_id. Still resolves the node's current name for one
+  // release.
   string node_name = 1;
   string profile_name = 2;
+  // node_id is the stable ID (NodeSummary.id) of the node. Preferred over
+  // node_name; when both are set they must name the same node, or the
+  // manager returns InvalidArgument.
+  string node_id = 3;
 }
 
 // ApplyProfileToNodeResponse reports the node's config generation after the
@@ -317,6 +364,8 @@ enum Health {
 
 // NodeSummary is the per-node row shown in the fleet list.
 message NodeSummary {
+  // name is the node's display name, unique across the fleet and changed with
+  // RenameNode.
   string name = 1;
   string address = 2;
   // root|intermediate|issuing
@@ -327,6 +376,18 @@ message NodeSummary {
   string issuer = 6;
   Health health = 7;
   string health_detail = 8;
+  // id is the node's stable identifier: a UUIDv7 in canonical lowercase form,
+  // assigned by the manager when the node joins the fleet and never changed or
+  // reused. Address the node by this, not by name.
+  string id = 9;
+  // protocols is the node's enrolment protocol state as it reports it:
+  // configured in the stored config against running this boot. Empty when the
+  // node is down or predates the report.
+  repeated cryptos.v1.ProtocolStatus protocols = 10;
+  // reboot_required is true when the node holds a stored change that takes
+  // effect only at its next boot: the node reports config_reboot_pending, or a
+  // protocol switch the manager applied has not yet shown up as running.
+  bool reboot_required = 11;
 }
 
 // NodeIdentity carries the node's CA chain, mirroring cryptos.v1.Identity
@@ -362,6 +423,8 @@ message Certificate {
   string profile = 8;
   string revoked_at = 9;
   string reason = 10;
+  // issuer_node_id is the stable ID (NodeSummary.id) of issuer_node.
+  string issuer_node_id = 11;
 }
 
 // EnrollmentAdapter is an enrollment protocol adapter binding, mirroring the
@@ -385,8 +448,8 @@ message AuditEvent {
   string at = 2;
   // config-applied|enroll-approved|enroll-rejected|issued|mcp-key-created|
   // mcp-key-first-used|mcp-key-rejected|mcp-key-revoked|profile-applied|
-  // profile-created|profile-deleted|profile-updated|protocol-toggled|rekeyed|
-  // renewed|revoked
+  // node-renamed|profile-created|profile-deleted|profile-updated|
+  // protocol-toggled|rekeyed|renewed|revoked
   string kind = 3;
   string summary = 4;
   // cert|enrollment|mcp-key|node|profile|protocol
@@ -420,6 +483,11 @@ message AuditEvent {
   // the manager ships approvals. It will carry the hex serial of the approving
   // operator's certificate.
   string approver_serial = 16;
+  // node_id is the stable ID (NodeSummary.id) of the node the entry concerns;
+  // empty when it concerns no node. Entries recorded before node IDs name the
+  // node in target_path only; the manager fills node_id for them from the
+  // name the node held at the entry's time.
+  string node_id = 17;
 }
 
 // EnrollmentRequest is a node enrollment request awaiting (or resolved by)
@@ -442,11 +510,16 @@ message EnrollmentRequest {
   string csr_subject_cn = 10;
   string requested_at = 11;
   string rejection_reason = 12;
+  // admitted_node_name is the node's name when it was admitted; it does not
+  // follow a later rename. Use admitted_node_id to find the node.
   string admitted_node_name = 13;
   // LINK|SUBORDINATE
   string kind = 14;
   // SPKI SHA-256 (hex) of the node identity pinned at first enroll (TOFU).
   string pinned_key_sha256 = 15;
+  // admitted_node_id is the stable ID (NodeSummary.id) of the node this request
+  // admitted; empty until approved.
+  string admitted_node_id = 16;
 }
 
 message CreateEnrollmentRequest {
@@ -458,9 +531,15 @@ message CreateEnrollmentRequest {
   string admin_key_pem = 4;
   string ca_pem = 5;
   // SUBORDINATE: the child node, its parent CA, and the issuing profile.
+  // Deprecated: use child_node_id. Still resolves the node's current name for
+  // one release.
   string child_node = 6;
   string parent_cn = 7;
   string profile = 8;
+  // child_node_id is the stable ID (NodeSummary.id) of the SUBORDINATE child
+  // node. Preferred over child_node; when both are set they must name the
+  // same node, or the manager returns InvalidArgument.
+  string child_node_id = 9;
 }
 
 message CreateEnrollmentResponse {
@@ -509,11 +588,17 @@ message WhoAmIResponse {
 // node and hex serial, with the RFC 5280 reason code for the revocation.
 message RevokeCertificateRequest {
   // node_name is the issuing node the certificate lives on.
+  // Deprecated: use node_id. Still resolves the node's current name for one
+  // release.
   string node_name = 1;
   // serial_hex is the certificate to revoke.
   string serial_hex = 2;
   // reason_code is the RFC 5280 CRLReason code.
   int32 reason_code = 3;
+  // node_id is the stable ID (NodeSummary.id) of the node. Preferred over
+  // node_name; when both are set they must name the same node, or the
+  // manager returns InvalidArgument.
+  string node_id = 4;
 }
 
 // RevokeCertificateResponse echoes the revoked certificate's serial, the time
@@ -528,11 +613,17 @@ message RevokeCertificateResponse {
 // CSR, and the issuance profile to sign the leaf under.
 message IssueLeafRequest {
   // node_name is the issuing node that signs the leaf.
+  // Deprecated: use node_id. Still resolves the node's current name for one
+  // release.
   string node_name = 1;
   // csr_der is the DER-encoded PKCS#10 CSR from the browser.
   bytes csr_der = 2;
   // profile_name is the issuance profile the node signs under.
   string profile_name = 3;
+  // node_id is the stable ID (NodeSummary.id) of the node. Preferred over
+  // node_name; when both are set they must name the same node, or the
+  // manager returns InvalidArgument.
+  string node_id = 4;
 }
 
 // IssueLeafResponse carries the signed leaf certificate.
@@ -545,10 +636,16 @@ message IssueLeafResponse {
 // parent signs the new key under.
 message RekeyNodeRequest {
   // node_name is the subordinate CA to re-key.
+  // Deprecated: use node_id. Still resolves the node's current name for one
+  // release.
   string node_name = 1;
   // profile_name is the CA profile the parent signs the new CSR under (e.g.
   // "sub-ca").
   string profile_name = 2;
+  // node_id is the stable ID (NodeSummary.id) of the node. Preferred over
+  // node_name; when both are set they must name the same node, or the
+  // manager returns InvalidArgument.
+  string node_id = 3;
 }
 
 // RekeyNodeResponse reports the re-keyed identity: the node's own subject CN,
@@ -565,7 +662,13 @@ message RekeyNodeResponse {
 // GetNodeConfigRequest names the managed node whose current config to fetch.
 message GetNodeConfigRequest {
   // node_name is the managed node to read the configuration from.
+  // Deprecated: use node_id. Still resolves the node's current name for one
+  // release.
   string node_name = 1;
+  // node_id is the stable ID (NodeSummary.id) of the node. Preferred over
+  // node_name; when both are set they must name the same node, or the
+  // manager returns InvalidArgument.
+  string node_id = 2;
 }
 
 // GetNodeConfigResponse carries the node's current full machine configuration.
@@ -577,10 +680,16 @@ message GetNodeConfigResponse {
 // apply (the fetched baseline with edits merged in, never a partial config).
 message ApplyNodeConfigRequest {
   // node_name is the managed node to apply the configuration to.
+  // Deprecated: use node_id. Still resolves the node's current name for one
+  // release.
   string node_name = 1;
   // config is the complete machine configuration to replace the node's current
   // config with.
   cryptos.v1.MachineConfig config = 2;
+  // node_id is the stable ID (NodeSummary.id) of the node. Preferred over
+  // node_name; when both are set they must name the same node, or the
+  // manager returns InvalidArgument.
+  string node_id = 3;
 }
 
 // ApplyNodeConfigResponse reports the node's config generation after the apply
@@ -592,14 +701,41 @@ message ApplyNodeConfigResponse {
   bool requires_reboot = 2;
 }
 
+// SetNodeProtocolRequest names the node, the protocol and its new state.
+message SetNodeProtocolRequest {
+  // node_name is the managed node to switch the protocol on.
+  string node_name = 1;
+  // protocol is the enrolment protocol to switch.
+  cryptos.v1.ServiceProtocol protocol = 2;
+  // enabled switches the protocol on (true) or off (false) at the node's next
+  // boot.
+  bool enabled = 3;
+}
+
+// SetNodeProtocolResponse carries the node's answer to the apply.
+message SetNodeProtocolResponse {
+  // generation is the node's config generation after the apply.
+  uint64 generation = 1;
+  // requires_reboot is true when the node stored a change that takes effect at
+  // its next boot. False when the protocol was already in the requested state
+  // and nothing was applied.
+  bool requires_reboot = 2;
+}
+
 // ExportCAKeyRequest names the managed node to back up and carries the operator
 // passphrase the node seals the backup with. The passphrase is relayed to the
 // node in transit and is never persisted by the manager.
 message ExportCAKeyRequest {
   // node_name is the managed node whose CA key to export.
+  // Deprecated: use node_id. Still resolves the node's current name for one
+  // release.
   string node_name = 1;
   // passphrase seals the backup node-side; it is never persisted.
   bytes passphrase = 2;
+  // node_id is the stable ID (NodeSummary.id) of the node. Preferred over
+  // node_name; when both are set they must name the same node, or the
+  // manager returns InvalidArgument.
+  string node_id = 3;
 }
 
 // ExportCAKeyResponse carries the encrypted backup envelope (Argon2id +
@@ -614,11 +750,17 @@ message ExportCAKeyResponse {
 // the node in transit and is never persisted by the manager.
 message ImportCAKeyRequest {
   // node_name is the fresh managed node to restore the identity onto.
+  // Deprecated: use node_id. Still resolves the node's current name for one
+  // release.
   string node_name = 1;
   // envelope is the encrypted CA key backup produced by ExportCAKey.
   bytes envelope = 2;
   // passphrase unseals the envelope node-side; it is never persisted.
   bytes passphrase = 3;
+  // node_id is the stable ID (NodeSummary.id) of the node. Preferred over
+  // node_name; when both are set they must name the same node, or the
+  // manager returns InvalidArgument.
+  string node_id = 4;
 }
 
 // ImportCAKeyResponse summarizes the restored identity so the web can confirm
@@ -711,19 +853,44 @@ message AdoptNodeResponse {
   string phase = 1;
   string detail = 2;
   bool done = 3;
+  // node_id is the stable ID (NodeSummary.id) the manager assigned the adopted
+  // node; set on the final message only.
+  string node_id = 4;
 }
 
 // DecommissionNodeRequest names the managed node to wipe and echoes its current
 // Root CA CN as destructive confirmation.
 message DecommissionNodeRequest {
+  // Deprecated: use node_id. Still resolves the node's current name for one
+  // release.
   string node_name = 1;
   string confirm_common_name = 2;
+  // node_id is the stable ID (NodeSummary.id) of the node. Preferred over
+  // node_name; when both are set they must name the same node, or the
+  // manager returns InvalidArgument.
+  string node_id = 3;
 }
 
 // DecommissionNodeResponse reports that the node accepted the wipe and is
 // rebooting into maintenance.
 message DecommissionNodeResponse {
   bool rebooting = 1;
+}
+
+// RenameNodeRequest names the node by its stable ID and carries its new
+// display name.
+message RenameNodeRequest {
+  // node_id is the stable ID (NodeSummary.id) of the node to rename.
+  string node_id = 1;
+  // new_name is the new display name: an RFC 1123 label, unique across the
+  // fleet.
+  string new_name = 2;
+}
+
+// RenameNodeResponse returns the node after the rename.
+message RenameNodeResponse {
+  // node is the renamed node; its id is unchanged.
+  NodeSummary node = 1;
 }
 
 // ListMcpKeysRequest scopes the MCP key listing.

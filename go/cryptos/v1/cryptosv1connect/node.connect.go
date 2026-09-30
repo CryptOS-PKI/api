@@ -230,7 +230,10 @@ type NodeServiceClient interface {
 	RemoteReset(context.Context, *connect.Request[v1.RemoteResetRequest]) (*connect.Response[v1.RemoteResetResponse], error)
 	// Attest signs the caller's nonce with the node's CA identity key so the
 	// Fleet Manager can verify possession of the node identity (challenge-
-	// response). ek_pub/ek_cert are reserved for future TPM EK attestation.
+	// response). The nonce is domain-separated before signing (see
+	// AttestResponse.signature), so an Attest signature can never be replayed
+	// as a certificate, CRL or OCSP signature. ek_pub/ek_cert are reserved for
+	// future TPM EK attestation.
 	Attest(context.Context, *connect.Request[v1.AttestRequest]) (*connect.Response[v1.AttestResponse], error)
 	// SetManagement merges FM managed-state into the node's persisted config
 	// (read-modify-write on the node) without replacing the whole config; used by
@@ -866,7 +869,10 @@ type NodeServiceHandler interface {
 	RemoteReset(context.Context, *connect.Request[v1.RemoteResetRequest]) (*connect.Response[v1.RemoteResetResponse], error)
 	// Attest signs the caller's nonce with the node's CA identity key so the
 	// Fleet Manager can verify possession of the node identity (challenge-
-	// response). ek_pub/ek_cert are reserved for future TPM EK attestation.
+	// response). The nonce is domain-separated before signing (see
+	// AttestResponse.signature), so an Attest signature can never be replayed
+	// as a certificate, CRL or OCSP signature. ek_pub/ek_cert are reserved for
+	// future TPM EK attestation.
 	Attest(context.Context, *connect.Request[v1.AttestRequest]) (*connect.Response[v1.AttestResponse], error)
 	// SetManagement merges FM managed-state into the node's persisted config
 	// (read-modify-write on the node) without replacing the whole config; used by

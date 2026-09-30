@@ -23,12 +23,21 @@ Taskfile.yml             # fmt / lint / generate / test / ci targets
 | `node.proto` | `NodeService` — the per-node management surface: config (`ApplyConfig`, `GetConfig`), status and identity, the first-boot ceremony, CA signing and revocation, key escrow and rotation, reset, in-place image upgrade, `Reboot` (orderly, CN-confirmed reboot or power-off), SCEP administration (one-time enrolment challenges and the approval queue), and the list of TSA certificates, current and past (`ListTsaCertificates`). |
 | `identity.proto` | `Identity` — DER + PEM + leaf SHA-256 for the CA chain. |
 | `ceremony.proto` | `CeremonyEvent` stream messages + ceremony kind/event enums. |
-| `status.proto` | `NodeStatus` — role, identity state, TPM state, etcd state, boot count, the revocation preflight result (state, last error, when it was checked), the DNS resolver source and nameservers, each enrolment protocol's configured and running state, and whether a stored config change is waiting for a reboot. |
+| `status.proto` | `NodeStatus` — role, identity state, TPM state, etcd state, boot count, the revocation preflight result (state, last error, when it was checked), the DNS resolver source and nameservers, the SNTP time-sync state (source, servers, last offset and sync, and the latest error), each enrolment protocol's configured and running state, and whether a stored config change is waiting for a reboot. |
 | `config.proto` | `MachineConfig` Phase 1 subset (role/network/storage/bootstrap/pki), plus the ACME, EST and SCEP enrolment blocks, the RFC 3161 time-stamp authority block and the Windows autoenrolment (MS-XCEP/WSTEP) block on `Pki` (`acme`, `est`, `scep`, `tsa`, `windows_enrollment`), each with an explicit `enabled` switch that takes effect at the next boot. |
 | `scep.proto` | The SCEP challenge and approval-queue messages. A challenge is returned once, when it is minted, and no read carries it or its digest. |
 | `tsa.proto` | The TSA certificate messages `ListTsaCertificates` returns, kept after rotation so old timestamp tokens still verify. |
 | `audit.proto` | `AuditEvent` — hash-chained audit log entry shape. |
-| `fleet/v1/fleet.proto` | `FleetService` — the Fleet Manager's surface over the fleet: node, certificate, profile, adapter, enrollment and operator-credential RPCs, the manager audit log (`ListAudit`), MCP agent key management (`ListMcpKeys`, `RevokeMcpKey`, `CreateMcpKey`), and step-up approvals (`ListApprovals`, `DecideApproval`). |
+| `fleet/v1/fleet.proto` | `FleetService` — the Fleet Manager's surface over the fleet: node (including `RenameNode`), certificate, profile, adapter, enrollment and operator-credential RPCs, the manager audit log (`ListAudit`), MCP agent key management (`ListMcpKeys`, `RevokeMcpKey`, `CreateMcpKey`), step-up approvals (`ListApprovals`, `DecideApproval`), and the per-node enrolment protocol switch (`SetNodeProtocol`, with each node's protocol state and `reboot_required` on `NodeSummary`). |
+
+### Node IDs and renaming
+
+Every node has a stable `id` on `NodeSummary`: a UUIDv7 in canonical lowercase form that the manager assigns when the node joins the fleet and never changes or reuses. Its `name` is a display label.
+
+- Every request that addresses a node takes `node_id` (`child_node_id` on `CreateEnrollmentRequest`). The old name fields still resolve a node's current name for one release and are deprecated. If both are set and name different nodes, the manager returns `InvalidArgument`.
+- `GetNodeRequest.name` also resolves a name the node held before a rename, when no current node has it, so old links still find the node.
+- `Certificate.issuer_node_id`, `EnrollmentRequest.admitted_node_id`, `AuditEvent.node_id` and the final `AdoptNodeResponse.node_id` carry the ID of the node they point at.
+- `RenameNode` takes `node_id` and `new_name` and returns the updated `NodeSummary`. It fails with `NotFound` when no node has the ID, `AlreadyExists` when another node has the name, and `InvalidArgument` when the name isn't an RFC 1123 label. Renaming to the current name changes nothing. It's admin-only and audited as `node-renamed`.
 
 ### MCP agent keys and audit actors
 
@@ -89,7 +98,7 @@ task tools       # install the pinned codegen plugins into .bin/ (generate runs 
 task license     # re-inject Apache 2.0 headers via golic
 ```
 
-The generated stubs under `go/` and `gen/ts/` are committed; `task ci` fails if they drift from the protos. No GitHub workflow runs that check yet (#73), so run `task ci` before you push.
+The generated stubs under `go/` and `gen/ts/` are committed; `task ci` fails if they drift from the protos. The Generated Output check (`.github/workflows/ci-generate.yaml`) runs the same `task generate:verify` on every pull request with the same pinned plugins, so a PR whose committed stubs don't match its protos fails. Run `task ci` before you push to catch it first.
 
 ## 🚦 Status
 

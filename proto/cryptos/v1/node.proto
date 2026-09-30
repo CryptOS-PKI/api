@@ -236,7 +236,11 @@ message SetManagementResponse {
 message ApplyConfigResponse {
   // Monotonically increasing generation; bumped on every successful apply.
   uint64 generation = 1;
-  // True when the apply changed a field that takes effect only on reboot.
+  // True when the apply changed a field that takes effect only on reboot. Any
+  // change to an enrolment protocol block (Pki.acme, Pki.est), switching it on
+  // or off included, sets it: the node stores the config and the protocol
+  // changes at the next boot. NodeStatus.config_reboot_pending stays true until
+  // then.
   bool requires_reboot = 2;
   // SHA-256 digest of the canonical-encoded applied configuration.
   bytes config_digest = 3;

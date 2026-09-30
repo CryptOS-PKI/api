@@ -140,6 +140,137 @@ message Pki {
   // (the default) leaves a Root refusing to issue leaves. Carried in the proto
   // so the acknowledgement survives ApplyConfig and reaches an installed node.
   string root_leaf_issuance = 11;
+  // acme configures the RFC 8555 enrolment endpoint. See "Protocol blocks"
+  // below for how an absent block, enabled=false and enabled=true apply.
+  Acme acme = 13;
+  // est configures the RFC 7030 enrolment endpoint, applied the same way as
+  // acme.
+  Est est = 14;
+}
+
+// Protocol blocks
+//
+// Each enrolment protocol a node can serve has its own block on Pki (acme and
+// est today). Every block follows the same rules, and a protocol added later
+// gets a block of the same shape:
+//
+//   - The first field is an explicit `enabled` flag. A protocol is opened
+//     deliberately: enabled=false, or a block that was never set, means off.
+//   - An absent block (the field unset in ApplyConfig) says nothing: the node
+//     keeps the block it already has. A client that predates the block cannot
+//     switch a protocol off by omission.
+//   - A present block with enabled=false switches the protocol off. The other
+//     fields may still be sent so the settings survive for a later switch on,
+//     and they are not checked for completeness while the protocol is off.
+//   - A present block with enabled=true switches it on, and the node validates
+//     every field before storing the config.
+//   - Any change to a block, including the switch itself, is reboot-required:
+//     ApplyConfig stores it and returns requires_reboot=true, and the listener
+//     starts, stops or changes only at the next boot. NodeStatus.protocols shows
+//     configured against running until then.
+//   - A ROOT-role node keeps every enrolment protocol off (Root Mode closes the
+//     service-plane listeners) and rejects a block with enabled=true.
+//   - Secret fields are write-only. GetConfig returns them empty; an apply that
+//     leaves one empty keeps the value stored under the same identifier (key_id
+//     or username), and an empty secret for an identifier the node does not
+//     know is rejected. Removing an entry from its list revokes it.
+
+// Acme is the node's RFC 8555 server.
+message Acme {
+  // enabled switches the ACME listener on at the next boot.
+  bool enabled = 1;
+  // base_url is the externally reachable base under which the ACME endpoints
+  // live, for example "https://ca.example.org/acme". Every URL handed to a
+  // client is built from it and every request's signed url header is checked
+  // against it, so it must be what clients dial rather than what the node
+  // binds. Required when enabled.
+  string base_url = 2;
+  // http_port is the TCP port the ACME listener binds. Zero means the node
+  // default. ACME is normally fronted by TLS, so this listener is plain HTTP
+  // and separate from revocation_http_port.
+  uint32 http_port = 3;
+  // profile names the non-CA certificate profile in Pki.profiles that ACME
+  // issues under. Required when enabled; there is no default.
+  string profile = 4;
+  // terms_of_service, when set, is advertised in the directory and a new
+  // account must agree to it.
+  string terms_of_service = 5;
+  // website is advertised in the directory meta.
+  string website = 6;
+  // allow_anonymous_accounts drops the External Account Binding requirement
+  // (RFC 8555 section 7.3.4), so anyone who can answer an http-01 challenge can
+  // register and order. Off by default.
+  bool allow_anonymous_accounts = 7;
+  // external_account_keys are the External Account Binding credentials. At
+  // least one is required when enabled, unless allow_anonymous_accounts is set.
+  repeated AcmeExternalAccountKey external_account_keys = 8;
+  // allowed_identifier_suffixes, when non-empty, restricts the DNS names the
+  // node orders for: a name must equal, or be a subdomain of, one of these.
+  // Empty places no name restriction beyond proof of control and the account
+  // binding.
+  repeated string allowed_identifier_suffixes = 9;
+  // order_ttl_hours is how long an order and its authorizations stay valid.
+  // Zero means the node default.
+  uint32 order_ttl_hours = 10;
+}
+
+// AcmeExternalAccountKey is one External Account Binding credential.
+message AcmeExternalAccountKey {
+  // key_id is the identifier the client sends as the binding's kid. Unique
+  // within the block.
+  string key_id = 1;
+  // hmac_key_base64 is the shared HMAC secret, base64url-encoded without
+  // padding, at least 32 bytes decoded. Write-only: GetConfig returns it empty.
+  string hmac_key_base64 = 2;
+}
+
+// Est is the node's RFC 7030 server. It terminates TLS itself, with a server
+// certificate the node mints from its own CA for hostnames, because
+// simplereenroll authenticates with a TLS client certificate.
+message Est {
+  // enabled switches the EST listener on at the next boot.
+  bool enabled = 1;
+  // hostnames are the DNS names and IP literals clients reach the endpoint on,
+  // stamped into the listener's server certificate. At least one is required
+  // when enabled.
+  repeated string hostnames = 2;
+  // http_port is the TCP port the EST listener binds. Zero means the node
+  // default.
+  uint32 http_port = 3;
+  // profile names the non-CA certificate profile in Pki.profiles that EST
+  // issues under. Required when enabled.
+  string profile = 4;
+  // label is the optional path segment between /.well-known/est and the
+  // operation (RFC 7030 section 3.2.2), a single segment. Empty serves the
+  // unlabelled paths.
+  string label = 5;
+  // realm is the HTTP Basic realm offered when simpleenroll challenges.
+  string realm = 6;
+  // allowed_identifier_suffixes restricts the names simpleenroll issues for: a
+  // name must equal, or be a subdomain of, one of these. It does not restrict
+  // simplereenroll, whose names are pinned to the certificate the client
+  // already holds. Required when enroll_credentials is set, unless
+  // allow_any_identifier is true.
+  repeated string allowed_identifier_suffixes = 7;
+  // allow_any_identifier drops that restriction. simpleenroll proves nothing
+  // about control of a name, so without an allowlist one leaked credential
+  // mints a certificate for any name.
+  bool allow_any_identifier = 8;
+  // enroll_credentials are the HTTP Basic credentials that authorize
+  // simpleenroll. Empty keeps simpleenroll closed and offers
+  // certificate-authenticated renewal (simplereenroll) only.
+  repeated EstEnrollCredential enroll_credentials = 9;
+}
+
+// EstEnrollCredential is one simpleenroll credential.
+message EstEnrollCredential {
+  // username is the HTTP Basic user name. Unique within the block.
+  string username = 1;
+  // password_sha256 is the lowercase hex SHA-256 of the password, so the node
+  // never stores a live credential. The password must be a generated
+  // high-entropy value, because a digest of a chosen word falls to a
+  // dictionary. Write-only: GetConfig returns it empty.
+  string password_sha256 = 2;
 }
 
 // Parent is the trust anchor a subordinate CA pins for its issuer: the parent

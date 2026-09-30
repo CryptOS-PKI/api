@@ -39,6 +39,42 @@ message NodeStatus {
   // resolver is the DNS resolver configuration the node wrote at boot. Unset in
   // maintenance mode.
   ResolverStatus resolver = 9;
+  // protocols reports every enrolment protocol the node knows, configured in
+  // the stored machine config against running this boot. Unset in maintenance
+  // mode.
+  repeated ProtocolStatus protocols = 11;
+  // config_reboot_pending is true when the stored machine config differs from
+  // the one this boot started from in a field that takes effect only at boot:
+  // an ApplyConfig answered requires_reboot=true and the node has not rebooted
+  // since. It covers every reboot-required field, not only the protocol
+  // blocks. False in maintenance mode.
+  bool config_reboot_pending = 12;
+}
+
+// ProtocolStatus is one enrolment protocol's switch state. A protocol switch
+// is reboot-required, so configured and running can differ until the next
+// boot.
+message ProtocolStatus {
+  ServiceProtocol protocol = 1;
+  // configured is true when the stored machine config has the protocol's block
+  // with enabled=true.
+  bool configured = 2;
+  // running is true when the protocol's listener started at this boot.
+  bool running = 3;
+  // reboot_pending is true when the stored block differs from the one the
+  // running listener started from: switched on or off, or with changed
+  // settings. The next boot applies it.
+  bool reboot_pending = 4;
+}
+
+// ServiceProtocol names an enrolment protocol a node can serve. Values are
+// added as protocols gain a Pki block.
+enum ServiceProtocol {
+  SERVICE_PROTOCOL_UNSPECIFIED = 0;
+  // ACME, RFC 8555 (Pki.acme).
+  SERVICE_PROTOCOL_ACME = 1;
+  // EST, RFC 7030 (Pki.est).
+  SERVICE_PROTOCOL_EST = 2;
 }
 
 // RevocationPreflight reports whether the configured revocation base URL is

@@ -20,7 +20,7 @@ Taskfile.yml             # fmt / lint / generate / test / ci targets
 
 | File | Defines |
 |---|---|
-| `node.proto` | `NodeService` — the per-node management surface: config (`ApplyConfig`, `GetConfig`), status and identity, the first-boot ceremony, CA signing and revocation, key escrow and rotation, reset, in-place image upgrade, `Reboot` (orderly, CN-confirmed reboot or power-off), SCEP administration (one-time enrolment challenges and the approval queue), and the list of TSA certificates, current and past (`ListTsaCertificates`). |
+| `node.proto` | `NodeService` — the per-node management surface: config (`ApplyConfig`, `GetConfig`), status and identity, the first-boot ceremony, CA signing and revocation, fetching an issued certificate and its chain by serial (`GetIssuedCertificate`), key escrow and rotation, reset, in-place image upgrade, `Reboot` (orderly, CN-confirmed reboot or power-off), SCEP administration (one-time enrolment challenges and the approval queue), and the list of TSA certificates, current and past (`ListTsaCertificates`). |
 | `identity.proto` | `Identity` — DER + PEM + leaf SHA-256 for the CA chain. |
 | `ceremony.proto` | `CeremonyEvent` stream messages + ceremony kind/event enums. |
 | `status.proto` | `NodeStatus` — role, identity state, TPM state, etcd state, boot count, the revocation preflight result (state, last error, when it was checked), the DNS resolver source and nameservers, the SNTP time-sync state (source, servers, last offset and sync, and the latest error), each enrolment protocol's configured and running state, and whether a stored config change is waiting for a reboot. |
@@ -28,7 +28,7 @@ Taskfile.yml             # fmt / lint / generate / test / ci targets
 | `scep.proto` | The SCEP challenge and approval-queue messages. A challenge is returned once, when it is minted, and no read carries it or its digest. |
 | `tsa.proto` | The TSA certificate messages `ListTsaCertificates` returns, kept after rotation so old timestamp tokens still verify. |
 | `audit.proto` | `AuditEvent` — hash-chained audit log entry shape. |
-| `fleet/v1/fleet.proto` | `FleetService` — the Fleet Manager's surface over the fleet: node (including `RenameNode`), certificate, profile, adapter, enrollment and operator-credential RPCs, the manager audit log (`ListAudit`), MCP agent key management (`ListMcpKeys`, `RevokeMcpKey`, `CreateMcpKey`), step-up approvals (`ListApprovals`, `DecideApproval`), and the per-node enrolment protocol switch (`SetNodeProtocol`, with each node's protocol state and `reboot_required` on `NodeSummary`). |
+| `fleet/v1/fleet.proto` | `FleetService` — the Fleet Manager's surface over the fleet: node (including `RenameNode`), certificate (including `GetCertificate`, an issued certificate and its chain by serial), profile, adapter, enrollment and operator-credential RPCs, the manager audit log (`ListAudit`), MCP agent key management (`ListMcpKeys`, `RevokeMcpKey`, `CreateMcpKey`), step-up approvals (`ListApprovals`, `DecideApproval`), and the per-node enrolment protocol switch (`SetNodeProtocol`, with each node's protocol state and `reboot_required` on `NodeSummary`). |
 
 ### Node IDs and renaming
 
@@ -38,6 +38,18 @@ Every node has a stable `id` on `NodeSummary`: a UUIDv7 in canonical lowercase f
 - `GetNodeRequest.name` also resolves a name the node held before a rename, when no current node has it, so old links still find the node.
 - `Certificate.issuer_node_id`, `EnrollmentRequest.admitted_node_id`, `AuditEvent.node_id` and the final `AdoptNodeResponse.node_id` carry the ID of the node they point at.
 - `RenameNode` takes `node_id` and `new_name` and returns the updated `NodeSummary`. It fails with `NotFound` when no node has the ID, `AlreadyExists` when another node has the name, and `InvalidArgument` when the name isn't an RFC 1123 label. Renaming to the current name changes nothing. It's admin-only and audited as `node-renamed`.
+
+### Fetching an issued certificate
+
+A client fetches an issued certificate and its chain by serial:
+
+| RPC | Takes | Returns |
+|---|---|---|
+| `NodeService.GetIssuedCertificate` | `serial_hex` | `certificate_der`, `chain_der` (repeated, issuer up to root), `status`, `revoked_at` |
+| `FleetService.GetCertificate` | `node_name`, `serial_hex` | `certificate_pem`, `chain_pem` (issuer up to root), `status`, `revoked_at` |
+
+- `status` is `valid`, `revoked` or `expired`. `revoked_at` is RFC3339, empty unless the certificate is revoked.
+- An unknown serial is `NotFound`. `GetCertificate` is readable at viewer level and above.
 
 ### MCP agent keys and audit actors
 

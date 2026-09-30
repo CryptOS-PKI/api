@@ -97,6 +97,12 @@ service NodeService {
   // ListRevocations returns this node's revoked certificates.
   rpc ListRevocations(ListRevocationsRequest) returns (ListRevocationsResponse);
 
+  // GetIssuedCertificate returns a certificate this node issued, identified by
+  // its hex serial, with its chain and current status, so a client can fetch
+  // the certificate itself rather than only its inventory entry. NotFound if
+  // the serial is not in this node's issued set.
+  rpc GetIssuedCertificate(GetIssuedCertificateRequest) returns (GetIssuedCertificateResponse);
+
   // ExportCAKey returns an encrypted backup of this node's software CA key and
   // certificate chain, sealed under the operator passphrase. The plaintext key
   // never leaves the node. Admin-authorized; refused on a TPM node (TPM keys
@@ -538,6 +544,26 @@ message ListRevocationsRequest {}
 
 message ListRevocationsResponse {
   repeated Revocation revocations = 1;
+}
+
+// GetIssuedCertificateRequest names the issued certificate to fetch.
+message GetIssuedCertificateRequest {
+  // serial_hex is the hex-encoded serial of a certificate this node issued.
+  string serial_hex = 1;
+}
+
+// GetIssuedCertificateResponse carries the certificate, its chain and its
+// status.
+message GetIssuedCertificateResponse {
+  // certificate_der is the DER encoding of the issued certificate.
+  bytes certificate_der = 1;
+  // chain_der is the DER-encoded chain, from the issuer up to the root.
+  repeated bytes chain_der = 2;
+  // status is "valid" | "revoked" | "expired".
+  string status = 3;
+  // revoked_at is when the certificate was revoked (RFC3339); empty unless
+  // status is revoked.
+  string revoked_at = 4;
 }
 
 message ListInstallDisksRequest {}

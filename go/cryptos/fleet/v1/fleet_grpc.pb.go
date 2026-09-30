@@ -19,44 +19,53 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	FleetService_ListNodes_FullMethodName                = "/cryptos.fleet.v1.FleetService/ListNodes"
-	FleetService_GetNode_FullMethodName                  = "/cryptos.fleet.v1.FleetService/GetNode"
-	FleetService_ListCertificates_FullMethodName         = "/cryptos.fleet.v1.FleetService/ListCertificates"
-	FleetService_ListProfiles_FullMethodName             = "/cryptos.fleet.v1.FleetService/ListProfiles"
-	FleetService_CreateProfile_FullMethodName            = "/cryptos.fleet.v1.FleetService/CreateProfile"
-	FleetService_UpdateProfile_FullMethodName            = "/cryptos.fleet.v1.FleetService/UpdateProfile"
-	FleetService_DeleteProfile_FullMethodName            = "/cryptos.fleet.v1.FleetService/DeleteProfile"
-	FleetService_ApplyProfileToNode_FullMethodName       = "/cryptos.fleet.v1.FleetService/ApplyProfileToNode"
-	FleetService_ListAdapters_FullMethodName             = "/cryptos.fleet.v1.FleetService/ListAdapters"
-	FleetService_SetAdapterEnabled_FullMethodName        = "/cryptos.fleet.v1.FleetService/SetAdapterEnabled"
-	FleetService_SetNodeProtocol_FullMethodName          = "/cryptos.fleet.v1.FleetService/SetNodeProtocol"
-	FleetService_ListAudit_FullMethodName                = "/cryptos.fleet.v1.FleetService/ListAudit"
-	FleetService_ListEnrollments_FullMethodName          = "/cryptos.fleet.v1.FleetService/ListEnrollments"
-	FleetService_CreateEnrollment_FullMethodName         = "/cryptos.fleet.v1.FleetService/CreateEnrollment"
-	FleetService_ApproveEnrollment_FullMethodName        = "/cryptos.fleet.v1.FleetService/ApproveEnrollment"
-	FleetService_RejectEnrollment_FullMethodName         = "/cryptos.fleet.v1.FleetService/RejectEnrollment"
-	FleetService_WhoAmI_FullMethodName                   = "/cryptos.fleet.v1.FleetService/WhoAmI"
-	FleetService_RevokeCertificate_FullMethodName        = "/cryptos.fleet.v1.FleetService/RevokeCertificate"
-	FleetService_GetCertificate_FullMethodName           = "/cryptos.fleet.v1.FleetService/GetCertificate"
-	FleetService_IssueLeaf_FullMethodName                = "/cryptos.fleet.v1.FleetService/IssueLeaf"
-	FleetService_RekeyNode_FullMethodName                = "/cryptos.fleet.v1.FleetService/RekeyNode"
-	FleetService_GetNodeConfig_FullMethodName            = "/cryptos.fleet.v1.FleetService/GetNodeConfig"
-	FleetService_ApplyNodeConfig_FullMethodName          = "/cryptos.fleet.v1.FleetService/ApplyNodeConfig"
-	FleetService_ExportCAKey_FullMethodName              = "/cryptos.fleet.v1.FleetService/ExportCAKey"
-	FleetService_ImportCAKey_FullMethodName              = "/cryptos.fleet.v1.FleetService/ImportCAKey"
-	FleetService_IssueOperatorCredential_FullMethodName  = "/cryptos.fleet.v1.FleetService/IssueOperatorCredential"
-	FleetService_RevokeOperatorCredential_FullMethodName = "/cryptos.fleet.v1.FleetService/RevokeOperatorCredential"
-	FleetService_ListOperatorCredentials_FullMethodName  = "/cryptos.fleet.v1.FleetService/ListOperatorCredentials"
-	FleetService_PreviewAdoption_FullMethodName          = "/cryptos.fleet.v1.FleetService/PreviewAdoption"
-	FleetService_ListInstallDisks_FullMethodName         = "/cryptos.fleet.v1.FleetService/ListInstallDisks"
-	FleetService_AdoptNode_FullMethodName                = "/cryptos.fleet.v1.FleetService/AdoptNode"
-	FleetService_DecommissionNode_FullMethodName         = "/cryptos.fleet.v1.FleetService/DecommissionNode"
-	FleetService_RenameNode_FullMethodName               = "/cryptos.fleet.v1.FleetService/RenameNode"
-	FleetService_ListMcpKeys_FullMethodName              = "/cryptos.fleet.v1.FleetService/ListMcpKeys"
-	FleetService_RevokeMcpKey_FullMethodName             = "/cryptos.fleet.v1.FleetService/RevokeMcpKey"
-	FleetService_CreateMcpKey_FullMethodName             = "/cryptos.fleet.v1.FleetService/CreateMcpKey"
-	FleetService_ListApprovals_FullMethodName            = "/cryptos.fleet.v1.FleetService/ListApprovals"
-	FleetService_DecideApproval_FullMethodName           = "/cryptos.fleet.v1.FleetService/DecideApproval"
+	FleetService_ListNodes_FullMethodName                       = "/cryptos.fleet.v1.FleetService/ListNodes"
+	FleetService_GetNode_FullMethodName                         = "/cryptos.fleet.v1.FleetService/GetNode"
+	FleetService_ListCertificates_FullMethodName                = "/cryptos.fleet.v1.FleetService/ListCertificates"
+	FleetService_ListProfiles_FullMethodName                    = "/cryptos.fleet.v1.FleetService/ListProfiles"
+	FleetService_CreateProfile_FullMethodName                   = "/cryptos.fleet.v1.FleetService/CreateProfile"
+	FleetService_UpdateProfile_FullMethodName                   = "/cryptos.fleet.v1.FleetService/UpdateProfile"
+	FleetService_DeleteProfile_FullMethodName                   = "/cryptos.fleet.v1.FleetService/DeleteProfile"
+	FleetService_ApplyProfileToNode_FullMethodName              = "/cryptos.fleet.v1.FleetService/ApplyProfileToNode"
+	FleetService_ListAdapters_FullMethodName                    = "/cryptos.fleet.v1.FleetService/ListAdapters"
+	FleetService_SetAdapterEnabled_FullMethodName               = "/cryptos.fleet.v1.FleetService/SetAdapterEnabled"
+	FleetService_SetNodeProtocol_FullMethodName                 = "/cryptos.fleet.v1.FleetService/SetNodeProtocol"
+	FleetService_ListAudit_FullMethodName                       = "/cryptos.fleet.v1.FleetService/ListAudit"
+	FleetService_ListEnrollments_FullMethodName                 = "/cryptos.fleet.v1.FleetService/ListEnrollments"
+	FleetService_CreateEnrollment_FullMethodName                = "/cryptos.fleet.v1.FleetService/CreateEnrollment"
+	FleetService_ApproveEnrollment_FullMethodName               = "/cryptos.fleet.v1.FleetService/ApproveEnrollment"
+	FleetService_RejectEnrollment_FullMethodName                = "/cryptos.fleet.v1.FleetService/RejectEnrollment"
+	FleetService_WhoAmI_FullMethodName                          = "/cryptos.fleet.v1.FleetService/WhoAmI"
+	FleetService_RevokeCertificate_FullMethodName               = "/cryptos.fleet.v1.FleetService/RevokeCertificate"
+	FleetService_GetCertificate_FullMethodName                  = "/cryptos.fleet.v1.FleetService/GetCertificate"
+	FleetService_IssueLeaf_FullMethodName                       = "/cryptos.fleet.v1.FleetService/IssueLeaf"
+	FleetService_RekeyNode_FullMethodName                       = "/cryptos.fleet.v1.FleetService/RekeyNode"
+	FleetService_GetNodeConfig_FullMethodName                   = "/cryptos.fleet.v1.FleetService/GetNodeConfig"
+	FleetService_ApplyNodeConfig_FullMethodName                 = "/cryptos.fleet.v1.FleetService/ApplyNodeConfig"
+	FleetService_ExportCAKey_FullMethodName                     = "/cryptos.fleet.v1.FleetService/ExportCAKey"
+	FleetService_ImportCAKey_FullMethodName                     = "/cryptos.fleet.v1.FleetService/ImportCAKey"
+	FleetService_CreateOperatorCredentialRequest_FullMethodName = "/cryptos.fleet.v1.FleetService/CreateOperatorCredentialRequest"
+	FleetService_ListOperatorCredentialRequests_FullMethodName  = "/cryptos.fleet.v1.FleetService/ListOperatorCredentialRequests"
+	FleetService_CancelOperatorCredentialRequest_FullMethodName = "/cryptos.fleet.v1.FleetService/CancelOperatorCredentialRequest"
+	FleetService_RecordOperatorCredential_FullMethodName        = "/cryptos.fleet.v1.FleetService/RecordOperatorCredential"
+	FleetService_RevokeOperatorCredential_FullMethodName        = "/cryptos.fleet.v1.FleetService/RevokeOperatorCredential"
+	FleetService_ListOperatorCredentials_FullMethodName         = "/cryptos.fleet.v1.FleetService/ListOperatorCredentials"
+	FleetService_ListOperatorCAs_FullMethodName                 = "/cryptos.fleet.v1.FleetService/ListOperatorCAs"
+	FleetService_RegisterOperatorCA_FullMethodName              = "/cryptos.fleet.v1.FleetService/RegisterOperatorCA"
+	FleetService_RetireOperatorCA_FullMethodName                = "/cryptos.fleet.v1.FleetService/RetireOperatorCA"
+	FleetService_SetOperatorCACRLSource_FullMethodName          = "/cryptos.fleet.v1.FleetService/SetOperatorCACRLSource"
+	FleetService_UploadOperatorCRL_FullMethodName               = "/cryptos.fleet.v1.FleetService/UploadOperatorCRL"
+	FleetService_SetOperatorCAOCSP_FullMethodName               = "/cryptos.fleet.v1.FleetService/SetOperatorCAOCSP"
+	FleetService_PreviewAdoption_FullMethodName                 = "/cryptos.fleet.v1.FleetService/PreviewAdoption"
+	FleetService_ListInstallDisks_FullMethodName                = "/cryptos.fleet.v1.FleetService/ListInstallDisks"
+	FleetService_AdoptNode_FullMethodName                       = "/cryptos.fleet.v1.FleetService/AdoptNode"
+	FleetService_DecommissionNode_FullMethodName                = "/cryptos.fleet.v1.FleetService/DecommissionNode"
+	FleetService_RenameNode_FullMethodName                      = "/cryptos.fleet.v1.FleetService/RenameNode"
+	FleetService_ListMcpKeys_FullMethodName                     = "/cryptos.fleet.v1.FleetService/ListMcpKeys"
+	FleetService_RevokeMcpKey_FullMethodName                    = "/cryptos.fleet.v1.FleetService/RevokeMcpKey"
+	FleetService_CreateMcpKey_FullMethodName                    = "/cryptos.fleet.v1.FleetService/CreateMcpKey"
+	FleetService_ListApprovals_FullMethodName                   = "/cryptos.fleet.v1.FleetService/ListApprovals"
+	FleetService_DecideApproval_FullMethodName                  = "/cryptos.fleet.v1.FleetService/DecideApproval"
 )
 
 // FleetServiceClient is the client API for FleetService service.
@@ -172,21 +181,64 @@ type FleetServiceClient interface {
 	// reach the node and is never persisted. Admin-gated and audited (the audit
 	// names the node and restored subject only, never the secret or envelope).
 	ImportCAKey(ctx context.Context, in *ImportCAKeyRequest, opts ...grpc.CallOption) (*ImportCAKeyResponse, error)
-	// IssueOperatorCredential issues an operator client certificate. The browser
-	// generates the key and CSR; the manager routes signing to the node acting as
-	// the operator CA under an operator-<level> profile that carries the
-	// access-level extension. Only the CSR crosses the wire; the operator key
-	// stays in the browser. Admin-gated and audited (the audit names the subject
-	// and serial only, never the CSR or certificate bytes).
-	IssueOperatorCredential(ctx context.Context, in *IssueOperatorCredentialRequest, opts ...grpc.CallOption) (*IssueOperatorCredentialResponse, error)
-	// RevokeOperatorCredential revokes an operator credential on the operator-CA
-	// node by hex serial, with an RFC 5280 reason code. The manager enforces the
-	// revocation in the authz middleware, so a revoked operator can no longer
-	// authenticate. Admin-gated and audited.
+	// CreateOperatorCredentialRequest stores a pending request for an operator
+	// credential from a CSR with subject CN=<email>, for the external operator
+	// CA to sign out of band. It returns the CSR, the OpenSSL extension section
+	// for the level, and the signing command. The request expires after 30
+	// days. Admin-gated and audited.
+	CreateOperatorCredentialRequest(ctx context.Context, in *CreateOperatorCredentialRequestRequest, opts ...grpc.CallOption) (*CreateOperatorCredentialRequestResponse, error)
+	// ListOperatorCredentialRequests returns credential requests, newest first,
+	// optionally filtered by state. Operator-readable.
+	ListOperatorCredentialRequests(ctx context.Context, in *ListOperatorCredentialRequestsRequest, opts ...grpc.CallOption) (*ListOperatorCredentialRequestsResponse, error)
+	// CancelOperatorCredentialRequest cancels a pending request. Admin-gated and
+	// audited.
+	CancelOperatorCredentialRequest(ctx context.Context, in *CancelOperatorCredentialRequestRequest, opts ...grpc.CallOption) (*CancelOperatorCredentialRequestResponse, error)
+	// RecordOperatorCredential checks and records an operator certificate the
+	// external operator CA signed. With request_id, the level, CN and public key
+	// must match the pending request, which is then completed; without it, a
+	// certificate made entirely out of band is imported. The certificate must
+	// chain to the active operator CA and not be recorded already. Admin-gated
+	// and audited.
+	RecordOperatorCredential(ctx context.Context, in *RecordOperatorCredentialRequest, opts ...grpc.CallOption) (*RecordOperatorCredentialResponse, error)
+	// RevokeOperatorCredential puts an operator credential on the manager's
+	// denylist, keyed by issuer and hex serial, with an RFC 5280 reason code.
+	// The authz middleware refuses the credential from its next request. A
+	// serial the manager never recorded can be denied too. It calls no node and
+	// doesn't revoke at the CA: the response warns to revoke there too and
+	// publish a new CRL. Admin-gated and audited.
 	RevokeOperatorCredential(ctx context.Context, in *RevokeOperatorCredentialRequest, opts ...grpc.CallOption) (*RevokeOperatorCredentialResponse, error)
-	// ListOperatorCredentials returns the operator credentials the manager has
-	// issued, with their level, expiry, and revocation state. Operator-readable.
+	// ListOperatorCredentials returns the operator credentials the manager
+	// knows: first-admin, requested, recorded and observed in use, with their
+	// issuer and revocation state. Operator-readable.
 	ListOperatorCredentials(ctx context.Context, in *ListOperatorCredentialsRequest, opts ...grpc.CallOption) (*ListOperatorCredentialsResponse, error)
+	// ListOperatorCAs returns the operator CAs the manager trusts or has
+	// trusted, with their CRL and OCSP state. Operator-readable.
+	ListOperatorCAs(ctx context.Context, in *ListOperatorCAsRequest, opts ...grpc.CallOption) (*ListOperatorCAsResponse, error)
+	// RegisterOperatorCA registers a new operator CA after first run, with the
+	// same checks, preview and confirm_sha256 step as
+	// BootstrapService.RegisterOperatorCA. The new CA becomes active and the
+	// previous active CA becomes retiring, still trusted until it is retired.
+	// Refused with 1605 ROTATION_IN_PROGRESS while a retiring CA exists.
+	// Admin-gated and audited. Every operator-CA write returns 1607 while the
+	// operator CA comes from the manager's config file.
+	RegisterOperatorCA(ctx context.Context, in *RegisterOperatorCARequest, opts ...grpc.CallOption) (*RegisterOperatorCAResponse, error)
+	// RetireOperatorCA stops trusting an operator CA; every certificate under
+	// it is refused from its next request. Refused with 1609 for the last
+	// active CA, and refused when the caller's own certificate chains only to
+	// it unless i_understand_self_lockout is set. Admin-gated and audited.
+	RetireOperatorCA(ctx context.Context, in *RetireOperatorCARequest, opts ...grpc.CallOption) (*RetireOperatorCAResponse, error)
+	// SetOperatorCACRLSource changes an operator CA's CRL source. A new URL or
+	// CRL must verify against the CA first; switching to none needs the NO_CRL
+	// acknowledgement and cuts off MCP for certificates under the CA.
+	// Admin-gated and audited.
+	SetOperatorCACRLSource(ctx context.Context, in *SetOperatorCACRLSourceRequest, opts ...grpc.CallOption) (*SetOperatorCACRLSourceResponse, error)
+	// UploadOperatorCRL stores a new CRL for an operator CA whose CRL source is
+	// upload. It must verify against the CA and be newer than the stored CRL.
+	// Admin-gated and audited.
+	UploadOperatorCRL(ctx context.Context, in *UploadOperatorCRLRequest, opts ...grpc.CallOption) (*UploadOperatorCRLResponse, error)
+	// SetOperatorCAOCSP changes an operator CA's OCSP mode. OCSP_MODE_URL must
+	// pass a probe of the responder first. Admin-gated and audited.
+	SetOperatorCAOCSP(ctx context.Context, in *SetOperatorCAOCSPRequest, opts ...grpc.CallOption) (*SetOperatorCAOCSPResponse, error)
 	// PreviewAdoption performs the trust-on-first-use step of adopting a new
 	// node: it dials the maintenance endpoint (no pin yet), captures the
 	// self-signed certificate the node presents, and returns its SHA-256
@@ -509,10 +561,40 @@ func (c *fleetServiceClient) ImportCAKey(ctx context.Context, in *ImportCAKeyReq
 	return out, nil
 }
 
-func (c *fleetServiceClient) IssueOperatorCredential(ctx context.Context, in *IssueOperatorCredentialRequest, opts ...grpc.CallOption) (*IssueOperatorCredentialResponse, error) {
+func (c *fleetServiceClient) CreateOperatorCredentialRequest(ctx context.Context, in *CreateOperatorCredentialRequestRequest, opts ...grpc.CallOption) (*CreateOperatorCredentialRequestResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(IssueOperatorCredentialResponse)
-	err := c.cc.Invoke(ctx, FleetService_IssueOperatorCredential_FullMethodName, in, out, cOpts...)
+	out := new(CreateOperatorCredentialRequestResponse)
+	err := c.cc.Invoke(ctx, FleetService_CreateOperatorCredentialRequest_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) ListOperatorCredentialRequests(ctx context.Context, in *ListOperatorCredentialRequestsRequest, opts ...grpc.CallOption) (*ListOperatorCredentialRequestsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListOperatorCredentialRequestsResponse)
+	err := c.cc.Invoke(ctx, FleetService_ListOperatorCredentialRequests_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) CancelOperatorCredentialRequest(ctx context.Context, in *CancelOperatorCredentialRequestRequest, opts ...grpc.CallOption) (*CancelOperatorCredentialRequestResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CancelOperatorCredentialRequestResponse)
+	err := c.cc.Invoke(ctx, FleetService_CancelOperatorCredentialRequest_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) RecordOperatorCredential(ctx context.Context, in *RecordOperatorCredentialRequest, opts ...grpc.CallOption) (*RecordOperatorCredentialResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RecordOperatorCredentialResponse)
+	err := c.cc.Invoke(ctx, FleetService_RecordOperatorCredential_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -533,6 +615,66 @@ func (c *fleetServiceClient) ListOperatorCredentials(ctx context.Context, in *Li
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListOperatorCredentialsResponse)
 	err := c.cc.Invoke(ctx, FleetService_ListOperatorCredentials_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) ListOperatorCAs(ctx context.Context, in *ListOperatorCAsRequest, opts ...grpc.CallOption) (*ListOperatorCAsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListOperatorCAsResponse)
+	err := c.cc.Invoke(ctx, FleetService_ListOperatorCAs_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) RegisterOperatorCA(ctx context.Context, in *RegisterOperatorCARequest, opts ...grpc.CallOption) (*RegisterOperatorCAResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RegisterOperatorCAResponse)
+	err := c.cc.Invoke(ctx, FleetService_RegisterOperatorCA_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) RetireOperatorCA(ctx context.Context, in *RetireOperatorCARequest, opts ...grpc.CallOption) (*RetireOperatorCAResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RetireOperatorCAResponse)
+	err := c.cc.Invoke(ctx, FleetService_RetireOperatorCA_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) SetOperatorCACRLSource(ctx context.Context, in *SetOperatorCACRLSourceRequest, opts ...grpc.CallOption) (*SetOperatorCACRLSourceResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetOperatorCACRLSourceResponse)
+	err := c.cc.Invoke(ctx, FleetService_SetOperatorCACRLSource_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) UploadOperatorCRL(ctx context.Context, in *UploadOperatorCRLRequest, opts ...grpc.CallOption) (*UploadOperatorCRLResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UploadOperatorCRLResponse)
+	err := c.cc.Invoke(ctx, FleetService_UploadOperatorCRL_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fleetServiceClient) SetOperatorCAOCSP(ctx context.Context, in *SetOperatorCAOCSPRequest, opts ...grpc.CallOption) (*SetOperatorCAOCSPResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetOperatorCAOCSPResponse)
+	err := c.cc.Invoke(ctx, FleetService_SetOperatorCAOCSP_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -761,21 +903,64 @@ type FleetServiceServer interface {
 	// reach the node and is never persisted. Admin-gated and audited (the audit
 	// names the node and restored subject only, never the secret or envelope).
 	ImportCAKey(context.Context, *ImportCAKeyRequest) (*ImportCAKeyResponse, error)
-	// IssueOperatorCredential issues an operator client certificate. The browser
-	// generates the key and CSR; the manager routes signing to the node acting as
-	// the operator CA under an operator-<level> profile that carries the
-	// access-level extension. Only the CSR crosses the wire; the operator key
-	// stays in the browser. Admin-gated and audited (the audit names the subject
-	// and serial only, never the CSR or certificate bytes).
-	IssueOperatorCredential(context.Context, *IssueOperatorCredentialRequest) (*IssueOperatorCredentialResponse, error)
-	// RevokeOperatorCredential revokes an operator credential on the operator-CA
-	// node by hex serial, with an RFC 5280 reason code. The manager enforces the
-	// revocation in the authz middleware, so a revoked operator can no longer
-	// authenticate. Admin-gated and audited.
+	// CreateOperatorCredentialRequest stores a pending request for an operator
+	// credential from a CSR with subject CN=<email>, for the external operator
+	// CA to sign out of band. It returns the CSR, the OpenSSL extension section
+	// for the level, and the signing command. The request expires after 30
+	// days. Admin-gated and audited.
+	CreateOperatorCredentialRequest(context.Context, *CreateOperatorCredentialRequestRequest) (*CreateOperatorCredentialRequestResponse, error)
+	// ListOperatorCredentialRequests returns credential requests, newest first,
+	// optionally filtered by state. Operator-readable.
+	ListOperatorCredentialRequests(context.Context, *ListOperatorCredentialRequestsRequest) (*ListOperatorCredentialRequestsResponse, error)
+	// CancelOperatorCredentialRequest cancels a pending request. Admin-gated and
+	// audited.
+	CancelOperatorCredentialRequest(context.Context, *CancelOperatorCredentialRequestRequest) (*CancelOperatorCredentialRequestResponse, error)
+	// RecordOperatorCredential checks and records an operator certificate the
+	// external operator CA signed. With request_id, the level, CN and public key
+	// must match the pending request, which is then completed; without it, a
+	// certificate made entirely out of band is imported. The certificate must
+	// chain to the active operator CA and not be recorded already. Admin-gated
+	// and audited.
+	RecordOperatorCredential(context.Context, *RecordOperatorCredentialRequest) (*RecordOperatorCredentialResponse, error)
+	// RevokeOperatorCredential puts an operator credential on the manager's
+	// denylist, keyed by issuer and hex serial, with an RFC 5280 reason code.
+	// The authz middleware refuses the credential from its next request. A
+	// serial the manager never recorded can be denied too. It calls no node and
+	// doesn't revoke at the CA: the response warns to revoke there too and
+	// publish a new CRL. Admin-gated and audited.
 	RevokeOperatorCredential(context.Context, *RevokeOperatorCredentialRequest) (*RevokeOperatorCredentialResponse, error)
-	// ListOperatorCredentials returns the operator credentials the manager has
-	// issued, with their level, expiry, and revocation state. Operator-readable.
+	// ListOperatorCredentials returns the operator credentials the manager
+	// knows: first-admin, requested, recorded and observed in use, with their
+	// issuer and revocation state. Operator-readable.
 	ListOperatorCredentials(context.Context, *ListOperatorCredentialsRequest) (*ListOperatorCredentialsResponse, error)
+	// ListOperatorCAs returns the operator CAs the manager trusts or has
+	// trusted, with their CRL and OCSP state. Operator-readable.
+	ListOperatorCAs(context.Context, *ListOperatorCAsRequest) (*ListOperatorCAsResponse, error)
+	// RegisterOperatorCA registers a new operator CA after first run, with the
+	// same checks, preview and confirm_sha256 step as
+	// BootstrapService.RegisterOperatorCA. The new CA becomes active and the
+	// previous active CA becomes retiring, still trusted until it is retired.
+	// Refused with 1605 ROTATION_IN_PROGRESS while a retiring CA exists.
+	// Admin-gated and audited. Every operator-CA write returns 1607 while the
+	// operator CA comes from the manager's config file.
+	RegisterOperatorCA(context.Context, *RegisterOperatorCARequest) (*RegisterOperatorCAResponse, error)
+	// RetireOperatorCA stops trusting an operator CA; every certificate under
+	// it is refused from its next request. Refused with 1609 for the last
+	// active CA, and refused when the caller's own certificate chains only to
+	// it unless i_understand_self_lockout is set. Admin-gated and audited.
+	RetireOperatorCA(context.Context, *RetireOperatorCARequest) (*RetireOperatorCAResponse, error)
+	// SetOperatorCACRLSource changes an operator CA's CRL source. A new URL or
+	// CRL must verify against the CA first; switching to none needs the NO_CRL
+	// acknowledgement and cuts off MCP for certificates under the CA.
+	// Admin-gated and audited.
+	SetOperatorCACRLSource(context.Context, *SetOperatorCACRLSourceRequest) (*SetOperatorCACRLSourceResponse, error)
+	// UploadOperatorCRL stores a new CRL for an operator CA whose CRL source is
+	// upload. It must verify against the CA and be newer than the stored CRL.
+	// Admin-gated and audited.
+	UploadOperatorCRL(context.Context, *UploadOperatorCRLRequest) (*UploadOperatorCRLResponse, error)
+	// SetOperatorCAOCSP changes an operator CA's OCSP mode. OCSP_MODE_URL must
+	// pass a probe of the responder first. Admin-gated and audited.
+	SetOperatorCAOCSP(context.Context, *SetOperatorCAOCSPRequest) (*SetOperatorCAOCSPResponse, error)
 	// PreviewAdoption performs the trust-on-first-use step of adopting a new
 	// node: it dials the maintenance endpoint (no pin yet), captures the
 	// self-signed certificate the node presents, and returns its SHA-256
@@ -922,14 +1107,41 @@ func (UnimplementedFleetServiceServer) ExportCAKey(context.Context, *ExportCAKey
 func (UnimplementedFleetServiceServer) ImportCAKey(context.Context, *ImportCAKeyRequest) (*ImportCAKeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ImportCAKey not implemented")
 }
-func (UnimplementedFleetServiceServer) IssueOperatorCredential(context.Context, *IssueOperatorCredentialRequest) (*IssueOperatorCredentialResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method IssueOperatorCredential not implemented")
+func (UnimplementedFleetServiceServer) CreateOperatorCredentialRequest(context.Context, *CreateOperatorCredentialRequestRequest) (*CreateOperatorCredentialRequestResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateOperatorCredentialRequest not implemented")
+}
+func (UnimplementedFleetServiceServer) ListOperatorCredentialRequests(context.Context, *ListOperatorCredentialRequestsRequest) (*ListOperatorCredentialRequestsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListOperatorCredentialRequests not implemented")
+}
+func (UnimplementedFleetServiceServer) CancelOperatorCredentialRequest(context.Context, *CancelOperatorCredentialRequestRequest) (*CancelOperatorCredentialRequestResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CancelOperatorCredentialRequest not implemented")
+}
+func (UnimplementedFleetServiceServer) RecordOperatorCredential(context.Context, *RecordOperatorCredentialRequest) (*RecordOperatorCredentialResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RecordOperatorCredential not implemented")
 }
 func (UnimplementedFleetServiceServer) RevokeOperatorCredential(context.Context, *RevokeOperatorCredentialRequest) (*RevokeOperatorCredentialResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RevokeOperatorCredential not implemented")
 }
 func (UnimplementedFleetServiceServer) ListOperatorCredentials(context.Context, *ListOperatorCredentialsRequest) (*ListOperatorCredentialsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListOperatorCredentials not implemented")
+}
+func (UnimplementedFleetServiceServer) ListOperatorCAs(context.Context, *ListOperatorCAsRequest) (*ListOperatorCAsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListOperatorCAs not implemented")
+}
+func (UnimplementedFleetServiceServer) RegisterOperatorCA(context.Context, *RegisterOperatorCARequest) (*RegisterOperatorCAResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterOperatorCA not implemented")
+}
+func (UnimplementedFleetServiceServer) RetireOperatorCA(context.Context, *RetireOperatorCARequest) (*RetireOperatorCAResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RetireOperatorCA not implemented")
+}
+func (UnimplementedFleetServiceServer) SetOperatorCACRLSource(context.Context, *SetOperatorCACRLSourceRequest) (*SetOperatorCACRLSourceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetOperatorCACRLSource not implemented")
+}
+func (UnimplementedFleetServiceServer) UploadOperatorCRL(context.Context, *UploadOperatorCRLRequest) (*UploadOperatorCRLResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UploadOperatorCRL not implemented")
+}
+func (UnimplementedFleetServiceServer) SetOperatorCAOCSP(context.Context, *SetOperatorCAOCSPRequest) (*SetOperatorCAOCSPResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetOperatorCAOCSP not implemented")
 }
 func (UnimplementedFleetServiceServer) PreviewAdoption(context.Context, *PreviewAdoptionRequest) (*PreviewAdoptionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PreviewAdoption not implemented")
@@ -1431,20 +1643,74 @@ func _FleetService_ImportCAKey_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FleetService_IssueOperatorCredential_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IssueOperatorCredentialRequest)
+func _FleetService_CreateOperatorCredentialRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateOperatorCredentialRequestRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FleetServiceServer).IssueOperatorCredential(ctx, in)
+		return srv.(FleetServiceServer).CreateOperatorCredentialRequest(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: FleetService_IssueOperatorCredential_FullMethodName,
+		FullMethod: FleetService_CreateOperatorCredentialRequest_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FleetServiceServer).IssueOperatorCredential(ctx, req.(*IssueOperatorCredentialRequest))
+		return srv.(FleetServiceServer).CreateOperatorCredentialRequest(ctx, req.(*CreateOperatorCredentialRequestRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_ListOperatorCredentialRequests_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListOperatorCredentialRequestsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).ListOperatorCredentialRequests(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_ListOperatorCredentialRequests_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).ListOperatorCredentialRequests(ctx, req.(*ListOperatorCredentialRequestsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_CancelOperatorCredentialRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CancelOperatorCredentialRequestRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).CancelOperatorCredentialRequest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_CancelOperatorCredentialRequest_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).CancelOperatorCredentialRequest(ctx, req.(*CancelOperatorCredentialRequestRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_RecordOperatorCredential_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RecordOperatorCredentialRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).RecordOperatorCredential(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_RecordOperatorCredential_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).RecordOperatorCredential(ctx, req.(*RecordOperatorCredentialRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1481,6 +1747,114 @@ func _FleetService_ListOperatorCredentials_Handler(srv interface{}, ctx context.
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FleetServiceServer).ListOperatorCredentials(ctx, req.(*ListOperatorCredentialsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_ListOperatorCAs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListOperatorCAsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).ListOperatorCAs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_ListOperatorCAs_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).ListOperatorCAs(ctx, req.(*ListOperatorCAsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_RegisterOperatorCA_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterOperatorCARequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).RegisterOperatorCA(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_RegisterOperatorCA_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).RegisterOperatorCA(ctx, req.(*RegisterOperatorCARequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_RetireOperatorCA_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RetireOperatorCARequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).RetireOperatorCA(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_RetireOperatorCA_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).RetireOperatorCA(ctx, req.(*RetireOperatorCARequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_SetOperatorCACRLSource_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetOperatorCACRLSourceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).SetOperatorCACRLSource(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_SetOperatorCACRLSource_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).SetOperatorCACRLSource(ctx, req.(*SetOperatorCACRLSourceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_UploadOperatorCRL_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UploadOperatorCRLRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).UploadOperatorCRL(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_UploadOperatorCRL_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).UploadOperatorCRL(ctx, req.(*UploadOperatorCRLRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FleetService_SetOperatorCAOCSP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetOperatorCAOCSPRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).SetOperatorCAOCSP(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_SetOperatorCAOCSP_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).SetOperatorCAOCSP(ctx, req.(*SetOperatorCAOCSPRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1766,8 +2140,20 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _FleetService_ImportCAKey_Handler,
 		},
 		{
-			MethodName: "IssueOperatorCredential",
-			Handler:    _FleetService_IssueOperatorCredential_Handler,
+			MethodName: "CreateOperatorCredentialRequest",
+			Handler:    _FleetService_CreateOperatorCredentialRequest_Handler,
+		},
+		{
+			MethodName: "ListOperatorCredentialRequests",
+			Handler:    _FleetService_ListOperatorCredentialRequests_Handler,
+		},
+		{
+			MethodName: "CancelOperatorCredentialRequest",
+			Handler:    _FleetService_CancelOperatorCredentialRequest_Handler,
+		},
+		{
+			MethodName: "RecordOperatorCredential",
+			Handler:    _FleetService_RecordOperatorCredential_Handler,
 		},
 		{
 			MethodName: "RevokeOperatorCredential",
@@ -1776,6 +2162,30 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListOperatorCredentials",
 			Handler:    _FleetService_ListOperatorCredentials_Handler,
+		},
+		{
+			MethodName: "ListOperatorCAs",
+			Handler:    _FleetService_ListOperatorCAs_Handler,
+		},
+		{
+			MethodName: "RegisterOperatorCA",
+			Handler:    _FleetService_RegisterOperatorCA_Handler,
+		},
+		{
+			MethodName: "RetireOperatorCA",
+			Handler:    _FleetService_RetireOperatorCA_Handler,
+		},
+		{
+			MethodName: "SetOperatorCACRLSource",
+			Handler:    _FleetService_SetOperatorCACRLSource_Handler,
+		},
+		{
+			MethodName: "UploadOperatorCRL",
+			Handler:    _FleetService_UploadOperatorCRL_Handler,
+		},
+		{
+			MethodName: "SetOperatorCAOCSP",
+			Handler:    _FleetService_SetOperatorCAOCSP_Handler,
 		},
 		{
 			MethodName: "PreviewAdoption",

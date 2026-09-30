@@ -8,7 +8,7 @@ Published as a standalone, versioned Go module. Consumed by [`cryptos`](https://
 
 ```
 proto/cryptos/v1/        # node .proto sources (the contract)
-proto/cryptos/fleet/v1/  # Fleet Manager .proto sources (FleetService)
+proto/cryptos/fleet/v1/  # Fleet Manager .proto sources (FleetService, BootstrapService)
 go/cryptos/              # generated Go stubs (committed; no toolchain required to consume)
 gen/ts/cryptos/          # generated TypeScript stubs for web/ (committed)
 buf.yaml                 # buf module + lint config (STANDARD)
@@ -28,7 +28,10 @@ Taskfile.yml             # fmt / lint / generate / test / ci targets
 | `scep.proto` | The SCEP challenge and approval-queue messages. A challenge is returned once, when it is minted, and no read carries it or its digest. |
 | `tsa.proto` | The TSA certificate messages `ListTsaCertificates` returns, kept after rotation so old timestamp tokens still verify. |
 | `audit.proto` | `AuditEvent` — hash-chained audit log entry shape, plus the `ListAuditEvents` and `VerifyAuditChain` messages. |
-| `fleet/v1/fleet.proto` | `FleetService` — the Fleet Manager's surface over the fleet: node (including `RenameNode`), certificate (including `GetCertificate`, an issued certificate and its chain by serial), profile, adapter, enrollment and operator-credential RPCs, the manager audit log (`ListAudit`), MCP agent key management (`ListMcpKeys`, `RevokeMcpKey`, `CreateMcpKey`), step-up approvals (`ListApprovals`, `DecideApproval`), and the per-node enrolment protocol switch (`SetNodeProtocol`, with each node's protocol state and `reboot_required` on `NodeSummary`). |
+| `fleet/v1/fleet.proto` | `FleetService` — the Fleet Manager's surface over the fleet: node (including `RenameNode`), certificate (including `GetCertificate`, an issued certificate and its chain by serial), profile, adapter, enrollment and operator-credential RPCs, the manager audit log (`ListAudit`), MCP agent key management (`ListMcpKeys`, `RevokeMcpKey`, `CreateMcpKey`), step-up approvals (`ListApprovals`, `DecideApproval`), the per-node enrolment protocol switch (`SetNodeProtocol`, with each node's protocol state and `reboot_required` on `NodeSummary`), operator CA administration and operator credential requests (see below). |
+| `fleet/v1/bootstrap.proto` | `BootstrapService` — first run: register the external operator CA and check the first admin certificate (see below). |
+| `fleet/v1/operator_ca.proto` | `OperatorCA`, its CRL and OCSP state, and the enums both services share. |
+| `fleet/v1/errors.proto` | `ErrorCode` (the manager's 1600-1699 block) and `ErrorReason`, the sub-reasons the web branches on. |
 
 ### Node IDs and renaming
 
@@ -92,6 +95,23 @@ Some MCP tool calls need a human decision before they run. The manager records e
 
 - `Approval` holds `id`, `tool`, `summary`, `request_digest` (lowercase hex SHA-256 of the canonical request), `requested_by_cn`, `requested_by_serial`, `key_id`, `required_level` (`viewer`, `operator` or `admin`), `created_at`, `expires_at`, `status`, `decided_by_cn`, `decided_by_serial` and `decided_at`. Timestamps are RFC3339 strings, empty when unset.
 - Both RPCs accept an operator certificate only; an MCP key can never list or decide approvals. The decider's level must be at least `required_level`.
+
+### First run and operator CAs
+
+The operator CA is external (an offline OpenSSL CA or an enterprise CA, never a CryptOS node). The Fleet Manager learns only its certificate and never signs an operator credential.
+
+`BootstrapService` is served over HTTPS only, outside the client-certificate check, and closes for good the first time an admin certificate authenticates:
+
+| RPC | Does |
+|---|---|
+| `GetBootstrapState` | Anonymous. `state` is `NOT_APPLICABLE`, `OPEN`, `OPEN_IN_PROGRESS`, `CLOSED` or `UNAVAILABLE` (with `reason_code`), plus `token_expires_at`. |
+| `StartBootstrapSession` | Consumes the one-time token from the manager's log and returns `session_secret`, sent afterwards in the `Fleetos-Bootstrap-Session` header. |
+| `RegisterOperatorCA` | Uploads the CA certificate with a CRL source (`url`, `crl_der` or `none`) and an OCSP mode (`off`, `aia`, `url`). The first call returns a preview; a second call with `confirm_sha256` stores it. |
+| `SubmitFirstAdminCertificate` | Checks and records the first admin certificate the CA signed, with an optional CSR for the key match. |
+
+`FleetService` manages operator CAs after first run (`ListOperatorCAs`, `RegisterOperatorCA`, `RetireOperatorCA`, `SetOperatorCACRLSource`, `UploadOperatorCRL`, `SetOperatorCAOCSP`) and operator credentials through requests signed at the CA (`CreateOperatorCredentialRequest`, `ListOperatorCredentialRequests`, `CancelOperatorCredentialRequest`, `RecordOperatorCredential`). `RevokeOperatorCredential` puts a credential on the manager's denylist by `issuer_sha256` and serial, and `OperatorCredential` carries `kind`, `issuer_sha256`, `email`, `full_name`, `denylisted`, `crl_revoked`, `first_seen_at` and `last_seen_at`. There is no `IssueOperatorCredential`.
+
+A 16xx failure carries its `ErrorCode` number on the `x-cryptos-error-code` error metadata and its `ErrorReason` name without the prefix (for example `IS_NODE_CA`) on `x-cryptos-error-reason`.
 
 Phase 2 will add role-aware service splits, protocol-adapter management, and full machine-config schema. Phase 3 adds HA, fleet, extensions, and recovery RPCs.
 

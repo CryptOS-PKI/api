@@ -102,15 +102,42 @@ const (
 	// FleetServiceImportCAKeyProcedure is the fully-qualified name of the FleetService's ImportCAKey
 	// RPC.
 	FleetServiceImportCAKeyProcedure = "/cryptos.fleet.v1.FleetService/ImportCAKey"
-	// FleetServiceIssueOperatorCredentialProcedure is the fully-qualified name of the FleetService's
-	// IssueOperatorCredential RPC.
-	FleetServiceIssueOperatorCredentialProcedure = "/cryptos.fleet.v1.FleetService/IssueOperatorCredential"
+	// FleetServiceCreateOperatorCredentialRequestProcedure is the fully-qualified name of the
+	// FleetService's CreateOperatorCredentialRequest RPC.
+	FleetServiceCreateOperatorCredentialRequestProcedure = "/cryptos.fleet.v1.FleetService/CreateOperatorCredentialRequest"
+	// FleetServiceListOperatorCredentialRequestsProcedure is the fully-qualified name of the
+	// FleetService's ListOperatorCredentialRequests RPC.
+	FleetServiceListOperatorCredentialRequestsProcedure = "/cryptos.fleet.v1.FleetService/ListOperatorCredentialRequests"
+	// FleetServiceCancelOperatorCredentialRequestProcedure is the fully-qualified name of the
+	// FleetService's CancelOperatorCredentialRequest RPC.
+	FleetServiceCancelOperatorCredentialRequestProcedure = "/cryptos.fleet.v1.FleetService/CancelOperatorCredentialRequest"
+	// FleetServiceRecordOperatorCredentialProcedure is the fully-qualified name of the FleetService's
+	// RecordOperatorCredential RPC.
+	FleetServiceRecordOperatorCredentialProcedure = "/cryptos.fleet.v1.FleetService/RecordOperatorCredential"
 	// FleetServiceRevokeOperatorCredentialProcedure is the fully-qualified name of the FleetService's
 	// RevokeOperatorCredential RPC.
 	FleetServiceRevokeOperatorCredentialProcedure = "/cryptos.fleet.v1.FleetService/RevokeOperatorCredential"
 	// FleetServiceListOperatorCredentialsProcedure is the fully-qualified name of the FleetService's
 	// ListOperatorCredentials RPC.
 	FleetServiceListOperatorCredentialsProcedure = "/cryptos.fleet.v1.FleetService/ListOperatorCredentials"
+	// FleetServiceListOperatorCAsProcedure is the fully-qualified name of the FleetService's
+	// ListOperatorCAs RPC.
+	FleetServiceListOperatorCAsProcedure = "/cryptos.fleet.v1.FleetService/ListOperatorCAs"
+	// FleetServiceRegisterOperatorCAProcedure is the fully-qualified name of the FleetService's
+	// RegisterOperatorCA RPC.
+	FleetServiceRegisterOperatorCAProcedure = "/cryptos.fleet.v1.FleetService/RegisterOperatorCA"
+	// FleetServiceRetireOperatorCAProcedure is the fully-qualified name of the FleetService's
+	// RetireOperatorCA RPC.
+	FleetServiceRetireOperatorCAProcedure = "/cryptos.fleet.v1.FleetService/RetireOperatorCA"
+	// FleetServiceSetOperatorCACRLSourceProcedure is the fully-qualified name of the FleetService's
+	// SetOperatorCACRLSource RPC.
+	FleetServiceSetOperatorCACRLSourceProcedure = "/cryptos.fleet.v1.FleetService/SetOperatorCACRLSource"
+	// FleetServiceUploadOperatorCRLProcedure is the fully-qualified name of the FleetService's
+	// UploadOperatorCRL RPC.
+	FleetServiceUploadOperatorCRLProcedure = "/cryptos.fleet.v1.FleetService/UploadOperatorCRL"
+	// FleetServiceSetOperatorCAOCSPProcedure is the fully-qualified name of the FleetService's
+	// SetOperatorCAOCSP RPC.
+	FleetServiceSetOperatorCAOCSPProcedure = "/cryptos.fleet.v1.FleetService/SetOperatorCAOCSP"
 	// FleetServicePreviewAdoptionProcedure is the fully-qualified name of the FleetService's
 	// PreviewAdoption RPC.
 	FleetServicePreviewAdoptionProcedure = "/cryptos.fleet.v1.FleetService/PreviewAdoption"
@@ -247,21 +274,64 @@ type FleetServiceClient interface {
 	// reach the node and is never persisted. Admin-gated and audited (the audit
 	// names the node and restored subject only, never the secret or envelope).
 	ImportCAKey(context.Context, *connect.Request[v1.ImportCAKeyRequest]) (*connect.Response[v1.ImportCAKeyResponse], error)
-	// IssueOperatorCredential issues an operator client certificate. The browser
-	// generates the key and CSR; the manager routes signing to the node acting as
-	// the operator CA under an operator-<level> profile that carries the
-	// access-level extension. Only the CSR crosses the wire; the operator key
-	// stays in the browser. Admin-gated and audited (the audit names the subject
-	// and serial only, never the CSR or certificate bytes).
-	IssueOperatorCredential(context.Context, *connect.Request[v1.IssueOperatorCredentialRequest]) (*connect.Response[v1.IssueOperatorCredentialResponse], error)
-	// RevokeOperatorCredential revokes an operator credential on the operator-CA
-	// node by hex serial, with an RFC 5280 reason code. The manager enforces the
-	// revocation in the authz middleware, so a revoked operator can no longer
-	// authenticate. Admin-gated and audited.
+	// CreateOperatorCredentialRequest stores a pending request for an operator
+	// credential from a CSR with subject CN=<email>, for the external operator
+	// CA to sign out of band. It returns the CSR, the OpenSSL extension section
+	// for the level, and the signing command. The request expires after 30
+	// days. Admin-gated and audited.
+	CreateOperatorCredentialRequest(context.Context, *connect.Request[v1.CreateOperatorCredentialRequestRequest]) (*connect.Response[v1.CreateOperatorCredentialRequestResponse], error)
+	// ListOperatorCredentialRequests returns credential requests, newest first,
+	// optionally filtered by state. Operator-readable.
+	ListOperatorCredentialRequests(context.Context, *connect.Request[v1.ListOperatorCredentialRequestsRequest]) (*connect.Response[v1.ListOperatorCredentialRequestsResponse], error)
+	// CancelOperatorCredentialRequest cancels a pending request. Admin-gated and
+	// audited.
+	CancelOperatorCredentialRequest(context.Context, *connect.Request[v1.CancelOperatorCredentialRequestRequest]) (*connect.Response[v1.CancelOperatorCredentialRequestResponse], error)
+	// RecordOperatorCredential checks and records an operator certificate the
+	// external operator CA signed. With request_id, the level, CN and public key
+	// must match the pending request, which is then completed; without it, a
+	// certificate made entirely out of band is imported. The certificate must
+	// chain to the active operator CA and not be recorded already. Admin-gated
+	// and audited.
+	RecordOperatorCredential(context.Context, *connect.Request[v1.RecordOperatorCredentialRequest]) (*connect.Response[v1.RecordOperatorCredentialResponse], error)
+	// RevokeOperatorCredential puts an operator credential on the manager's
+	// denylist, keyed by issuer and hex serial, with an RFC 5280 reason code.
+	// The authz middleware refuses the credential from its next request. A
+	// serial the manager never recorded can be denied too. It calls no node and
+	// doesn't revoke at the CA: the response warns to revoke there too and
+	// publish a new CRL. Admin-gated and audited.
 	RevokeOperatorCredential(context.Context, *connect.Request[v1.RevokeOperatorCredentialRequest]) (*connect.Response[v1.RevokeOperatorCredentialResponse], error)
-	// ListOperatorCredentials returns the operator credentials the manager has
-	// issued, with their level, expiry, and revocation state. Operator-readable.
+	// ListOperatorCredentials returns the operator credentials the manager
+	// knows: first-admin, requested, recorded and observed in use, with their
+	// issuer and revocation state. Operator-readable.
 	ListOperatorCredentials(context.Context, *connect.Request[v1.ListOperatorCredentialsRequest]) (*connect.Response[v1.ListOperatorCredentialsResponse], error)
+	// ListOperatorCAs returns the operator CAs the manager trusts or has
+	// trusted, with their CRL and OCSP state. Operator-readable.
+	ListOperatorCAs(context.Context, *connect.Request[v1.ListOperatorCAsRequest]) (*connect.Response[v1.ListOperatorCAsResponse], error)
+	// RegisterOperatorCA registers a new operator CA after first run, with the
+	// same checks, preview and confirm_sha256 step as
+	// BootstrapService.RegisterOperatorCA. The new CA becomes active and the
+	// previous active CA becomes retiring, still trusted until it is retired.
+	// Refused with 1605 ROTATION_IN_PROGRESS while a retiring CA exists.
+	// Admin-gated and audited. Every operator-CA write returns 1607 while the
+	// operator CA comes from the manager's config file.
+	RegisterOperatorCA(context.Context, *connect.Request[v1.RegisterOperatorCARequest]) (*connect.Response[v1.RegisterOperatorCAResponse], error)
+	// RetireOperatorCA stops trusting an operator CA; every certificate under
+	// it is refused from its next request. Refused with 1609 for the last
+	// active CA, and refused when the caller's own certificate chains only to
+	// it unless i_understand_self_lockout is set. Admin-gated and audited.
+	RetireOperatorCA(context.Context, *connect.Request[v1.RetireOperatorCARequest]) (*connect.Response[v1.RetireOperatorCAResponse], error)
+	// SetOperatorCACRLSource changes an operator CA's CRL source. A new URL or
+	// CRL must verify against the CA first; switching to none needs the NO_CRL
+	// acknowledgement and cuts off MCP for certificates under the CA.
+	// Admin-gated and audited.
+	SetOperatorCACRLSource(context.Context, *connect.Request[v1.SetOperatorCACRLSourceRequest]) (*connect.Response[v1.SetOperatorCACRLSourceResponse], error)
+	// UploadOperatorCRL stores a new CRL for an operator CA whose CRL source is
+	// upload. It must verify against the CA and be newer than the stored CRL.
+	// Admin-gated and audited.
+	UploadOperatorCRL(context.Context, *connect.Request[v1.UploadOperatorCRLRequest]) (*connect.Response[v1.UploadOperatorCRLResponse], error)
+	// SetOperatorCAOCSP changes an operator CA's OCSP mode. OCSP_MODE_URL must
+	// pass a probe of the responder first. Admin-gated and audited.
+	SetOperatorCAOCSP(context.Context, *connect.Request[v1.SetOperatorCAOCSPRequest]) (*connect.Response[v1.SetOperatorCAOCSPResponse], error)
 	// PreviewAdoption performs the trust-on-first-use step of adopting a new
 	// node: it dials the maintenance endpoint (no pin yet), captures the
 	// self-signed certificate the node presents, and returns its SHA-256
@@ -487,10 +557,28 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(fleetServiceMethods.ByName("ImportCAKey")),
 			connect.WithClientOptions(opts...),
 		),
-		issueOperatorCredential: connect.NewClient[v1.IssueOperatorCredentialRequest, v1.IssueOperatorCredentialResponse](
+		createOperatorCredentialRequest: connect.NewClient[v1.CreateOperatorCredentialRequestRequest, v1.CreateOperatorCredentialRequestResponse](
 			httpClient,
-			baseURL+FleetServiceIssueOperatorCredentialProcedure,
-			connect.WithSchema(fleetServiceMethods.ByName("IssueOperatorCredential")),
+			baseURL+FleetServiceCreateOperatorCredentialRequestProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("CreateOperatorCredentialRequest")),
+			connect.WithClientOptions(opts...),
+		),
+		listOperatorCredentialRequests: connect.NewClient[v1.ListOperatorCredentialRequestsRequest, v1.ListOperatorCredentialRequestsResponse](
+			httpClient,
+			baseURL+FleetServiceListOperatorCredentialRequestsProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("ListOperatorCredentialRequests")),
+			connect.WithClientOptions(opts...),
+		),
+		cancelOperatorCredentialRequest: connect.NewClient[v1.CancelOperatorCredentialRequestRequest, v1.CancelOperatorCredentialRequestResponse](
+			httpClient,
+			baseURL+FleetServiceCancelOperatorCredentialRequestProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("CancelOperatorCredentialRequest")),
+			connect.WithClientOptions(opts...),
+		),
+		recordOperatorCredential: connect.NewClient[v1.RecordOperatorCredentialRequest, v1.RecordOperatorCredentialResponse](
+			httpClient,
+			baseURL+FleetServiceRecordOperatorCredentialProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("RecordOperatorCredential")),
 			connect.WithClientOptions(opts...),
 		),
 		revokeOperatorCredential: connect.NewClient[v1.RevokeOperatorCredentialRequest, v1.RevokeOperatorCredentialResponse](
@@ -503,6 +591,42 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			httpClient,
 			baseURL+FleetServiceListOperatorCredentialsProcedure,
 			connect.WithSchema(fleetServiceMethods.ByName("ListOperatorCredentials")),
+			connect.WithClientOptions(opts...),
+		),
+		listOperatorCAs: connect.NewClient[v1.ListOperatorCAsRequest, v1.ListOperatorCAsResponse](
+			httpClient,
+			baseURL+FleetServiceListOperatorCAsProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("ListOperatorCAs")),
+			connect.WithClientOptions(opts...),
+		),
+		registerOperatorCA: connect.NewClient[v1.RegisterOperatorCARequest, v1.RegisterOperatorCAResponse](
+			httpClient,
+			baseURL+FleetServiceRegisterOperatorCAProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("RegisterOperatorCA")),
+			connect.WithClientOptions(opts...),
+		),
+		retireOperatorCA: connect.NewClient[v1.RetireOperatorCARequest, v1.RetireOperatorCAResponse](
+			httpClient,
+			baseURL+FleetServiceRetireOperatorCAProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("RetireOperatorCA")),
+			connect.WithClientOptions(opts...),
+		),
+		setOperatorCACRLSource: connect.NewClient[v1.SetOperatorCACRLSourceRequest, v1.SetOperatorCACRLSourceResponse](
+			httpClient,
+			baseURL+FleetServiceSetOperatorCACRLSourceProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("SetOperatorCACRLSource")),
+			connect.WithClientOptions(opts...),
+		),
+		uploadOperatorCRL: connect.NewClient[v1.UploadOperatorCRLRequest, v1.UploadOperatorCRLResponse](
+			httpClient,
+			baseURL+FleetServiceUploadOperatorCRLProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("UploadOperatorCRL")),
+			connect.WithClientOptions(opts...),
+		),
+		setOperatorCAOCSP: connect.NewClient[v1.SetOperatorCAOCSPRequest, v1.SetOperatorCAOCSPResponse](
+			httpClient,
+			baseURL+FleetServiceSetOperatorCAOCSPProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("SetOperatorCAOCSP")),
 			connect.WithClientOptions(opts...),
 		),
 		previewAdoption: connect.NewClient[v1.PreviewAdoptionRequest, v1.PreviewAdoptionResponse](
@@ -570,44 +694,53 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 
 // fleetServiceClient implements FleetServiceClient.
 type fleetServiceClient struct {
-	listNodes                *connect.Client[v1.ListNodesRequest, v1.ListNodesResponse]
-	getNode                  *connect.Client[v1.GetNodeRequest, v1.GetNodeResponse]
-	listCertificates         *connect.Client[v1.ListCertificatesRequest, v1.ListCertificatesResponse]
-	listProfiles             *connect.Client[v1.ListProfilesRequest, v1.ListProfilesResponse]
-	createProfile            *connect.Client[v1.CreateProfileRequest, v1.CreateProfileResponse]
-	updateProfile            *connect.Client[v1.UpdateProfileRequest, v1.UpdateProfileResponse]
-	deleteProfile            *connect.Client[v1.DeleteProfileRequest, v1.DeleteProfileResponse]
-	applyProfileToNode       *connect.Client[v1.ApplyProfileToNodeRequest, v1.ApplyProfileToNodeResponse]
-	listAdapters             *connect.Client[v1.ListAdaptersRequest, v1.ListAdaptersResponse]
-	setAdapterEnabled        *connect.Client[v1.SetAdapterEnabledRequest, v1.SetAdapterEnabledResponse]
-	setNodeProtocol          *connect.Client[v1.SetNodeProtocolRequest, v1.SetNodeProtocolResponse]
-	listAudit                *connect.Client[v1.ListAuditRequest, v1.ListAuditResponse]
-	listEnrollments          *connect.Client[v1.ListEnrollmentsRequest, v1.ListEnrollmentsResponse]
-	createEnrollment         *connect.Client[v1.CreateEnrollmentRequest, v1.CreateEnrollmentResponse]
-	approveEnrollment        *connect.Client[v1.ApproveEnrollmentRequest, v1.ApproveEnrollmentResponse]
-	rejectEnrollment         *connect.Client[v1.RejectEnrollmentRequest, v1.RejectEnrollmentResponse]
-	whoAmI                   *connect.Client[v1.WhoAmIRequest, v1.WhoAmIResponse]
-	revokeCertificate        *connect.Client[v1.RevokeCertificateRequest, v1.RevokeCertificateResponse]
-	getCertificate           *connect.Client[v1.GetCertificateRequest, v1.GetCertificateResponse]
-	issueLeaf                *connect.Client[v1.IssueLeafRequest, v1.IssueLeafResponse]
-	rekeyNode                *connect.Client[v1.RekeyNodeRequest, v1.RekeyNodeResponse]
-	getNodeConfig            *connect.Client[v1.GetNodeConfigRequest, v1.GetNodeConfigResponse]
-	applyNodeConfig          *connect.Client[v1.ApplyNodeConfigRequest, v1.ApplyNodeConfigResponse]
-	exportCAKey              *connect.Client[v1.ExportCAKeyRequest, v1.ExportCAKeyResponse]
-	importCAKey              *connect.Client[v1.ImportCAKeyRequest, v1.ImportCAKeyResponse]
-	issueOperatorCredential  *connect.Client[v1.IssueOperatorCredentialRequest, v1.IssueOperatorCredentialResponse]
-	revokeOperatorCredential *connect.Client[v1.RevokeOperatorCredentialRequest, v1.RevokeOperatorCredentialResponse]
-	listOperatorCredentials  *connect.Client[v1.ListOperatorCredentialsRequest, v1.ListOperatorCredentialsResponse]
-	previewAdoption          *connect.Client[v1.PreviewAdoptionRequest, v1.PreviewAdoptionResponse]
-	listInstallDisks         *connect.Client[v1.ListInstallDisksRequest, v1.ListInstallDisksResponse]
-	adoptNode                *connect.Client[v1.AdoptNodeRequest, v1.AdoptNodeResponse]
-	decommissionNode         *connect.Client[v1.DecommissionNodeRequest, v1.DecommissionNodeResponse]
-	renameNode               *connect.Client[v1.RenameNodeRequest, v1.RenameNodeResponse]
-	listMcpKeys              *connect.Client[v1.ListMcpKeysRequest, v1.ListMcpKeysResponse]
-	revokeMcpKey             *connect.Client[v1.RevokeMcpKeyRequest, v1.RevokeMcpKeyResponse]
-	createMcpKey             *connect.Client[v1.CreateMcpKeyRequest, v1.CreateMcpKeyResponse]
-	listApprovals            *connect.Client[v1.ListApprovalsRequest, v1.ListApprovalsResponse]
-	decideApproval           *connect.Client[v1.DecideApprovalRequest, v1.DecideApprovalResponse]
+	listNodes                       *connect.Client[v1.ListNodesRequest, v1.ListNodesResponse]
+	getNode                         *connect.Client[v1.GetNodeRequest, v1.GetNodeResponse]
+	listCertificates                *connect.Client[v1.ListCertificatesRequest, v1.ListCertificatesResponse]
+	listProfiles                    *connect.Client[v1.ListProfilesRequest, v1.ListProfilesResponse]
+	createProfile                   *connect.Client[v1.CreateProfileRequest, v1.CreateProfileResponse]
+	updateProfile                   *connect.Client[v1.UpdateProfileRequest, v1.UpdateProfileResponse]
+	deleteProfile                   *connect.Client[v1.DeleteProfileRequest, v1.DeleteProfileResponse]
+	applyProfileToNode              *connect.Client[v1.ApplyProfileToNodeRequest, v1.ApplyProfileToNodeResponse]
+	listAdapters                    *connect.Client[v1.ListAdaptersRequest, v1.ListAdaptersResponse]
+	setAdapterEnabled               *connect.Client[v1.SetAdapterEnabledRequest, v1.SetAdapterEnabledResponse]
+	setNodeProtocol                 *connect.Client[v1.SetNodeProtocolRequest, v1.SetNodeProtocolResponse]
+	listAudit                       *connect.Client[v1.ListAuditRequest, v1.ListAuditResponse]
+	listEnrollments                 *connect.Client[v1.ListEnrollmentsRequest, v1.ListEnrollmentsResponse]
+	createEnrollment                *connect.Client[v1.CreateEnrollmentRequest, v1.CreateEnrollmentResponse]
+	approveEnrollment               *connect.Client[v1.ApproveEnrollmentRequest, v1.ApproveEnrollmentResponse]
+	rejectEnrollment                *connect.Client[v1.RejectEnrollmentRequest, v1.RejectEnrollmentResponse]
+	whoAmI                          *connect.Client[v1.WhoAmIRequest, v1.WhoAmIResponse]
+	revokeCertificate               *connect.Client[v1.RevokeCertificateRequest, v1.RevokeCertificateResponse]
+	getCertificate                  *connect.Client[v1.GetCertificateRequest, v1.GetCertificateResponse]
+	issueLeaf                       *connect.Client[v1.IssueLeafRequest, v1.IssueLeafResponse]
+	rekeyNode                       *connect.Client[v1.RekeyNodeRequest, v1.RekeyNodeResponse]
+	getNodeConfig                   *connect.Client[v1.GetNodeConfigRequest, v1.GetNodeConfigResponse]
+	applyNodeConfig                 *connect.Client[v1.ApplyNodeConfigRequest, v1.ApplyNodeConfigResponse]
+	exportCAKey                     *connect.Client[v1.ExportCAKeyRequest, v1.ExportCAKeyResponse]
+	importCAKey                     *connect.Client[v1.ImportCAKeyRequest, v1.ImportCAKeyResponse]
+	createOperatorCredentialRequest *connect.Client[v1.CreateOperatorCredentialRequestRequest, v1.CreateOperatorCredentialRequestResponse]
+	listOperatorCredentialRequests  *connect.Client[v1.ListOperatorCredentialRequestsRequest, v1.ListOperatorCredentialRequestsResponse]
+	cancelOperatorCredentialRequest *connect.Client[v1.CancelOperatorCredentialRequestRequest, v1.CancelOperatorCredentialRequestResponse]
+	recordOperatorCredential        *connect.Client[v1.RecordOperatorCredentialRequest, v1.RecordOperatorCredentialResponse]
+	revokeOperatorCredential        *connect.Client[v1.RevokeOperatorCredentialRequest, v1.RevokeOperatorCredentialResponse]
+	listOperatorCredentials         *connect.Client[v1.ListOperatorCredentialsRequest, v1.ListOperatorCredentialsResponse]
+	listOperatorCAs                 *connect.Client[v1.ListOperatorCAsRequest, v1.ListOperatorCAsResponse]
+	registerOperatorCA              *connect.Client[v1.RegisterOperatorCARequest, v1.RegisterOperatorCAResponse]
+	retireOperatorCA                *connect.Client[v1.RetireOperatorCARequest, v1.RetireOperatorCAResponse]
+	setOperatorCACRLSource          *connect.Client[v1.SetOperatorCACRLSourceRequest, v1.SetOperatorCACRLSourceResponse]
+	uploadOperatorCRL               *connect.Client[v1.UploadOperatorCRLRequest, v1.UploadOperatorCRLResponse]
+	setOperatorCAOCSP               *connect.Client[v1.SetOperatorCAOCSPRequest, v1.SetOperatorCAOCSPResponse]
+	previewAdoption                 *connect.Client[v1.PreviewAdoptionRequest, v1.PreviewAdoptionResponse]
+	listInstallDisks                *connect.Client[v1.ListInstallDisksRequest, v1.ListInstallDisksResponse]
+	adoptNode                       *connect.Client[v1.AdoptNodeRequest, v1.AdoptNodeResponse]
+	decommissionNode                *connect.Client[v1.DecommissionNodeRequest, v1.DecommissionNodeResponse]
+	renameNode                      *connect.Client[v1.RenameNodeRequest, v1.RenameNodeResponse]
+	listMcpKeys                     *connect.Client[v1.ListMcpKeysRequest, v1.ListMcpKeysResponse]
+	revokeMcpKey                    *connect.Client[v1.RevokeMcpKeyRequest, v1.RevokeMcpKeyResponse]
+	createMcpKey                    *connect.Client[v1.CreateMcpKeyRequest, v1.CreateMcpKeyResponse]
+	listApprovals                   *connect.Client[v1.ListApprovalsRequest, v1.ListApprovalsResponse]
+	decideApproval                  *connect.Client[v1.DecideApprovalRequest, v1.DecideApprovalResponse]
 }
 
 // ListNodes calls cryptos.fleet.v1.FleetService.ListNodes.
@@ -735,9 +868,27 @@ func (c *fleetServiceClient) ImportCAKey(ctx context.Context, req *connect.Reque
 	return c.importCAKey.CallUnary(ctx, req)
 }
 
-// IssueOperatorCredential calls cryptos.fleet.v1.FleetService.IssueOperatorCredential.
-func (c *fleetServiceClient) IssueOperatorCredential(ctx context.Context, req *connect.Request[v1.IssueOperatorCredentialRequest]) (*connect.Response[v1.IssueOperatorCredentialResponse], error) {
-	return c.issueOperatorCredential.CallUnary(ctx, req)
+// CreateOperatorCredentialRequest calls
+// cryptos.fleet.v1.FleetService.CreateOperatorCredentialRequest.
+func (c *fleetServiceClient) CreateOperatorCredentialRequest(ctx context.Context, req *connect.Request[v1.CreateOperatorCredentialRequestRequest]) (*connect.Response[v1.CreateOperatorCredentialRequestResponse], error) {
+	return c.createOperatorCredentialRequest.CallUnary(ctx, req)
+}
+
+// ListOperatorCredentialRequests calls
+// cryptos.fleet.v1.FleetService.ListOperatorCredentialRequests.
+func (c *fleetServiceClient) ListOperatorCredentialRequests(ctx context.Context, req *connect.Request[v1.ListOperatorCredentialRequestsRequest]) (*connect.Response[v1.ListOperatorCredentialRequestsResponse], error) {
+	return c.listOperatorCredentialRequests.CallUnary(ctx, req)
+}
+
+// CancelOperatorCredentialRequest calls
+// cryptos.fleet.v1.FleetService.CancelOperatorCredentialRequest.
+func (c *fleetServiceClient) CancelOperatorCredentialRequest(ctx context.Context, req *connect.Request[v1.CancelOperatorCredentialRequestRequest]) (*connect.Response[v1.CancelOperatorCredentialRequestResponse], error) {
+	return c.cancelOperatorCredentialRequest.CallUnary(ctx, req)
+}
+
+// RecordOperatorCredential calls cryptos.fleet.v1.FleetService.RecordOperatorCredential.
+func (c *fleetServiceClient) RecordOperatorCredential(ctx context.Context, req *connect.Request[v1.RecordOperatorCredentialRequest]) (*connect.Response[v1.RecordOperatorCredentialResponse], error) {
+	return c.recordOperatorCredential.CallUnary(ctx, req)
 }
 
 // RevokeOperatorCredential calls cryptos.fleet.v1.FleetService.RevokeOperatorCredential.
@@ -748,6 +899,36 @@ func (c *fleetServiceClient) RevokeOperatorCredential(ctx context.Context, req *
 // ListOperatorCredentials calls cryptos.fleet.v1.FleetService.ListOperatorCredentials.
 func (c *fleetServiceClient) ListOperatorCredentials(ctx context.Context, req *connect.Request[v1.ListOperatorCredentialsRequest]) (*connect.Response[v1.ListOperatorCredentialsResponse], error) {
 	return c.listOperatorCredentials.CallUnary(ctx, req)
+}
+
+// ListOperatorCAs calls cryptos.fleet.v1.FleetService.ListOperatorCAs.
+func (c *fleetServiceClient) ListOperatorCAs(ctx context.Context, req *connect.Request[v1.ListOperatorCAsRequest]) (*connect.Response[v1.ListOperatorCAsResponse], error) {
+	return c.listOperatorCAs.CallUnary(ctx, req)
+}
+
+// RegisterOperatorCA calls cryptos.fleet.v1.FleetService.RegisterOperatorCA.
+func (c *fleetServiceClient) RegisterOperatorCA(ctx context.Context, req *connect.Request[v1.RegisterOperatorCARequest]) (*connect.Response[v1.RegisterOperatorCAResponse], error) {
+	return c.registerOperatorCA.CallUnary(ctx, req)
+}
+
+// RetireOperatorCA calls cryptos.fleet.v1.FleetService.RetireOperatorCA.
+func (c *fleetServiceClient) RetireOperatorCA(ctx context.Context, req *connect.Request[v1.RetireOperatorCARequest]) (*connect.Response[v1.RetireOperatorCAResponse], error) {
+	return c.retireOperatorCA.CallUnary(ctx, req)
+}
+
+// SetOperatorCACRLSource calls cryptos.fleet.v1.FleetService.SetOperatorCACRLSource.
+func (c *fleetServiceClient) SetOperatorCACRLSource(ctx context.Context, req *connect.Request[v1.SetOperatorCACRLSourceRequest]) (*connect.Response[v1.SetOperatorCACRLSourceResponse], error) {
+	return c.setOperatorCACRLSource.CallUnary(ctx, req)
+}
+
+// UploadOperatorCRL calls cryptos.fleet.v1.FleetService.UploadOperatorCRL.
+func (c *fleetServiceClient) UploadOperatorCRL(ctx context.Context, req *connect.Request[v1.UploadOperatorCRLRequest]) (*connect.Response[v1.UploadOperatorCRLResponse], error) {
+	return c.uploadOperatorCRL.CallUnary(ctx, req)
+}
+
+// SetOperatorCAOCSP calls cryptos.fleet.v1.FleetService.SetOperatorCAOCSP.
+func (c *fleetServiceClient) SetOperatorCAOCSP(ctx context.Context, req *connect.Request[v1.SetOperatorCAOCSPRequest]) (*connect.Response[v1.SetOperatorCAOCSPResponse], error) {
+	return c.setOperatorCAOCSP.CallUnary(ctx, req)
 }
 
 // PreviewAdoption calls cryptos.fleet.v1.FleetService.PreviewAdoption.
@@ -906,21 +1087,64 @@ type FleetServiceHandler interface {
 	// reach the node and is never persisted. Admin-gated and audited (the audit
 	// names the node and restored subject only, never the secret or envelope).
 	ImportCAKey(context.Context, *connect.Request[v1.ImportCAKeyRequest]) (*connect.Response[v1.ImportCAKeyResponse], error)
-	// IssueOperatorCredential issues an operator client certificate. The browser
-	// generates the key and CSR; the manager routes signing to the node acting as
-	// the operator CA under an operator-<level> profile that carries the
-	// access-level extension. Only the CSR crosses the wire; the operator key
-	// stays in the browser. Admin-gated and audited (the audit names the subject
-	// and serial only, never the CSR or certificate bytes).
-	IssueOperatorCredential(context.Context, *connect.Request[v1.IssueOperatorCredentialRequest]) (*connect.Response[v1.IssueOperatorCredentialResponse], error)
-	// RevokeOperatorCredential revokes an operator credential on the operator-CA
-	// node by hex serial, with an RFC 5280 reason code. The manager enforces the
-	// revocation in the authz middleware, so a revoked operator can no longer
-	// authenticate. Admin-gated and audited.
+	// CreateOperatorCredentialRequest stores a pending request for an operator
+	// credential from a CSR with subject CN=<email>, for the external operator
+	// CA to sign out of band. It returns the CSR, the OpenSSL extension section
+	// for the level, and the signing command. The request expires after 30
+	// days. Admin-gated and audited.
+	CreateOperatorCredentialRequest(context.Context, *connect.Request[v1.CreateOperatorCredentialRequestRequest]) (*connect.Response[v1.CreateOperatorCredentialRequestResponse], error)
+	// ListOperatorCredentialRequests returns credential requests, newest first,
+	// optionally filtered by state. Operator-readable.
+	ListOperatorCredentialRequests(context.Context, *connect.Request[v1.ListOperatorCredentialRequestsRequest]) (*connect.Response[v1.ListOperatorCredentialRequestsResponse], error)
+	// CancelOperatorCredentialRequest cancels a pending request. Admin-gated and
+	// audited.
+	CancelOperatorCredentialRequest(context.Context, *connect.Request[v1.CancelOperatorCredentialRequestRequest]) (*connect.Response[v1.CancelOperatorCredentialRequestResponse], error)
+	// RecordOperatorCredential checks and records an operator certificate the
+	// external operator CA signed. With request_id, the level, CN and public key
+	// must match the pending request, which is then completed; without it, a
+	// certificate made entirely out of band is imported. The certificate must
+	// chain to the active operator CA and not be recorded already. Admin-gated
+	// and audited.
+	RecordOperatorCredential(context.Context, *connect.Request[v1.RecordOperatorCredentialRequest]) (*connect.Response[v1.RecordOperatorCredentialResponse], error)
+	// RevokeOperatorCredential puts an operator credential on the manager's
+	// denylist, keyed by issuer and hex serial, with an RFC 5280 reason code.
+	// The authz middleware refuses the credential from its next request. A
+	// serial the manager never recorded can be denied too. It calls no node and
+	// doesn't revoke at the CA: the response warns to revoke there too and
+	// publish a new CRL. Admin-gated and audited.
 	RevokeOperatorCredential(context.Context, *connect.Request[v1.RevokeOperatorCredentialRequest]) (*connect.Response[v1.RevokeOperatorCredentialResponse], error)
-	// ListOperatorCredentials returns the operator credentials the manager has
-	// issued, with their level, expiry, and revocation state. Operator-readable.
+	// ListOperatorCredentials returns the operator credentials the manager
+	// knows: first-admin, requested, recorded and observed in use, with their
+	// issuer and revocation state. Operator-readable.
 	ListOperatorCredentials(context.Context, *connect.Request[v1.ListOperatorCredentialsRequest]) (*connect.Response[v1.ListOperatorCredentialsResponse], error)
+	// ListOperatorCAs returns the operator CAs the manager trusts or has
+	// trusted, with their CRL and OCSP state. Operator-readable.
+	ListOperatorCAs(context.Context, *connect.Request[v1.ListOperatorCAsRequest]) (*connect.Response[v1.ListOperatorCAsResponse], error)
+	// RegisterOperatorCA registers a new operator CA after first run, with the
+	// same checks, preview and confirm_sha256 step as
+	// BootstrapService.RegisterOperatorCA. The new CA becomes active and the
+	// previous active CA becomes retiring, still trusted until it is retired.
+	// Refused with 1605 ROTATION_IN_PROGRESS while a retiring CA exists.
+	// Admin-gated and audited. Every operator-CA write returns 1607 while the
+	// operator CA comes from the manager's config file.
+	RegisterOperatorCA(context.Context, *connect.Request[v1.RegisterOperatorCARequest]) (*connect.Response[v1.RegisterOperatorCAResponse], error)
+	// RetireOperatorCA stops trusting an operator CA; every certificate under
+	// it is refused from its next request. Refused with 1609 for the last
+	// active CA, and refused when the caller's own certificate chains only to
+	// it unless i_understand_self_lockout is set. Admin-gated and audited.
+	RetireOperatorCA(context.Context, *connect.Request[v1.RetireOperatorCARequest]) (*connect.Response[v1.RetireOperatorCAResponse], error)
+	// SetOperatorCACRLSource changes an operator CA's CRL source. A new URL or
+	// CRL must verify against the CA first; switching to none needs the NO_CRL
+	// acknowledgement and cuts off MCP for certificates under the CA.
+	// Admin-gated and audited.
+	SetOperatorCACRLSource(context.Context, *connect.Request[v1.SetOperatorCACRLSourceRequest]) (*connect.Response[v1.SetOperatorCACRLSourceResponse], error)
+	// UploadOperatorCRL stores a new CRL for an operator CA whose CRL source is
+	// upload. It must verify against the CA and be newer than the stored CRL.
+	// Admin-gated and audited.
+	UploadOperatorCRL(context.Context, *connect.Request[v1.UploadOperatorCRLRequest]) (*connect.Response[v1.UploadOperatorCRLResponse], error)
+	// SetOperatorCAOCSP changes an operator CA's OCSP mode. OCSP_MODE_URL must
+	// pass a probe of the responder first. Admin-gated and audited.
+	SetOperatorCAOCSP(context.Context, *connect.Request[v1.SetOperatorCAOCSPRequest]) (*connect.Response[v1.SetOperatorCAOCSPResponse], error)
 	// PreviewAdoption performs the trust-on-first-use step of adopting a new
 	// node: it dials the maintenance endpoint (no pin yet), captures the
 	// self-signed certificate the node presents, and returns its SHA-256
@@ -1142,10 +1366,28 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(fleetServiceMethods.ByName("ImportCAKey")),
 		connect.WithHandlerOptions(opts...),
 	)
-	fleetServiceIssueOperatorCredentialHandler := connect.NewUnaryHandler(
-		FleetServiceIssueOperatorCredentialProcedure,
-		svc.IssueOperatorCredential,
-		connect.WithSchema(fleetServiceMethods.ByName("IssueOperatorCredential")),
+	fleetServiceCreateOperatorCredentialRequestHandler := connect.NewUnaryHandler(
+		FleetServiceCreateOperatorCredentialRequestProcedure,
+		svc.CreateOperatorCredentialRequest,
+		connect.WithSchema(fleetServiceMethods.ByName("CreateOperatorCredentialRequest")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceListOperatorCredentialRequestsHandler := connect.NewUnaryHandler(
+		FleetServiceListOperatorCredentialRequestsProcedure,
+		svc.ListOperatorCredentialRequests,
+		connect.WithSchema(fleetServiceMethods.ByName("ListOperatorCredentialRequests")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceCancelOperatorCredentialRequestHandler := connect.NewUnaryHandler(
+		FleetServiceCancelOperatorCredentialRequestProcedure,
+		svc.CancelOperatorCredentialRequest,
+		connect.WithSchema(fleetServiceMethods.ByName("CancelOperatorCredentialRequest")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceRecordOperatorCredentialHandler := connect.NewUnaryHandler(
+		FleetServiceRecordOperatorCredentialProcedure,
+		svc.RecordOperatorCredential,
+		connect.WithSchema(fleetServiceMethods.ByName("RecordOperatorCredential")),
 		connect.WithHandlerOptions(opts...),
 	)
 	fleetServiceRevokeOperatorCredentialHandler := connect.NewUnaryHandler(
@@ -1158,6 +1400,42 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		FleetServiceListOperatorCredentialsProcedure,
 		svc.ListOperatorCredentials,
 		connect.WithSchema(fleetServiceMethods.ByName("ListOperatorCredentials")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceListOperatorCAsHandler := connect.NewUnaryHandler(
+		FleetServiceListOperatorCAsProcedure,
+		svc.ListOperatorCAs,
+		connect.WithSchema(fleetServiceMethods.ByName("ListOperatorCAs")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceRegisterOperatorCAHandler := connect.NewUnaryHandler(
+		FleetServiceRegisterOperatorCAProcedure,
+		svc.RegisterOperatorCA,
+		connect.WithSchema(fleetServiceMethods.ByName("RegisterOperatorCA")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceRetireOperatorCAHandler := connect.NewUnaryHandler(
+		FleetServiceRetireOperatorCAProcedure,
+		svc.RetireOperatorCA,
+		connect.WithSchema(fleetServiceMethods.ByName("RetireOperatorCA")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceSetOperatorCACRLSourceHandler := connect.NewUnaryHandler(
+		FleetServiceSetOperatorCACRLSourceProcedure,
+		svc.SetOperatorCACRLSource,
+		connect.WithSchema(fleetServiceMethods.ByName("SetOperatorCACRLSource")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceUploadOperatorCRLHandler := connect.NewUnaryHandler(
+		FleetServiceUploadOperatorCRLProcedure,
+		svc.UploadOperatorCRL,
+		connect.WithSchema(fleetServiceMethods.ByName("UploadOperatorCRL")),
+		connect.WithHandlerOptions(opts...),
+	)
+	fleetServiceSetOperatorCAOCSPHandler := connect.NewUnaryHandler(
+		FleetServiceSetOperatorCAOCSPProcedure,
+		svc.SetOperatorCAOCSP,
+		connect.WithSchema(fleetServiceMethods.ByName("SetOperatorCAOCSP")),
 		connect.WithHandlerOptions(opts...),
 	)
 	fleetServicePreviewAdoptionHandler := connect.NewUnaryHandler(
@@ -1272,12 +1550,30 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 			fleetServiceExportCAKeyHandler.ServeHTTP(w, r)
 		case FleetServiceImportCAKeyProcedure:
 			fleetServiceImportCAKeyHandler.ServeHTTP(w, r)
-		case FleetServiceIssueOperatorCredentialProcedure:
-			fleetServiceIssueOperatorCredentialHandler.ServeHTTP(w, r)
+		case FleetServiceCreateOperatorCredentialRequestProcedure:
+			fleetServiceCreateOperatorCredentialRequestHandler.ServeHTTP(w, r)
+		case FleetServiceListOperatorCredentialRequestsProcedure:
+			fleetServiceListOperatorCredentialRequestsHandler.ServeHTTP(w, r)
+		case FleetServiceCancelOperatorCredentialRequestProcedure:
+			fleetServiceCancelOperatorCredentialRequestHandler.ServeHTTP(w, r)
+		case FleetServiceRecordOperatorCredentialProcedure:
+			fleetServiceRecordOperatorCredentialHandler.ServeHTTP(w, r)
 		case FleetServiceRevokeOperatorCredentialProcedure:
 			fleetServiceRevokeOperatorCredentialHandler.ServeHTTP(w, r)
 		case FleetServiceListOperatorCredentialsProcedure:
 			fleetServiceListOperatorCredentialsHandler.ServeHTTP(w, r)
+		case FleetServiceListOperatorCAsProcedure:
+			fleetServiceListOperatorCAsHandler.ServeHTTP(w, r)
+		case FleetServiceRegisterOperatorCAProcedure:
+			fleetServiceRegisterOperatorCAHandler.ServeHTTP(w, r)
+		case FleetServiceRetireOperatorCAProcedure:
+			fleetServiceRetireOperatorCAHandler.ServeHTTP(w, r)
+		case FleetServiceSetOperatorCACRLSourceProcedure:
+			fleetServiceSetOperatorCACRLSourceHandler.ServeHTTP(w, r)
+		case FleetServiceUploadOperatorCRLProcedure:
+			fleetServiceUploadOperatorCRLHandler.ServeHTTP(w, r)
+		case FleetServiceSetOperatorCAOCSPProcedure:
+			fleetServiceSetOperatorCAOCSPHandler.ServeHTTP(w, r)
 		case FleetServicePreviewAdoptionProcedure:
 			fleetServicePreviewAdoptionHandler.ServeHTTP(w, r)
 		case FleetServiceListInstallDisksProcedure:
@@ -1407,8 +1703,20 @@ func (UnimplementedFleetServiceHandler) ImportCAKey(context.Context, *connect.Re
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ImportCAKey is not implemented"))
 }
 
-func (UnimplementedFleetServiceHandler) IssueOperatorCredential(context.Context, *connect.Request[v1.IssueOperatorCredentialRequest]) (*connect.Response[v1.IssueOperatorCredentialResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.IssueOperatorCredential is not implemented"))
+func (UnimplementedFleetServiceHandler) CreateOperatorCredentialRequest(context.Context, *connect.Request[v1.CreateOperatorCredentialRequestRequest]) (*connect.Response[v1.CreateOperatorCredentialRequestResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.CreateOperatorCredentialRequest is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) ListOperatorCredentialRequests(context.Context, *connect.Request[v1.ListOperatorCredentialRequestsRequest]) (*connect.Response[v1.ListOperatorCredentialRequestsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ListOperatorCredentialRequests is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) CancelOperatorCredentialRequest(context.Context, *connect.Request[v1.CancelOperatorCredentialRequestRequest]) (*connect.Response[v1.CancelOperatorCredentialRequestResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.CancelOperatorCredentialRequest is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) RecordOperatorCredential(context.Context, *connect.Request[v1.RecordOperatorCredentialRequest]) (*connect.Response[v1.RecordOperatorCredentialResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.RecordOperatorCredential is not implemented"))
 }
 
 func (UnimplementedFleetServiceHandler) RevokeOperatorCredential(context.Context, *connect.Request[v1.RevokeOperatorCredentialRequest]) (*connect.Response[v1.RevokeOperatorCredentialResponse], error) {
@@ -1417,6 +1725,30 @@ func (UnimplementedFleetServiceHandler) RevokeOperatorCredential(context.Context
 
 func (UnimplementedFleetServiceHandler) ListOperatorCredentials(context.Context, *connect.Request[v1.ListOperatorCredentialsRequest]) (*connect.Response[v1.ListOperatorCredentialsResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ListOperatorCredentials is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) ListOperatorCAs(context.Context, *connect.Request[v1.ListOperatorCAsRequest]) (*connect.Response[v1.ListOperatorCAsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.ListOperatorCAs is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) RegisterOperatorCA(context.Context, *connect.Request[v1.RegisterOperatorCARequest]) (*connect.Response[v1.RegisterOperatorCAResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.RegisterOperatorCA is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) RetireOperatorCA(context.Context, *connect.Request[v1.RetireOperatorCARequest]) (*connect.Response[v1.RetireOperatorCAResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.RetireOperatorCA is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) SetOperatorCACRLSource(context.Context, *connect.Request[v1.SetOperatorCACRLSourceRequest]) (*connect.Response[v1.SetOperatorCACRLSourceResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.SetOperatorCACRLSource is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) UploadOperatorCRL(context.Context, *connect.Request[v1.UploadOperatorCRLRequest]) (*connect.Response[v1.UploadOperatorCRLResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.UploadOperatorCRL is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) SetOperatorCAOCSP(context.Context, *connect.Request[v1.SetOperatorCAOCSPRequest]) (*connect.Response[v1.SetOperatorCAOCSPResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.SetOperatorCAOCSP is not implemented"))
 }
 
 func (UnimplementedFleetServiceHandler) PreviewAdoption(context.Context, *connect.Request[v1.PreviewAdoptionRequest]) (*connect.Response[v1.PreviewAdoptionResponse], error) {

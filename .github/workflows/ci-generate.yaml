@@ -39,7 +39,7 @@ permissions:
   contents: read
 jobs:
   generate:
-    name: 🧬 Generated output is current${{ github.event.action == 'edited' && github.event.changes.base == null && ' (edit, not run)' || '' }}
+    name: 🧬 Generated output is current
     if: github.event.pull_request.draft == false && (github.event.action != 'edited' || github.event.changes.base != null)
     runs-on: ubuntu-latest
     timeout-minutes: 15

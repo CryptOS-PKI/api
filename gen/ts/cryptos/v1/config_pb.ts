@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file cryptos/v1/config.proto.
  */
 export const file_cryptos_v1_config: GenFile = /*@__PURE__*/
-  fileDesc("ChdjcnlwdG9zL3YxL2NvbmZpZy5wcm90bxIKY3J5cHRvcy52MSKJAwoNTWFjaGluZUNvbmZpZxITCgthcGlfdmVyc2lvbhgBIAEoCRIMCgRraW5kGAIgASgJEiYKCG1ldGFkYXRhGAMgASgLMhQuY3J5cHRvcy52MS5NZXRhZGF0YRIeCgRyb2xlGAQgASgLMhAuY3J5cHRvcy52MS5Sb2xlEiQKB25ldHdvcmsYBSABKAsyEy5jcnlwdG9zLnYxLk5ldHdvcmsSJAoHc3RvcmFnZRgGIAEoCzITLmNyeXB0b3MudjEuU3RvcmFnZRIoCglib290c3RyYXAYByABKAsyFS5jcnlwdG9zLnYxLkJvb3RzdHJhcBIcCgNwa2kYCCABKAsyDy5jcnlwdG9zLnYxLlBraRIkCgdpbnN0YWxsGAkgASgLMhMuY3J5cHRvcy52MS5JbnN0YWxsEicKCXN0YXRlX2tleRgKIAEoCzIULmNyeXB0b3MudjEuU3RhdGVLZXkSKgoKbWFuYWdlbWVudBgLIAEoCzIWLmNyeXB0b3MudjEuTWFuYWdlbWVudCJWCgpNYW5hZ2VtZW50EhIKCm1hbmFnZXJfY24YASABKAkSEQoJdHJ1c3RfcGVtGAIgASgJEiEKGW9wZXJhdG9yX3N1cmZhY2VfcmVhZG9ubHkYAyABKAgiPgoIU3RhdGVLZXkSDAoEbW9kZRgBIAEoCRIkCgNrbXMYAiABKAsyFy5jcnlwdG9zLnYxLkttc1N0YXRlS2V5IjIKC0ttc1N0YXRlS2V5EhAKCGVuZHBvaW50GAEgASgJEhEKCXRydXN0X3BlbRgCIAEoCSIYCghNZXRhZGF0YRIMCgRuYW1lGAEgASgJIhQKBFJvbGUSDAoEa2luZBgBIAEoCSJjCgdOZXR3b3JrEhEKCWludGVyZmFjZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJEg8KB2dhdGV3YXkYAyABKAkSEwoLbmFtZXNlcnZlcnMYBCADKAkSDgoGc2VhcmNoGAUgAygJIjwKB1N0b3JhZ2USHQoVc3RhdGVfcGFydGl0aW9uX2xhYmVsGAEgASgJEhIKCmZpcnN0X2Jvb3QYAiABKAgiPgoJQm9vdHN0cmFwEhYKDmFkbWluX2NlcnRfcGVtGAEgASgJEhkKEWFkbWluX2NlcnRfc2hhMjU2GAIgASgJIrMDCgNQa2kSFAoMcm9vdF9rZXlfYWxnGAEgASgJEikKDHJvb3Rfc3ViamVjdBgCIAEoCzITLmNyeXB0b3MudjEuU3ViamVjdBIbChNyb290X3ZhbGlkaXR5X3llYXJzGAMgASgNEhsKE3BhdGhfbGVuX2NvbnN0cmFpbnQYBCABKA0SMAoIcHJvZmlsZXMYBSADKAsyHi5jcnlwdG9zLnYxLkNlcnRpZmljYXRlUHJvZmlsZRIiCgZwYXJlbnQYBiABKAsyEi5jcnlwdG9zLnYxLlBhcmVudBIbChNyZXZvY2F0aW9uX2Jhc2VfdXJsGAcgASgJEicKH2FsbG93X3VudmVyaWZpZWRfcmV2b2NhdGlvbl91cmwYCCABKAgSHQoVY3JsX25leHRfdXBkYXRlX2hvdXJzGAkgASgNEhwKFHJldm9jYXRpb25faHR0cF9wb3J0GAogASgNEhoKEnJvb3RfbGVhZl9pc3N1YW5jZRgLIAEoCRIeCgRhY21lGA0gASgLMhAuY3J5cHRvcy52MS5BY21lEhwKA2VzdBgOIAEoCzIPLmNyeXB0b3MudjEuRXN0IpsCCgRBY21lEg8KB2VuYWJsZWQYASABKAgSEAoIYmFzZV91cmwYAiABKAkSEQoJaHR0cF9wb3J0GAMgASgNEg8KB3Byb2ZpbGUYBCABKAkSGAoQdGVybXNfb2Zfc2VydmljZRgFIAEoCRIPCgd3ZWJzaXRlGAYgASgJEiAKGGFsbG93X2Fub255bW91c19hY2NvdW50cxgHIAEoCBJBChVleHRlcm5hbF9hY2NvdW50X2tleXMYCCADKAsyIi5jcnlwdG9zLnYxLkFjbWVFeHRlcm5hbEFjY291bnRLZXkSIwobYWxsb3dlZF9pZGVudGlmaWVyX3N1ZmZpeGVzGAkgAygJEhcKD29yZGVyX3R0bF9ob3VycxgKIAEoDSJBChZBY21lRXh0ZXJuYWxBY2NvdW50S2V5Eg4KBmtleV9pZBgBIAEoCRIXCg9obWFjX2tleV9iYXNlNjQYAiABKAki6wEKA0VzdBIPCgdlbmFibGVkGAEgASgIEhEKCWhvc3RuYW1lcxgCIAMoCRIRCglodHRwX3BvcnQYAyABKA0SDwoHcHJvZmlsZRgEIAEoCRINCgVsYWJlbBgFIAEoCRINCgVyZWFsbRgGIAEoCRIjChthbGxvd2VkX2lkZW50aWZpZXJfc3VmZml4ZXMYByADKAkSHAoUYWxsb3dfYW55X2lkZW50aWZpZXIYCCABKAgSOwoSZW5yb2xsX2NyZWRlbnRpYWxzGAkgAygLMh8uY3J5cHRvcy52MS5Fc3RFbnJvbGxDcmVkZW50aWFsIkAKE0VzdEVucm9sbENyZWRlbnRpYWwSEAoIdXNlcm5hbWUYASABKAkSFwoPcGFzc3dvcmRfc2hhMjU2GAIgASgJIjUKBlBhcmVudBITCgtjYV9jZXJ0X3BlbRgBIAEoCRIWCg5jYV9jZXJ0X3NoYTI1NhgCIAEoCSLoAgoSQ2VydGlmaWNhdGVQcm9maWxlEgwKBG5hbWUYASABKAkSDwoHa2V5X2FsZxgCIAEoCRIkCgdzdWJqZWN0GAMgASgLMhMuY3J5cHRvcy52MS5TdWJqZWN0EhUKDXZhbGlkaXR5X2RheXMYBCABKA0SNwoRYmFzaWNfY29uc3RyYWludHMYBSABKAsyHC5jcnlwdG9zLnYxLkJhc2ljQ29uc3RyYWludHMSEQoJa2V5X3VzYWdlGAYgAygJEhUKDWV4dF9rZXlfdXNhZ2UYByADKAkSKQoEc2FucxgIIAEoCzIbLmNyeXB0b3MudjEuU3ViamVjdEFsdE5hbWVzEjMKEGV4dHJhX2V4dGVuc2lvbnMYCSADKAsyGS5jcnlwdG9zLnYxLlg1MDlFeHRlbnNpb24SGgoSYWxsb3dfcmVxdWVzdF9zYW5zGAogASgIEhcKD3ZhbGlkaXR5X3BvbGljeRgLIAEoCSJFChBCYXNpY0NvbnN0cmFpbnRzEg0KBWlzX2NhGAEgASgIEhUKCHBhdGhfbGVuGAIgASgNSACIAQFCCwoJX3BhdGhfbGVuImsKD1N1YmplY3RBbHROYW1lcxILCgNkbnMYASADKAkSCgoCaXAYAiADKAkSDQoFZW1haWwYAyADKAkSCwoDdXJpGAQgAygJEhYKDmtyYjVfcHJpbmNpcGFsGAUgAygJEgsKA3VwbhgGIAMoCSI9Cg1YNTA5RXh0ZW5zaW9uEgsKA29pZBgBIAEoCRIQCghjcml0aWNhbBgCIAEoCBINCgV2YWx1ZRgDIAEoDCIXCgdJbnN0YWxsEgwKBGRpc2sYASABKAkiaQoHU3ViamVjdBITCgtjb21tb25fbmFtZRgBIAEoCRIUCgxvcmdhbml6YXRpb24YAiABKAkSDwoHY291bnRyeRgDIAEoCRIQCghwcm92aW5jZRgEIAEoCRIQCghsb2NhbGl0eRgFIAEoCUI0WjJnaXRodWIuY29tL0NyeXB0T1MtUEtJL2FwaS9nby9jcnlwdG9zL3YxO2NyeXB0b3N2MWIGcHJvdG8z");
+  fileDesc("ChdjcnlwdG9zL3YxL2NvbmZpZy5wcm90bxIKY3J5cHRvcy52MSKJAwoNTWFjaGluZUNvbmZpZxITCgthcGlfdmVyc2lvbhgBIAEoCRIMCgRraW5kGAIgASgJEiYKCG1ldGFkYXRhGAMgASgLMhQuY3J5cHRvcy52MS5NZXRhZGF0YRIeCgRyb2xlGAQgASgLMhAuY3J5cHRvcy52MS5Sb2xlEiQKB25ldHdvcmsYBSABKAsyEy5jcnlwdG9zLnYxLk5ldHdvcmsSJAoHc3RvcmFnZRgGIAEoCzITLmNyeXB0b3MudjEuU3RvcmFnZRIoCglib290c3RyYXAYByABKAsyFS5jcnlwdG9zLnYxLkJvb3RzdHJhcBIcCgNwa2kYCCABKAsyDy5jcnlwdG9zLnYxLlBraRIkCgdpbnN0YWxsGAkgASgLMhMuY3J5cHRvcy52MS5JbnN0YWxsEicKCXN0YXRlX2tleRgKIAEoCzIULmNyeXB0b3MudjEuU3RhdGVLZXkSKgoKbWFuYWdlbWVudBgLIAEoCzIWLmNyeXB0b3MudjEuTWFuYWdlbWVudCJWCgpNYW5hZ2VtZW50EhIKCm1hbmFnZXJfY24YASABKAkSEQoJdHJ1c3RfcGVtGAIgASgJEiEKGW9wZXJhdG9yX3N1cmZhY2VfcmVhZG9ubHkYAyABKAgiPgoIU3RhdGVLZXkSDAoEbW9kZRgBIAEoCRIkCgNrbXMYAiABKAsyFy5jcnlwdG9zLnYxLkttc1N0YXRlS2V5IjIKC0ttc1N0YXRlS2V5EhAKCGVuZHBvaW50GAEgASgJEhEKCXRydXN0X3BlbRgCIAEoCSIYCghNZXRhZGF0YRIMCgRuYW1lGAEgASgJIhQKBFJvbGUSDAoEa2luZBgBIAEoCSJjCgdOZXR3b3JrEhEKCWludGVyZmFjZRgBIAEoCRIPCgdhZGRyZXNzGAIgASgJEg8KB2dhdGV3YXkYAyABKAkSEwoLbmFtZXNlcnZlcnMYBCADKAkSDgoGc2VhcmNoGAUgAygJIjwKB1N0b3JhZ2USHQoVc3RhdGVfcGFydGl0aW9uX2xhYmVsGAEgASgJEhIKCmZpcnN0X2Jvb3QYAiABKAgiPgoJQm9vdHN0cmFwEhYKDmFkbWluX2NlcnRfcGVtGAEgASgJEhkKEWFkbWluX2NlcnRfc2hhMjU2GAIgASgJItMDCgNQa2kSFAoMcm9vdF9rZXlfYWxnGAEgASgJEikKDHJvb3Rfc3ViamVjdBgCIAEoCzITLmNyeXB0b3MudjEuU3ViamVjdBIbChNyb290X3ZhbGlkaXR5X3llYXJzGAMgASgNEhsKE3BhdGhfbGVuX2NvbnN0cmFpbnQYBCABKA0SMAoIcHJvZmlsZXMYBSADKAsyHi5jcnlwdG9zLnYxLkNlcnRpZmljYXRlUHJvZmlsZRIiCgZwYXJlbnQYBiABKAsyEi5jcnlwdG9zLnYxLlBhcmVudBIbChNyZXZvY2F0aW9uX2Jhc2VfdXJsGAcgASgJEicKH2FsbG93X3VudmVyaWZpZWRfcmV2b2NhdGlvbl91cmwYCCABKAgSHQoVY3JsX25leHRfdXBkYXRlX2hvdXJzGAkgASgNEhwKFHJldm9jYXRpb25faHR0cF9wb3J0GAogASgNEhoKEnJvb3RfbGVhZl9pc3N1YW5jZRgLIAEoCRIeCgRhY21lGA0gASgLMhAuY3J5cHRvcy52MS5BY21lEhwKA2VzdBgOIAEoCzIPLmNyeXB0b3MudjEuRXN0Eh4KBHNjZXAYDyABKAsyEC5jcnlwdG9zLnYxLlNjZXAimwIKBEFjbWUSDwoHZW5hYmxlZBgBIAEoCBIQCghiYXNlX3VybBgCIAEoCRIRCglodHRwX3BvcnQYAyABKA0SDwoHcHJvZmlsZRgEIAEoCRIYChB0ZXJtc19vZl9zZXJ2aWNlGAUgASgJEg8KB3dlYnNpdGUYBiABKAkSIAoYYWxsb3dfYW5vbnltb3VzX2FjY291bnRzGAcgASgIEkEKFWV4dGVybmFsX2FjY291bnRfa2V5cxgIIAMoCzIiLmNyeXB0b3MudjEuQWNtZUV4dGVybmFsQWNjb3VudEtleRIjChthbGxvd2VkX2lkZW50aWZpZXJfc3VmZml4ZXMYCSADKAkSFwoPb3JkZXJfdHRsX2hvdXJzGAogASgNIkEKFkFjbWVFeHRlcm5hbEFjY291bnRLZXkSDgoGa2V5X2lkGAEgASgJEhcKD2htYWNfa2V5X2Jhc2U2NBgCIAEoCSLrAQoDRXN0Eg8KB2VuYWJsZWQYASABKAgSEQoJaG9zdG5hbWVzGAIgAygJEhEKCWh0dHBfcG9ydBgDIAEoDRIPCgdwcm9maWxlGAQgASgJEg0KBWxhYmVsGAUgASgJEg0KBXJlYWxtGAYgASgJEiMKG2FsbG93ZWRfaWRlbnRpZmllcl9zdWZmaXhlcxgHIAMoCRIcChRhbGxvd19hbnlfaWRlbnRpZmllchgIIAEoCBI7ChJlbnJvbGxfY3JlZGVudGlhbHMYCSADKAsyHy5jcnlwdG9zLnYxLkVzdEVucm9sbENyZWRlbnRpYWwiQAoTRXN0RW5yb2xsQ3JlZGVudGlhbBIQCgh1c2VybmFtZRgBIAEoCRIXCg9wYXNzd29yZF9zaGEyNTYYAiABKAkimgEKBFNjZXASDwoHZW5hYmxlZBgBIAEoCBIRCglodHRwX3BvcnQYAiABKA0SKQoIcHJvZmlsZXMYAyADKAsyFy5jcnlwdG9zLnYxLlNjZXBQcm9maWxlEiMKG2FsbG93ZWRfaWRlbnRpZmllcl9zdWZmaXhlcxgEIAMoCRIeCgJyYRgFIAEoCzISLmNyeXB0b3MudjEuU2NlcFJhIlIKC1NjZXBQcm9maWxlEg8KB3Byb2ZpbGUYASABKAkSGAoQbWluX3JzYV9rZXlfYml0cxgCIAEoDRIYChByZXF1aXJlX2FwcHJvdmFsGAMgASgIIj4KBlNjZXBSYRIVCg12YWxpZGl0eV9kYXlzGAEgASgNEh0KFXJvdGF0aW9uX292ZXJsYXBfZGF5cxgCIAEoDSI1CgZQYXJlbnQSEwoLY2FfY2VydF9wZW0YASABKAkSFgoOY2FfY2VydF9zaGEyNTYYAiABKAki6AIKEkNlcnRpZmljYXRlUHJvZmlsZRIMCgRuYW1lGAEgASgJEg8KB2tleV9hbGcYAiABKAkSJAoHc3ViamVjdBgDIAEoCzITLmNyeXB0b3MudjEuU3ViamVjdBIVCg12YWxpZGl0eV9kYXlzGAQgASgNEjcKEWJhc2ljX2NvbnN0cmFpbnRzGAUgASgLMhwuY3J5cHRvcy52MS5CYXNpY0NvbnN0cmFpbnRzEhEKCWtleV91c2FnZRgGIAMoCRIVCg1leHRfa2V5X3VzYWdlGAcgAygJEikKBHNhbnMYCCABKAsyGy5jcnlwdG9zLnYxLlN1YmplY3RBbHROYW1lcxIzChBleHRyYV9leHRlbnNpb25zGAkgAygLMhkuY3J5cHRvcy52MS5YNTA5RXh0ZW5zaW9uEhoKEmFsbG93X3JlcXVlc3Rfc2FucxgKIAEoCBIXCg92YWxpZGl0eV9wb2xpY3kYCyABKAkiRQoQQmFzaWNDb25zdHJhaW50cxINCgVpc19jYRgBIAEoCBIVCghwYXRoX2xlbhgCIAEoDUgAiAEBQgsKCV9wYXRoX2xlbiJrCg9TdWJqZWN0QWx0TmFtZXMSCwoDZG5zGAEgAygJEgoKAmlwGAIgAygJEg0KBWVtYWlsGAMgAygJEgsKA3VyaRgEIAMoCRIWCg5rcmI1X3ByaW5jaXBhbBgFIAMoCRILCgN1cG4YBiADKAkiPQoNWDUwOUV4dGVuc2lvbhILCgNvaWQYASABKAkSEAoIY3JpdGljYWwYAiABKAgSDQoFdmFsdWUYAyABKAwiFwoHSW5zdGFsbBIMCgRkaXNrGAEgASgJImkKB1N1YmplY3QSEwoLY29tbW9uX25hbWUYASABKAkSFAoMb3JnYW5pemF0aW9uGAIgASgJEg8KB2NvdW50cnkYAyABKAkSEAoIcHJvdmluY2UYBCABKAkSEAoIbG9jYWxpdHkYBSABKAlCNFoyZ2l0aHViLmNvbS9DcnlwdE9TLVBLSS9hcGkvZ28vY3J5cHRvcy92MTtjcnlwdG9zdjFiBnByb3RvMw");
 
 /**
  * MachineConfig is the declarative configuration applied via ApplyConfig.
@@ -419,6 +419,14 @@ export type Pki = Message<"cryptos.v1.Pki"> & {
    * @generated from field: cryptos.v1.Est est = 14;
    */
   est?: Est | undefined;
+
+  /**
+   * scep configures the RFC 8894 enrolment endpoint, applied the same way as
+   * acme.
+   *
+   * @generated from field: cryptos.v1.Scep scep = 15;
+   */
+  scep?: Scep | undefined;
 };
 
 /**
@@ -682,6 +690,157 @@ export const EstEnrollCredentialSchema: GenMessage<EstEnrollCredential> = /*@__P
   messageDesc(file_cryptos_v1_config, 13);
 
 /**
+ * Scep is the node's RFC 8894 server. It is plain HTTP, as the RFC intends:
+ * the CMS envelope carries confidentiality and integrity. Clients encrypt
+ * requests to, and verify responses from, an RA certificate the node mints
+ * from its own CA, so the CA key only ever signs certificates.
+ *
+ * Initial enrolment (PKCSReq) is authorized by a one-time challenge minted
+ * with NodeService.MintScepChallenge. Renewal (RenewalReq) is authorized by
+ * the client's current certificate, which must chain to this node's CA and not
+ * be revoked, and the renewed certificate keeps that certificate's names.
+ * There is no static shared challenge, by design: one secret configured for
+ * every device would let anyone who lifts it from one device enrol as any.
+ *
+ * @generated from message cryptos.v1.Scep
+ */
+export type Scep = Message<"cryptos.v1.Scep"> & {
+  /**
+   * enabled switches the SCEP listener on at the next boot.
+   *
+   * @generated from field: bool enabled = 1;
+   */
+  enabled: boolean;
+
+  /**
+   * http_port is the TCP port the SCEP listener binds. Zero means the node
+   * default.
+   *
+   * @generated from field: uint32 http_port = 2;
+   */
+  httpPort: number;
+
+  /**
+   * profiles are the certificate profiles SCEP issues from, each with its own
+   * key floor and approval switch. At least one is required when enabled, and
+   * a profile name appears at most once. A challenge names the profile its
+   * enrolment issues from; a renewal issues from the profile of the
+   * certificate being renewed.
+   *
+   * @generated from field: repeated cryptos.v1.ScepProfile profiles = 3;
+   */
+  profiles: ScepProfile[];
+
+  /**
+   * allowed_identifier_suffixes restricts the names an initial enrolment
+   * issues for: every DNS name in the request, and the subject common name,
+   * must equal, or be a subdomain of, one of these. Required when enabled;
+   * unlike EST there is no switch to drop it, because a challenge proves
+   * nothing about control of a name. It does not restrict renewal, whose names
+   * are pinned to the certificate the client already holds.
+   *
+   * @generated from field: repeated string allowed_identifier_suffixes = 4;
+   */
+  allowedIdentifierSuffixes: string[];
+
+  /**
+   * ra configures the RA certificate that decrypts requests and signs
+   * responses. Unset means the defaults below.
+   *
+   * @generated from field: cryptos.v1.ScepRa ra = 5;
+   */
+  ra?: ScepRa | undefined;
+};
+
+/**
+ * Describes the message cryptos.v1.Scep.
+ * Use `create(ScepSchema)` to create a new message.
+ */
+export const ScepSchema: GenMessage<Scep> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 14);
+
+/**
+ * ScepProfile is one certificate profile SCEP may issue from.
+ *
+ * @generated from message cryptos.v1.ScepProfile
+ */
+export type ScepProfile = Message<"cryptos.v1.ScepProfile"> & {
+  /**
+   * profile names a non-CA certificate profile in Pki.profiles. Required.
+   *
+   * @generated from field: string profile = 1;
+   */
+  profile: string;
+
+  /**
+   * min_rsa_key_bits is the smallest RSA subject key this profile accepts over
+   * SCEP. Zero means 3072, the node-wide floor. 2048 is the lowest value
+   * accepted, for devices that cannot hold a larger key (Cisco IOS and IOS-XE
+   * trustpoints are limited to RSA 2048), and a value below it is rejected.
+   * Stronger RSA keys and ECDSA P-384 keys are always accepted. The floor
+   * applies only to certificates this profile issues over SCEP: the node's
+   * own CA, RA and listener keys stay RSA 3072 or larger, or ECDSA P-384, and
+   * other issuance paths keep the node-wide floor.
+   *
+   * @generated from field: uint32 min_rsa_key_bits = 2;
+   */
+  minRsaKeyBits: number;
+
+  /**
+   * require_approval holds every initial enrolment for this profile in a
+   * queue: the client is answered PENDING and polls (CertPoll) until an admin
+   * approves or rejects it with ApproveScepEnrollment or RejectScepEnrollment.
+   * Off by default, where the one-time challenge is the approval and the node
+   * issues or refuses on the spot. Renewals are never queued.
+   *
+   * @generated from field: bool require_approval = 3;
+   */
+  requireApproval: boolean;
+};
+
+/**
+ * Describes the message cryptos.v1.ScepProfile.
+ * Use `create(ScepProfileSchema)` to create a new message.
+ */
+export const ScepProfileSchema: GenMessage<ScepProfile> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 15);
+
+/**
+ * ScepRa configures the node's SCEP RA certificate. The RA key is RSA 3072
+ * (key transport needs an RSA recipient) with key usage digitalSignature and
+ * keyEncipherment, sealed on the state partition and never in the clear.
+ *
+ * @generated from message cryptos.v1.ScepRa
+ */
+export type ScepRa = Message<"cryptos.v1.ScepRa"> & {
+  /**
+   * validity_days is the RA certificate's lifetime. Zero means 365, which is
+   * also the most accepted.
+   *
+   * @generated from field: uint32 validity_days = 1;
+   */
+  validityDays: number;
+
+  /**
+   * rotation_overlap_days is how long before the RA certificate expires the
+   * node mints its successor. During the overlap GetCACert offers the new RA,
+   * and requests encrypted to either the old or the new RA decrypt, so a
+   * device that cached the old certificate still enrols. Zero means 30. Must
+   * be less than validity_days.
+   *
+   * @generated from field: uint32 rotation_overlap_days = 2;
+   */
+  rotationOverlapDays: number;
+};
+
+/**
+ * Describes the message cryptos.v1.ScepRa.
+ * Use `create(ScepRaSchema)` to create a new message.
+ */
+export const ScepRaSchema: GenMessage<ScepRa> = /*@__PURE__*/
+  messageDesc(file_cryptos_v1_config, 16);
+
+/**
  * Parent is the trust anchor a subordinate CA pins for its issuer: the parent
  * (or root) CA certificate, by full PEM or by SHA-256 fingerprint. Exactly one
  * is set. Unused by a Root.
@@ -705,7 +864,7 @@ export type Parent = Message<"cryptos.v1.Parent"> & {
  * Use `create(ParentSchema)` to create a new message.
  */
 export const ParentSchema: GenMessage<Parent> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 14);
+  messageDesc(file_cryptos_v1_config, 17);
 
 /**
  * CertificateProfile drives CSR generation and certificate signing: key
@@ -794,7 +953,7 @@ export type CertificateProfile = Message<"cryptos.v1.CertificateProfile"> & {
  * Use `create(CertificateProfileSchema)` to create a new message.
  */
 export const CertificateProfileSchema: GenMessage<CertificateProfile> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 15);
+  messageDesc(file_cryptos_v1_config, 18);
 
 /**
  * @generated from message cryptos.v1.BasicConstraints
@@ -819,7 +978,7 @@ export type BasicConstraints = Message<"cryptos.v1.BasicConstraints"> & {
  * Use `create(BasicConstraintsSchema)` to create a new message.
  */
 export const BasicConstraintsSchema: GenMessage<BasicConstraints> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 16);
+  messageDesc(file_cryptos_v1_config, 19);
 
 /**
  * @generated from message cryptos.v1.SubjectAltNames
@@ -868,7 +1027,7 @@ export type SubjectAltNames = Message<"cryptos.v1.SubjectAltNames"> & {
  * Use `create(SubjectAltNamesSchema)` to create a new message.
  */
 export const SubjectAltNamesSchema: GenMessage<SubjectAltNames> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 17);
+  messageDesc(file_cryptos_v1_config, 20);
 
 /**
  * X509Extension is the raw escape hatch: a dotted OID, criticality flag, and the
@@ -898,7 +1057,7 @@ export type X509Extension = Message<"cryptos.v1.X509Extension"> & {
  * Use `create(X509ExtensionSchema)` to create a new message.
  */
 export const X509ExtensionSchema: GenMessage<X509Extension> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 18);
+  messageDesc(file_cryptos_v1_config, 21);
 
 /**
  * Install declares how the node provisions itself to persistent storage during
@@ -921,7 +1080,7 @@ export type Install = Message<"cryptos.v1.Install"> & {
  * Use `create(InstallSchema)` to create a new message.
  */
 export const InstallSchema: GenMessage<Install> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 19);
+  messageDesc(file_cryptos_v1_config, 22);
 
 /**
  * @generated from message cryptos.v1.Subject
@@ -962,5 +1121,5 @@ export type Subject = Message<"cryptos.v1.Subject"> & {
  * Use `create(SubjectSchema)` to create a new message.
  */
 export const SubjectSchema: GenMessage<Subject> = /*@__PURE__*/
-  messageDesc(file_cryptos_v1_config, 20);
+  messageDesc(file_cryptos_v1_config, 23);
 

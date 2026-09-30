@@ -146,12 +146,15 @@ message Pki {
   // est configures the RFC 7030 enrolment endpoint, applied the same way as
   // acme.
   Est est = 14;
+  // scep configures the RFC 8894 enrolment endpoint, applied the same way as
+  // acme.
+  Scep scep = 15;
 }
 
 // Protocol blocks
 //
-// Each enrolment protocol a node can serve has its own block on Pki (acme and
-// est today). Every block follows the same rules, and a protocol added later
+// Each enrolment protocol a node can serve has its own block on Pki (acme, est
+// and scep today). Every block follows the same rules, and a protocol added later
 // gets a block of the same shape:
 //
 //   - The first field is an explicit `enabled` flag. A protocol is opened
@@ -174,6 +177,9 @@ message Pki {
 //     leaves one empty keeps the value stored under the same identifier (key_id
 //     or username), and an empty secret for an identifier the node does not
 //     know is rejected. Removing an entry from its list revokes it.
+//   - Credentials the node mints itself, such as SCEP one-time challenges, are
+//     not config. They never appear in a block; they are returned once by the
+//     RPC that mints them, stored as a digest, and never read back.
 
 // Acme is the node's RFC 8555 server.
 message Acme {
@@ -271,6 +277,77 @@ message EstEnrollCredential {
   // high-entropy value, because a digest of a chosen word falls to a
   // dictionary. Write-only: GetConfig returns it empty.
   string password_sha256 = 2;
+}
+
+// Scep is the node's RFC 8894 server. It is plain HTTP, as the RFC intends:
+// the CMS envelope carries confidentiality and integrity. Clients encrypt
+// requests to, and verify responses from, an RA certificate the node mints
+// from its own CA, so the CA key only ever signs certificates.
+//
+// Initial enrolment (PKCSReq) is authorized by a one-time challenge minted
+// with NodeService.MintScepChallenge. Renewal (RenewalReq) is authorized by
+// the client's current certificate, which must chain to this node's CA and not
+// be revoked, and the renewed certificate keeps that certificate's names.
+// There is no static shared challenge, by design: one secret configured for
+// every device would let anyone who lifts it from one device enrol as any.
+message Scep {
+  // enabled switches the SCEP listener on at the next boot.
+  bool enabled = 1;
+  // http_port is the TCP port the SCEP listener binds. Zero means the node
+  // default.
+  uint32 http_port = 2;
+  // profiles are the certificate profiles SCEP issues from, each with its own
+  // key floor and approval switch. At least one is required when enabled, and
+  // a profile name appears at most once. A challenge names the profile its
+  // enrolment issues from; a renewal issues from the profile of the
+  // certificate being renewed.
+  repeated ScepProfile profiles = 3;
+  // allowed_identifier_suffixes restricts the names an initial enrolment
+  // issues for: every DNS name in the request, and the subject common name,
+  // must equal, or be a subdomain of, one of these. Required when enabled;
+  // unlike EST there is no switch to drop it, because a challenge proves
+  // nothing about control of a name. It does not restrict renewal, whose names
+  // are pinned to the certificate the client already holds.
+  repeated string allowed_identifier_suffixes = 4;
+  // ra configures the RA certificate that decrypts requests and signs
+  // responses. Unset means the defaults below.
+  ScepRa ra = 5;
+}
+
+// ScepProfile is one certificate profile SCEP may issue from.
+message ScepProfile {
+  // profile names a non-CA certificate profile in Pki.profiles. Required.
+  string profile = 1;
+  // min_rsa_key_bits is the smallest RSA subject key this profile accepts over
+  // SCEP. Zero means 3072, the node-wide floor. 2048 is the lowest value
+  // accepted, for devices that cannot hold a larger key (Cisco IOS and IOS-XE
+  // trustpoints are limited to RSA 2048), and a value below it is rejected.
+  // Stronger RSA keys and ECDSA P-384 keys are always accepted. The floor
+  // applies only to certificates this profile issues over SCEP: the node's
+  // own CA, RA and listener keys stay RSA 3072 or larger, or ECDSA P-384, and
+  // other issuance paths keep the node-wide floor.
+  uint32 min_rsa_key_bits = 2;
+  // require_approval holds every initial enrolment for this profile in a
+  // queue: the client is answered PENDING and polls (CertPoll) until an admin
+  // approves or rejects it with ApproveScepEnrollment or RejectScepEnrollment.
+  // Off by default, where the one-time challenge is the approval and the node
+  // issues or refuses on the spot. Renewals are never queued.
+  bool require_approval = 3;
+}
+
+// ScepRa configures the node's SCEP RA certificate. The RA key is RSA 3072
+// (key transport needs an RSA recipient) with key usage digitalSignature and
+// keyEncipherment, sealed on the state partition and never in the clear.
+message ScepRa {
+  // validity_days is the RA certificate's lifetime. Zero means 365, which is
+  // also the most accepted.
+  uint32 validity_days = 1;
+  // rotation_overlap_days is how long before the RA certificate expires the
+  // node mints its successor. During the overlap GetCACert offers the new RA,
+  // and requests encrypted to either the old or the new RA decrypt, so a
+  // device that cached the old certificate still enrols. Zero means 30. Must
+  // be less than validity_days.
+  uint32 rotation_overlap_days = 2;
 }
 
 // Parent is the trust anchor a subordinate CA pins for its issuer: the parent

@@ -954,15 +954,18 @@ type AttestResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// ECDSA signature (ASN.1 DER) over SHA-384 of the message
+	// Signature by the node's CA identity key over SHA-384 of the message
 	//
 	//	"CryptOS-PKI attestation v1" || 0x00 || uint32_be(len(nonce)) || nonce
 	//
 	// where the context string is its 26 ASCII bytes with no terminator, 0x00
 	// is a single separator byte, and uint32_be is the nonce length as a 4-byte
-	// big-endian integer. A verifier rebuilds the message from the nonce it
-	// sent, hashes it with SHA-384 and checks the signature against
-	// identity_pub_der.
+	// big-endian integer. The encoding follows the identity key type: an ECDSA
+	// key gives an ASN.1 DER SEQUENCE { r INTEGER, s INTEGER }, and an RSA key
+	// gives an RSASSA-PKCS1-v1_5 signature with SHA-384 (raw bytes, the length
+	// of the modulus). A verifier rebuilds the message from the nonce it sent,
+	// hashes it with SHA-384 and checks the signature against identity_pub_der
+	// using the scheme that key's type implies.
 	Signature []byte `protobuf:"bytes,1,opt,name=signature,proto3" json:"signature,omitempty"`
 	// The node's CA identity public key, PKIX/DER encoded.
 	IdentityPubDer []byte `protobuf:"bytes,2,opt,name=identity_pub_der,json=identityPubDer,proto3" json:"identity_pub_der,omitempty"`

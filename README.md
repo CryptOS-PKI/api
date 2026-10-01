@@ -1,5 +1,14 @@
 # 📡 api
 
+> [!IMPORTANT]
+> 📦 **Moved. This repository is archived and read-only.** Each API now lives with the service that serves it:
+>
+> - **Node API** (`NodeService`, package `cryptos.node.v1`): [CryptOS-PKI/cryptos-node/proto](https://github.com/CryptOS-PKI/cryptos-node/tree/main/proto/cryptos/node/v1), Go stubs at `github.com/CryptOS-PKI/cryptos-node/gen/go/cryptos/node/v1`.
+> - **Fleet API** (`FleetService`, `BootstrapService`, package `cryptos.fleet.v1`): [CryptOS-PKI/cryptos-manager/proto](https://github.com/CryptOS-PKI/cryptos-manager/tree/main/proto/cryptos/fleet/v1), Go stubs at `github.com/CryptOS-PKI/cryptos-manager/gen/go/cryptos/fleet/v1`.
+> - **TypeScript stubs** for both: `packages/api-client` in [CryptOS-PKI/cryptos-web](https://github.com/CryptOS-PKI/cryptos-web).
+>
+> The rest of this README describes the repository as it was before the move.
+
 Shared `.proto` definitions and generated gRPC stubs for [CryptOS-PKI](https://github.com/CryptOS-PKI).
 
 Published as a standalone, versioned Go module. Consumed by [`cryptos`](https://github.com/CryptOS-PKI/cryptos) and [`manager`](https://github.com/CryptOS-PKI/manager) as a Go dependency; consumed by [`web`](https://github.com/CryptOS-PKI/web) via generated TypeScript stubs.

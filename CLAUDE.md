@@ -63,8 +63,8 @@ minutes per PR:
   checked. Only Release Drafter (on push to `main`) and Label Sync (when `.github/labels.yml`
   changes) run on `main`.
 - **Edits.** PR Checks and the Label Checker rerun on a title or body edit. The other PR
-  workflows run on an `edited` event only when the PR's base changed (a stacked PR retargeted onto
-  `main`); a skipped job is not billed.
+  workflows ignore edits: after a stacked PR is retargeted onto `main`, CI starts on its next push
+  or when the PR is toggled to draft and back to ready.
 - **No no-op jobs.** The licence check ships for this repo's ecosystem only. The old two-job
   `job-license-check.yaml` also started a job for the other language that found no manifest and
   billed a minute per run to do nothing.

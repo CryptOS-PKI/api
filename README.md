@@ -157,6 +157,8 @@ task license     # re-inject Apache 2.0 headers via golic
 
 The generated stubs under `go/` and `gen/ts/` are committed; `task ci` fails if they drift from the protos. The Generated Output check (`.github/workflows/ci-generate.yaml`) runs the same `task generate:verify` on every pull request with the same pinned plugins, so a PR whose committed stubs don't match its protos fails. Run `task ci` before you push to catch it first.
 
+After a stacked pull request is retargeted onto `main`, CI starts on its next push, or when it is toggled to draft and back to ready.
+
 ## 🚦 Status
 
 **Pre-alpha.** The surface is unstable while Phase 1 lands. Tag-based semver kicks in once the v1 contract solidifies.

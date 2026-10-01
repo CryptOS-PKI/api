@@ -286,6 +286,17 @@ service FleetService {
   // and new names).
   rpc RenameNode(RenameNodeRequest) returns (RenameNodeResponse);
 
+  // RemoveNode removes a node from the manager's inventory without contacting
+  // the node, for a node that is gone (destroyed, or wiped and not coming
+  // back). It does not reset or unlink the node; DecommissionNode does that.
+  // confirm_name must equal the node's current name. The node's audit
+  // history and name history are kept, and its credentials folder is moved
+  // aside rather than deleted. NotFound if no node has node_id;
+  // InvalidArgument if confirm_name doesn't match; FailedPrecondition while
+  // something still depends on the node, such as a pending enrollment that
+  // names it. Admin-gated and audited (node-removed, with the name and ID).
+  rpc RemoveNode(RemoveNodeRequest) returns (RemoveNodeResponse);
+
   // ListMcpKeys returns the MCP agent keys bound to the calling operator's
   // certificate. An admin may set all to list every operator's keys; a
   // non-admin that sets all is refused. The listing never carries a key or its
@@ -1180,6 +1191,21 @@ message RenameNodeRequest {
 // RenameNodeResponse returns the node after the rename.
 message RenameNodeResponse {
   // node is the renamed node; its id is unchanged.
+  NodeSummary node = 1;
+}
+
+// RemoveNodeRequest names the node to remove from the inventory.
+message RemoveNodeRequest {
+  // node_id is the stable ID (NodeSummary.id) of the node to remove.
+  string node_id = 1;
+  // confirm_name must equal the node's current name, so a mistyped ID
+  // can't remove another node.
+  string confirm_name = 2;
+}
+
+// RemoveNodeResponse carries the node as it was before removal.
+message RemoveNodeResponse {
+  // node is the removed node's id, name, address and role.
   NodeSummary node = 1;
 }
 

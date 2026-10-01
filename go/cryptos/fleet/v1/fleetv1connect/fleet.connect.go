@@ -154,6 +154,8 @@ const (
 	FleetServiceDecommissionNodeProcedure = "/cryptos.fleet.v1.FleetService/DecommissionNode"
 	// FleetServiceRenameNodeProcedure is the fully-qualified name of the FleetService's RenameNode RPC.
 	FleetServiceRenameNodeProcedure = "/cryptos.fleet.v1.FleetService/RenameNode"
+	// FleetServiceRemoveNodeProcedure is the fully-qualified name of the FleetService's RemoveNode RPC.
+	FleetServiceRemoveNodeProcedure = "/cryptos.fleet.v1.FleetService/RemoveNode"
 	// FleetServiceListMcpKeysProcedure is the fully-qualified name of the FleetService's ListMcpKeys
 	// RPC.
 	FleetServiceListMcpKeysProcedure = "/cryptos.fleet.v1.FleetService/ListMcpKeys"
@@ -383,6 +385,16 @@ type FleetServiceClient interface {
 	// and records nothing. Admin-gated and audited (node-renamed, with the old
 	// and new names).
 	RenameNode(context.Context, *connect.Request[v1.RenameNodeRequest]) (*connect.Response[v1.RenameNodeResponse], error)
+	// RemoveNode removes a node from the manager's inventory without contacting
+	// the node, for a node that is gone (destroyed, or wiped and not coming
+	// back). It does not reset or unlink the node; DecommissionNode does that.
+	// confirm_name must equal the node's current name. The node's audit
+	// history and name history are kept, and its credentials folder is moved
+	// aside rather than deleted. NotFound if no node has node_id;
+	// InvalidArgument if confirm_name doesn't match; FailedPrecondition while
+	// something still depends on the node, such as a pending enrollment that
+	// names it. Admin-gated and audited (node-removed, with the name and ID).
+	RemoveNode(context.Context, *connect.Request[v1.RemoveNodeRequest]) (*connect.Response[v1.RemoveNodeResponse], error)
 	// ListMcpKeys returns the MCP agent keys bound to the calling operator's
 	// certificate. An admin may set all to list every operator's keys; a
 	// non-admin that sets all is refused. The listing never carries a key or its
@@ -683,6 +695,12 @@ func NewFleetServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(fleetServiceMethods.ByName("RenameNode")),
 			connect.WithClientOptions(opts...),
 		),
+		removeNode: connect.NewClient[v1.RemoveNodeRequest, v1.RemoveNodeResponse](
+			httpClient,
+			baseURL+FleetServiceRemoveNodeProcedure,
+			connect.WithSchema(fleetServiceMethods.ByName("RemoveNode")),
+			connect.WithClientOptions(opts...),
+		),
 		listMcpKeys: connect.NewClient[v1.ListMcpKeysRequest, v1.ListMcpKeysResponse](
 			httpClient,
 			baseURL+FleetServiceListMcpKeysProcedure,
@@ -761,6 +779,7 @@ type fleetServiceClient struct {
 	confirmAdoptionFingerprint      *connect.Client[v1.ConfirmAdoptionFingerprintRequest, v1.ConfirmAdoptionFingerprintResponse]
 	decommissionNode                *connect.Client[v1.DecommissionNodeRequest, v1.DecommissionNodeResponse]
 	renameNode                      *connect.Client[v1.RenameNodeRequest, v1.RenameNodeResponse]
+	removeNode                      *connect.Client[v1.RemoveNodeRequest, v1.RemoveNodeResponse]
 	listMcpKeys                     *connect.Client[v1.ListMcpKeysRequest, v1.ListMcpKeysResponse]
 	revokeMcpKey                    *connect.Client[v1.RevokeMcpKeyRequest, v1.RevokeMcpKeyResponse]
 	createMcpKey                    *connect.Client[v1.CreateMcpKeyRequest, v1.CreateMcpKeyResponse]
@@ -984,6 +1003,11 @@ func (c *fleetServiceClient) DecommissionNode(ctx context.Context, req *connect.
 // RenameNode calls cryptos.fleet.v1.FleetService.RenameNode.
 func (c *fleetServiceClient) RenameNode(ctx context.Context, req *connect.Request[v1.RenameNodeRequest]) (*connect.Response[v1.RenameNodeResponse], error) {
 	return c.renameNode.CallUnary(ctx, req)
+}
+
+// RemoveNode calls cryptos.fleet.v1.FleetService.RemoveNode.
+func (c *fleetServiceClient) RemoveNode(ctx context.Context, req *connect.Request[v1.RemoveNodeRequest]) (*connect.Response[v1.RemoveNodeResponse], error) {
+	return c.removeNode.CallUnary(ctx, req)
 }
 
 // ListMcpKeys calls cryptos.fleet.v1.FleetService.ListMcpKeys.
@@ -1223,6 +1247,16 @@ type FleetServiceHandler interface {
 	// and records nothing. Admin-gated and audited (node-renamed, with the old
 	// and new names).
 	RenameNode(context.Context, *connect.Request[v1.RenameNodeRequest]) (*connect.Response[v1.RenameNodeResponse], error)
+	// RemoveNode removes a node from the manager's inventory without contacting
+	// the node, for a node that is gone (destroyed, or wiped and not coming
+	// back). It does not reset or unlink the node; DecommissionNode does that.
+	// confirm_name must equal the node's current name. The node's audit
+	// history and name history are kept, and its credentials folder is moved
+	// aside rather than deleted. NotFound if no node has node_id;
+	// InvalidArgument if confirm_name doesn't match; FailedPrecondition while
+	// something still depends on the node, such as a pending enrollment that
+	// names it. Admin-gated and audited (node-removed, with the name and ID).
+	RemoveNode(context.Context, *connect.Request[v1.RemoveNodeRequest]) (*connect.Response[v1.RemoveNodeResponse], error)
 	// ListMcpKeys returns the MCP agent keys bound to the calling operator's
 	// certificate. An admin may set all to list every operator's keys; a
 	// non-admin that sets all is refused. The listing never carries a key or its
@@ -1519,6 +1553,12 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(fleetServiceMethods.ByName("RenameNode")),
 		connect.WithHandlerOptions(opts...),
 	)
+	fleetServiceRemoveNodeHandler := connect.NewUnaryHandler(
+		FleetServiceRemoveNodeProcedure,
+		svc.RemoveNode,
+		connect.WithSchema(fleetServiceMethods.ByName("RemoveNode")),
+		connect.WithHandlerOptions(opts...),
+	)
 	fleetServiceListMcpKeysHandler := connect.NewUnaryHandler(
 		FleetServiceListMcpKeysProcedure,
 		svc.ListMcpKeys,
@@ -1637,6 +1677,8 @@ func NewFleetServiceHandler(svc FleetServiceHandler, opts ...connect.HandlerOpti
 			fleetServiceDecommissionNodeHandler.ServeHTTP(w, r)
 		case FleetServiceRenameNodeProcedure:
 			fleetServiceRenameNodeHandler.ServeHTTP(w, r)
+		case FleetServiceRemoveNodeProcedure:
+			fleetServiceRemoveNodeHandler.ServeHTTP(w, r)
 		case FleetServiceListMcpKeysProcedure:
 			fleetServiceListMcpKeysHandler.ServeHTTP(w, r)
 		case FleetServiceRevokeMcpKeyProcedure:
@@ -1826,6 +1868,10 @@ func (UnimplementedFleetServiceHandler) DecommissionNode(context.Context, *conne
 
 func (UnimplementedFleetServiceHandler) RenameNode(context.Context, *connect.Request[v1.RenameNodeRequest]) (*connect.Response[v1.RenameNodeResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.RenameNode is not implemented"))
+}
+
+func (UnimplementedFleetServiceHandler) RemoveNode(context.Context, *connect.Request[v1.RemoveNodeRequest]) (*connect.Response[v1.RemoveNodeResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("cryptos.fleet.v1.FleetService.RemoveNode is not implemented"))
 }
 
 func (UnimplementedFleetServiceHandler) ListMcpKeys(context.Context, *connect.Request[v1.ListMcpKeysRequest]) (*connect.Response[v1.ListMcpKeysResponse], error) {

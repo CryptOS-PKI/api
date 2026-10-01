@@ -62,6 +62,7 @@ const (
 	FleetService_ConfirmAdoptionFingerprint_FullMethodName      = "/cryptos.fleet.v1.FleetService/ConfirmAdoptionFingerprint"
 	FleetService_DecommissionNode_FullMethodName                = "/cryptos.fleet.v1.FleetService/DecommissionNode"
 	FleetService_RenameNode_FullMethodName                      = "/cryptos.fleet.v1.FleetService/RenameNode"
+	FleetService_RemoveNode_FullMethodName                      = "/cryptos.fleet.v1.FleetService/RemoveNode"
 	FleetService_ListMcpKeys_FullMethodName                     = "/cryptos.fleet.v1.FleetService/ListMcpKeys"
 	FleetService_RevokeMcpKey_FullMethodName                    = "/cryptos.fleet.v1.FleetService/RevokeMcpKey"
 	FleetService_CreateMcpKey_FullMethodName                    = "/cryptos.fleet.v1.FleetService/CreateMcpKey"
@@ -288,6 +289,16 @@ type FleetServiceClient interface {
 	// and records nothing. Admin-gated and audited (node-renamed, with the old
 	// and new names).
 	RenameNode(ctx context.Context, in *RenameNodeRequest, opts ...grpc.CallOption) (*RenameNodeResponse, error)
+	// RemoveNode removes a node from the manager's inventory without contacting
+	// the node, for a node that is gone (destroyed, or wiped and not coming
+	// back). It does not reset or unlink the node; DecommissionNode does that.
+	// confirm_name must equal the node's current name. The node's audit
+	// history and name history are kept, and its credentials folder is moved
+	// aside rather than deleted. NotFound if no node has node_id;
+	// InvalidArgument if confirm_name doesn't match; FailedPrecondition while
+	// something still depends on the node, such as a pending enrollment that
+	// names it. Admin-gated and audited (node-removed, with the name and ID).
+	RemoveNode(ctx context.Context, in *RemoveNodeRequest, opts ...grpc.CallOption) (*RemoveNodeResponse, error)
 	// ListMcpKeys returns the MCP agent keys bound to the calling operator's
 	// certificate. An admin may set all to list every operator's keys; a
 	// non-admin that sets all is refused. The listing never carries a key or its
@@ -766,6 +777,16 @@ func (c *fleetServiceClient) RenameNode(ctx context.Context, in *RenameNodeReque
 	return out, nil
 }
 
+func (c *fleetServiceClient) RemoveNode(ctx context.Context, in *RemoveNodeRequest, opts ...grpc.CallOption) (*RemoveNodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RemoveNodeResponse)
+	err := c.cc.Invoke(ctx, FleetService_RemoveNode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *fleetServiceClient) ListMcpKeys(ctx context.Context, in *ListMcpKeysRequest, opts ...grpc.CallOption) (*ListMcpKeysResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListMcpKeysResponse)
@@ -1035,6 +1056,16 @@ type FleetServiceServer interface {
 	// and records nothing. Admin-gated and audited (node-renamed, with the old
 	// and new names).
 	RenameNode(context.Context, *RenameNodeRequest) (*RenameNodeResponse, error)
+	// RemoveNode removes a node from the manager's inventory without contacting
+	// the node, for a node that is gone (destroyed, or wiped and not coming
+	// back). It does not reset or unlink the node; DecommissionNode does that.
+	// confirm_name must equal the node's current name. The node's audit
+	// history and name history are kept, and its credentials folder is moved
+	// aside rather than deleted. NotFound if no node has node_id;
+	// InvalidArgument if confirm_name doesn't match; FailedPrecondition while
+	// something still depends on the node, such as a pending enrollment that
+	// names it. Admin-gated and audited (node-removed, with the name and ID).
+	RemoveNode(context.Context, *RemoveNodeRequest) (*RemoveNodeResponse, error)
 	// ListMcpKeys returns the MCP agent keys bound to the calling operator's
 	// certificate. An admin may set all to list every operator's keys; a
 	// non-admin that sets all is refused. The listing never carries a key or its
@@ -1201,6 +1232,9 @@ func (UnimplementedFleetServiceServer) DecommissionNode(context.Context, *Decomm
 }
 func (UnimplementedFleetServiceServer) RenameNode(context.Context, *RenameNodeRequest) (*RenameNodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RenameNode not implemented")
+}
+func (UnimplementedFleetServiceServer) RemoveNode(context.Context, *RemoveNodeRequest) (*RemoveNodeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveNode not implemented")
 }
 func (UnimplementedFleetServiceServer) ListMcpKeys(context.Context, *ListMcpKeysRequest) (*ListMcpKeysResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListMcpKeys not implemented")
@@ -2004,6 +2038,24 @@ func _FleetService_RenameNode_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FleetService_RemoveNode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveNodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FleetServiceServer).RemoveNode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FleetService_RemoveNode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FleetServiceServer).RemoveNode(ctx, req.(*RemoveNodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _FleetService_ListMcpKeys_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListMcpKeysRequest)
 	if err := dec(in); err != nil {
@@ -2268,6 +2320,10 @@ var FleetService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RenameNode",
 			Handler:    _FleetService_RenameNode_Handler,
+		},
+		{
+			MethodName: "RemoveNode",
+			Handler:    _FleetService_RemoveNode_Handler,
 		},
 		{
 			MethodName: "ListMcpKeys",

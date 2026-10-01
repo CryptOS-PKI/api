@@ -56,6 +56,7 @@ func TestErrorReasons(t *testing.T) {
 		"KEY_USAGE", "BASIC_CONSTRAINTS", "KEY_MISMATCH", "REVOKED", "REVOKED_OCSP",
 		"OCSP_UNKNOWN", "DUPLICATE",
 		"NOT_FOUND", "EXPIRED", "NOT_PENDING",
+		"FULL_NAME",
 	}
 	want := map[protoreflect.Name]protoreflect.EnumNumber{"ERROR_REASON_UNSPECIFIED": 0}
 	for i, n := range names {

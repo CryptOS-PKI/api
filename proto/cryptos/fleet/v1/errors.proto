@@ -151,4 +151,7 @@ enum ErrorReason {
   ERROR_REASON_EXPIRED = 36;
   // 1611: the credential request was already completed or cancelled.
   ERROR_REASON_NOT_PENDING = 37;
+  // 1610: the full name is empty, longer than 128 characters, or has a
+  // control character.
+  ERROR_REASON_FULL_NAME = 38;
 }
